@@ -16,7 +16,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//Cartucho c("D:\\Descargas\\GB\\ROMS\\32K\\Boxxle II (U).gb");						
 	//Cartucho c("D:\\Descargas\\GB\\ROMS\\32K\\Brainbender (U).gb");
 	//Cartucho c("D:\\Descargas\\GB\\ROMS\\32K\\Bubble Ghost (U).gb");
-	Cartucho c("D:\\Descargas\\GB\\ROMS\\32K\\Castelian (U).gb");
+	//Cartucho c("D:\\Descargas\\GB\\ROMS\\32K\\Castelian (U).gb");
 	//Cartucho c("D:\\Descargas\\GB\\ROMS\\32K\\Catrap (U).gb");						
 	//Cartucho c("D:\\Descargas\\GB\\ROMS\\32K\\Cool Ball (U).gb");
 	//Cartucho c("D:\\Descargas\\GB\\ROMS\\32K\\Crystal Quest (U).gb");
@@ -43,7 +43,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//Cartucho c("D:\\Descargas\\GB\\ROMS\\32K\\World Bowling (U).gb");
 
 	//Cartucho c("D:\\Descargas\\GB\\ROMS\\PDRoms\\AsciiWars.gb");
-	//Cartucho c("D:\\Descargas\\GB\\ROMS\\PDRoms\\Big Scroller Demo (PD).gb");
+	Cartucho c("D:\\Descargas\\GB\\ROMS\\PDRoms\\Big Scroller Demo (PD).gb");
 	//Cartucho c("D:\\Descargas\\GB\\ROMS\\PDRoms\\BLEM! (PD).gb");
 	//Cartucho c("D:\\Descargas\\GB\\ROMS\\PDRoms\\Bounce.gb");
 	//Cartucho c("D:\\Descargas\\GB\\ROMS\\PDRoms\\BOXING.GB");

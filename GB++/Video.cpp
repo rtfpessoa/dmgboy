@@ -126,6 +126,12 @@ void Video::UpdateBG(BYTE y)
 
 	ObtainPalette(palette);
 
+	yScrolled = (y + mem->MemR(SCY));
+	if (yScrolled < 0)
+		yScrolled += 256;
+	else if (yScrolled > 255)
+		yScrolled -= 256;
+
 	//for (x=0; x<160; x++)
 	for (x=0; x<256; x++)
 	{
@@ -138,7 +144,7 @@ void Video::UpdateBG(BYTE y)
 			continue;
 		}
 
-		map = map_ini + ((y/8 * 32) + x/8);
+		map = map_ini + ((yScrolled/8 * 32) + x/8);
 		if (BIT4(mem->MemR(LCDC)) == 0)	//Seleccionar el tile data
 		{
 			//0x8800 = 0x9000 - (128 * 16)
@@ -150,7 +156,7 @@ void Video::UpdateBG(BYTE y)
 			//dir_tile = mem->MemR(map)*16 + 0x8000;
 			dir_tile = 0x8000 + mem->MemR(map)*16;
 		}
-		y_tile = y % 8;
+		y_tile = yScrolled % 8;
 		x_tile = x % 8;
 
 		line[0] = mem->MemR(dir_tile + (y_tile * 2));	//y_tile * 2 porque cada linea de 1 tile ocupa 2 bytes
@@ -165,11 +171,8 @@ void Video::UpdateBG(BYTE y)
 		xScrolled = (x - mem->MemR(SCX));
 		if (xScrolled < 0)
 			xScrolled += 256;
-		yScrolled = (y - mem->MemR(SCY));
-		if (yScrolled < 0)
-			yScrolled += 256;
 
-		DrawPixel(hideScreen, colour, colour, colour, xScrolled, yScrolled);
+		DrawPixel(hideScreen, colour, colour, colour, xScrolled, y);
 	}
 	//RefreshScreen();
 }
