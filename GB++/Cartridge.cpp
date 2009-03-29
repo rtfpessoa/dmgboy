@@ -39,7 +39,7 @@ void Cartridge::Print(int beg, int end)
 	int i, j;
 	unsigned char byte;
 	
-	for (i=start;i<=end;i=i+16){
+	for (i=beg;i<=end;i=i+16){
 		cout << setfill('0') << setw(6) << hex << i << "h: ";
 		for (j=i;j<i+16;j++){
 			byte = this->mem_cartridge[j];

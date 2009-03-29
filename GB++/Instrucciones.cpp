@@ -752,7 +752,7 @@ void Instrucciones::STOP()
 
 	reg->Add_PC(2);
 
-	cerr << "Instruccion 0x10 (Stop): Revisar interrupciones de joypad\n";
+	cout << "Instruccion 0x10 (Stop): Revisar interrupciones de joypad\n";
 }
 
 void Instrucciones::SWAP(e_registers lugar)

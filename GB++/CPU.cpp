@@ -8,7 +8,7 @@ CPU::CPU(Video *v, Pad *p)
 	this->v = v;
 	v->SetMem(this->GetPtrMemory());
 	this->p = p;
-	p->SetMem(this->GetPtrMemory());
+	SetPad(p);
 }
 
 CPU::~CPU()
@@ -993,8 +993,13 @@ void CPU::eventsSDL()
 						}
 					}
 				}
+				//!!No hay break. Cuando SDL_KEYDOWN también SDL_KEYUP
 			case SDL_KEYUP:
-				p->updateKey(ev.type, ev.key.keysym.sym);
+				BYTE valueP1 = MemR(P1);
+				BYTE interrupt = p->updateKey(ev.type, ev.key.keysym.sym, &valueP1);
+				MemW(P1, valueP1);
+				if (interrupt)
+					MemW(IF, MemR(IF) | 0x10);
 				break;
 		}
 	}

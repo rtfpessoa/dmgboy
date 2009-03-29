@@ -13,9 +13,14 @@ Memory::~Memory()
 
 Memory *Memory::GetPtrMemory() {return this;}
 
-void Memory::CargarCartridge(Cartridge *c)
+void Memory::LoadCartridge(Cartridge *c)
 {
 	memcpy(&memory, c->GetData(), c->GetSize());
+}
+
+void Memory::SetPad(Pad *p)
+{
+	this->p = p;
 }
 
 void Memory::ResetMem()
@@ -61,11 +66,11 @@ void Memory::ResetMem()
 	memory[P1]	  = 0x3F;
 }
 
-inline void Memory::MemW(WORD direccion, BYTE value, bool checkDirAndValue)
+inline void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
 {
 	if (checkDirAndValue)
 	{
-		switch (direccion)
+		switch (direction)
 		{
 			case DMA:
 				//cout << "W DMA: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl;
@@ -76,8 +81,9 @@ inline void Memory::MemW(WORD direccion, BYTE value, bool checkDirAndValue)
 			//case TAC: cout << "W TAC: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl; break;
 			//case BGP: cout << "W BGP: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl; break;
 			case P1:
-				//cout << "W P1: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl;
+				cout << "W P1: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl;
 				value = (value & 0x30) | (MemR(P1) & ~0x30);
+				value = p->updateInput(value);
 				break;
 			//case LCDC: cout << "W LCDC: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl; break;
 			//case SCX: cout << "W SCX: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl; break;
@@ -90,12 +96,12 @@ inline void Memory::MemW(WORD direccion, BYTE value, bool checkDirAndValue)
 		//if ((direccion >= 0x8000) && (direccion < 0xA000))
 		//	cout << "W VRAM: 0x" << setfill('0') << setw(4) << uppercase << hex << (int)direccion << "=0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl;
 
-		if ((direccion > 0xBFFF) && (direccion < 0xDE00))//C000-DDFF
-			memory[direccion + 0x2000] = value;
-		if ((direccion > 0xDFFF) && (direccion < 0xFE00))//E000-FDFF
-			memory[direccion - 0x2000] = value;
+		if ((direction > 0xBFFF) && (direction < 0xDE00))//C000-DDFF
+			memory[direction + 0x2000] = value;
+		if ((direction > 0xDFFF) && (direction < 0xFE00))//E000-FDFF
+			memory[direction - 0x2000] = value;
 
-		if (direccion < 0x8000)
+		if (direction < 0x8000)
 		{
 			//cout << "Error: Intentando escribir en la ROM. ";
 			//cout << "0x" << setfill('0') << setw(4) << uppercase << hex << (int)direccion << "=0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl;
@@ -103,15 +109,15 @@ inline void Memory::MemW(WORD direccion, BYTE value, bool checkDirAndValue)
 		}
 	}//Fin if
 
-	memory[direccion] = value;
+	memory[direction] = value;
 }
 
-inline void Memory::MemW(WORD direccion, BYTE value)
+inline void Memory::MemW(WORD direction, BYTE value)
 {
-	MemW(direccion, value, true);
+	MemW(direction, value, true);
 }
 
-inline BYTE Memory::MemR(WORD direccion)
+inline BYTE Memory::MemR(WORD direction)
 {
 	/*switch (direccion)
 	{
@@ -123,13 +129,13 @@ inline BYTE Memory::MemR(WORD direccion)
 		//case BGP: cout << "R BGP\n"; break;
 		//case P1: cout << "R P1: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)memory[direccion] << endl; break;
 	}*/
-	return memory[direccion];
+	return memory[direction];
 }
 
-void Memory::DmaTransfer(BYTE direccion)
+void Memory::DmaTransfer(BYTE direction)
 {
 	BYTE i;
 
 	for (i=0; i<0xA0; i++)
-		MemW(0xFE00 + i, MemR((direccion << 8) + i));
+		MemW(0xFE00 + i, MemR((direction << 8) + i));
 }

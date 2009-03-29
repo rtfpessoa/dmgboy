@@ -15,7 +15,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Asteroids (UE).gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Boxxle (V1.1) (U) [!].gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Boxxle II (U).gb");						
-	Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Brainbender (U).gb");
+	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Brainbender (U).gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Bubble Ghost (U).gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Castelian (U).gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Catrap (U).gb");						
@@ -27,7 +27,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Game of Harmony, The (U).gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Heiankyo Alien (U).gb");				
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Hyper Lode Runner (JU) (v1.1).gb");
-	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Kwirk (UA) [!].gb");					
+	Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Kwirk (UA) [!].gb");					
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Loopz (JUE).gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Missile Command (UE).gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Motocross Maniacs (U).gb");
@@ -73,7 +73,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	Pad p;
 
 	CPU cpu(&v, &p);
-	cpu.CargarCartridge(&c);
+	cpu.LoadCartridge(&c);
 	try
 	{
 		cpu.Run();
