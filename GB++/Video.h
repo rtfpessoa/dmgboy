@@ -2,17 +2,17 @@
 #define __VIDEO_H__
 
 #include "SDL.h"
-#include "Memoria.h"
+#include "Memory.h"
 
 class Video
 {
 private:
-	Memoria *mem;
+	Memory *mem;
 	SDL_Surface *screen, *hideScreen;
 public:
 	Video();
 	~Video(void);
-	void SetMem(Memoria *mem);
+	void SetMem(Memory *mem);
 	void RefreshScreen();
 	//void ActualizarPantalla();
 	void UpdateBG(BYTE line);

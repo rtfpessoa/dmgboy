@@ -92,7 +92,7 @@ void Video::DrawPixel(SDL_Surface *screen, Uint8 R, Uint8 G, Uint8 B, BYTE x, BY
 
 
 
-void Video::SetMem(Memoria *mem)
+void Video::SetMem(Memory *mem)
 {
 	this->mem = mem;
 }

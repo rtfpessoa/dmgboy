@@ -2,11 +2,13 @@
 #include "CPU.h"
 #include "Instrucciones.h"
 
-CPU::CPU(Video *v)
+CPU::CPU(Video *v, Pad *p)
 {
 	cyclesLCD = 0;
 	this->v = v;
-	v->SetMem(this->GetPtrMemoria());
+	v->SetMem(this->GetPtrMemory());
+	this->p = p;
+	p->SetMem(this->GetPtrMemory());
 }
 
 CPU::~CPU()
@@ -28,7 +30,7 @@ void CPU::Interprete()
 {
 	BYTE OpCode = 0, NextOpcode = 0, lastOpCode = 0;
 	
-	Instrucciones inst(this->GetPtrRegistros(), this->GetPtrMemoria());
+	Instrucciones inst(this->GetPtrRegisters(), this->GetPtrMemory());
 
     for(;;)
     {
@@ -328,7 +330,7 @@ void CPU::OpCodeCB()
 
     OpCode = MemR(Get_PC() + 1);
 
-	Instrucciones inst(this->GetPtrRegistros(), this->GetPtrMemoria());
+	Instrucciones inst(this->GetPtrRegisters(), this->GetPtrMemory());
 
     switch (OpCode)
     {
@@ -884,12 +886,13 @@ void CPU::ActualizarEstadoLCD()
 	else
 		MemW(STAT, MemR(STAT) & ~0x40, false);
 }
+
 void CPU::Interrupciones()
 {
 	if (!Get_IME())
 		return;
 
-	Instrucciones inst(this->GetPtrRegistros(), this->GetPtrMemoria());
+	Instrucciones inst(this->GetPtrRegisters(), this->GetPtrMemory());
 
 	if (BIT0(MemR(IE)) && BIT0(MemR(IF)))	//V-Blank
 	{
@@ -972,12 +975,26 @@ void CPU::eventsSDL()
 		{
 			case SDL_QUIT:
 				printf( ">El usuario quiere salir.\n" );
+				exit(0);
 				break;
 			case SDL_KEYDOWN:
-				printf( ">El usuario pulsa la tecla %s.\n", SDL_GetKeyName(ev.key.keysym.sym));
-				break;
+				if (ev.key.keysym.sym == SDLK_ESCAPE)
+				{
+					printf("Presionar de nuevo ESC para salir o cualquier otra tecla para continuar\n");
+					while(true)
+					{
+						SDL_WaitEvent(&ev);
+						if (ev.type == SDL_KEYDOWN)
+						{
+							if (ev.key.keysym.sym == SDLK_ESCAPE)
+								exit(0);
+							else
+								return;
+						}
+					}
+				}
 			case SDL_KEYUP:
-				printf( ">El usuario suelta la tecla %s.\n", SDL_GetKeyName(ev.key.keysym.sym));
+				p->updateKey(ev.type, ev.key.keysym.sym);
 				break;
 		}
 	}

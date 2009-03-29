@@ -177,7 +177,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Cartucho.cpp"
+				RelativePath=".\Cartridge.cpp"
 				>
 			</File>
 			<File
@@ -193,11 +193,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Memoria.cpp"
+				RelativePath=".\Memory.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Registros.cpp"
+				RelativePath=".\Pad.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Registers.cpp"
 				>
 			</File>
 			<File
@@ -231,7 +235,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Cartucho.h"
+				RelativePath=".\Cartridge.h"
 				>
 			</File>
 			<File
@@ -247,11 +251,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Memoria.h"
+				RelativePath=".\Memory.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Registros.h"
+				RelativePath=".\Pad.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Registers.h"
 				>
 			</File>
 			<File

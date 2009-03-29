@@ -3,15 +3,6 @@
 
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
-			    //0				 5				  10					  15				 20
-enum e_registros {A, B, C, D, E, F, H, L, AF, BC, DE, HL, f_Z, f_N, f_H, f_C, PC, SP, $, n, c_BC, c_DE, c_HL, c_nn};
-
-enum e_keys {kRIGHT, kLEFT, kUP, kDOWN, kA, kB, kSELECT, kSTART};
-
-union u_registro{
-	WORD doble;
-	BYTE simple[2];
-};
 
 #define MAX_LCD_MODE_0 204    //201-207
 #define MAX_LCD_MODE_1 4560    //456 * 10 = 4560

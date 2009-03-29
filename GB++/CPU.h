@@ -1,11 +1,12 @@
 #ifndef __CPU_H__
 #define __CPU_H__
 
-#include "Registros.h"
-#include "Memoria.h"
+#include "Registers.h"
+#include "Memory.h"
 #include "Video.h"
+#include "Pad.h"
 
-class CPU: public Registros, public Memoria
+class CPU: public Registers, public Memory, public Pad
 {
 private:
 	BYTE lastCycles;
@@ -13,9 +14,9 @@ private:
 	WORD cyclesTimer;
 	WORD cyclesDIV;
 	Video *v;
-	BYTE keys[8];
+	Pad *p;
 public:
-	CPU(Video *v);
+	CPU(Video *v, Pad *p);
 	~CPU();
 	
 	void Run();
