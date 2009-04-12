@@ -14,17 +14,13 @@ public:
 	~Video(void);
 	void SetMem(Memory *mem);
 	void RefreshScreen();
-	//void ActualizarPantalla();
-	void UpdateBG(BYTE line);
-	//void actualizarBG(BYTE scanLine);
+	void UpdateLine(BYTE line);
 	void Close();
 private:
+	void UpdateBG(BYTE line);
+	void UpdateWin(BYTE line);
 	void DrawPixel(SDL_Surface *screen, Uint8 R, Uint8 G, Uint8 B, BYTE x, BYTE y);
 	void ObtainPalette(BYTE * palette);
-	//void DrawTile(WORD dir_tile, BYTE row, BYTE col);
-	/*int getIdTile(int xTile, int yTile, int mapAddress, int tileAddress);
-	int getTile(int idTile, int tileAddress, int bitX, int bitY);
-	int id2color(int id, int direccion);*/
 };
 
 #endif

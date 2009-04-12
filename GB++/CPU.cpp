@@ -828,7 +828,7 @@ void CPU::ActualizarEstadoLCD()
 					if (BIT5(MemR(STAT)))
 						MemW(IF, MemR(IF) | 0x02);
                 }
-				v->UpdateBG(MemR(LY));
+				v->UpdateLine(MemR(LY));
                 MemW(LY, MemR(LY) + 1, false);
                 cyclesLCD = 0;
             }
@@ -997,7 +997,7 @@ void CPU::eventsSDL()
 			case SDL_KEYUP:
 				BYTE valueP1 = MemR(P1);
 				BYTE interrupt = p->updateKey(ev.type, ev.key.keysym.sym, &valueP1);
-				MemW(P1, valueP1);
+				MemW(P1, valueP1, false);
 				if (interrupt)
 					MemW(IF, MemR(IF) | 0x10);
 				break;

@@ -13,6 +13,7 @@ Pad::~Pad(void)
 
 BYTE Pad::updateInput(BYTE valueP1)
 {
+	//valueP1 = valueP1 | 0x0F;
 	if(!BIT5(valueP1))
 		return ((valueP1 & 0x30) |
 			(!joypad[jSTART] << 3) | (!joypad[jSELECT] << 2) | (!joypad[jB] << 1) | (!joypad[jA]));

@@ -22,13 +22,170 @@ Video::Video(void)
 	hideScreen = SDL_CreateRGBSurface(SDL_SWSURFACE, 256, 256, 16, 0,0,0,0);
 }
 
+Video::~Video(void)
+{
+}
+
+void Video::SetMem(Memory *mem)
+{
+	this->mem = mem;
+}
+
 void Video::Close()
 {
 	atexit(SDL_Quit);
 }
 
-Video::~Video(void)
+void Video::UpdateLine(BYTE y)
 {
+	UpdateBG(y);
+	UpdateWin(y);
+}
+
+void Video::RefreshScreen()
+{
+	//Copiar la superficie oculta a la principal
+	SDL_BlitSurface(hideScreen, NULL, screen, NULL);
+	//Hacer el cambio
+	SDL_Flip(screen);
+	//cout << "Refresco de pantalla: ";
+	//system("PAUSE");
+	cout << ".";
+	//Sleep(20);
+}
+
+void Video::UpdateBG(BYTE y)
+{
+	WORD x;
+	BYTE x_tile, y_tile, colour;
+	BYTE line[2];
+	BYTE palette[4];
+	int xScrolled, yScrolled;
+	WORD map_ini, map, dir_tile;
+
+	//Seleccionar el tile map
+	map_ini = BIT3(mem->MemR(LCDC)) ? 0x9C00 : 0x9800;
+
+	ObtainPalette(palette);
+
+	yScrolled = (y + mem->MemR(SCY));
+	if (yScrolled < 0)
+		yScrolled += 256;
+	else if (yScrolled > 255)
+		yScrolled -= 256;
+
+	//for (x=0; x<160; x++)
+	for (x=0; x<256; x++)
+	{
+		//Si el LCD o Background desactivado 
+		//pintamos la linea de negro
+		if (!BIT7(mem->MemR(LCDC)) || !BIT0(mem->MemR(LCDC)))
+		{
+			DrawPixel(hideScreen, 255, 255, 255, x, y);
+			//DrawPixel(screen, 0, 0, 0, x, y);
+			continue;
+		}
+
+		map = map_ini + ((yScrolled/8 * 32) + x/8);
+		if (!BIT4(mem->MemR(LCDC)))	//Seleccionar el tile data
+		{
+			//0x8800 = 0x9000 - (128 * 16)
+			dir_tile = (WORD)(0x9000 + ((char)mem->MemR(map))*16);	//Se multiplica por 16 porque cada tile ocupa 16 bytes
+		}
+		else
+		{
+			dir_tile = 0x8000 + mem->MemR(map)*16;
+		}
+
+		y_tile = yScrolled % 8;
+		x_tile = x % 8;
+
+		line[0] = mem->MemR(dir_tile + (y_tile * 2));	//y_tile * 2 porque cada linea de 1 tile ocupa 2 bytes
+		line[1] = mem->MemR(dir_tile + (y_tile * 2) + 1);
+		
+		BYTE pixX = (BYTE)abs((int)x_tile - 7);
+		//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
+		//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
+		colour = palette[(((line[1] & ((BYTE)pow(2.0f, pixX))) >> pixX) << 1) |
+						  ((line[0] & (BYTE)(pow(2.0f, pixX))) >> pixX)];
+
+		xScrolled = (x - mem->MemR(SCX));
+		if (xScrolled < 0)
+			xScrolled += 256;
+
+		DrawPixel(hideScreen, colour, colour, colour, xScrolled, y);
+	}
+}
+
+void Video::UpdateWin(BYTE y)
+{
+	WORD map_ini, map, x, dir_tile, wndPosY;
+	BYTE x_tile, y_tile, colour, xIni, xScrolled, yScrolled;
+	BYTE line[2];
+	BYTE palette[4];
+	unsigned short wndPosX;
+
+	//Si la ventana está desactivada no hacemos nada
+	if (!BIT5(mem->MemR(LCDC)))
+		return;
+
+	wndPosX = mem->MemR(WX) - 7;
+	wndPosY = mem->MemR(WY);
+
+	if (y < wndPosY)
+		return;
+
+	if (wndPosX < 0) xIni = 0;
+	else if (wndPosX > 160) xIni = 160;
+	else xIni = wndPosX;
+
+	ObtainPalette(palette);
+
+	map_ini = BIT6(mem->MemR(LCDC)) ? 0x9C00 : 0x9800;
+
+	for (x=xIni; x<160; x++)
+	{
+		xScrolled = x - wndPosX;
+		yScrolled = y - wndPosY;
+
+		map = map_ini + ((yScrolled/8 * 32) + xScrolled/8);
+		
+		if (!BIT4(mem->MemR(LCDC)))	//Seleccionar el tile data
+		{
+			//0x8800 = 0x9000 - (128 * 16)
+			dir_tile = (WORD)(0x9000 + ((char)mem->MemR(map))*16);	//Se multiplica por 16 porque cada tile ocupa 16 bytes
+		}
+		else
+		{
+			dir_tile = 0x8000 + mem->MemR(map)*16;
+		}
+
+		y_tile = yScrolled % 8;
+		x_tile = xScrolled % 8;
+
+		line[0] = mem->MemR(dir_tile + (y_tile * 2));	//y_tile * 2 porque cada linea de 1 tile ocupa 2 bytes
+		line[1] = mem->MemR(dir_tile + (y_tile * 2) + 1);
+		
+		BYTE pixX = (BYTE)abs((int)x_tile - 7);
+		//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
+		//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
+		colour = palette[(((line[1] & ((BYTE)pow(2.0f, pixX))) >> pixX) << 1) |
+						  ((line[0] & (BYTE)(pow(2.0f, pixX))) >> pixX)];
+
+		DrawPixel(hideScreen, colour, colour, colour, x, y);
+	}
+}
+
+void Video::ObtainPalette(BYTE * palette)
+{
+	BYTE palette_data;
+
+	palette_data = mem->MemR(BGP);
+	
+	palette[0] = abs((BITS01(palette_data) - 3)) * 85;
+	palette[1] = abs(((BITS23(palette_data) >> 2) - 3)) * 85;
+	palette[2] = abs(((BITS45(palette_data) >> 4) - 3)) * 85;
+	palette[3] = abs(((BITS67(palette_data) >> 6) - 3)) * 85;
 }
 
 void Video::DrawPixel(SDL_Surface *screen, Uint8 R, Uint8 G, Uint8 B, BYTE x, BYTE y)
@@ -88,103 +245,4 @@ void Video::DrawPixel(SDL_Surface *screen, Uint8 R, Uint8 G, Uint8 B, BYTE x, BY
     {
         SDL_UnlockSurface(screen);
     }
-}
-
-
-
-void Video::SetMem(Memory *mem)
-{
-	this->mem = mem;
-}
-
-void Video::RefreshScreen()
-{
-	//Copiar la superficie oculta a la principal
-	SDL_BlitSurface(hideScreen, NULL, screen, NULL);
-	//Hacer el cambio
-	SDL_Flip(screen);
-	//cout << "Refresco de pantalla: ";
-	//system("PAUSE");
-	cout << ".";
-	//Sleep(20);
-}
-
-void Video::UpdateBG(BYTE y)
-{
-	WORD x;
-	BYTE x_tile, y_tile, colour;
-	BYTE line[2];
-	BYTE palette[4];
-	int xScrolled, yScrolled;
-	WORD map_ini, map, dir_tile;
-
-	//Seleccionar el tile map
-	if (BIT3(mem->MemR(LCDC)) == 0)
-		map_ini = 0x9800;
-	else
-		map_ini = 0x9C00;
-
-	ObtainPalette(palette);
-
-	yScrolled = (y + mem->MemR(SCY));
-	if (yScrolled < 0)
-		yScrolled += 256;
-	else if (yScrolled > 255)
-		yScrolled -= 256;
-
-	//for (x=0; x<160; x++)
-	for (x=0; x<256; x++)
-	{
-		//Si el LCD o Background desactivado 
-		//pintamos la linea de negro
-		if ((BIT7(mem->MemR(LCDC)) == 0) || (BIT0(mem->MemR(LCDC)) == 0))
-		{
-			DrawPixel(hideScreen, 255, 255, 255, x, y);
-			//DrawPixel(screen, 0, 0, 0, x, y);
-			continue;
-		}
-
-		map = map_ini + ((yScrolled/8 * 32) + x/8);
-		if (BIT4(mem->MemR(LCDC)) == 0)	//Seleccionar el tile data
-		{
-			//0x8800 = 0x9000 - (128 * 16)
-			//dir_tile = (WORD)(((short)mem->MemR(map))*16 + 0x9000);	//Se multiplica por 16 porque cada tile ocupa 16 bytes
-			dir_tile = (WORD)(0x9000 + ((char)mem->MemR(map))*16);	//Se multiplica por 16 porque cada tile ocupa 16 bytes
-		}
-		else
-		{
-			//dir_tile = mem->MemR(map)*16 + 0x8000;
-			dir_tile = 0x8000 + mem->MemR(map)*16;
-		}
-		y_tile = yScrolled % 8;
-		x_tile = x % 8;
-
-		line[0] = mem->MemR(dir_tile + (y_tile * 2));	//y_tile * 2 porque cada linea de 1 tile ocupa 2 bytes
-		line[1] = mem->MemR(dir_tile + (y_tile * 2) + 1);
-		
-		BYTE pixX = (BYTE)abs((int)x_tile - 7);
-		//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
-		//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
-		colour = palette[(((line[1] & ((BYTE)pow(2.0f, pixX))) >> pixX) << 1) |
-						  ((line[0] & (BYTE)(pow(2.0f, pixX))) >> pixX)];
-
-		xScrolled = (x - mem->MemR(SCX));
-		if (xScrolled < 0)
-			xScrolled += 256;
-
-		DrawPixel(hideScreen, colour, colour, colour, xScrolled, y);
-	}
-	//RefreshScreen();
-}
-
-void Video::ObtainPalette(BYTE * palette)
-{
-	BYTE palette_data;
-
-	palette_data = mem->MemR(BGP);
-	
-	palette[0] = abs((BITS01(palette_data) - 3)) * 85;
-	palette[1] = abs(((BITS23(palette_data) >> 2) - 3)) * 85;
-	palette[2] = abs(((BITS45(palette_data) >> 4) - 3)) * 85;
-	palette[3] = abs(((BITS67(palette_data) >> 6) - 3)) * 85;
 }
