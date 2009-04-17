@@ -11,7 +11,7 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Alleyway (JUA) [!].gb");
+	Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Alleyway (JUA) [!].gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Asteroids (UE).gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Boxxle (V1.1) (U) [!].gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Boxxle II (U).gb");						
@@ -50,7 +50,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\PDRoms\\BOXING.GB");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\PDRoms\\CardShuffle.gb");					
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\PDRoms\\DanLaser.gb");
-	Cartridge c("D:\\Descargas\\GB\\ROMS\\PDRoms\\DownhillSki.gb");
+	//Cartridge c("D:\\Descargas\\GB\\ROMS\\PDRoms\\DownhillSki.gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\PDRoms\\GAME1.GB");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\PDRoms\\GAY.GB");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\PDRoms\\GB-TicTacToe.gb");							

@@ -38,8 +38,10 @@ void Video::Close()
 
 void Video::UpdateLine(BYTE y)
 {
+	OrderOAM(y);
 	UpdateBG(y);
 	UpdateWin(y);
+	UpdateOAM(y);
 }
 
 void Video::RefreshScreen()
@@ -66,7 +68,7 @@ void Video::UpdateBG(BYTE y)
 	//Seleccionar el tile map
 	map_ini = BIT3(mem->MemR(LCDC)) ? 0x9C00 : 0x9800;
 
-	ObtainPalette(palette);
+	GetPalette(palette, BGP);
 
 	yScrolled = (y + mem->MemR(SCY));
 	if (yScrolled < 0)
@@ -139,7 +141,7 @@ void Video::UpdateWin(BYTE y)
 	else if (wndPosX > 160) xIni = 160;
 	else xIni = wndPosX;
 
-	ObtainPalette(palette);
+	GetPalette(palette, BGP);
 
 	map_ini = BIT6(mem->MemR(LCDC)) ? 0x9C00 : 0x9800;
 
@@ -176,16 +178,93 @@ void Video::UpdateWin(BYTE y)
 	}
 }
 
-void Video::ObtainPalette(BYTE * palette)
+void Video::OrderOAM(BYTE y)
 {
-	BYTE palette_data;
+	BYTE ySprite;
+	WORD dir;
 
-	palette_data = mem->MemR(BGP);
+	orderedOAM.clear();
+
+	if (!BIT1(mem->MemR(LCDC)))	//OAM desactivado
+		return;
+
+	if (BIT2(mem->MemR(LCDC)))
+		cout << "8x16" << endl;
+
+	for(dir=0xFE00; dir<0xFEA0; dir+=0x04)
+	{
+		ySprite = mem->MemR(dir);
+
+		if ((ySprite==0) || (ySprite>=160))	//La y está fuera de la pantalla
+			continue;
+
+		ySprite -= 16;
+		if ((ySprite > y-8) && (ySprite <= y))
+			orderedOAM.insert(pair<BYTE, WORD>(mem->MemR(dir+1), dir));
+	}
+}
+
+void Video::UpdateOAM(BYTE y)
+{
+	BYTE xSprite, ySprite, attrSprite, x, xTile, yTile, colour;
+	WORD dirSprite, tileNumber, dirTile;
+	BYTE palette[4], palette2[4];
+	BYTE line[2];
+
+	if (!BIT1(mem->MemR(LCDC)))	//OAM desactivado
+		return;
+
+	if (BIT2(mem->MemR(LCDC)))
+		cout << "8x16" << endl;
+
+	GetPalette(palette, OBP0);
+
+	multimap<BYTE, WORD>::iterator it;
+
+	for (it=orderedOAM.begin(); it != orderedOAM.end(); it++)
+	{
+		dirSprite = (*it).second;
+		ySprite = mem->MemR(dirSprite) - 16;	//=mem->MemR(dirSprite + 0);
+		xSprite = (*it).first - 8;			//=mem->MemR(dirSprite + 1);
+		tileNumber = mem->MemR(dirSprite + 2);
+		attrSprite = mem->MemR(dirSprite + 3);
+		dirTile = 0x8000 + tileNumber*16;
+
+		for (x=xSprite; x<xSprite+8; x++)
+		{
+			yTile = y - ySprite;
+			xTile = x % 8;
+
+			line[0] = mem->MemR(dirTile + (yTile * 2));	//yTile * 2 porque cada linea de 1 tile ocupa 2 bytes
+			line[1] = mem->MemR(dirTile + (yTile * 2) + 1);
+			
+			BYTE pixX = (BYTE)abs((int)xTile - 7);
+			//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
+			//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
+			BYTE index = (((line[1] & ((BYTE)pow(2.0f, pixX))) >> pixX) << 1) |
+							  ((line[0] & (BYTE)(pow(2.0f, pixX))) >> pixX);
+
+			//El 0 es transparente (no pintar)
+			if (index)
+			{
+				colour = palette[index];
+
+				DrawPixel(hideScreen, colour, colour, colour, xSprite + xTile, ySprite + yTile);
+			}
+		}
+	}
+}
+
+void Video::GetPalette(BYTE * palette, WORD dir)
+{
+	BYTE paletteData;
+
+	paletteData = mem->MemR(dir);
 	
-	palette[0] = abs((BITS01(palette_data) - 3)) * 85;
-	palette[1] = abs(((BITS23(palette_data) >> 2) - 3)) * 85;
-	palette[2] = abs(((BITS45(palette_data) >> 4) - 3)) * 85;
-	palette[3] = abs(((BITS67(palette_data) >> 6) - 3)) * 85;
+	palette[0] = abs((BITS01(paletteData) - 3)) * 85;
+	palette[1] = abs(((BITS23(paletteData) >> 2) - 3)) * 85;
+	palette[2] = abs(((BITS45(paletteData) >> 4) - 3)) * 85;
+	palette[3] = abs(((BITS67(paletteData) >> 6) - 3)) * 85;
 }
 
 void Video::DrawPixel(SDL_Surface *screen, Uint8 R, Uint8 G, Uint8 B, BYTE x, BYTE y)

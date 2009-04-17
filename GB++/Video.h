@@ -3,12 +3,14 @@
 
 #include "SDL.h"
 #include "Memory.h"
+#include "map"
 
 class Video
 {
 private:
 	Memory *mem;
 	SDL_Surface *screen, *hideScreen;
+	multimap<BYTE, WORD> orderedOAM;
 public:
 	Video();
 	~Video(void);
@@ -19,8 +21,10 @@ public:
 private:
 	void UpdateBG(BYTE line);
 	void UpdateWin(BYTE line);
+	void OrderOAM(BYTE line);
+	void UpdateOAM(BYTE line);
 	void DrawPixel(SDL_Surface *screen, Uint8 R, Uint8 G, Uint8 B, BYTE x, BYTE y);
-	void ObtainPalette(BYTE * palette);
+	void GetPalette(BYTE * palette, WORD dir);
 };
 
 #endif
