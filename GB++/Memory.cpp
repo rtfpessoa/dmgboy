@@ -81,11 +81,11 @@ inline void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
 			//case TAC: cout << "W TAC: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl; break;
 			//case BGP: cout << "W BGP: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl; break;
 			case P1:
-				cout << endl << "W P1   : 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl;
-				cout << "Antes  : 0x" << setfill('0') << setw(2) << uppercase << hex << (int)memory[P1] << endl;
+				//cout << endl << "W P1   : 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl;
+				//cout << "Antes  : 0x" << setfill('0') << setw(2) << uppercase << hex << (int)memory[P1] << endl;
 				value = (value & 0x30) | (memory[P1] & ~0x30);
 				value = p->updateInput(value);
-				cout << "Despues: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl;
+				//cout << "Despues: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl;
 				break;
 			//case LCDC: cout << "W LCDC: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl; break;
 			//case SCX: cout << "W SCX: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl; break;
@@ -129,7 +129,7 @@ inline BYTE Memory::MemR(WORD direction)
 		//case DIV: cout << "R DIV\n"; break;
 		//case TAC: cout << "R TAC\n"; break;
 		//case BGP: cout << "R BGP\n"; break;
-		case P1: cout << "R P1: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)memory[direction] << endl; break;
+		//case P1: cout << "R P1: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)memory[direction] << endl; break;
 	}
 	return memory[direction];
 }

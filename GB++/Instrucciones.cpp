@@ -504,7 +504,7 @@ void Instrucciones::AND(e_registers lugar)
 			reg->Set_A(reg->Get_A() & mem->MemR(reg->Get_HL()));
 			break;
 		default:
-			reg->Set_A(reg->Get_A() | reg->Get_Reg(lugar));
+			reg->Set_A(reg->Get_A() & reg->Get_Reg(lugar));
 	}
 
 	if (reg->Get_A() == 0x00) reg->Set_flagZ(1); else reg->Set_flagZ(0);
@@ -636,8 +636,8 @@ void Instrucciones::ADD_A_n(e_registers lugar)
 	valor = reg->Get_A() + valor_reg;
 
 	if ((valor & 0xFF)== 0) reg->Set_flagZ(1); else reg->Set_flagZ(0);
-	if (((reg->Get_A() & 0x0F) + (valor_reg & 0x0F)) > 0x0F) reg->Set_flagN(1); else reg->Set_flagN(0);
-	reg->Set_flagH(0);
+	if (((reg->Get_A() & 0x0F) + (valor_reg & 0x0F)) > 0x0F) reg->Set_flagH(1); else reg->Set_flagH(0);
+	reg->Set_flagN(0);
 	if (valor > 0xFF) reg->Set_flagC(1); else reg->Set_flagC(0);
 
 	reg->Set_A(valor & 0xFF);

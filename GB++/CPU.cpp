@@ -790,19 +790,19 @@ BYTE CPU::CiclosInstruccion(WORD OpCode)
 
 void CPU::TareasRutinarias()
 {
-	ActualizarEstadoLCD();
-	ActualizarTimer();
+	UpdateStateLCD();
+	UpdateTimer();
 	eventsSDL();
 }
 
-void CPU::ActualizarEstadoLCD()
+void CPU::UpdateStateLCD()
 {
 
-	BYTE modo;
+	BYTE mode;
 
-    modo = BITS01(MemR(STAT));
+    mode = BITS01(MemR(STAT));
 
-    switch (modo)
+    switch (mode)
     {
         case (0):	//Durante H-Blank
             if (cyclesLCD > MAX_LCD_MODE_0)
@@ -827,8 +827,9 @@ void CPU::ActualizarEstadoLCD()
 					//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
 					if (BIT5(MemR(STAT)))
 						MemW(IF, MemR(IF) | 0x02);
+
+					v->UpdateLine(MemR(LY));
                 }
-				v->UpdateLine(MemR(LY));
                 MemW(LY, MemR(LY) + 1, false);
                 cyclesLCD = 0;
             }
@@ -937,7 +938,7 @@ void CPU::Interrupciones()
 	}
 }
 
-void CPU::ActualizarTimer()
+void CPU::UpdateTimer()
 {
 	//int FreqTimer = {4096, 262144, 65536, 16384};
 	WORD overflowTimer[] = {1024, 16, 64, 256};

@@ -180,7 +180,7 @@ void Video::UpdateWin(BYTE y)
 
 void Video::OrderOAM(BYTE y)
 {
-	BYTE ySprite;
+	BYTE ySprite, hSprite;
 	WORD dir;
 
 	orderedOAM.clear();
@@ -188,8 +188,8 @@ void Video::OrderOAM(BYTE y)
 	if (!BIT1(mem->MemR(LCDC)))	//OAM desactivado
 		return;
 
-	if (BIT2(mem->MemR(LCDC)))
-		cout << "8x16" << endl;
+	hSprite = BIT2(mem->MemR(LCDC)) ? 16 : 8;
+	//!!!!Tal vez el modo 8x16 no esté bien
 
 	for(dir=0xFE00; dir<0xFEA0; dir+=0x04)
 	{
@@ -199,14 +199,14 @@ void Video::OrderOAM(BYTE y)
 			continue;
 
 		ySprite -= 16;
-		if ((ySprite > y-8) && (ySprite <= y))
+		if ((ySprite > y-hSprite) && (ySprite <= y))
 			orderedOAM.insert(pair<BYTE, WORD>(mem->MemR(dir+1), dir));
 	}
 }
 
 void Video::UpdateOAM(BYTE y)
 {
-	BYTE xSprite, ySprite, attrSprite, x, xTile, yTile, colour;
+	BYTE xSprite, ySprite, attrSprite, x, xTile, yTile, colour, xFlip, yFlip, countX, countY;
 	WORD dirSprite, tileNumber, dirTile;
 	BYTE palette[4], palette2[4];
 	BYTE line[2];
@@ -214,8 +214,8 @@ void Video::UpdateOAM(BYTE y)
 	if (!BIT1(mem->MemR(LCDC)))	//OAM desactivado
 		return;
 
-	if (BIT2(mem->MemR(LCDC)))
-		cout << "8x16" << endl;
+	//if (BIT2(mem->MemR(LCDC)))
+	//	cout << "8x16" << endl;
 
 	GetPalette(palette, OBP0);
 
@@ -229,11 +229,17 @@ void Video::UpdateOAM(BYTE y)
 		tileNumber = mem->MemR(dirSprite + 2);
 		attrSprite = mem->MemR(dirSprite + 3);
 		dirTile = 0x8000 + tileNumber*16;
+		xFlip = BIT5(attrSprite);
+		yFlip = BIT6(attrSprite);
 
-		for (x=xSprite; x<xSprite+8; x++)
+		xTile = countX = countY = 0;
+		yTile = y - ySprite;
+		countY = yTile;
+		if (yFlip) yTile = (BYTE)abs((int)yTile - 7);
+
+		for (x=xSprite; ((x<xSprite+8) && (x<0xff)); x++)
 		{
-			yTile = y - ySprite;
-			xTile = x % 8;
+			xTile = xFlip ? (BYTE)abs((int)countX - 7) : countX;
 
 			line[0] = mem->MemR(dirTile + (yTile * 2));	//yTile * 2 porque cada linea de 1 tile ocupa 2 bytes
 			line[1] = mem->MemR(dirTile + (yTile * 2) + 1);
@@ -249,8 +255,10 @@ void Video::UpdateOAM(BYTE y)
 			{
 				colour = palette[index];
 
-				DrawPixel(hideScreen, colour, colour, colour, xSprite + xTile, ySprite + yTile);
+				DrawPixel(hideScreen, colour, colour, colour, xSprite + countX, ySprite + countY);
 			}
+
+			countX++;
 		}
 	}
 }

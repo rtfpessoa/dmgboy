@@ -26,8 +26,8 @@ private:
 	BYTE CiclosInstruccion(WORD OpCode);
 	void OpCodeCB();
 	void TareasRutinarias();
-	void ActualizarEstadoLCD();
-	void ActualizarTimer();
+	void UpdateStateLCD();
+	void UpdateTimer();
 	void Interrupciones();
 	void eventsSDL();
 };
