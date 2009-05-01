@@ -13,7 +13,7 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Alleyway (JUA) [!].gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Asteroids (UE).gb");
-	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Boxxle (V1.1) (U) [!].gb");
+	Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Boxxle (V1.1) (U) [!].gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Boxxle II (U).gb");						
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Brainbender (U).gb");
 	//Cartridge c("D:\\Descargas\\GB\\ROMS\\32K\\Bubble Ghost (U).gb");

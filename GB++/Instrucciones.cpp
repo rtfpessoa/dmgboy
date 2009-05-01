@@ -596,24 +596,25 @@ void Instrucciones::SRL_n(e_registers lugar)
 	reg->Add_PC(2);
 }
 
-void Instrucciones::SUB_n(e_registers lugar)
+void Instrucciones::SUB_n(e_registers place)
 {
 	WORD value;
 	BYTE length = 1;
 
-	if (lugar == c_HL)
+	if (place == c_HL)
 		value = mem->MemR(reg->Get_HL());
-	else if (lugar == $)
+	else if (place == $)
 	{
 		value = mem->MemR(reg->Get_PC() + 1);
 		length = 2;
 	}
 	else
-		value = reg->Get_Reg(lugar);
+		value = reg->Get_Reg(place);
 
-	((reg->Get_A() - value) == 0) ? reg->Set_flagZ(1) : reg->Set_flagZ(0);
+	//((reg->Get_A() - value) == 0) ? reg->Set_flagZ(1) : reg->Set_flagZ(0);
+	reg->Set_flagZ((reg->Get_A() - value) ? 0 : 1);
 	reg->Set_flagN(1);
-	(((reg->Get_A() & 0x00FF) - (value & 0x00FF)) < 0) ? reg->Set_flagH(1) : reg->Set_flagH(0);
+	(((reg->Get_A() & 0x0F) - (value & 0x0F)) < 0) ? reg->Set_flagH(1) : reg->Set_flagH(0);
 	((reg->Get_A() - value) < 0) ? reg->Set_flagC(1) : reg->Set_flagC(0);
 
 	reg->Set_A(reg->Get_A() - value);
@@ -755,24 +756,24 @@ void Instrucciones::STOP()
 	cout << "Instruccion 0x10 (Stop)\n";
 }
 
-void Instrucciones::SWAP(e_registers lugar)
+void Instrucciones::SWAP(e_registers place)
 {
-	BYTE valor;
+	BYTE value;
 
-	if (lugar == c_HL)
+	if (place == c_HL)
 	{
-		valor = mem->MemR(reg->Get_HL());
-		valor = ((valor & 0x0F) << 4) | ((valor & 0xF0) >> 4);
-		mem->MemW(reg->Get_HL(), valor);
+		value = mem->MemR(reg->Get_HL());
+		value = ((value & 0x0F) << 4) | ((value & 0xF0) >> 4);
+		mem->MemW(reg->Get_HL(), value);
 	}
 	else
 	{
-		valor = reg->Get_Reg(lugar);
-		valor = ((valor & 0x0F) << 4) | ((valor & 0xF0) >> 4);
-		reg->Set_Reg(lugar, valor);
+		value = reg->Get_Reg(place);
+		value = ((value & 0x0F) << 4) | ((value & 0xF0) >> 4);
+		reg->Set_Reg(place, value);
 	}
 
-	if (lugar == 0) reg->Set_flagZ(1); else reg->Set_flagZ(0);
+	reg->Set_flagZ(value ? 0 : 1);
 	reg->Set_flagN(0);
 	reg->Set_flagH(0);
 	reg->Set_flagC(0);
