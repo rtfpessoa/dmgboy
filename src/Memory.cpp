@@ -1,4 +1,3 @@
-#include "StdAfx.h"
 #include "Memory.h"
 #include "Cartridge.h"
 
@@ -15,7 +14,7 @@ Memory *Memory::GetPtrMemory() {return this;}
 
 void Memory::LoadCartridge(Cartridge *c)
 {
-	memcpy(&memory, c->GetData(), c->GetSize());
+	memcpy(&memory, c->GetData(), 32768);
 }
 
 void Memory::SetPad(Pad *p)

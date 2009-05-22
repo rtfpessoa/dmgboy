@@ -1,9 +1,10 @@
 #ifndef __VIDEO_H__
 #define __VIDEO_H__
 
-#include "SDL.h"
+#include "Definiciones.h"
 #include "Memory.h"
 #include "map"
+//#include <SDL.h>
 
 class Video
 {

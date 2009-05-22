@@ -1,7 +1,7 @@
 #ifndef __REGISTERS_H__
 #define __REGISTERS_H__
 
-#include "StdAfx.h"
+#include "Definiciones.h"
 
 			    //0				 5				  10					  15				 20
 enum e_registers {A, B, C, D, E, F, H, L, AF, BC, DE, HL, f_Z, f_N, f_H, f_C, PC, SP, $, n, c_BC, c_DE, c_HL, c_nn};
@@ -67,10 +67,10 @@ public:
 
 	bool Get_Stop();
 	void Set_Stop(bool valor);
-	
+
 	WORD Get_Reg(e_registers reg);
 	void Set_Reg(e_registers reg, WORD valor);
-	
+
 	BYTE Get_flagZ();
 	void Set_flagZ(BYTE valor);
 	BYTE Get_flagN();

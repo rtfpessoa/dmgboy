@@ -1,4 +1,3 @@
-#include "StdAfx.h"
 #include "Pad.h"
 
 Pad::Pad(void)

@@ -1,5 +1,6 @@
-#include "StdAfx.h"
 #include "Registers.h"
+#include <sstream>
+using namespace std;
 
 Registers::Registers() {ResetRegs();}
 
@@ -76,7 +77,8 @@ WORD Registers::Get_Reg(e_registers reg)
 		default:
 			stringstream out;
 			out << "Get_Reg - Error, registro incorrecto: " << reg << "\n";
-			throw exception(out.str().data());
+			//throw exception(out.str().data());
+			throw exception();
 	}
 }
 
@@ -100,7 +102,8 @@ void Registers::Set_Reg(e_registers reg, WORD valor)
 		default:
 			stringstream out;
 			out << "Set_Reg - Error, registro incorrecto: " << reg << "\n";
-			throw exception(out.str().data());
+			//throw exception(out.str().data());
+			throw exception();
 	}
 }
 
@@ -123,7 +126,8 @@ BYTE Registers::Get_Flag(e_registers flag)
 		default:
 			stringstream out;
 			out << "Error, flag incorrecto (Get): " << flag << "\n";
-			throw exception(out.str().data());
+			//throw exception(out.str().data());
+			throw exception();
 	}
 }
 
@@ -137,7 +141,8 @@ void Registers::Set_Flag(e_registers flag, BYTE valor)
 		default:
 			stringstream out;
 			out << "Error, flag incorrecto (Set): " << flag << "\n";
-			throw exception(out.str().data());
+			//throw exception(out.str().data());
+			throw exception();
 	}
 }
 

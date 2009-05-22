@@ -1,7 +1,8 @@
 #ifndef __PAD_H__
 #define __PAD_H__
 
-#include "SDL.h"
+#include <SDL.h>
+#include "Definiciones.h"
 
 enum e_joypad {jRIGHT, jLEFT, jUP, jDOWN, jA, jB, jSELECT, jSTART};
 

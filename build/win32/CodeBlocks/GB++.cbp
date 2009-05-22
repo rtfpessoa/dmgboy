@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="GB++" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="GB++" prefix_auto="1" extension_auto="1" />
+				<Option object_output="Debug" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-W" />
+					<Add option="-g" />
+					<Add option="-O0" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_CONSOLE" />
+					<Add directory="C:\Archivos de programa\SDL-1.2.13 MinGW\include\SDL" />
+				</Compiler>
+				<Linker>
+					<Add library="C:\Archivos de programa\SDL-1.2.13 MinGW\lib\libSDLmain.a" />
+					<Add library="C:\Archivos de programa\SDL-1.2.13 MinGW\lib\libSDL.dll.a" />
+					<Add directory="C:\Archivos de programa\SDL-1.2.13 MinGW\lib" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="GB++" prefix_auto="1" extension_auto="1" />
+				<Option object_output="Release" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-W" />
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_CONSOLE" />
+					<Add directory="C:\Archivos de programa\SDL-1.2.13 MinGW\include\SDL" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="SDL" />
+					<Add library="SDLmain" />
+					<Add library="libmingw32.a" />
+					<Add library="libSDL.dll.a" />
+					<Add library="libSDLmain.a" />
+					<Add directory="C:\Archivos de programa\SDL-1.2.13 MinGW\lib" />
+				</Linker>
+			</Target>
+		</Build>
+		<Unit filename="..\..\..\src\CPU.cpp" />
+		<Unit filename="..\..\..\src\CPU.h" />
+		<Unit filename="..\..\..\src\Cartridge.cpp" />
+		<Unit filename="..\..\..\src\Cartridge.h" />
+		<Unit filename="..\..\..\src\Definiciones.h" />
+		<Unit filename="..\..\..\src\GB++.cpp" />
+		<Unit filename="..\..\..\src\Instrucciones.cpp" />
+		<Unit filename="..\..\..\src\Instrucciones.h" />
+		<Unit filename="..\..\..\src\Memory.cpp" />
+		<Unit filename="..\..\..\src\Memory.h" />
+		<Unit filename="..\..\..\src\Pad.cpp" />
+		<Unit filename="..\..\..\src\Pad.h" />
+		<Unit filename="..\..\..\src\Registers.cpp" />
+		<Unit filename="..\..\..\src\Registers.h" />
+		<Unit filename="..\..\..\src\Video.cpp" />
+		<Unit filename="..\..\..\src\Video.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,6 +1,8 @@
-#include "StdAfx.h"
 #include "CPU.h"
 #include "Instrucciones.h"
+#include <iomanip>
+#include <sstream>
+#include "Registers.h"
 
 CPU::CPU(Video *v, Pad *p)
 {
@@ -29,7 +31,7 @@ void CPU::Reset()
 void CPU::Interprete()
 {
 	BYTE OpCode = 0, NextOpcode = 0, lastOpCode = 0;
-	
+
 	Instrucciones inst(this->GetPtrRegisters(), this->GetPtrMemory());
 
     for(;;)
@@ -176,7 +178,7 @@ void CPU::Interprete()
 				case (0x7D): inst.LD_A_n(L); break;
 				case (0x7E): inst.LD_A_n(c_HL); break;
 				case (0x7F): inst.LD_n_A(A); break;
-				
+
 				case (0x80): inst.ADD_A_n(B); break;
 				case (0x81): inst.ADD_A_n(C); break;
 				case (0x82): inst.ADD_A_n(D); break;
@@ -302,12 +304,12 @@ void CPU::Interprete()
 				case (0xFE): inst.CP_n($); break;
 				case (0xFF): inst.RST_n(0x38); break;
 				default:
-					stringstream out;
-					out << "Error, instruccion no implementada: 0x";
+					stringstream out;					out << "Error, instruccion no implementada: 0x";
 					out << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << "\n";
-					throw exception(out.str().data());
+					//throw exception(out.str().data());
+					exit(-1);
 			}
-		
+
         if (OpCode == 0xCB)
             lastCycles = CiclosInstruccion((OpCode << 8) | NextOpcode);
         else
@@ -384,7 +386,7 @@ void CPU::OpCodeCB()
 		case (0x2D): inst.SRA_n(L); break;
 		case (0x2E): inst.SRA_n(c_HL); break;
 		case (0x2F): inst.SRA_n(A); break;
-		
+
 		case (0x30): inst.SWAP(B); break;
 		case (0x31): inst.SWAP(C); break;
 		case (0x32): inst.SWAP(D); break;
@@ -610,7 +612,8 @@ void CPU::OpCodeCB()
 			stringstream out;
 			out << "Error, instruccion no implementada: 0xCB";
 			out << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << "\n";
-			throw exception(out.str().data());
+			//throw exception(out.str().data());
+			exit(-1);
     }
 }
 
@@ -776,7 +779,7 @@ BYTE CPU::CiclosInstruccion(WORD OpCode)
         case (0xF9): valor = 8; break;
         case (0xFA): valor = 16; break;
         case (0xFE): valor = 8; break;
-        case (0xFF): valor = 32; break;                
+        case (0xFF): valor = 32; break;
 
         default:
             if (((OpCode & 0xFF00) >> 8) == 0xCB)
