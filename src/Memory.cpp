@@ -120,8 +120,8 @@ inline void Memory::MemW(WORD direction, BYTE value)
 
 inline BYTE Memory::MemR(WORD direction)
 {
-	switch (direction)
-	{
+	//switch (direction)
+	//{
 		//case DMA: cout << "R DMA\n"; break;
 		//case TIMA: cout << "R TIMA\n"; break;
 		//case TMA: cout << "R TMA\n"; break;
@@ -129,7 +129,7 @@ inline BYTE Memory::MemR(WORD direction)
 		//case TAC: cout << "R TAC\n"; break;
 		//case BGP: cout << "R BGP\n"; break;
 		//case P1: cout << "R P1: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)memory[direction] << endl; break;
-	}
+	//}
 	return memory[direction];
 }
 

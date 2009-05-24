@@ -26,62 +26,62 @@ public:
 
 	Registers *GetPtrRegisters();
 
-	BYTE Get_A();
-	void Set_A(BYTE valor);
-	BYTE Get_B();
-	void Set_B(BYTE valor);
-	BYTE Get_C();
-	void Set_C(BYTE valor);
-	BYTE Get_D();
-	void Set_D(BYTE valor);
-	BYTE Get_E();
-	void Set_E(BYTE valor);
-	BYTE Get_F();
-	void Set_F(BYTE valor);
-	BYTE Get_H();
-	void Set_H(BYTE valor);
-	BYTE Get_L();
-	void Set_L(BYTE valor);
+	inline BYTE Get_A();
+	inline void Set_A(BYTE value);
+	inline BYTE Get_B();
+	inline void Set_B(BYTE value);
+	inline BYTE Get_C();
+	inline void Set_C(BYTE value);
+	inline BYTE Get_D();
+	inline void Set_D(BYTE value);
+	inline BYTE Get_E();
+	inline void Set_E(BYTE value);
+	inline BYTE Get_F();
+	inline void Set_F(BYTE value);
+	inline BYTE Get_H();
+	inline void Set_H(BYTE value);
+	inline BYTE Get_L();
+	inline void Set_L(BYTE value);
 
-	WORD Get_AF();
-	void Set_AF(WORD valor);
-	WORD Get_BC();
-	void Set_BC(WORD valor);
-	WORD Get_DE();
-	void Set_DE(WORD valor);
-	WORD Get_HL();
-	void Set_HL(WORD valor);
+	inline WORD Get_AF();
+	inline void Set_AF(WORD value);
+	inline WORD Get_BC();
+	inline void Set_BC(WORD value);
+	inline WORD Get_DE();
+	inline void Set_DE(WORD value);
+	inline WORD Get_HL();
+	inline void Set_HL(WORD value);
 
-	WORD Get_PC();
-	void Set_PC(WORD valor);
-	void Add_PC(int valor);
-	WORD Get_SP();
-	void Set_SP(WORD valor);
-	void Add_SP(int valor);
+	inline WORD Get_PC();
+	inline void Set_PC(WORD value);
+	void Add_PC(int value);
+	inline WORD Get_SP();
+	inline void Set_SP(WORD value);
+	void Add_SP(int value);
 
 	bool Get_IME();
-	void Set_IME(bool valor);
+	inline void Set_IME(bool value);
 
 	bool Get_Halt();
-	void Set_Halt(bool valor);
+	inline void Set_Halt(bool value);
 
 	bool Get_Stop();
-	void Set_Stop(bool valor);
+	inline void Set_Stop(bool value);
 
 	WORD Get_Reg(e_registers reg);
-	void Set_Reg(e_registers reg, WORD valor);
+	void Set_Reg(e_registers reg, WORD value);
 
-	BYTE Get_flagZ();
-	void Set_flagZ(BYTE valor);
-	BYTE Get_flagN();
-	void Set_flagN(BYTE valor);
-	BYTE Get_flagH();
-	void Set_flagH(BYTE valor);
-	BYTE Get_flagC();
-	void Set_flagC(BYTE valor);
+	inline BYTE Get_flagZ();
+	inline void Set_flagZ(BYTE value);
+	inline BYTE Get_flagN();
+	inline void Set_flagN(BYTE value);
+	inline BYTE Get_flagH();
+	inline void Set_flagH(BYTE value);
+	inline BYTE Get_flagC();
+	inline void Set_flagC(BYTE value);
 
 	BYTE Get_Flag(e_registers flag);
-	void Set_Flag(e_registers flag, BYTE valor);
+	void Set_Flag(e_registers flag, BYTE value);
 
 	void ResetRegs();
 };

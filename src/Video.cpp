@@ -1,6 +1,5 @@
 #include "Video.h"
 #include <iostream>
-#include "math.h"
 
 Video::Video(void)
 {
@@ -19,6 +18,9 @@ Video::Video(void)
     }
 
 	hideScreen = SDL_CreateRGBSurface(SDL_SWSURFACE, 256, 256, 16, 0,0,0,0);
+
+	for (int i=0; i<4; i++)
+		colours[i] = SDL_MapRGB(hideScreen->format, i*85, i*85, i*85);
 }
 
 Video::~Video(void)
@@ -37,10 +39,23 @@ void Video::Close()
 
 void Video::UpdateLine(BYTE y)
 {
+	if ( SDL_MUSTLOCK(screen) )
+    {
+        if ( SDL_LockSurface(screen) < 0 )
+		{
+            return;
+        }
+    }
+
 	OrderOAM(y);
 	UpdateBG(y);
 	UpdateWin(y);
 	UpdateOAM(y);
+
+	if ( SDL_MUSTLOCK(screen) )
+    {
+        SDL_UnlockSurface(screen);
+    }
 }
 
 void Video::RefreshScreen()
@@ -58,14 +73,18 @@ void Video::RefreshScreen()
 void Video::UpdateBG(BYTE y)
 {
 	WORD x;
-	BYTE x_tile, y_tile, colour;
+	BYTE x_tile, y_tile, valueLCDC, valueSCX;
 	BYTE line[2];
-	BYTE palette[4];
+	Uint32 colour;
+	Uint32 palette[4];
 	int xScrolled, yScrolled;
 	WORD map_ini, map, dir_tile;
 
+	valueLCDC = mem->MemR(LCDC);
+	valueSCX = mem->MemR(SCX);
+
 	//Seleccionar el tile map
-	map_ini = BIT3(mem->MemR(LCDC)) ? 0x9C00 : 0x9800;
+	map_ini = BIT3(valueLCDC) ? 0x9C00 : 0x9800;
 
 	GetPalette(palette, BGP);
 
@@ -79,16 +98,16 @@ void Video::UpdateBG(BYTE y)
 	for (x=0; x<256; x++)
 	{
 		//Si el LCD o Background desactivado
-		//pintamos la linea de negro
-		if (!BIT7(mem->MemR(LCDC)) || !BIT0(mem->MemR(LCDC)))
+		//pintamos la linea de blanco
+		if (!BIT7(valueLCDC) || !BIT0(valueLCDC))
 		{
-			DrawPixel(hideScreen, 255, 255, 255, x, y);
-			//DrawPixel(screen, 0, 0, 0, x, y);
+			DrawPixel(hideScreen, colours[3], x, y);
+			//DrawPixel(hideScreen, colours[0], x, y);
 			continue;
 		}
 
 		map = map_ini + ((yScrolled/8 * 32) + x/8);
-		if (!BIT4(mem->MemR(LCDC)))	//Seleccionar el tile data
+		if (!BIT4(valueLCDC))	//Seleccionar el tile data
 		{
 			//0x8800 = 0x9000 - (128 * 16)
 			dir_tile = (WORD)(0x9000 + ((char)mem->MemR(map))*16);	//Se multiplica por 16 porque cada tile ocupa 16 bytes
@@ -107,23 +126,24 @@ void Video::UpdateBG(BYTE y)
 		BYTE pixX = (BYTE)abs((int)x_tile - 7);
 		//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 		//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
-		colour = palette[(((line[1] & ((BYTE)pow(2.0f, pixX))) >> pixX) << 1) |
-						  ((line[0] & (BYTE)(pow(2.0f, pixX))) >> pixX)];
+		colour = palette[(((line[1] & (0x01 << pixX)) >> pixX) << 1) |
+						  ((line[0] & (0x01 << pixX)) >> pixX)];
 
-		xScrolled = (x - mem->MemR(SCX));
+		xScrolled = (x - valueSCX);
 		if (xScrolled < 0)
 			xScrolled += 256;
 
-		DrawPixel(hideScreen, colour, colour, colour, xScrolled, y);
+		DrawPixel(hideScreen, colour, xScrolled, y);
 	}
 }
 
 void Video::UpdateWin(BYTE y)
 {
 	WORD map_ini, map, x, dir_tile, wndPosY;
-	BYTE x_tile, y_tile, colour, xIni, xScrolled, yScrolled;
+	BYTE x_tile, y_tile, xIni, xScrolled, yScrolled;
 	BYTE line[2];
-	BYTE palette[4];
+	Uint32 colour;
+	Uint32 palette[4];
 	short wndPosX;
 
 	//Si la ventana está desactivada no hacemos nada
@@ -171,10 +191,10 @@ void Video::UpdateWin(BYTE y)
 		BYTE pixX = (BYTE)abs((int)x_tile - 7);
 		//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 		//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
-		colour = palette[(((line[1] & ((BYTE)pow(2.0f, pixX))) >> pixX) << 1) |
-						  ((line[0] & (BYTE)(pow(2.0f, pixX))) >> pixX)];
+		colour = palette[(((line[1] & (0x01 << pixX)) >> pixX) << 1) |
+						  ((line[0] & (0x01 << pixX)) >> pixX)];
 
-		DrawPixel(hideScreen, colour, colour, colour, x, y);
+		DrawPixel(hideScreen, colour, x, y);
 	}
 }
 
@@ -206,9 +226,10 @@ void Video::OrderOAM(BYTE y)
 
 void Video::UpdateOAM(BYTE y)
 {
-	BYTE xSprite, ySprite, attrSprite, x, xTile, yTile, colour, xFlip, yFlip, countX, countY;
+	BYTE xSprite, ySprite, attrSprite, x, xTile, yTile, xFlip, yFlip, countX, countY;
 	WORD dirSprite, tileNumber, dirTile;
-	BYTE palette[4], palette2[4];
+	Uint32 colour;
+	Uint32 palette[4], palette2[4];
 	BYTE line[2];
 
 	if (!BIT1(mem->MemR(LCDC)))	//OAM desactivado
@@ -247,15 +268,15 @@ void Video::UpdateOAM(BYTE y)
 			BYTE pixX = (BYTE)abs((int)xTile - 7);
 			//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 			//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
-			BYTE index = (((line[1] & ((BYTE)pow(2.0f, pixX))) >> pixX) << 1) |
-							  ((line[0] & (BYTE)(pow(2.0f, pixX))) >> pixX);
+			BYTE index = (((line[1] & (0x01 << pixX)) >> pixX) << 1) |
+						  ((line[0] & (0x01 << pixX)) >> pixX);
 
 			//El 0 es transparente (no pintar)
 			if (index)
 			{
 				colour = palette[index];
 
-				DrawPixel(hideScreen, colour, colour, colour, xSprite + countX, ySprite + countY);
+				DrawPixel(hideScreen, colour, xSprite + countX, ySprite + countY);
 			}
 
 			countX++;
@@ -263,73 +284,48 @@ void Video::UpdateOAM(BYTE y)
 	}
 }
 
-void Video::GetPalette(BYTE * palette, WORD dir)
+void Video::GetPalette(Uint32 * palette, WORD dir)
 {
-	BYTE paletteData;
+	Uint32 paletteData;
 
 	paletteData = mem->MemR(dir);
 
-	palette[0] = abs((BITS01(paletteData) - 3)) * 85;
-	palette[1] = abs(((BITS23(paletteData) >> 2) - 3)) * 85;
-	palette[2] = abs(((BITS45(paletteData) >> 4) - 3)) * 85;
-	palette[3] = abs(((BITS67(paletteData) >> 6) - 3)) * 85;
+	palette[0] = colours[abs((BITS01(paletteData) - 3))];
+	palette[1] = colours[abs(((BITS23(paletteData) >> 2) - 3))];
+	palette[2] = colours[abs(((BITS45(paletteData) >> 4) - 3))];
+	palette[3] = colours[abs(((BITS67(paletteData) >> 6) - 3))];
 }
 
-void Video::DrawPixel(SDL_Surface *screen, Uint8 R, Uint8 G, Uint8 B, BYTE x, BYTE y)
+void Video::DrawPixel(SDL_Surface *screen, Uint32 colour, BYTE x, BYTE y)
 {
-    Uint32 color = SDL_MapRGB(screen->format, R, G, B);
+    int bpp = screen->format->BytesPerPixel;
+    /* Here p is the address to the pixel we want to set */
+    Uint8 *p = (Uint8 *)screen->pixels + y * screen->pitch + x * bpp;
 
-    if ( SDL_MUSTLOCK(screen) )
-    {
-        if ( SDL_LockSurface(screen) < 0 )
-		{
-            return;
-        }
-    }
+    switch(bpp) {
+    case 1:
+        *p = colour;
+        break;
 
-    switch (screen->format->BytesPerPixel)
-    {
-		case 1:
-		{ /* Asumimos 8-bpp */
-			Uint8 *bufp;
+    case 2:
+        *(Uint16 *)p = colour;
+        break;
 
-			bufp = (Uint8 *)screen->pixels + y*screen->pitch + x;
-			*bufp = color;
+    case 3:
+        if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+            p[0] = (colour >> 16) & 0xff;
+            p[1] = (colour >> 8) & 0xff;
+            p[2] = colour & 0xff;
+        } else {
+            p[0] = colour & 0xff;
+            p[1] = (colour >> 8) & 0xff;
+            p[2] = (colour >> 16) & 0xff;
         }
         break;
 
-		case 2:
-		{ /* Probablemente 15-bpp o 16-bpp */
-            Uint16 *bufp;
-
-            bufp = (Uint16 *)screen->pixels + y*screen->pitch/2 + x;
-            *bufp = color;
-        }
-        break;
-
-		case 3:
-		{ /* Modo lento 24-bpp, normalmente no usado */
-            Uint8 *bufp;
-
-            bufp = (Uint8 *)screen->pixels + y*screen->pitch + x;
-            *(bufp+screen->format->Rshift/8) = R;
-            *(bufp+screen->format->Gshift/8) = G;
-            *(bufp+screen->format->Bshift/8) = B;
-        }
-        break;
-
-		case 4:
-		{ /* Probablemente 32-bpp */
-            Uint32 *bufp;
-
-            bufp = (Uint32 *)screen->pixels + y * screen->pitch/4 + x;
-            *bufp = color;
-        }
+    case 4:
+        *(Uint32 *)p = colour;
         break;
     }
 
-    if ( SDL_MUSTLOCK(screen) )
-    {
-        SDL_UnlockSurface(screen);
-    }
 }

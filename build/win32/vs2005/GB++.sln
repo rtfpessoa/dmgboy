@@ -17,4 +17,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		AMDCaProjectFile = D:\Mis Documentos\GB++\build\win32\vs2005\CodeAnalyst\GB++.caw
+	EndGlobalSection
 EndGlobal

@@ -19,7 +19,7 @@ CPU::~CPU()
 
 void CPU::Run()
 {
-	Interprete();
+	Interpreter();
 }
 
 void CPU::Reset()
@@ -28,7 +28,7 @@ void CPU::Reset()
 	ResetMem();
 }
 
-void CPU::Interprete()
+void CPU::Interpreter()
 {
 	BYTE OpCode = 0, NextOpcode = 0, lastOpCode = 0;
 
@@ -258,7 +258,7 @@ void CPU::Interprete()
 				case (0xC8): inst.RET_cc(f_Z, 1); break;
 				case (0xC9): inst.RET(); break;
 				case (0xCA): inst.JP_cc_nn(f_Z, 1); break;
-				case (0xCB): OpCodeCB(); break;
+				case (0xCB): OpCodeCB(&inst); break;
 				case (0xCC): inst.CALL_cc_nn(f_Z, 1); break;
 				case (0xCD): inst.CALL_nn(); break;
 				case (0xCE): inst.ADC_A_n($); break;
@@ -307,7 +307,7 @@ void CPU::Interprete()
 					stringstream out;					out << "Error, instruccion no implementada: 0x";
 					out << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << "\n";
 					//throw exception(out.str().data());
-					exit(-1);
+					throw exception();
 			}
 
         if (OpCode == 0xCB)
@@ -320,300 +320,298 @@ void CPU::Interprete()
 		cyclesDIV += lastCycles;
 
         TareasRutinarias();
-        Interrupciones();
+        Interrupciones(&inst);
 	}
 }
 
 
 
-void CPU::OpCodeCB()
+void CPU::OpCodeCB(Instrucciones * inst)
 {
     BYTE OpCode;
 
     OpCode = MemR(Get_PC() + 1);
 
-	Instrucciones inst(this->GetPtrRegisters(), this->GetPtrMemory());
-
     switch (OpCode)
     {
-		case (0x00): inst.RLC_n(B); break;
-		case (0x01): inst.RLC_n(C); break;
-		case (0x02): inst.RLC_n(D); break;
-		case (0x03): inst.RLC_n(E); break;
-		case (0x04): inst.RLC_n(H); break;
-		case (0x05): inst.RLC_n(L); break;
-		case (0x06): inst.RLC_n(c_HL); break;
-		case (0x07): inst.RLC_n(A); break;
-		case (0x08): inst.RRC_n(B); break;
-		case (0x09): inst.RRC_n(C); break;
-		case (0x0A): inst.RRC_n(D); break;
-		case (0x0B): inst.RRC_n(E); break;
-		case (0x0C): inst.RRC_n(H); break;
-		case (0x0D): inst.RRC_n(L); break;
-		case (0x0E): inst.RRC_n(c_HL); break;
-		case (0x0F): inst.RRC_n(A); break;
+		case (0x00): inst->RLC_n(B); break;
+		case (0x01): inst->RLC_n(C); break;
+		case (0x02): inst->RLC_n(D); break;
+		case (0x03): inst->RLC_n(E); break;
+		case (0x04): inst->RLC_n(H); break;
+		case (0x05): inst->RLC_n(L); break;
+		case (0x06): inst->RLC_n(c_HL); break;
+		case (0x07): inst->RLC_n(A); break;
+		case (0x08): inst->RRC_n(B); break;
+		case (0x09): inst->RRC_n(C); break;
+		case (0x0A): inst->RRC_n(D); break;
+		case (0x0B): inst->RRC_n(E); break;
+		case (0x0C): inst->RRC_n(H); break;
+		case (0x0D): inst->RRC_n(L); break;
+		case (0x0E): inst->RRC_n(c_HL); break;
+		case (0x0F): inst->RRC_n(A); break;
 
-		case (0x10): inst.RL_n(B); break;
-		case (0x11): inst.RL_n(C); break;
-		case (0x12): inst.RL_n(D); break;
-		case (0x13): inst.RL_n(E); break;
-		case (0x14): inst.RL_n(H); break;
-		case (0x15): inst.RL_n(L); break;
-		case (0x16): inst.RL_n(c_HL); break;
-		case (0x17): inst.RL_n(A); break;
-		case (0x18): inst.RR_n(B); break;
-		case (0x19): inst.RR_n(C); break;
-		case (0x1A): inst.RR_n(D); break;
-		case (0x1B): inst.RR_n(E); break;
-		case (0x1C): inst.RR_n(H); break;
-		case (0x1D): inst.RR_n(L); break;
-		case (0x1E): inst.RR_n(c_HL); break;
-		case (0x1F): inst.RR_n(A); break;
+		case (0x10): inst->RL_n(B); break;
+		case (0x11): inst->RL_n(C); break;
+		case (0x12): inst->RL_n(D); break;
+		case (0x13): inst->RL_n(E); break;
+		case (0x14): inst->RL_n(H); break;
+		case (0x15): inst->RL_n(L); break;
+		case (0x16): inst->RL_n(c_HL); break;
+		case (0x17): inst->RL_n(A); break;
+		case (0x18): inst->RR_n(B); break;
+		case (0x19): inst->RR_n(C); break;
+		case (0x1A): inst->RR_n(D); break;
+		case (0x1B): inst->RR_n(E); break;
+		case (0x1C): inst->RR_n(H); break;
+		case (0x1D): inst->RR_n(L); break;
+		case (0x1E): inst->RR_n(c_HL); break;
+		case (0x1F): inst->RR_n(A); break;
 
-        case (0x20): inst.SLA_n(B); break;
-        case (0x21): inst.SLA_n(C); break;
-        case (0x22): inst.SLA_n(D); break;
-        case (0x23): inst.SLA_n(E); break;
-        case (0x24): inst.SLA_n(H); break;
-        case (0x25): inst.SLA_n(L); break;
-        case (0x26): inst.SLA_n(c_HL); break;
-        case (0x27): inst.SLA_n(A); break;
-		case (0x28): inst.SRA_n(B); break;
-		case (0x29): inst.SRA_n(C); break;
-		case (0x2A): inst.SRA_n(D); break;
-		case (0x2B): inst.SRA_n(E); break;
-		case (0x2C): inst.SRA_n(H); break;
-		case (0x2D): inst.SRA_n(L); break;
-		case (0x2E): inst.SRA_n(c_HL); break;
-		case (0x2F): inst.SRA_n(A); break;
+        case (0x20): inst->SLA_n(B); break;
+        case (0x21): inst->SLA_n(C); break;
+        case (0x22): inst->SLA_n(D); break;
+        case (0x23): inst->SLA_n(E); break;
+        case (0x24): inst->SLA_n(H); break;
+        case (0x25): inst->SLA_n(L); break;
+        case (0x26): inst->SLA_n(c_HL); break;
+        case (0x27): inst->SLA_n(A); break;
+		case (0x28): inst->SRA_n(B); break;
+		case (0x29): inst->SRA_n(C); break;
+		case (0x2A): inst->SRA_n(D); break;
+		case (0x2B): inst->SRA_n(E); break;
+		case (0x2C): inst->SRA_n(H); break;
+		case (0x2D): inst->SRA_n(L); break;
+		case (0x2E): inst->SRA_n(c_HL); break;
+		case (0x2F): inst->SRA_n(A); break;
 
-		case (0x30): inst.SWAP(B); break;
-		case (0x31): inst.SWAP(C); break;
-		case (0x32): inst.SWAP(D); break;
-		case (0x33): inst.SWAP(E); break;
-		case (0x34): inst.SWAP(H); break;
-		case (0x35): inst.SWAP(L); break;
-		case (0x36): inst.SWAP(c_HL); break;
-		case (0x37): inst.SWAP(A); break;
-        case (0x38): inst.SRL_n(B); break;
-        case (0x39): inst.SRL_n(C); break;
-        case (0x3A): inst.SRL_n(D); break;
-        case (0x3B): inst.SRL_n(E); break;
-        case (0x3C): inst.SRL_n(H); break;
-        case (0x3D): inst.SRL_n(L); break;
-        case (0x3E): inst.SRL_n(c_HL); break;
-        case (0x3F): inst.SRL_n(A); break;
+		case (0x30): inst->SWAP(B); break;
+		case (0x31): inst->SWAP(C); break;
+		case (0x32): inst->SWAP(D); break;
+		case (0x33): inst->SWAP(E); break;
+		case (0x34): inst->SWAP(H); break;
+		case (0x35): inst->SWAP(L); break;
+		case (0x36): inst->SWAP(c_HL); break;
+		case (0x37): inst->SWAP(A); break;
+        case (0x38): inst->SRL_n(B); break;
+        case (0x39): inst->SRL_n(C); break;
+        case (0x3A): inst->SRL_n(D); break;
+        case (0x3B): inst->SRL_n(E); break;
+        case (0x3C): inst->SRL_n(H); break;
+        case (0x3D): inst->SRL_n(L); break;
+        case (0x3E): inst->SRL_n(c_HL); break;
+        case (0x3F): inst->SRL_n(A); break;
 
-		case (0x40): inst.BIT_b_r(0, B); break;
-		case (0x41): inst.BIT_b_r(0, C); break;
-		case (0x42): inst.BIT_b_r(0, D); break;
-		case (0x43): inst.BIT_b_r(0, E); break;
-		case (0x44): inst.BIT_b_r(0, H); break;
-		case (0x45): inst.BIT_b_r(0, L); break;
-		case (0x46): inst.BIT_b_r(0, c_HL); break;
-		case (0x47): inst.BIT_b_r(0, A); break;
-		case (0x48): inst.BIT_b_r(1, B); break;
-		case (0x49): inst.BIT_b_r(1, C); break;
-		case (0x4A): inst.BIT_b_r(1, D); break;
-		case (0x4B): inst.BIT_b_r(1, E); break;
-		case (0x4C): inst.BIT_b_r(1, H); break;
-		case (0x4D): inst.BIT_b_r(1, L); break;
-		case (0x4E): inst.BIT_b_r(1, c_HL); break;
-		case (0x4F): inst.BIT_b_r(1, A); break;
+		case (0x40): inst->BIT_b_r(0, B); break;
+		case (0x41): inst->BIT_b_r(0, C); break;
+		case (0x42): inst->BIT_b_r(0, D); break;
+		case (0x43): inst->BIT_b_r(0, E); break;
+		case (0x44): inst->BIT_b_r(0, H); break;
+		case (0x45): inst->BIT_b_r(0, L); break;
+		case (0x46): inst->BIT_b_r(0, c_HL); break;
+		case (0x47): inst->BIT_b_r(0, A); break;
+		case (0x48): inst->BIT_b_r(1, B); break;
+		case (0x49): inst->BIT_b_r(1, C); break;
+		case (0x4A): inst->BIT_b_r(1, D); break;
+		case (0x4B): inst->BIT_b_r(1, E); break;
+		case (0x4C): inst->BIT_b_r(1, H); break;
+		case (0x4D): inst->BIT_b_r(1, L); break;
+		case (0x4E): inst->BIT_b_r(1, c_HL); break;
+		case (0x4F): inst->BIT_b_r(1, A); break;
 
-		case (0x50): inst.BIT_b_r(2, B); break;
-		case (0x51): inst.BIT_b_r(2, C); break;
-		case (0x52): inst.BIT_b_r(2, D); break;
-		case (0x53): inst.BIT_b_r(2, E); break;
-		case (0x54): inst.BIT_b_r(2, H); break;
-		case (0x55): inst.BIT_b_r(2, L); break;
-		case (0x56): inst.BIT_b_r(2, c_HL); break;
-		case (0x57): inst.BIT_b_r(2, A); break;
-		case (0x58): inst.BIT_b_r(3, B); break;
-		case (0x59): inst.BIT_b_r(3, C); break;
-		case (0x5A): inst.BIT_b_r(3, D); break;
-		case (0x5B): inst.BIT_b_r(3, E); break;
-		case (0x5C): inst.BIT_b_r(3, H); break;
-		case (0x5D): inst.BIT_b_r(3, L); break;
-		case (0x5E): inst.BIT_b_r(3, c_HL); break;
-		case (0x5F): inst.BIT_b_r(3, A); break;
+		case (0x50): inst->BIT_b_r(2, B); break;
+		case (0x51): inst->BIT_b_r(2, C); break;
+		case (0x52): inst->BIT_b_r(2, D); break;
+		case (0x53): inst->BIT_b_r(2, E); break;
+		case (0x54): inst->BIT_b_r(2, H); break;
+		case (0x55): inst->BIT_b_r(2, L); break;
+		case (0x56): inst->BIT_b_r(2, c_HL); break;
+		case (0x57): inst->BIT_b_r(2, A); break;
+		case (0x58): inst->BIT_b_r(3, B); break;
+		case (0x59): inst->BIT_b_r(3, C); break;
+		case (0x5A): inst->BIT_b_r(3, D); break;
+		case (0x5B): inst->BIT_b_r(3, E); break;
+		case (0x5C): inst->BIT_b_r(3, H); break;
+		case (0x5D): inst->BIT_b_r(3, L); break;
+		case (0x5E): inst->BIT_b_r(3, c_HL); break;
+		case (0x5F): inst->BIT_b_r(3, A); break;
 
-		case (0x60): inst.BIT_b_r(4, B); break;
-		case (0x61): inst.BIT_b_r(4, C); break;
-		case (0x62): inst.BIT_b_r(4, D); break;
-		case (0x63): inst.BIT_b_r(4, E); break;
-		case (0x64): inst.BIT_b_r(4, H); break;
-		case (0x65): inst.BIT_b_r(4, L); break;
-		case (0x66): inst.BIT_b_r(4, c_HL); break;
-		case (0x67): inst.BIT_b_r(4, A); break;
-		case (0x68): inst.BIT_b_r(5, B); break;
-		case (0x69): inst.BIT_b_r(5, C); break;
-		case (0x6A): inst.BIT_b_r(5, D); break;
-		case (0x6B): inst.BIT_b_r(5, E); break;
-		case (0x6C): inst.BIT_b_r(5, H); break;
-		case (0x6D): inst.BIT_b_r(5, L); break;
-		case (0x6E): inst.BIT_b_r(5, c_HL); break;
-		case (0x6F): inst.BIT_b_r(5, A); break;
+		case (0x60): inst->BIT_b_r(4, B); break;
+		case (0x61): inst->BIT_b_r(4, C); break;
+		case (0x62): inst->BIT_b_r(4, D); break;
+		case (0x63): inst->BIT_b_r(4, E); break;
+		case (0x64): inst->BIT_b_r(4, H); break;
+		case (0x65): inst->BIT_b_r(4, L); break;
+		case (0x66): inst->BIT_b_r(4, c_HL); break;
+		case (0x67): inst->BIT_b_r(4, A); break;
+		case (0x68): inst->BIT_b_r(5, B); break;
+		case (0x69): inst->BIT_b_r(5, C); break;
+		case (0x6A): inst->BIT_b_r(5, D); break;
+		case (0x6B): inst->BIT_b_r(5, E); break;
+		case (0x6C): inst->BIT_b_r(5, H); break;
+		case (0x6D): inst->BIT_b_r(5, L); break;
+		case (0x6E): inst->BIT_b_r(5, c_HL); break;
+		case (0x6F): inst->BIT_b_r(5, A); break;
 
-		case (0x70): inst.BIT_b_r(6, B); break;
-		case (0x71): inst.BIT_b_r(6, C); break;
-		case (0x72): inst.BIT_b_r(6, D); break;
-		case (0x73): inst.BIT_b_r(6, E); break;
-		case (0x74): inst.BIT_b_r(6, H); break;
-		case (0x75): inst.BIT_b_r(6, L); break;
-		case (0x76): inst.BIT_b_r(6, c_HL); break;
-		case (0x77): inst.BIT_b_r(6, A); break;
-		case (0x78): inst.BIT_b_r(7, B); break;
-		case (0x79): inst.BIT_b_r(7, C); break;
-		case (0x7A): inst.BIT_b_r(7, D); break;
-		case (0x7B): inst.BIT_b_r(7, E); break;
-		case (0x7C): inst.BIT_b_r(7, H); break;
-		case (0x7D): inst.BIT_b_r(7, L); break;
-		case (0x7E): inst.BIT_b_r(7, c_HL); break;
-		case (0x7F): inst.BIT_b_r(7, A); break;
+		case (0x70): inst->BIT_b_r(6, B); break;
+		case (0x71): inst->BIT_b_r(6, C); break;
+		case (0x72): inst->BIT_b_r(6, D); break;
+		case (0x73): inst->BIT_b_r(6, E); break;
+		case (0x74): inst->BIT_b_r(6, H); break;
+		case (0x75): inst->BIT_b_r(6, L); break;
+		case (0x76): inst->BIT_b_r(6, c_HL); break;
+		case (0x77): inst->BIT_b_r(6, A); break;
+		case (0x78): inst->BIT_b_r(7, B); break;
+		case (0x79): inst->BIT_b_r(7, C); break;
+		case (0x7A): inst->BIT_b_r(7, D); break;
+		case (0x7B): inst->BIT_b_r(7, E); break;
+		case (0x7C): inst->BIT_b_r(7, H); break;
+		case (0x7D): inst->BIT_b_r(7, L); break;
+		case (0x7E): inst->BIT_b_r(7, c_HL); break;
+		case (0x7F): inst->BIT_b_r(7, A); break;
 
-        case (0x80): inst.RES_b_r(0, B); break;
-        case (0x81): inst.RES_b_r(0, C); break;
-        case (0x82): inst.RES_b_r(0, D); break;
-        case (0x83): inst.RES_b_r(0, E); break;
-        case (0x84): inst.RES_b_r(0, H); break;
-        case (0x85): inst.RES_b_r(0, L); break;
-        case (0x86): inst.RES_b_r(0, c_HL); break;
-        case (0x87): inst.RES_b_r(0, A); break;
-        case (0x88): inst.RES_b_r(1, B); break;
-        case (0x89): inst.RES_b_r(1, C); break;
-        case (0x8A): inst.RES_b_r(1, D); break;
-        case (0x8B): inst.RES_b_r(1, E); break;
-        case (0x8C): inst.RES_b_r(1, H); break;
-        case (0x8D): inst.RES_b_r(1, L); break;
-        case (0x8E): inst.RES_b_r(1, c_HL); break;
-        case (0x8F): inst.RES_b_r(1, A); break;
+        case (0x80): inst->RES_b_r(0, B); break;
+        case (0x81): inst->RES_b_r(0, C); break;
+        case (0x82): inst->RES_b_r(0, D); break;
+        case (0x83): inst->RES_b_r(0, E); break;
+        case (0x84): inst->RES_b_r(0, H); break;
+        case (0x85): inst->RES_b_r(0, L); break;
+        case (0x86): inst->RES_b_r(0, c_HL); break;
+        case (0x87): inst->RES_b_r(0, A); break;
+        case (0x88): inst->RES_b_r(1, B); break;
+        case (0x89): inst->RES_b_r(1, C); break;
+        case (0x8A): inst->RES_b_r(1, D); break;
+        case (0x8B): inst->RES_b_r(1, E); break;
+        case (0x8C): inst->RES_b_r(1, H); break;
+        case (0x8D): inst->RES_b_r(1, L); break;
+        case (0x8E): inst->RES_b_r(1, c_HL); break;
+        case (0x8F): inst->RES_b_r(1, A); break;
 
-        case (0x90): inst.RES_b_r(2, B); break;
-        case (0x91): inst.RES_b_r(2, C); break;
-        case (0x92): inst.RES_b_r(2, D); break;
-        case (0x93): inst.RES_b_r(2, E); break;
-        case (0x94): inst.RES_b_r(2, H); break;
-        case (0x95): inst.RES_b_r(2, L); break;
-        case (0x96): inst.RES_b_r(2, c_HL); break;
-        case (0x97): inst.RES_b_r(2, A); break;
-        case (0x98): inst.RES_b_r(3, B); break;
-        case (0x99): inst.RES_b_r(3, C); break;
-        case (0x9A): inst.RES_b_r(3, D); break;
-        case (0x9B): inst.RES_b_r(3, E); break;
-        case (0x9C): inst.RES_b_r(3, H); break;
-        case (0x9D): inst.RES_b_r(3, L); break;
-        case (0x9E): inst.RES_b_r(3, c_HL); break;
-        case (0x9F): inst.RES_b_r(3, A); break;
+        case (0x90): inst->RES_b_r(2, B); break;
+        case (0x91): inst->RES_b_r(2, C); break;
+        case (0x92): inst->RES_b_r(2, D); break;
+        case (0x93): inst->RES_b_r(2, E); break;
+        case (0x94): inst->RES_b_r(2, H); break;
+        case (0x95): inst->RES_b_r(2, L); break;
+        case (0x96): inst->RES_b_r(2, c_HL); break;
+        case (0x97): inst->RES_b_r(2, A); break;
+        case (0x98): inst->RES_b_r(3, B); break;
+        case (0x99): inst->RES_b_r(3, C); break;
+        case (0x9A): inst->RES_b_r(3, D); break;
+        case (0x9B): inst->RES_b_r(3, E); break;
+        case (0x9C): inst->RES_b_r(3, H); break;
+        case (0x9D): inst->RES_b_r(3, L); break;
+        case (0x9E): inst->RES_b_r(3, c_HL); break;
+        case (0x9F): inst->RES_b_r(3, A); break;
 
-        case (0xA0): inst.RES_b_r(4, B); break;
-        case (0xA1): inst.RES_b_r(4, C); break;
-        case (0xA2): inst.RES_b_r(4, D); break;
-        case (0xA3): inst.RES_b_r(4, E); break;
-        case (0xA4): inst.RES_b_r(4, H); break;
-        case (0xA5): inst.RES_b_r(4, L); break;
-        case (0xA6): inst.RES_b_r(4, c_HL); break;
-        case (0xA7): inst.RES_b_r(4, A); break;
-        case (0xA8): inst.RES_b_r(5, B); break;
-        case (0xA9): inst.RES_b_r(5, C); break;
-        case (0xAA): inst.RES_b_r(5, D); break;
-        case (0xAB): inst.RES_b_r(5, E); break;
-        case (0xAC): inst.RES_b_r(5, H); break;
-        case (0xAD): inst.RES_b_r(5, L); break;
-        case (0xAE): inst.RES_b_r(5, c_HL); break;
-        case (0xAF): inst.RES_b_r(5, A); break;
+        case (0xA0): inst->RES_b_r(4, B); break;
+        case (0xA1): inst->RES_b_r(4, C); break;
+        case (0xA2): inst->RES_b_r(4, D); break;
+        case (0xA3): inst->RES_b_r(4, E); break;
+        case (0xA4): inst->RES_b_r(4, H); break;
+        case (0xA5): inst->RES_b_r(4, L); break;
+        case (0xA6): inst->RES_b_r(4, c_HL); break;
+        case (0xA7): inst->RES_b_r(4, A); break;
+        case (0xA8): inst->RES_b_r(5, B); break;
+        case (0xA9): inst->RES_b_r(5, C); break;
+        case (0xAA): inst->RES_b_r(5, D); break;
+        case (0xAB): inst->RES_b_r(5, E); break;
+        case (0xAC): inst->RES_b_r(5, H); break;
+        case (0xAD): inst->RES_b_r(5, L); break;
+        case (0xAE): inst->RES_b_r(5, c_HL); break;
+        case (0xAF): inst->RES_b_r(5, A); break;
 
-        case (0xB0): inst.RES_b_r(6, B); break;
-        case (0xB1): inst.RES_b_r(6, C); break;
-        case (0xB2): inst.RES_b_r(6, D); break;
-        case (0xB3): inst.RES_b_r(6, E); break;
-        case (0xB4): inst.RES_b_r(6, H); break;
-        case (0xB5): inst.RES_b_r(6, L); break;
-        case (0xB6): inst.RES_b_r(6, c_HL); break;
-        case (0xB7): inst.RES_b_r(6, A); break;
-        case (0xB8): inst.RES_b_r(7, B); break;
-        case (0xB9): inst.RES_b_r(7, C); break;
-        case (0xBA): inst.RES_b_r(7, D); break;
-        case (0xBB): inst.RES_b_r(7, E); break;
-        case (0xBC): inst.RES_b_r(7, H); break;
-        case (0xBD): inst.RES_b_r(7, L); break;
-        case (0xBE): inst.RES_b_r(7, c_HL); break;
-        case (0xBF): inst.RES_b_r(7, A); break;
+        case (0xB0): inst->RES_b_r(6, B); break;
+        case (0xB1): inst->RES_b_r(6, C); break;
+        case (0xB2): inst->RES_b_r(6, D); break;
+        case (0xB3): inst->RES_b_r(6, E); break;
+        case (0xB4): inst->RES_b_r(6, H); break;
+        case (0xB5): inst->RES_b_r(6, L); break;
+        case (0xB6): inst->RES_b_r(6, c_HL); break;
+        case (0xB7): inst->RES_b_r(6, A); break;
+        case (0xB8): inst->RES_b_r(7, B); break;
+        case (0xB9): inst->RES_b_r(7, C); break;
+        case (0xBA): inst->RES_b_r(7, D); break;
+        case (0xBB): inst->RES_b_r(7, E); break;
+        case (0xBC): inst->RES_b_r(7, H); break;
+        case (0xBD): inst->RES_b_r(7, L); break;
+        case (0xBE): inst->RES_b_r(7, c_HL); break;
+        case (0xBF): inst->RES_b_r(7, A); break;
 
-        case (0xC0): inst.SET_b_r(0, B); break;
-        case (0xC1): inst.SET_b_r(0, C); break;
-        case (0xC2): inst.SET_b_r(0, D); break;
-        case (0xC3): inst.SET_b_r(0, E); break;
-        case (0xC4): inst.SET_b_r(0, H); break;
-        case (0xC5): inst.SET_b_r(0, L); break;
-        case (0xC6): inst.SET_b_r(0, c_HL); break;
-        case (0xC7): inst.SET_b_r(0, A); break;
-        case (0xC8): inst.SET_b_r(1, B); break;
-        case (0xC9): inst.SET_b_r(1, C); break;
-        case (0xCA): inst.SET_b_r(1, D); break;
-        case (0xCB): inst.SET_b_r(1, E); break;
-        case (0xCC): inst.SET_b_r(1, H); break;
-        case (0xCD): inst.SET_b_r(1, L); break;
-        case (0xCE): inst.SET_b_r(1, c_HL); break;
-        case (0xCF): inst.SET_b_r(1, A); break;
+        case (0xC0): inst->SET_b_r(0, B); break;
+        case (0xC1): inst->SET_b_r(0, C); break;
+        case (0xC2): inst->SET_b_r(0, D); break;
+        case (0xC3): inst->SET_b_r(0, E); break;
+        case (0xC4): inst->SET_b_r(0, H); break;
+        case (0xC5): inst->SET_b_r(0, L); break;
+        case (0xC6): inst->SET_b_r(0, c_HL); break;
+        case (0xC7): inst->SET_b_r(0, A); break;
+        case (0xC8): inst->SET_b_r(1, B); break;
+        case (0xC9): inst->SET_b_r(1, C); break;
+        case (0xCA): inst->SET_b_r(1, D); break;
+        case (0xCB): inst->SET_b_r(1, E); break;
+        case (0xCC): inst->SET_b_r(1, H); break;
+        case (0xCD): inst->SET_b_r(1, L); break;
+        case (0xCE): inst->SET_b_r(1, c_HL); break;
+        case (0xCF): inst->SET_b_r(1, A); break;
 
-        case (0xD0): inst.SET_b_r(2, B); break;
-        case (0xD1): inst.SET_b_r(2, C); break;
-        case (0xD2): inst.SET_b_r(2, D); break;
-        case (0xD3): inst.SET_b_r(2, E); break;
-        case (0xD4): inst.SET_b_r(2, H); break;
-        case (0xD5): inst.SET_b_r(2, L); break;
-        case (0xD6): inst.SET_b_r(2, c_HL); break;
-        case (0xD7): inst.SET_b_r(2, A); break;
-        case (0xD8): inst.SET_b_r(3, B); break;
-        case (0xD9): inst.SET_b_r(3, C); break;
-        case (0xDA): inst.SET_b_r(3, D); break;
-        case (0xDB): inst.SET_b_r(3, E); break;
-        case (0xDC): inst.SET_b_r(3, H); break;
-        case (0xDD): inst.SET_b_r(3, L); break;
-        case (0xDE): inst.SET_b_r(3, c_HL); break;
-        case (0xDF): inst.SET_b_r(3, A); break;
+        case (0xD0): inst->SET_b_r(2, B); break;
+        case (0xD1): inst->SET_b_r(2, C); break;
+        case (0xD2): inst->SET_b_r(2, D); break;
+        case (0xD3): inst->SET_b_r(2, E); break;
+        case (0xD4): inst->SET_b_r(2, H); break;
+        case (0xD5): inst->SET_b_r(2, L); break;
+        case (0xD6): inst->SET_b_r(2, c_HL); break;
+        case (0xD7): inst->SET_b_r(2, A); break;
+        case (0xD8): inst->SET_b_r(3, B); break;
+        case (0xD9): inst->SET_b_r(3, C); break;
+        case (0xDA): inst->SET_b_r(3, D); break;
+        case (0xDB): inst->SET_b_r(3, E); break;
+        case (0xDC): inst->SET_b_r(3, H); break;
+        case (0xDD): inst->SET_b_r(3, L); break;
+        case (0xDE): inst->SET_b_r(3, c_HL); break;
+        case (0xDF): inst->SET_b_r(3, A); break;
 
-        case (0xE0): inst.SET_b_r(4, B); break;
-        case (0xE1): inst.SET_b_r(4, C); break;
-        case (0xE2): inst.SET_b_r(4, D); break;
-        case (0xE3): inst.SET_b_r(4, E); break;
-        case (0xE4): inst.SET_b_r(4, H); break;
-        case (0xE5): inst.SET_b_r(4, L); break;
-        case (0xE6): inst.SET_b_r(4, c_HL); break;
-        case (0xE7): inst.SET_b_r(4, A); break;
-        case (0xE8): inst.SET_b_r(5, B); break;
-        case (0xE9): inst.SET_b_r(5, C); break;
-        case (0xEA): inst.SET_b_r(5, D); break;
-        case (0xEB): inst.SET_b_r(5, E); break;
-        case (0xEC): inst.SET_b_r(5, H); break;
-        case (0xED): inst.SET_b_r(5, L); break;
-        case (0xEE): inst.SET_b_r(5, c_HL); break;
-        case (0xEF): inst.SET_b_r(5, A); break;
+        case (0xE0): inst->SET_b_r(4, B); break;
+        case (0xE1): inst->SET_b_r(4, C); break;
+        case (0xE2): inst->SET_b_r(4, D); break;
+        case (0xE3): inst->SET_b_r(4, E); break;
+        case (0xE4): inst->SET_b_r(4, H); break;
+        case (0xE5): inst->SET_b_r(4, L); break;
+        case (0xE6): inst->SET_b_r(4, c_HL); break;
+        case (0xE7): inst->SET_b_r(4, A); break;
+        case (0xE8): inst->SET_b_r(5, B); break;
+        case (0xE9): inst->SET_b_r(5, C); break;
+        case (0xEA): inst->SET_b_r(5, D); break;
+        case (0xEB): inst->SET_b_r(5, E); break;
+        case (0xEC): inst->SET_b_r(5, H); break;
+        case (0xED): inst->SET_b_r(5, L); break;
+        case (0xEE): inst->SET_b_r(5, c_HL); break;
+        case (0xEF): inst->SET_b_r(5, A); break;
 
-        case (0xF0): inst.SET_b_r(6, B); break;
-        case (0xF1): inst.SET_b_r(6, C); break;
-        case (0xF2): inst.SET_b_r(6, D); break;
-        case (0xF3): inst.SET_b_r(6, E); break;
-        case (0xF4): inst.SET_b_r(6, H); break;
-        case (0xF5): inst.SET_b_r(6, L); break;
-        case (0xF6): inst.SET_b_r(6, c_HL); break;
-        case (0xF7): inst.SET_b_r(6, A); break;
-        case (0xF8): inst.SET_b_r(7, B); break;
-        case (0xF9): inst.SET_b_r(7, C); break;
-        case (0xFA): inst.SET_b_r(7, D); break;
-        case (0xFB): inst.SET_b_r(7, E); break;
-        case (0xFC): inst.SET_b_r(7, H); break;
-        case (0xFD): inst.SET_b_r(7, L); break;
-        case (0xFE): inst.SET_b_r(7, c_HL); break;
-        case (0xFF): inst.SET_b_r(7, A); break;
+        case (0xF0): inst->SET_b_r(6, B); break;
+        case (0xF1): inst->SET_b_r(6, C); break;
+        case (0xF2): inst->SET_b_r(6, D); break;
+        case (0xF3): inst->SET_b_r(6, E); break;
+        case (0xF4): inst->SET_b_r(6, H); break;
+        case (0xF5): inst->SET_b_r(6, L); break;
+        case (0xF6): inst->SET_b_r(6, c_HL); break;
+        case (0xF7): inst->SET_b_r(6, A); break;
+        case (0xF8): inst->SET_b_r(7, B); break;
+        case (0xF9): inst->SET_b_r(7, C); break;
+        case (0xFA): inst->SET_b_r(7, D); break;
+        case (0xFB): inst->SET_b_r(7, E); break;
+        case (0xFC): inst->SET_b_r(7, H); break;
+        case (0xFD): inst->SET_b_r(7, L); break;
+        case (0xFE): inst->SET_b_r(7, c_HL); break;
+        case (0xFF): inst->SET_b_r(7, A); break;
 
         default:
 			stringstream out;
 			out << "Error, instruccion no implementada: 0xCB";
 			out << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << "\n";
 			//throw exception(out.str().data());
-			exit(-1);
+			throw exception();
     }
 }
 
@@ -800,7 +798,6 @@ void CPU::TareasRutinarias()
 
 void CPU::UpdateStateLCD()
 {
-
 	BYTE mode;
 
     mode = BITS01(MemR(STAT));
@@ -891,53 +888,56 @@ void CPU::UpdateStateLCD()
 		MemW(STAT, MemR(STAT) & ~0x40, false);
 }
 
-void CPU::Interrupciones()
+void CPU::Interrupciones(Instrucciones * inst)
 {
 	if (!Get_IME())
 		return;
 
-	Instrucciones inst(this->GetPtrRegisters(), this->GetPtrMemory());
+	BYTE valueIE, valueIF;
 
-	if (BIT0(MemR(IE)) && BIT0(MemR(IF)))	//V-Blank
+	valueIE = MemR(IE);
+	valueIF = MemR(IF);
+
+	if (BIT0(valueIE) && BIT0(valueIF))	//V-Blank
 	{
 		Set_IME(false);
 		Set_Halt(false);
 		Add_PC(-1);
-		inst.RST_n(0x40);
-		MemW(IF, MemR(IF) & ~0x01);
+		inst->RST_n(0x40);
+		MemW(IF, valueIF & ~0x01);
 	}
-	else if (BIT1(MemR(IE)) && BIT1(MemR(IF)))	//LCD-Stat
+	else if (BIT1(valueIE) && BIT1(valueIF))	//LCD-Stat
 	{
 		Set_IME(false);
 		Set_Halt(false);
 		Add_PC(-1);
-		inst.RST_n(0x48);
-		MemW(IF, MemR(IF) & ~0x02);
+		inst->RST_n(0x48);
+		MemW(IF, valueIF & ~0x02);
 	}
-	else if (BIT2(MemR(IE)) && BIT2(MemR(IF)))	//Timer
+	else if (BIT2(valueIE) && BIT2(valueIF))	//Timer
 	{
 		Set_IME(false);
 		Set_Halt(false);
 		Add_PC(-1);
-		inst.RST_n(0x50);
-		MemW(IF, MemR(IF) & ~0x04);
+		inst->RST_n(0x50);
+		MemW(IF, valueIF & ~0x04);
 	}
-	else if(BIT3(MemR(IE)) && BIT3(MemR(IF)))	//Serial
+	else if(BIT3(valueIE) && BIT3(valueIF))	//Serial
 	{
 		Set_IME(false);
 		Set_Halt(false);
 		Add_PC(-1);
-		inst.RST_n(0x58);
-		MemW(IF, MemR(IF) & ~0x08);
+		inst->RST_n(0x58);
+		MemW(IF, valueIF & ~0x08);
 	}
-	else if (BIT4(MemR(IE)) && BIT4(MemR(IF)))	//Joypad
+	else if (BIT4(valueIE) && BIT4(valueIF))	//Joypad
 	{
 		Set_IME(false);
 		Set_Halt(false);
 		Set_Stop(false);
 		Add_PC(-1);
-		inst.RST_n(0x60);
-		MemW(IF, MemR(IF) & ~0x10);
+		inst->RST_n(0x60);
+		MemW(IF, valueIF & ~0x10);
 	}
 }
 

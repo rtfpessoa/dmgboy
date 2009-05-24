@@ -4,7 +4,7 @@
 #include "Definiciones.h"
 #include "Memory.h"
 #include "map"
-//#include <SDL.h>
+#include <SDL.h>
 
 class Video
 {
@@ -12,6 +12,7 @@ private:
 	Memory *mem;
 	SDL_Surface *screen, *hideScreen;
 	multimap<BYTE, WORD> orderedOAM;
+	Uint32 colours[4];
 public:
 	Video();
 	~Video(void);
@@ -24,8 +25,8 @@ private:
 	void UpdateWin(BYTE line);
 	void OrderOAM(BYTE line);
 	void UpdateOAM(BYTE line);
-	void DrawPixel(SDL_Surface *screen, Uint8 R, Uint8 G, Uint8 B, BYTE x, BYTE y);
-	void GetPalette(BYTE * palette, WORD dir);
+	inline void DrawPixel(SDL_Surface *screen, Uint32 colour, BYTE x, BYTE y);
+	void GetPalette(Uint32 * palette, WORD dir);
 };
 
 #endif

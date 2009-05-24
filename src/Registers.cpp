@@ -11,46 +11,46 @@ Registers::~Registers()
 Registers *Registers::GetPtrRegisters() {return this;}
 
 BYTE Registers::Get_A()				{return this->af.simple[1];}
-void Registers::Set_A(BYTE valor)	{this->af.simple[1] = valor;}
+void Registers::Set_A(BYTE value)	{this->af.simple[1] = value;}
 BYTE Registers::Get_B()				{return this->bc.simple[1];}
-void Registers::Set_B(BYTE valor)	{this->bc.simple[1] = valor;}
+void Registers::Set_B(BYTE value)	{this->bc.simple[1] = value;}
 BYTE Registers::Get_C()				{return this->bc.simple[0];}
-void Registers::Set_C(BYTE valor)	{this->bc.simple[0] = valor;}
+void Registers::Set_C(BYTE value)	{this->bc.simple[0] = value;}
 BYTE Registers::Get_D()				{return this->de.simple[1];}
-void Registers::Set_D(BYTE valor)	{this->de.simple[1] = valor;}
+void Registers::Set_D(BYTE value)	{this->de.simple[1] = value;}
 BYTE Registers::Get_E()				{return this->de.simple[0];}
-void Registers::Set_E(BYTE valor)	{this->de.simple[0] = valor;}
+void Registers::Set_E(BYTE value)	{this->de.simple[0] = value;}
 BYTE Registers::Get_F()				{return this->af.simple[0];}
-void Registers::Set_F(BYTE valor)	{this->af.simple[0] = valor;}
+void Registers::Set_F(BYTE value)	{this->af.simple[0] = value;}
 BYTE Registers::Get_H()				{return this->hl.simple[1];}
-void Registers::Set_H(BYTE valor)	{this->hl.simple[1] = valor;}
+void Registers::Set_H(BYTE value)	{this->hl.simple[1] = value;}
 BYTE Registers::Get_L()				{return this->hl.simple[0];}
-void Registers::Set_L(BYTE valor)	{this->hl.simple[0] = valor;}
+void Registers::Set_L(BYTE value)	{this->hl.simple[0] = value;}
 
 WORD Registers::Get_AF()			{return this->af.doble;}
-void Registers::Set_AF(WORD valor)	{this->af.doble = valor;}
+void Registers::Set_AF(WORD value)	{this->af.doble = value;}
 WORD Registers::Get_BC()			{return this->bc.doble;}
-void Registers::Set_BC(WORD valor)	{this->bc.doble = valor;}
+void Registers::Set_BC(WORD value)	{this->bc.doble = value;}
 WORD Registers::Get_DE()			{return this->de.doble;}
-void Registers::Set_DE(WORD valor)	{this->de.doble = valor;}
+void Registers::Set_DE(WORD value)	{this->de.doble = value;}
 WORD Registers::Get_HL()			{return this->hl.doble;}
-void Registers::Set_HL(WORD valor)	{this->hl.doble = valor;}
+void Registers::Set_HL(WORD value)	{this->hl.doble = value;}
 
-inline WORD Registers::Get_PC()			{return this->pc;}
-void Registers::Set_PC(WORD valor)  {this->pc = valor;}
-void Registers::Add_PC(int valor)  {this->pc += valor;};
+WORD Registers::Get_PC()			{return this->pc;}
+void Registers::Set_PC(WORD value)  {this->pc = value;}
+void Registers::Add_PC(int value)  {this->pc += value;};
 WORD Registers::Get_SP()			{return this->sp;}
-void Registers::Set_SP(WORD valor)  {this->sp = valor;}
-void Registers::Add_SP(int valor)  {this->sp += valor;};
+void Registers::Set_SP(WORD value)  {this->sp = value;}
+void Registers::Add_SP(int value)  {this->sp += value;};
 
 bool Registers::Get_IME()			{return this->IME;}
-void Registers::Set_IME(bool valor)	{this->IME = valor;}
+void Registers::Set_IME(bool value)	{this->IME = value;}
 
 bool Registers::Get_Halt()				{return this->halt;}
-void Registers::Set_Halt(bool valor)	{this->halt = valor;}
+void Registers::Set_Halt(bool value)	{this->halt = value;}
 
 bool Registers::Get_Stop()				{return this->stop;}
-void Registers::Set_Stop(bool valor)	{this->stop = valor;}
+void Registers::Set_Stop(bool value)	{this->stop = value;}
 
 WORD Registers::Get_Reg(e_registers reg)
 {
@@ -69,11 +69,6 @@ WORD Registers::Get_Reg(e_registers reg)
 		case HL: return this->Get_HL(); break;
 		case PC: return this->Get_PC(); break;
 		case SP: return this->Get_SP(); break;
-		/*
-		case c_bc: return this->Get_BC(); break;	//Realmente estos hacen los mismo que los anteriores,
-		case c_de: return this->Get_DE(); break;	//pero se usan para saber que hay que irse a la direccion
-		case c_hl: return this->Get_HL(); break;	//en memoria contenida en estos registros
-		*/
 		default:
 			stringstream out;
 			out << "Get_Reg - Error, registro incorrecto: " << reg << "\n";
@@ -82,23 +77,23 @@ WORD Registers::Get_Reg(e_registers reg)
 	}
 }
 
-void Registers::Set_Reg(e_registers reg, WORD valor)
+void Registers::Set_Reg(e_registers reg, WORD value)
 {
 	switch (reg){
-		case A: this->Set_A(valor); break;
-		case B: this->Set_B(valor); break;
-		case C: this->Set_C(valor); break;
-		case D: this->Set_D(valor); break;
-		case E: this->Set_E(valor); break;
-		case F: this->Set_F(valor); break;
-		case H: this->Set_H(valor); break;
-		case L: this->Set_L(valor); break;
-		case AF: this->Set_AF(valor); break;
-		case BC: this->Set_BC(valor); break;
-		case DE: this->Set_DE(valor); break;
-		case HL: this->Set_HL(valor); break;
-		case PC: this->Set_PC(valor); break;
-		case SP: this->Set_SP(valor); break;
+		case A: this->Set_A(value); break;
+		case B: this->Set_B(value); break;
+		case C: this->Set_C(value); break;
+		case D: this->Set_D(value); break;
+		case E: this->Set_E(value); break;
+		case F: this->Set_F(value); break;
+		case H: this->Set_H(value); break;
+		case L: this->Set_L(value); break;
+		case AF: this->Set_AF(value); break;
+		case BC: this->Set_BC(value); break;
+		case DE: this->Set_DE(value); break;
+		case HL: this->Set_HL(value); break;
+		case PC: this->Set_PC(value); break;
+		case SP: this->Set_SP(value); break;
 		default:
 			stringstream out;
 			out << "Set_Reg - Error, registro incorrecto: " << reg << "\n";
@@ -108,13 +103,13 @@ void Registers::Set_Reg(e_registers reg, WORD valor)
 }
 
 BYTE Registers::Get_flagZ() {return (this->af.simple[0] >> 7);}
-void Registers::Set_flagZ(BYTE valor) {this->af.simple[0] = (this->af.simple[0] & 0x7F) | (valor << 7);}
+void Registers::Set_flagZ(BYTE value) {this->af.simple[0] = (this->af.simple[0] & 0x7F) | (value << 7);}
 BYTE Registers::Get_flagN() {return ((this->af.simple[0] & 0x40) >> 6);}
-void Registers::Set_flagN(BYTE valor) {this->af.simple[0] = (this->af.simple[0] & 0xBF) | (valor << 6);}
+void Registers::Set_flagN(BYTE value) {this->af.simple[0] = (this->af.simple[0] & 0xBF) | (value << 6);}
 BYTE Registers::Get_flagH() {return ((this->af.simple[0] & 0x20) >> 5);}
-void Registers::Set_flagH(BYTE valor) {this->af.simple[0] = (this->af.simple[0] & 0xDF) | (valor << 5);}
+void Registers::Set_flagH(BYTE value) {this->af.simple[0] = (this->af.simple[0] & 0xDF) | (value << 5);}
 BYTE Registers::Get_flagC() {return ((this->af.simple[0] & 0x10) >> 4);}
-void Registers::Set_flagC(BYTE valor) {this->af.simple[0] = (this->af.simple[0] & 0xEF) | (valor << 4);}
+void Registers::Set_flagC(BYTE value) {this->af.simple[0] = (this->af.simple[0] & 0xEF) | (value << 4);}
 
 BYTE Registers::Get_Flag(e_registers flag)
 {
@@ -131,13 +126,13 @@ BYTE Registers::Get_Flag(e_registers flag)
 	}
 }
 
-void Registers::Set_Flag(e_registers flag, BYTE valor)
+void Registers::Set_Flag(e_registers flag, BYTE value)
 {
 	switch (flag){
-		case f_C: this->Set_flagC(valor);
-		case f_H: this->Set_flagH(valor);
-		case f_N: this->Set_flagN(valor);
-		case f_Z: this->Set_flagZ(valor);
+		case f_C: this->Set_flagC(value);
+		case f_H: this->Set_flagH(value);
+		case f_N: this->Set_flagN(value);
+		case f_Z: this->Set_flagZ(value);
 		default:
 			stringstream out;
 			out << "Error, flag incorrecto (Set): " << flag << "\n";

@@ -8,11 +8,10 @@
 #include "CPU.h"
 #include "Pad.h"
 
-//Para evitar que el gcc en windows de un mensaje de error al linkar de referencia
+//Para evitar que el gcc en windows de un mensaje de error de referencia al linkar
 //WinMain16 no encontrada
 #undef main
 
-//int _tmain(int argc, _TCHAR* argv[])
 int main ( int argc, char** argv )
 {
 	string basePath;
@@ -77,17 +76,15 @@ int main ( int argc, char** argv )
 
 	//Tiene MBC - Cartridge c(basePath + "PDRoms/Pikakilla.gb");
 
-	//c.Print(0, 0x1a0);
-
 	if (!c.isLoaded())
 	{
-		cout << "Press to finish" << endl;
+		cout << "Press to finish ..." << endl;
 		cin.get();
 
 		return 0;
 	}
 
-    cout << "Press to continue" << endl;
+    cout << "Press to continue ..." << endl;
     cin.get();
     Video v;
 	Pad p;
@@ -105,7 +102,7 @@ int main ( int argc, char** argv )
 
 	v.Close();
 
-    cout << "Press to finish" << endl;
+    cout << "Press to finish ..." << endl;
     cin.get();
 
 	return 0;

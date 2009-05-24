@@ -2,6 +2,7 @@
 #define __CPU_H__
 
 #include "Registers.h"
+#include "Instrucciones.h"
 #include "Memory.h"
 #include "Video.h"
 #include "Pad.h"
@@ -22,13 +23,13 @@ public:
 	void Run();
 	void Reset();
 private:
-	void Interprete();
+	void Interpreter();
 	BYTE CiclosInstruccion(WORD OpCode);
-	void OpCodeCB();
+	void OpCodeCB(Instrucciones * inst);
 	void TareasRutinarias();
 	void UpdateStateLCD();
 	void UpdateTimer();
-	void Interrupciones();
+	void Interrupciones(Instrucciones * inst);
 	void eventsSDL();
 };
 
