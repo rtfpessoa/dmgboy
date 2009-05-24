@@ -9,15 +9,14 @@ Video::Video(void)
         exit(1);
     }
 
-    //screen = SDL_SetVideoMode(160, 144, 16, SDL_SWSURFACE);
-	screen = SDL_SetVideoMode(256, 256, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	screen = SDL_SetVideoMode(160, 144, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
     if ( screen == NULL )
     {
 		cerr << "No se puede establecer el modo de video: " << SDL_GetError() << endl;
         exit(1);
     }
 
-	hideScreen = SDL_CreateRGBSurface(SDL_SWSURFACE, 256, 256, 16, 0,0,0,0);
+	hideScreen = SDL_CreateRGBSurface(SDL_SWSURFACE, 160, 144, 16, 0,0,0,0);
 
 	for (int i=0; i<4; i++)
 		colours[i] = SDL_MapRGB(hideScreen->format, i*85, i*85, i*85);
@@ -64,10 +63,7 @@ void Video::RefreshScreen()
 	SDL_BlitSurface(hideScreen, NULL, screen, NULL);
 	//Hacer el cambio
 	SDL_Flip(screen);
-	//cout << "Refresco de pantalla: ";
-	//system("PAUSE");
 	cout << ".";
-	//Sleep(20);
 }
 
 void Video::UpdateBG(BYTE y)
@@ -94,8 +90,7 @@ void Video::UpdateBG(BYTE y)
 	else if (yScrolled > 255)
 		yScrolled -= 256;
 
-	//for (x=0; x<160; x++)
-	for (x=0; x<256; x++)
+	for (x=0; x<160; x++)
 	{
 		//Si el LCD o Background desactivado
 		//pintamos la linea de blanco
@@ -106,7 +101,11 @@ void Video::UpdateBG(BYTE y)
 			continue;
 		}
 
-		map = map_ini + ((yScrolled/8 * 32) + x/8);
+		xScrolled = (x + valueSCX);
+		if (xScrolled > 256)
+			xScrolled -= 256;
+
+		map = map_ini + ((yScrolled/8 * 32) + xScrolled/8);
 		if (!BIT4(valueLCDC))	//Seleccionar el tile data
 		{
 			//0x8800 = 0x9000 - (128 * 16)
@@ -118,7 +117,7 @@ void Video::UpdateBG(BYTE y)
 		}
 
 		y_tile = yScrolled % 8;
-		x_tile = x % 8;
+		x_tile = xScrolled % 8;
 
 		line[0] = mem->MemR(dir_tile + (y_tile * 2));	//y_tile * 2 porque cada linea de 1 tile ocupa 2 bytes
 		line[1] = mem->MemR(dir_tile + (y_tile * 2) + 1);
@@ -129,11 +128,7 @@ void Video::UpdateBG(BYTE y)
 		colour = palette[(((line[1] & (0x01 << pixX)) >> pixX) << 1) |
 						  ((line[0] & (0x01 << pixX)) >> pixX)];
 
-		xScrolled = (x - valueSCX);
-		if (xScrolled < 0)
-			xScrolled += 256;
-
-		DrawPixel(hideScreen, colour, xScrolled, y);
+		DrawPixel(hideScreen, colour, x, y);
 	}
 }
 
