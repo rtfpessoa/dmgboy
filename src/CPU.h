@@ -6,8 +6,9 @@
 #include "Memory.h"
 #include "Video.h"
 #include "Pad.h"
+#include "Cartridge.h"
 
-class CPU: public Registers, public Memory, public Pad
+class CPU: public Registers, public Memory
 {
 private:
 	BYTE lastCycles;
@@ -17,7 +18,7 @@ private:
 	Video *v;
 	Pad *p;
 public:
-	CPU(Video *v, Pad *p);
+	CPU(Video *v, Pad *p, Cartridge *c);
 	~CPU();
 	
 	void Run();

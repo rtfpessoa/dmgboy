@@ -14,7 +14,7 @@ Memory *Memory::GetPtrMemory() {return this;}
 
 void Memory::LoadCartridge(Cartridge *c)
 {
-	memcpy(&memory, c->GetData(), 32768);
+	this->c = c;
 }
 
 void Memory::SetPad(Pad *p)
@@ -97,15 +97,16 @@ inline void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
 		//if ((direccion >= 0x8000) && (direccion < 0xA000))
 		//	cout << "W VRAM: 0x" << setfill('0') << setw(4) << uppercase << hex << (int)direccion << "=0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl;
 
-		if ((direction > 0xBFFF) && (direction < 0xDE00))//C000-DDFF
+		if ((direction >= 0xC000) && (direction < 0xDE00))//C000-DDFF
 			memory[direction + 0x2000] = value;
-		if ((direction > 0xDFFF) && (direction < 0xFE00))//E000-FDFF
+		if ((direction >= 0xE000) && (direction < 0xFE00))//E000-FDFF
 			memory[direction - 0x2000] = value;
 
-		if (direction < 0x8000)
+		if ((direction < 0x8000) || ((direction >= 0xA000)&&(direction < 0xC000)))
 		{
 			//cout << "Error: Intentando escribir en la ROM. ";
 			//cout << "0x" << setfill('0') << setw(4) << uppercase << hex << (int)direccion << "=0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl;
+			c->Write(direction, value);
 			return;
 		}
 	}//Fin if
@@ -130,6 +131,10 @@ inline BYTE Memory::MemR(WORD direction)
 		//case BGP: cout << "R BGP\n"; break;
 		//case P1: cout << "R P1: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)memory[direction] << endl; break;
 	//}
+	if (direction < 0x8000)
+	{
+		return c->Read(direction);
+	}
 	return memory[direction];
 }
 

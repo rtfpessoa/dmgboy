@@ -9,17 +9,19 @@ Video::Video(void)
         exit(1);
     }
 
-	screen = SDL_SetVideoMode(160, 144, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	screen = SDL_SetVideoMode(SCREEN_W, SCREEN_H, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
     if ( screen == NULL )
     {
 		cerr << "No se puede establecer el modo de video: " << SDL_GetError() << endl;
         exit(1);
     }
 
-	hideScreen = SDL_CreateRGBSurface(SDL_SWSURFACE, 160, 144, 16, 0,0,0,0);
+	hideScreen = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_W, SCREEN_H, 16, 0,0,0,0);
 
 	for (int i=0; i<4; i++)
-		colours[i] = SDL_MapRGB(hideScreen->format, i*85, i*85, i*85);
+		colors[i] = SDL_MapRGB(hideScreen->format, i*85, i*85, i*85);
+
+	SDL_WM_SetCaption("GB++", "icon");
 }
 
 Video::~Video(void)
@@ -69,9 +71,9 @@ void Video::RefreshScreen()
 void Video::UpdateBG(BYTE y)
 {
 	WORD x;
-	BYTE x_tile, y_tile, valueLCDC, valueSCX;
+	BYTE x_tile, y_tile, valueLCDC, valueSCX, indexColor;
 	BYTE line[2];
-	Uint32 colour;
+	Uint32 color;
 	Uint32 palette[4];
 	int xScrolled, yScrolled;
 	WORD map_ini, map, dir_tile;
@@ -90,14 +92,14 @@ void Video::UpdateBG(BYTE y)
 	else if (yScrolled > 255)
 		yScrolled -= 256;
 
-	for (x=0; x<160; x++)
+	for (x=0; x<SCREEN_W; x++)
 	{
 		//Si el LCD o Background desactivado
 		//pintamos la linea de blanco
 		if (!BIT7(valueLCDC) || !BIT0(valueLCDC))
 		{
-			DrawPixel(hideScreen, colours[3], x, y);
-			//DrawPixel(hideScreen, colours[0], x, y);
+			DrawPixel(hideScreen, colors[3], x, y);
+			//DrawPixel(hideScreen, colors[0], x, y);
 			continue;
 		}
 
@@ -125,19 +127,20 @@ void Video::UpdateBG(BYTE y)
 		BYTE pixX = (BYTE)abs((int)x_tile - 7);
 		//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 		//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
-		colour = palette[(((line[1] & (0x01 << pixX)) >> pixX) << 1) |
-						  ((line[0] & (0x01 << pixX)) >> pixX)];
+		indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
+		color = palette[indexColor];
 
-		DrawPixel(hideScreen, colour, x, y);
+		DrawPixel(hideScreen, color, x, y);
+		indexColorsBGWnd[x][y] = indexColor;
 	}
 }
 
 void Video::UpdateWin(BYTE y)
 {
 	WORD map_ini, map, x, dir_tile, wndPosY;
-	BYTE x_tile, y_tile, xIni, xScrolled, yScrolled;
+	BYTE x_tile, y_tile, xIni, xScrolled, yScrolled, indexColor;
 	BYTE line[2];
-	Uint32 colour;
+	Uint32 color;
 	Uint32 palette[4];
 	short wndPosX;
 
@@ -153,7 +156,7 @@ void Video::UpdateWin(BYTE y)
 
 	if (wndPosX < 0) xIni = 0;
 	//!!!!!!!!!!!!!!!!!wndPosX nunca puede llegar a wndPosX (solo llega llega a 127) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	else if (wndPosX > 160) xIni = 160;
+	else if (wndPosX > SCREEN_W) xIni = SCREEN_W;
 	else xIni = wndPosX;
 
 	GetPalette(palette, BGP);
@@ -186,10 +189,11 @@ void Video::UpdateWin(BYTE y)
 		BYTE pixX = (BYTE)abs((int)x_tile - 7);
 		//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 		//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
-		colour = palette[(((line[1] & (0x01 << pixX)) >> pixX) << 1) |
-						  ((line[0] & (0x01 << pixX)) >> pixX)];
+		indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
+		color = palette[indexColor];
 
-		DrawPixel(hideScreen, colour, x, y);
+		DrawPixel(hideScreen, color, x, y);
+		indexColorsBGWnd[x][y] = indexColor;
 	}
 }
 
@@ -210,7 +214,7 @@ void Video::OrderOAM(BYTE y)
 	{
 		ySprite = mem->MemR(dir);
 
-		if ((ySprite==0) || (ySprite>=160))	//La y está fuera de la pantalla
+		if ((ySprite==0) || (ySprite>=SCREEN_W))	//La y está fuera de la pantalla
 			continue;
 
 		ySprite -= 16;
@@ -221,9 +225,9 @@ void Video::OrderOAM(BYTE y)
 
 void Video::UpdateOAM(BYTE y)
 {
-	BYTE xSprite, ySprite, attrSprite, x, xTile, yTile, xFlip, yFlip, countX, countY;
+	BYTE xSprite, ySprite, attrSprite, x, xTile, yTile, xFlip, yFlip, countX, countY, behind;
 	WORD dirSprite, tileNumber, dirTile;
-	Uint32 colour;
+	Uint32 color;
 	Uint32 palette[4], palette2[4];
 	BYTE line[2];
 
@@ -241,12 +245,13 @@ void Video::UpdateOAM(BYTE y)
 	{
 		dirSprite = (*it).second;
 		ySprite = mem->MemR(dirSprite) - 16;	//=mem->MemR(dirSprite + 0);
-		xSprite = (*it).first - 8;			//=mem->MemR(dirSprite + 1);
+		xSprite = (*it).first - 8;				//=mem->MemR(dirSprite + 1);
 		tileNumber = mem->MemR(dirSprite + 2);
 		attrSprite = mem->MemR(dirSprite + 3);
 		dirTile = 0x8000 + tileNumber*16;
 		xFlip = BIT5(attrSprite);
 		yFlip = BIT6(attrSprite);
+		behind = BIT7(attrSprite);
 
 		xTile = countX = countY = 0;
 		yTile = y - ySprite;
@@ -263,15 +268,14 @@ void Video::UpdateOAM(BYTE y)
 			BYTE pixX = (BYTE)abs((int)xTile - 7);
 			//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 			//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
-			BYTE index = (((line[1] & (0x01 << pixX)) >> pixX) << 1) |
-						  ((line[0] & (0x01 << pixX)) >> pixX);
+			BYTE index = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
 
 			//El 0 es transparente (no pintar)
-			if (index)
+			if ((index) && ((!behind) || (!indexColorsBGWnd[xSprite + countX][ySprite + countY])))
 			{
-				colour = palette[index];
+				color = palette[index];
 
-				DrawPixel(hideScreen, colour, xSprite + countX, ySprite + countY);
+				DrawPixel(hideScreen, color, xSprite + countX, ySprite + countY);
 			}
 
 			countX++;
@@ -285,13 +289,13 @@ void Video::GetPalette(Uint32 * palette, WORD dir)
 
 	paletteData = mem->MemR(dir);
 
-	palette[0] = colours[abs((BITS01(paletteData) - 3))];
-	palette[1] = colours[abs(((BITS23(paletteData) >> 2) - 3))];
-	palette[2] = colours[abs(((BITS45(paletteData) >> 4) - 3))];
-	palette[3] = colours[abs(((BITS67(paletteData) >> 6) - 3))];
+	palette[0] = colors[abs((int)(BITS01(paletteData) - 3))];
+	palette[1] = colors[abs((int)((BITS23(paletteData) >> 2) - 3))];
+	palette[2] = colors[abs((int)((BITS45(paletteData) >> 4) - 3))];
+	palette[3] = colors[abs((int)((BITS67(paletteData) >> 6) - 3))];
 }
 
-void Video::DrawPixel(SDL_Surface *screen, Uint32 colour, BYTE x, BYTE y)
+void Video::DrawPixel(SDL_Surface *screen, Uint32 color, BYTE x, BYTE y)
 {
     int bpp = screen->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to set */
@@ -299,27 +303,27 @@ void Video::DrawPixel(SDL_Surface *screen, Uint32 colour, BYTE x, BYTE y)
 
     switch(bpp) {
     case 1:
-        *p = colour;
+        *p = color;
         break;
 
     case 2:
-        *(Uint16 *)p = colour;
+        *(Uint16 *)p = color;
         break;
 
     case 3:
         if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-            p[0] = (colour >> 16) & 0xff;
-            p[1] = (colour >> 8) & 0xff;
-            p[2] = colour & 0xff;
+            p[0] = (color >> 16) & 0xff;
+            p[1] = (color >> 8) & 0xff;
+            p[2] = color & 0xff;
         } else {
-            p[0] = colour & 0xff;
-            p[1] = (colour >> 8) & 0xff;
-            p[2] = (colour >> 16) & 0xff;
+            p[0] = color & 0xff;
+            p[1] = (color >> 8) & 0xff;
+            p[2] = (color >> 16) & 0xff;
         }
         break;
 
     case 4:
-        *(Uint32 *)p = colour;
+        *(Uint32 *)p = color;
         break;
     }
 

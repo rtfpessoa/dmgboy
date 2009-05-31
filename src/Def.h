@@ -1,5 +1,5 @@
-#ifndef __DEFINICIONES_H__
-#define __DEFINICIONES_H__
+#ifndef __DEF_H__
+#define __DEF_H__
 
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
@@ -22,11 +22,6 @@ typedef unsigned short WORD;
 #define BITS23(value)	((value) & 0x0C)
 #define BITS45(value)	((value) & 0x30)
 #define BITS67(value)	((value) & 0xC0)
-
-#define CART_NAME		0x0134
-#define CART_TYPE		0x0147
-#define CART_ROM_SIZE	0x0148
-#define CART_RAM_SIZE	0x0148
 
 #define P1		0xFF00
 #define SB		0xFF01

@@ -54,8 +54,12 @@
 		<Unit filename="..\..\..\src\Cartridge.h" />
 		<Unit filename="..\..\..\src\Definiciones.h" />
 		<Unit filename="..\..\..\src\GB++.cpp" />
+		<Unit filename="..\..\..\src\GBException.cpp" />
+		<Unit filename="..\..\..\src\GBException.h" />
 		<Unit filename="..\..\..\src\Instrucciones.cpp" />
 		<Unit filename="..\..\..\src\Instrucciones.h" />
+		<Unit filename="..\..\..\src\MBC.cpp" />
+		<Unit filename="..\..\..\src\MBC.h" />
 		<Unit filename="..\..\..\src\Memory.cpp" />
 		<Unit filename="..\..\..\src\Memory.h" />
 		<Unit filename="..\..\..\src\Pad.cpp" />

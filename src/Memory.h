@@ -11,12 +11,13 @@ class Memory
 private:
 	BYTE memory[SIZE_MEM];
 	Pad *p;
+	Cartridge *c;
 public:
 	Memory();
 	~Memory();
 	Memory *GetPtrMemory();
-	void SetPad(Pad *p);
 	void ResetMem();
+	void SetPad(Pad *p);
 	void LoadCartridge(Cartridge *c);
 	void MemW(WORD direction, BYTE value, bool checkDirAndValue);
 	void MemW(WORD direction, BYTE value);

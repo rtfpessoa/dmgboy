@@ -3,14 +3,16 @@
 #include <iomanip>
 #include <sstream>
 #include "Registers.h"
+#include "GBException.h"
 
-CPU::CPU(Video *v, Pad *p)
+CPU::CPU(Video *v, Pad *p, Cartridge *c)
 {
 	cyclesLCD = 0;
 	this->v = v;
 	v->SetMem(this->GetPtrMemory());
 	this->p = p;
 	SetPad(p);
+	LoadCartridge(c);
 }
 
 CPU::~CPU()
@@ -304,10 +306,10 @@ void CPU::Interpreter()
 				case (0xFE): inst.CP_n($); break;
 				case (0xFF): inst.RST_n(0x38); break;
 				default:
-					stringstream out;					out << "Error, instruccion no implementada: 0x";
+					stringstream out;
+					out << "Error, instruccion no implementada: 0x";
 					out << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << "\n";
-					//throw exception(out.str().data());
-					throw exception();
+					throw GBException(out.str().data());
 			}
 
         if (OpCode == 0xCB)
@@ -610,8 +612,7 @@ void CPU::OpCodeCB(Instrucciones * inst)
 			stringstream out;
 			out << "Error, instruccion no implementada: 0xCB";
 			out << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << "\n";
-			//throw exception(out.str().data());
-			throw exception();
+			throw GBException(out.str().data());
     }
 }
 

@@ -1,7 +1,7 @@
 #ifndef __REGISTERS_H__
 #define __REGISTERS_H__
 
-#include "Definiciones.h"
+#include "Def.h"
 
 			    //0				 5				  10					  15				 20
 enum e_registers {A, B, C, D, E, F, H, L, AF, BC, DE, HL, f_Z, f_N, f_H, f_C, PC, SP, $, n, c_BC, c_DE, c_HL, c_nn};

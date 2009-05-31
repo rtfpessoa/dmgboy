@@ -1,5 +1,6 @@
 #include "Instrucciones.h"
 #include <iostream>
+#include "GBException.h"
 
 Instrucciones::Instrucciones(Registers* reg, Memory* mem)
 {
@@ -689,7 +690,7 @@ void Instrucciones::ADD_HL_n(e_registers lugar)
 		case DE:
 		case HL:
 		case SP: valor_reg = reg->Get_Reg(lugar); break;
-		default: printf("Error, registro incorrecto. Instrucción: ADD_HL\n"); exit(-1);//throw exception("Error, registro incorrecto. Instrucción: ADD_HL");
+		default: throw GBException("Error, registro incorrecto. Instrucción: ADD_HL");
 	}
 
 	valor = reg->Get_HL() + valor_reg;

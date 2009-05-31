@@ -188,7 +188,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\GBException.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\Instrucciones.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\MBC.cpp"
 				>
 			</File>
 			<File
@@ -221,11 +229,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\Definiciones.h"
+				RelativePath="..\..\..\src\Def.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\GBException.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\src\Instrucciones.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\MBC.h"
 				>
 			</File>
 			<File
