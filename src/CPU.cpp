@@ -1,9 +1,11 @@
 #include "CPU.h"
-#include "Instrucciones.h"
+#include "Instructions.h"
 #include <iomanip>
 #include <sstream>
 #include "Registers.h"
 #include "GBException.h"
+
+using namespace std;
 
 CPU::CPU(Video *v, Pad *p, Cartridge *c)
 {
@@ -34,7 +36,7 @@ void CPU::Interpreter()
 {
 	BYTE OpCode = 0, NextOpcode = 0, lastOpCode = 0;
 
-	Instrucciones inst(this->GetPtrRegisters(), this->GetPtrMemory());
+	Instructions inst(this->GetPtrRegisters(), this->GetPtrMemory());
 
     for(;;)
     {
@@ -328,7 +330,7 @@ void CPU::Interpreter()
 
 
 
-void CPU::OpCodeCB(Instrucciones * inst)
+void CPU::OpCodeCB(Instructions * inst)
 {
     BYTE OpCode;
 
@@ -889,7 +891,7 @@ void CPU::UpdateStateLCD()
 		MemW(STAT, MemR(STAT) & ~0x40, false);
 }
 
-void CPU::Interrupciones(Instrucciones * inst)
+void CPU::Interrupciones(Instructions * inst)
 {
 	if (!Get_IME())
 		return;

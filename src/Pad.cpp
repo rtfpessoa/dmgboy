@@ -38,35 +38,35 @@ BYTE Pad::updateKey(int eventType, SDLKey key, BYTE *valueP1)
 
 	switch(key)
 	{
-		case(SDLK_a):
+		case(kA):
 			printf( "PAD: A\n");
 			joypad[jA] = (eventType == SDL_KEYDOWN);
 			break;
-		case(SDLK_s):
+		case(kB):
 			printf( "PAD: B\n");
 			joypad[jB] = (eventType == SDL_KEYDOWN);
 			break;
-		case(SDLK_q):
+		case(kSE):
 			printf( "PAD: SELECT\n");
 			joypad[jSELECT] = (eventType == SDL_KEYDOWN);
 			break;
-		case(SDLK_w):
+		case(kST):
 			printf( "PAD: START\n");
 			joypad[jSTART] = (eventType == SDL_KEYDOWN);
 			break;
-		case(SDLK_LEFT):
+		case(kL):
 			printf( "PAD: LEFT\n");
 			joypad[jLEFT] = (eventType == SDL_KEYDOWN);
 			break;
-		case(SDLK_RIGHT):
+		case(kR):
 			printf( "PAD: RIGHT\n");
 			joypad[jRIGHT] = (eventType == SDL_KEYDOWN);
 			break;
-		case(SDLK_UP):
+		case(kU):
 			printf( "PAD: UP\n");
 			joypad[jUP] = (eventType == SDL_KEYDOWN);
 			break;
-		case(SDLK_DOWN):
+		case(kD):
 			printf( "PAD: DOWN\n");
 			joypad[jDOWN] = (eventType == SDL_KEYDOWN);
 			break;
@@ -79,11 +79,11 @@ BYTE Pad::updateKey(int eventType, SDLKey key, BYTE *valueP1)
 	if (eventType == SDL_KEYDOWN)
 	{
 		if(!BIT5(*valueP1))
-			if ((key == SDLK_a) || (key == SDLK_s) || (key == SDLK_q) || (key == SDLK_w))
+			if ((key == kA) || (key == kB) || (key == kSE) || (key == kST))
 				return 1;
 
 		if(!BIT4(*valueP1))
-			if ((key == SDLK_LEFT) || (key == SDLK_RIGHT) || (key == SDLK_UP) || (key == SDLK_DOWN))
+			if ((key == kL) || (key == kR) || (key == kU) || (key == kD))
 				return 1;
 	}
 

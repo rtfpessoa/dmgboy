@@ -4,7 +4,7 @@
 #include "Registers.h"
 #include "Memory.h"
 
-class Instrucciones
+class Instructions
 {
 private:
 	Registers *reg;
@@ -12,8 +12,8 @@ private:
 
 	void PUSH_PC();
 public:
-	Instrucciones(Registers *reg, Memory *mem);
-	~Instrucciones(void);
+	Instructions(Registers *reg, Memory *mem);
+	~Instructions(void);
 	
 	void ADC_A_n(e_registers place);
 	void ADD_A_n(e_registers place);

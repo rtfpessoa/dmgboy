@@ -6,7 +6,7 @@
 #include <iomanip>
 #include "GBException.h"
 
-enum e_MBC { None, MBC1, MBC2, MBC3, MBC5, MMM01, HuC1, RumbleCart, Other};
+using namespace std;
 
 Cartridge::Cartridge(string path)
 {
@@ -16,29 +16,37 @@ Cartridge::Cartridge(string path)
 	{
 		size = file.tellg();
 		this->size = size;
-		mem_cartridge = new BYTE [size];
+		_memCartridge = new BYTE [size];
 		file.seekg (0, ios::beg);
-		file.read ((char *)mem_cartridge, size);
+		file.read ((char *)_memCartridge, size);
 		file.close();
 
 		cout << path << ":\nArchivo cargado en memoria correctamente" << endl;
 		char name[17];
-		memcpy(name, &mem_cartridge[CART_NAME], 17);
+		memcpy(name, &_memCartridge[CART_NAME], 17);
 		name[16] = '\0';
 		cout << "Nombre de cartucho: " << name << endl;
-		cout << "Tamano de ROM:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)mem_cartridge[CART_ROM_SIZE] << endl;
-		cout << "Tamano de RAM:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)mem_cartridge[CART_RAM_SIZE] << endl;
-		cout << "Tipo de cartucho:\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)mem_cartridge[CART_TYPE] << endl;
+		cout << "Tamano de ROM:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_ROM_SIZE] << endl;
+		cout << "Tamano de RAM:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_RAM_SIZE] << endl;
+		cout << "Tipo de cartucho:\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_TYPE] << endl;
 
-		switch(mem_cartridge[CART_TYPE])
+		SetMBCMemCart(_memCartridge);
+
+		switch(_memCartridge[CART_TYPE])
 		{
 		case 0x00:						//ROM ONLY
 		case 0x08:						//ROM+RAM
-		case 0x09: mbc = None; break;	//ROM+RAM+BATTERY 
+		case 0x09:						//ROM+RAM+BATTERY  
+			ptrRead = &NoneRead;
+			ptrWrite = &NoneWrite;
+			break;
 		case 0x01:						//ROM+MBC1 
 		case 0x02:						//ROM+MBC1+RAM 
-		case 0x03: mbc = MBC1; break;	//ROM+MBC1+RAM+BATT 
-		case 0x05:						//ROM+MBC2 
+		case 0x03:						//ROM+MBC1+RAM+BATT 
+			ptrRead = &MBC1Read;
+			ptrWrite = &MBC1Write;
+			break;
+		/*case 0x05:						//ROM+MBC2 
 		case 0x06: mbc = MBC2; break;	//ROM+MBC2+BATTERY
 		case 0x0B:						//ROM+MMM01
 		case 0x0C:						//ROM+MMM01+SRAM
@@ -57,24 +65,23 @@ Cartridge::Cartridge(string path)
 		case 0x1F:						//Pocket Camera
 		case 0xFD:						//Bandai TAMA5
 		case 0xFE: mbc = Other; break;	//Hudson HuC-3
-		case 0xFF: mbc = HuC1; break;	//Hudson HuC-1
+		case 0xFF: mbc = HuC1; break;	//Hudson HuC-1*/
+		default: throw GBException("MBC no implementado todavia");
 		}
-
-		_isLoaded = true;
+		isLoaded = true;
 	}
 	else
 	{
 		cout << path << ": Error al intentar abrir el archivo" << endl;
-		_isLoaded = false;
+		isLoaded = false;
 	}
-	ROMBank = 1;
 }
 
 Cartridge::~Cartridge(void)
 {
 }
 
-void Cartridge::Print(int beg, int end)
+/*void Cartridge::Print(int beg, int end)
 {
 	int i, j;
 	BYTE byte;
@@ -87,11 +94,11 @@ void Cartridge::Print(int beg, int end)
 		}
 		cout << endl;
 	}
-}
+}*/
 
 BYTE *Cartridge::GetData()
 {
-	return mem_cartridge;
+	return _memCartridge;
 }
 
 unsigned int Cartridge::GetSize()
@@ -99,38 +106,17 @@ unsigned int Cartridge::GetSize()
 	return size;
 }
 
-bool Cartridge::isLoaded()
+bool Cartridge::IsLoaded()
 {
-	return _isLoaded;
+	return isLoaded;
 }
 
 BYTE Cartridge::Read(WORD direction)
 {
-	switch(mbc)
-	{
-		case None: return mem_cartridge[direction];
-		case MBC1: return MBC1Read(direction);
-		default:
-			throw GBException("The type of MBC not yet suported");
-	}
+	return ptrRead(direction);
 }
 
 void Cartridge::Write(WORD direction, BYTE value)
 {
-	if ((direction >=0x2000)&&(direction < 0x4000))
-	{
-		//Habria que tener en cuenta tambien los bits superiores (4000-5FFF)
-		if ((value & 0x1F)== 0)
-			value++;
-
-		ROMBank = value & 0x1F;
-	}
-}
-
-BYTE Cartridge::MBC1Read(WORD direction)
-{
-	if (direction < 0x4000)
-		return mem_cartridge[direction];
-	else
-		return mem_cartridge[(direction - 0x4000) + (0x4000*ROMBank)];
+	ptrWrite(direction, value);
 }

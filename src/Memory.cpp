@@ -94,8 +94,6 @@ inline void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
 			case DIV: value = 0; break;
 			//case 0xC6E8: cout << "0xC6E8" << endl; break;
 		}
-		//if ((direccion >= 0x8000) && (direccion < 0xA000))
-		//	cout << "W VRAM: 0x" << setfill('0') << setw(4) << uppercase << hex << (int)direccion << "=0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl;
 
 		if ((direction >= 0xC000) && (direction < 0xDE00))//C000-DDFF
 			memory[direction + 0x2000] = value;
@@ -104,8 +102,6 @@ inline void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
 
 		if ((direction < 0x8000) || ((direction >= 0xA000)&&(direction < 0xC000)))
 		{
-			//cout << "Error: Intentando escribir en la ROM. ";
-			//cout << "0x" << setfill('0') << setw(4) << uppercase << hex << (int)direccion << "=0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl;
 			c->Write(direction, value);
 			return;
 		}
@@ -119,7 +115,7 @@ inline void Memory::MemW(WORD direction, BYTE value)
 	MemW(direction, value, true);
 }
 
-inline BYTE Memory::MemR(WORD direction)
+BYTE Memory::MemR(WORD direction)
 {
 	//switch (direction)
 	//{

@@ -1,5 +1,7 @@
 #include "GBException.h"
 
+using namespace std;
+
 GBException::GBException(string desc): exception(), description(desc)
 {
 

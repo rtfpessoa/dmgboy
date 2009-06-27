@@ -14,9 +14,9 @@ class Video
 private:
 	Memory *mem;
 	SDL_Surface *screen, *hideScreen;
-	multimap<BYTE, WORD> orderedOAM;
+	std::multimap<int, int> orderedOAM;	//posicion x, dir. memoria
 	Uint32 colors[4];
-	BYTE indexColorsBGWnd[SCREEN_W][SCREEN_H];	//Indice de color en pantalla pintadas por background y window 
+	int indexColorsBGWnd[SCREEN_W][SCREEN_H];	//Indice de color en pantalla pintadas por background y window 
 public:
 	Video();
 	~Video(void);
@@ -25,12 +25,12 @@ public:
 	void UpdateLine(BYTE line);
 	void Close();
 private:
-	void UpdateBG(BYTE line);
-	void UpdateWin(BYTE line);
-	void OrderOAM(BYTE line);
-	void UpdateOAM(BYTE line);
-	inline void DrawPixel(SDL_Surface *screen, Uint32 color, BYTE x, BYTE y);
-	void GetPalette(Uint32 * palette, WORD dir);
+	void UpdateBG(int line);
+	void UpdateWin(int line);
+	void OrderOAM(int line);
+	void UpdateOAM(int line);
+	inline void DrawPixel(SDL_Surface *screen, Uint32 color, int x, int y);
+	void GetPalette(Uint32 * palette, int dir);
 };
 
 #endif

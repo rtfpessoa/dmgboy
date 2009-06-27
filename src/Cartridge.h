@@ -3,7 +3,7 @@
 
 #include <string>
 #include "Def.h"
-using namespace std;
+#include "MBC.h"
 
 #define CART_NAME		0x0134
 #define CART_TYPE		0x0147
@@ -13,23 +13,21 @@ using namespace std;
 class Cartridge
 {
 private:
-	BYTE * mem_cartridge;
 	unsigned int size;
-	bool _isLoaded;
-	BYTE mbc;
-	BYTE ROMBank;
+	bool isLoaded;
+	BYTE * _memCartridge;
 
-	BYTE MBC1Read(WORD direction);
-	void MBC1Write(WORD direction, BYTE value);
+	BYTE (*ptrRead)(WORD);
+	void (*ptrWrite)(WORD, BYTE);
 public:
-	Cartridge(string path);
+	Cartridge(std::string path);
 	~Cartridge();
 	void Print(int beg, int end);
 	BYTE *GetData();
 	unsigned int GetSize();
 	BYTE Read(WORD direction);
 	void Write(WORD direction, BYTE value);
-	bool isLoaded();
+	bool IsLoaded();
 };
 
 #endif

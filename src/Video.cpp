@@ -1,6 +1,8 @@
 #include "Video.h"
 #include <iostream>
 
+using namespace std;
+
 Video::Video(void)
 {
 	//if ( SDL_Init(SDL_INIT_AUDIO|SDL_INIT_VIDEO) < 0 ) {
@@ -68,11 +70,11 @@ void Video::RefreshScreen()
 	cout << ".";
 }
 
-void Video::UpdateBG(BYTE y)
+void Video::UpdateBG(int y)
 {
-	WORD x;
-	BYTE x_tile, y_tile, valueLCDC, valueSCX, indexColor;
-	BYTE line[2];
+	int x, indexColor;
+	BYTE x_tile, y_tile, valueLCDC, valueSCX;
+	int line[2];
 	Uint32 color;
 	Uint32 palette[4];
 	int xScrolled, yScrolled;
@@ -124,7 +126,7 @@ void Video::UpdateBG(BYTE y)
 		line[0] = mem->MemR(dir_tile + (y_tile * 2));	//y_tile * 2 porque cada linea de 1 tile ocupa 2 bytes
 		line[1] = mem->MemR(dir_tile + (y_tile * 2) + 1);
 
-		BYTE pixX = (BYTE)abs((int)x_tile - 7);
+		int pixX = (BYTE)abs((int)x_tile - 7);
 		//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 		//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
 		indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
@@ -135,9 +137,10 @@ void Video::UpdateBG(BYTE y)
 	}
 }
 
-void Video::UpdateWin(BYTE y)
+void Video::UpdateWin(int y)
 {
-	WORD map_ini, map, x, dir_tile, wndPosY;
+	int x;
+	WORD map_ini, map, dir_tile, wndPosY;
 	BYTE x_tile, y_tile, xIni, xScrolled, yScrolled, indexColor;
 	BYTE line[2];
 	Uint32 color;
@@ -155,7 +158,6 @@ void Video::UpdateWin(BYTE y)
 		return;
 
 	if (wndPosX < 0) xIni = 0;
-	//!!!!!!!!!!!!!!!!!wndPosX nunca puede llegar a wndPosX (solo llega llega a 127) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	else if (wndPosX > SCREEN_W) xIni = SCREEN_W;
 	else xIni = wndPosX;
 
@@ -163,7 +165,7 @@ void Video::UpdateWin(BYTE y)
 
 	map_ini = BIT6(mem->MemR(LCDC)) ? 0x9C00 : 0x9800;
 
-	for (x=xIni; x<160; x++)
+	for (x=xIni; x<SCREEN_W; x++)
 	{
 		xScrolled = x - wndPosX;
 		yScrolled = y - wndPosY;
@@ -197,10 +199,10 @@ void Video::UpdateWin(BYTE y)
 	}
 }
 
-void Video::OrderOAM(BYTE y)
+void Video::OrderOAM(int y)
 {
-	BYTE ySprite, hSprite;
-	WORD dir;
+	short ySprite, hSprite;
+	int dir;
 
 	orderedOAM.clear();
 
@@ -214,18 +216,20 @@ void Video::OrderOAM(BYTE y)
 	{
 		ySprite = mem->MemR(dir);
 
-		if ((ySprite==0) || (ySprite>=SCREEN_W))	//La y está fuera de la pantalla
+		if ((ySprite==0) || (ySprite>=SCREEN_H+16))	//La y está fuera de la pantalla
 			continue;
 
-		ySprite -= 16;
-		if ((ySprite > y-hSprite) && (ySprite <= y))
-			orderedOAM.insert(pair<BYTE, WORD>(mem->MemR(dir+1), dir));
+		ySprite -= 16;	//y en pantalla
+		if ((ySprite > (short)y-hSprite) && (ySprite <= y))
+			orderedOAM.insert(pair<int, int>(mem->MemR(dir+1), dir));
 	}
 }
 
-void Video::UpdateOAM(BYTE y)
+void Video::UpdateOAM(int y)
 {
-	BYTE xSprite, ySprite, attrSprite, x, xTile, yTile, xFlip, yFlip, countX, countY, behind;
+	int x, xSprite;
+	BYTE attrSprite, xTile, yTile, xFlip, yFlip, countX, countY, behind, mode16;
+	short ySprite;
 	WORD dirSprite, tileNumber, dirTile;
 	Uint32 color;
 	Uint32 palette[4], palette2[4];
@@ -234,12 +238,11 @@ void Video::UpdateOAM(BYTE y)
 	if (!BIT1(mem->MemR(LCDC)))	//OAM desactivado
 		return;
 
-	//if (BIT2(mem->MemR(LCDC)))
-	//	cout << "8x16" << endl;
+	mode16 = BIT2(mem->MemR(LCDC));
 
 	GetPalette(palette, OBP0);
 
-	multimap<BYTE, WORD>::iterator it;
+	multimap<int, int>::iterator it;
 
 	for (it=orderedOAM.begin(); it != orderedOAM.end(); it++)
 	{
@@ -247,6 +250,8 @@ void Video::UpdateOAM(BYTE y)
 		ySprite = mem->MemR(dirSprite) - 16;	//=mem->MemR(dirSprite + 0);
 		xSprite = (*it).first - 8;				//=mem->MemR(dirSprite + 1);
 		tileNumber = mem->MemR(dirSprite + 2);
+		if (mode16)
+			tileNumber = tileNumber & 0xF0;
 		attrSprite = mem->MemR(dirSprite + 3);
 		dirTile = 0x8000 + tileNumber*16;
 		xFlip = BIT5(attrSprite);
@@ -258,7 +263,7 @@ void Video::UpdateOAM(BYTE y)
 		countY = yTile;
 		if (yFlip) yTile = (BYTE)abs((int)yTile - 7);
 
-		for (x=xSprite; ((x<xSprite+8) && (x<0xff)); x++)
+		for (x=xSprite; ((x<xSprite+8) && (x<=SCREEN_W)); x++)
 		{
 			xTile = xFlip ? (BYTE)abs((int)countX - 7) : countX;
 
@@ -283,7 +288,7 @@ void Video::UpdateOAM(BYTE y)
 	}
 }
 
-void Video::GetPalette(Uint32 * palette, WORD dir)
+void Video::GetPalette(Uint32 * palette, int dir)
 {
 	Uint32 paletteData;
 
@@ -295,7 +300,7 @@ void Video::GetPalette(Uint32 * palette, WORD dir)
 	palette[3] = colors[abs((int)((BITS67(paletteData) >> 6) - 3))];
 }
 
-void Video::DrawPixel(SDL_Surface *screen, Uint32 color, BYTE x, BYTE y)
+void Video::DrawPixel(SDL_Surface *screen, Uint32 color, int x, int y)
 {
     int bpp = screen->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to set */

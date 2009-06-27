@@ -2,15 +2,14 @@
 #define __GBEXCEPTION_H__
 
 #include <string>
-using namespace std;
 
-class GBException: public exception
+class GBException: public std::exception
 {
 private:
-	string description;
+	std::string description;
 
 public:
-	GBException(string desc);
+	GBException(std::string desc);
 	const char* what() const throw();
 	~GBException() throw();
 };

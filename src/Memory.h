@@ -12,6 +12,8 @@ private:
 	BYTE memory[SIZE_MEM];
 	Pad *p;
 	Cartridge *c;
+private:
+	void DmaTransfer(BYTE direction);
 public:
 	Memory();
 	~Memory();
@@ -21,9 +23,7 @@ public:
 	void LoadCartridge(Cartridge *c);
 	void MemW(WORD direction, BYTE value, bool checkDirAndValue);
 	void MemW(WORD direction, BYTE value);
-	BYTE MemR(WORD direction);
-private:
-	void DmaTransfer(BYTE direction);
+	inline BYTE MemR(WORD direction);
 };
 
 #endif

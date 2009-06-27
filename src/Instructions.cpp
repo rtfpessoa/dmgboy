@@ -1,20 +1,23 @@
-#include "Instrucciones.h"
+#include "Instructions.h"
 #include <iostream>
+#include <assert.h>
 #include "GBException.h"
 
-Instrucciones::Instrucciones(Registers* reg, Memory* mem)
+using namespace std;
+
+Instructions::Instructions(Registers* reg, Memory* mem)
 {
 	this->reg = reg;
 	this->mem = mem;
 }
 
-Instrucciones::~Instrucciones(void)
+Instructions::~Instructions(void)
 {
 }
 
-void Instrucciones::NOP(){reg->Add_PC(1);}
+void Instructions::NOP(){reg->Add_PC(1);}
 
-void Instrucciones::LD_r1_r2(e_registers e_reg1, e_registers e_reg2)
+void Instructions::LD_r1_r2(e_registers e_reg1, e_registers e_reg2)
 {
 	BYTE length = 1;
 
@@ -44,7 +47,7 @@ void Instrucciones::LD_r1_r2(e_registers e_reg1, e_registers e_reg2)
 }
 
 
-void Instrucciones::LD_A_n(e_registers place)
+void Instructions::LD_A_n(e_registers place)
 {
     WORD address;
 	BYTE value;
@@ -80,7 +83,7 @@ void Instrucciones::LD_A_n(e_registers place)
 }
 
 
-void Instrucciones::LD_n_A(e_registers place)
+void Instructions::LD_n_A(e_registers place)
 {
     WORD address;
     BYTE length = 1;
@@ -108,24 +111,24 @@ void Instrucciones::LD_n_A(e_registers place)
 	reg->Add_PC(length);
 }
 
-void Instrucciones::JP_nn()
+void Instructions::JP_nn()
 {
 	reg->Set_PC((mem->MemR((reg->Get_PC()+2)) << 8) | mem->MemR(reg->Get_PC() + 1));
 }
 
-void Instrucciones::LDH_A_n()
+void Instructions::LDH_A_n()
 {
 	reg->Set_A(mem->MemR(0xFF00 + mem->MemR(reg->Get_PC() + 1)));
 	reg->Add_PC(2);
 }
 
-void Instrucciones::LDH_n_A()
+void Instructions::LDH_n_A()
 {
 	mem->MemW(0xFF00 + mem->MemR(reg->Get_PC() + 1), reg->Get_A());
 	reg->Add_PC(2);
 }
 
-void Instrucciones::CCF()
+void Instructions::CCF()
 {
 	reg->Set_flagN(0);
 	reg->Set_flagH(0);
@@ -133,7 +136,7 @@ void Instrucciones::CCF()
 	reg->Add_PC(1);
 }
 
-void Instrucciones::CP_n(e_registers place)
+void Instructions::CP_n(e_registers place)
 {
 	BYTE value;
 	BYTE length = 1;
@@ -159,7 +162,7 @@ void Instrucciones::CP_n(e_registers place)
 	reg->Add_PC(length);
 }
 
-void Instrucciones::CPL()
+void Instructions::CPL()
 {
 	reg->Set_A(~reg->Get_A());
 
@@ -169,17 +172,14 @@ void Instrucciones::CPL()
 	reg->Add_PC(1);
 }
 
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//Revisado hasta aquí
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-void Instrucciones::LD_n_nn(e_registers lugar)
+void Instructions::LD_n_nn(e_registers place)
 {
-	reg->Set_Reg(lugar, ((mem->MemR(reg->Get_PC() + 2)) << 8) | mem->MemR(reg->Get_PC() + 1));
+	assert((place == BC) || (place == DE) || (place == HL) || (place == SP));
+	reg->Set_Reg(place, ((mem->MemR(reg->Get_PC() + 2)) << 8) | mem->MemR(reg->Get_PC() + 1));
     reg->Add_PC(3);
 }
 
-void Instrucciones::LD_nn_SP()
+void Instructions::LD_nn_SP()
 {
 	WORD destAddress = ((mem->MemR(reg->Get_PC() + 2)) << 8) | mem->MemR(reg->Get_PC() + 1);
 	mem->MemW(destAddress, reg->Get_SP() & 0x00FF);
@@ -187,30 +187,30 @@ void Instrucciones::LD_nn_SP()
     reg->Add_PC(3);
 }
 
-void Instrucciones::JR()
+void Instructions::JR()
 {
-    char n;
+    char address;	//Con signo
 
-	n = mem->MemR(reg->Get_PC() + 1);
+	address = mem->MemR(reg->Get_PC() + 1);
 
 	//El "2 +" es porque antes de saltar ha tenido que ver cuales eran los dos opcodes de la instrucción
 	//y tiene importancia al ser un salto relativo con respecto al actual PC.
-    reg->Add_PC(2 + n);
+    reg->Add_PC(2 + address);
 }
 
-void Instrucciones::JR_CC_n(e_registers flag, BYTE value2check)
+void Instructions::JR_CC_n(e_registers flag, BYTE value2check)
 {
-	char n;
-
-	n = mem->MemR(reg->Get_PC() + 1);
-
-	reg->Add_PC(2);
-
 	if (reg->Get_Flag(flag) == value2check)
-		reg->Add_PC(n);
+		JR();
+	else
+		reg->Add_PC(2);
 }
 
-void Instrucciones::CALL_nn()
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//Revisado hasta aquí
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+void Instructions::CALL_nn()
 {
 	reg->Add_SP(-1);
 	mem->MemW(reg->Get_SP(),((reg->Get_PC() + 3) & 0xFF00) >> 8);
@@ -219,7 +219,7 @@ void Instrucciones::CALL_nn()
 	reg->Set_PC(((mem->MemR(reg->Get_PC() + 2)) << 8) | mem->MemR(reg->Get_PC() + 1));
 }
 
-void Instrucciones::CALL_cc_nn(e_registers flag, BYTE value2check)
+void Instructions::CALL_cc_nn(e_registers flag, BYTE value2check)
 {
 	if (reg->Get_Flag(flag) == value2check)
 		CALL_nn();
@@ -227,42 +227,42 @@ void Instrucciones::CALL_cc_nn(e_registers flag, BYTE value2check)
 		reg->Add_PC(3);
 }
 
-void Instrucciones::LDI_A_HL()
+void Instructions::LDI_A_HL()
 {
 	reg->Set_A(mem->MemR(reg->Get_HL()));
 	reg->Set_HL(reg->Get_HL() + 1);
 	reg->Add_PC(1);
 }
 
-void Instrucciones::LDI_HL_A()
+void Instructions::LDI_HL_A()
 {
 	mem->MemW(reg->Get_HL(), reg->Get_A());
 	reg->Set_HL(reg->Get_HL() + 1);
 	reg->Add_PC(1);
 }
 
-void Instrucciones::LDD_A_HL()
+void Instructions::LDD_A_HL()
 {
 	reg->Set_A(mem->MemR(reg->Get_HL()));
 	reg->Set_HL(reg->Get_HL() - 1);
 	reg->Add_PC(1);
 }
 
-void Instrucciones::LDD_HL_A()
+void Instructions::LDD_HL_A()
 {
 	mem->MemW(reg->Get_HL(), reg->Get_A());
 	reg->Set_HL(reg->Get_HL() - 1);
 	reg->Add_PC(1);
 }
 
-void Instrucciones::LD_SP_HL()
+void Instructions::LD_SP_HL()
 {
 	reg->Set_SP(reg->Get_HL());
 
 	reg->Add_PC(1);
 }
 
-void Instrucciones::INC_n(e_registers lugar)
+void Instructions::INC_n(e_registers lugar)
 {
 	if (lugar == c_HL)
 	{
@@ -281,13 +281,13 @@ void Instrucciones::INC_n(e_registers lugar)
 	reg->Add_PC(1);
 }
 
-void Instrucciones::INC_nn(e_registers lugar)
+void Instructions::INC_nn(e_registers lugar)
 {
 	reg->Set_Reg(lugar, reg->Get_Reg(lugar) + 1);
 	reg->Add_PC(1);
 }
 
-void Instrucciones::DAA()
+void Instructions::DAA()
 {
 	(reg->Get_A() > 99) ? reg->Set_flagC(1) : reg->Set_flagC(0);
 	reg->Set_flagH(0);
@@ -298,7 +298,7 @@ void Instrucciones::DAA()
 	reg->Add_PC(1);
 }
 
-void Instrucciones::DEC_n(e_registers lugar)
+void Instructions::DEC_n(e_registers lugar)
 {
 	if (lugar == c_HL)
 	{
@@ -317,13 +317,13 @@ void Instrucciones::DEC_n(e_registers lugar)
 	reg->Add_PC(1);
 }
 
-void Instrucciones::DEC_nn(e_registers lugar)
+void Instructions::DEC_nn(e_registers lugar)
 {
 	reg->Set_Reg(lugar, reg->Get_Reg(lugar) - 1);
 	reg->Add_PC(1);
 }
 
-void Instrucciones::OR_n(e_registers lugar)
+void Instructions::OR_n(e_registers lugar)
 {
 	BYTE longitud = 1;
 
@@ -349,7 +349,7 @@ void Instrucciones::OR_n(e_registers lugar)
 	reg->Add_PC(longitud);
 }
 
-void Instrucciones::XOR_n(e_registers lugar)
+void Instructions::XOR_n(e_registers lugar)
 {
     BYTE longitud = 1;
 
@@ -374,49 +374,49 @@ void Instrucciones::XOR_n(e_registers lugar)
 	reg->Add_PC(longitud);
 }
 
-void Instrucciones::RET()
+void Instructions::RET()
 {
 	reg->Set_PC((mem->MemR(reg->Get_SP() + 1) << 8) | mem->MemR(reg->Get_SP()));
 	reg->Add_SP(2);
 }
 
-void Instrucciones::RETI()
+void Instructions::RETI()
 {
 	EI();
 	RET();
 }
 
-void Instrucciones::RET_cc(e_registers flag, BYTE value2check)
+void Instructions::RET_cc(e_registers flag, BYTE value2check)
 {
 	reg->Add_PC(1);
 	if (reg->Get_Flag(flag) == value2check)
 		RET();
 }
 /*
-void Instrucciones::PUSH_nn(e_registers lugar)
+void Instructions::PUSH_nn(e_registers lugar)
 {
 
 }
 */
-void Instrucciones::LD_nn_n(e_registers lugar)
+void Instructions::LD_nn_n(e_registers lugar)
 {
 	reg->Set_Reg(lugar, mem->MemR(reg->Get_PC() + 1));
 	reg->Add_PC(2);
 }
 
-void Instrucciones::LD_A_C()
+void Instructions::LD_A_C()
 {
 	reg->Set_A(mem->MemR(0xFF00 + reg->Get_C()));
 	reg->Add_PC(1);
 }
 
-void Instrucciones::LD_C_A()
+void Instructions::LD_C_A()
 {
 	mem->MemW(0xFF00 + reg->Get_C(), reg->Get_A());
 	reg->Add_PC(1);
 }
 
-void Instrucciones::SET_b_r(BYTE bit, e_registers lugar)
+void Instructions::SET_b_r(BYTE bit, e_registers lugar)
 {
 	if (lugar == c_HL)
 		mem->MemW(reg->Get_HL(), mem->MemR(reg->Get_HL()) | 1 << bit);
@@ -426,7 +426,7 @@ void Instrucciones::SET_b_r(BYTE bit, e_registers lugar)
 	reg->Add_PC(2);
 }
 
-void Instrucciones::BIT_b_r(BYTE bit, e_registers lugar)
+void Instructions::BIT_b_r(BYTE bit, e_registers lugar)
 {
 	BYTE value;
 
@@ -446,7 +446,7 @@ void Instrucciones::BIT_b_r(BYTE bit, e_registers lugar)
 	reg->Add_PC(2);
 }
 
-void Instrucciones::RES_b_r(BYTE bit, e_registers lugar)
+void Instructions::RES_b_r(BYTE bit, e_registers lugar)
 {
     if (lugar == c_HL)
 		mem->MemW(reg->Get_HL(), mem->MemR(reg->Get_HL()) & ~(1 << bit));
@@ -456,19 +456,19 @@ void Instrucciones::RES_b_r(BYTE bit, e_registers lugar)
 	reg->Add_PC(2);
 }
 
-void Instrucciones::DI()
+void Instructions::DI()
 {
 	reg->Set_IME(0);
 	reg->Add_PC(1);
 }
 
-void Instrucciones::EI()
+void Instructions::EI()
 {
 	reg->Set_IME(1);
 	reg->Add_PC(1);
 }
 
-void Instrucciones::SBC_A(e_registers lugar)
+void Instructions::SBC_A(e_registers lugar)
 {
 	WORD aux;
 	BYTE length = 1;
@@ -496,7 +496,7 @@ void Instrucciones::SBC_A(e_registers lugar)
 	reg->Add_PC(length);
 }
 
-void Instrucciones::AND(e_registers lugar)
+void Instructions::AND(e_registers lugar)
 {
 	BYTE longitud = 1;
 
@@ -522,7 +522,7 @@ void Instrucciones::AND(e_registers lugar)
 }
 
 
-void Instrucciones::SLA_n(e_registers lugar)
+void Instructions::SLA_n(e_registers lugar)
 {
 	BYTE bit7, valor;
 
@@ -547,7 +547,7 @@ void Instrucciones::SLA_n(e_registers lugar)
 	reg->Add_PC(2);
 }
 
-void Instrucciones::SRA_n(e_registers lugar)
+void Instructions::SRA_n(e_registers lugar)
 {
     BYTE bit0, bit7, value;
 
@@ -575,7 +575,7 @@ void Instrucciones::SRA_n(e_registers lugar)
 	reg->Add_PC(2);
 }
 
-void Instrucciones::SRL_n(e_registers lugar)
+void Instructions::SRL_n(e_registers lugar)
 {
     BYTE bit0, bit7, valor;
 
@@ -602,7 +602,7 @@ void Instrucciones::SRL_n(e_registers lugar)
 	reg->Add_PC(2);
 }
 
-void Instrucciones::SUB_n(e_registers place)
+void Instructions::SUB_n(e_registers place)
 {
 	WORD value;
 	BYTE length = 1;
@@ -628,7 +628,7 @@ void Instrucciones::SUB_n(e_registers place)
 	reg->Add_PC(length);
 }
 
-void Instrucciones::ADD_A_n(e_registers lugar)
+void Instructions::ADD_A_n(e_registers lugar)
 {
 	WORD valor;
 	BYTE valor_reg, longitud = 1;
@@ -652,7 +652,7 @@ void Instrucciones::ADD_A_n(e_registers lugar)
 	reg->Add_PC(longitud);
 }
 
-void Instrucciones::ADC_A_n(e_registers lugar)
+void Instructions::ADC_A_n(e_registers lugar)
 {
 	WORD value;
 	BYTE valor_reg, longitud = 1;
@@ -679,7 +679,7 @@ void Instrucciones::ADC_A_n(e_registers lugar)
 	reg->Add_PC(longitud);
 }
 
-void Instrucciones::ADD_HL_n(e_registers lugar)
+void Instructions::ADD_HL_n(e_registers lugar)
 {
 	int valor;
 	WORD valor_reg;
@@ -704,7 +704,7 @@ void Instrucciones::ADD_HL_n(e_registers lugar)
 	reg->Add_PC(1);
 }
 
-void Instrucciones::ADD_SP_n()
+void Instructions::ADD_SP_n()
 {
 	BYTE lNibbleSP;
 	char lNibbleN;
@@ -728,12 +728,12 @@ void Instrucciones::ADD_SP_n()
 	reg->Add_PC(2);
 }
 
-void Instrucciones::JP_HL()
+void Instructions::JP_HL()
 {
 	reg->Set_PC(reg->Get_HL());
 }
 
-void Instrucciones::SCF()
+void Instructions::SCF()
 {
 	reg->Set_flagN(0);
 	reg->Set_flagH(0);
@@ -742,7 +742,7 @@ void Instrucciones::SCF()
 	reg->Add_PC(1);
 }
 
-void Instrucciones::HALT()
+void Instructions::HALT()
 {
 	if (reg->Get_IME())
 	{
@@ -753,7 +753,7 @@ void Instrucciones::HALT()
 		reg->Add_PC(2);
 }
 
-void Instrucciones::STOP()
+void Instructions::STOP()
 {
 	reg->Set_Stop(true);
 
@@ -762,7 +762,7 @@ void Instrucciones::STOP()
 	cout << "Instruccion 0x10 (Stop)\n";
 }
 
-void Instrucciones::SWAP(e_registers place)
+void Instructions::SWAP(e_registers place)
 {
 	BYTE value;
 
@@ -787,7 +787,7 @@ void Instrucciones::SWAP(e_registers place)
 	reg->Add_PC(2);
 }
 
-void Instrucciones::PUSH_nn(e_registers lugar)
+void Instructions::PUSH_nn(e_registers lugar)
 {
 	reg->Add_SP(-1);
 	mem->MemW(reg->Get_SP(), (reg->Get_Reg(lugar) & 0xFF00) >> 8);
@@ -797,7 +797,7 @@ void Instrucciones::PUSH_nn(e_registers lugar)
 	reg->Add_PC(1);
 }
 
-void Instrucciones::POP_nn(e_registers lugar)
+void Instructions::POP_nn(e_registers lugar)
 {
 	reg->Set_Reg(lugar, (mem->MemR(reg->Get_SP() + 1) << 8) | mem->MemR(reg->Get_SP()));
 	reg->Add_SP(2);
@@ -805,7 +805,7 @@ void Instrucciones::POP_nn(e_registers lugar)
 	reg->Add_PC(1);
 }
 
-void Instrucciones::JP_cc_nn(e_registers flag, BYTE value2check)
+void Instructions::JP_cc_nn(e_registers flag, BYTE value2check)
 {
 	WORD nn;
 
@@ -817,7 +817,7 @@ void Instrucciones::JP_cc_nn(e_registers flag, BYTE value2check)
 		reg->Set_PC(nn);
 }
 
-void Instrucciones::RL_n(e_registers lugar)
+void Instructions::RL_n(e_registers lugar)
 {
 	BYTE oldBit7;
 
@@ -847,7 +847,7 @@ void Instrucciones::RL_n(e_registers lugar)
 		reg->Add_PC(1);
 }
 
-void Instrucciones::RLCA()
+void Instructions::RLCA()
 {
 	BYTE bit7, valor;
 
@@ -864,7 +864,7 @@ void Instrucciones::RLCA()
 	reg->Add_PC(1);
 }
 
-void Instrucciones::RLC_n(e_registers lugar)
+void Instructions::RLC_n(e_registers lugar)
 {
 	BYTE bit7, valor;
 
@@ -891,12 +891,12 @@ void Instrucciones::RLC_n(e_registers lugar)
 	reg->Add_PC(2);
 }
 
-//void Instrucciones::RLCA()
+//void Instructions::RLCA()
 //{
 //	RLC_n(A);
 //}
 
-void Instrucciones::RR_n(e_registers lugar)
+void Instructions::RR_n(e_registers lugar)
 {
 	BYTE bit0, value;
 
@@ -926,7 +926,7 @@ void Instrucciones::RR_n(e_registers lugar)
 		reg->Add_PC(1);
 }
 
-void Instrucciones::RRC_n(e_registers lugar)
+void Instructions::RRC_n(e_registers lugar)
 {
 	BYTE bit0, valor;
 
@@ -956,12 +956,12 @@ void Instrucciones::RRC_n(e_registers lugar)
 		reg->Add_PC(1);
 }
 
-//void Instrucciones::RRCA()
+//void Instructions::RRCA()
 //{
 //	RRC_n(A);
 //}
 
-void Instrucciones::PUSH_PC()
+void Instructions::PUSH_PC()
 {
 	reg->Add_SP(-1);
 	mem->MemW(reg->Get_SP(), (reg->Get_PC() & 0xFF00) >> 8);
@@ -969,7 +969,7 @@ void Instrucciones::PUSH_PC()
 	mem->MemW(reg->Get_SP(), reg->Get_PC() & 0x00FF);
 }
 
-void Instrucciones::RST_n(BYTE desp)
+void Instructions::RST_n(BYTE desp)
 {
 	//Queremos que se guarde la siquiente instruccion a ejecutar
 	reg->Add_PC(1);
@@ -979,7 +979,7 @@ void Instrucciones::RST_n(BYTE desp)
 	reg->Set_PC(0x0000 + desp);
 }
 
-void Instrucciones::LDHL_SP_n()
+void Instructions::LDHL_SP_n()
 {
 	char n;
 

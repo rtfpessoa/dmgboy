@@ -1,13 +1,15 @@
 // GB++.cpp: define el punto de entrada de la aplicación de consola.
 //
-#include "Cartridge.h"
 #include <iostream>
+#include "Cartridge.h"
 #include "Video.h"
 #include "Registers.h"
 #include "Memory.h"
 #include "CPU.h"
 #include "Pad.h"
 #include "GBException.h"
+
+using namespace std;
 
 //Para evitar que el gcc en windows de un mensaje de error de referencia al linkar
 //WinMain16 no encontrada
@@ -23,7 +25,7 @@ int main ( int argc, char** argv )
 	basePath = "/media/disk/Descargas/GB/ROMS/";
 #endif
 
-	//Cartridge c(basePath + "32K/Alleyway (JUA) [!].gb");
+	Cartridge c(basePath + "32K/Alleyway (JUA) [!].gb");
 	//Cartridge c(basePath + "32K/Asteroids (UE).gb");
 	//Cartridge c(basePath + "32K/Boxxle (V1.1) (U) [!].gb");
 	//Cartridge c(basePath + "32K/Boxxle II (U).gb");
@@ -73,18 +75,18 @@ int main ( int argc, char** argv )
 	//Cartridge c(basePath + "PDRoms/Pong.gb");
 	//Cartridge c(basePath + "PDRoms/Puzzle.gb");
 	//Cartridge c(basePath + "PDRoms/Quiz.gb");
+	//Cartridge c(basePath + "PDRoms/Pikakilla.gb");
 
 	//Cartridge c(basePath + "64K/Amazing Penguin (U).gb");
 	//Cartridge c(basePath + "64K/Amazing Spider-Man, The (UE).gb");
-	Cartridge c(basePath + "64K/Super Mario Land (JUE) (v1.1).gb");
+	//Cartridge c(basePath + "64K/Super Mario Land (JUE) (v1.1).gb");
 	//Cartridge c(basePath + "64K/Castlevania Adventure, The (U).gb");
 	//Cartridge c(basePath + "64K/Pac-Man (U).gb");
 	//Cartridge c(basePath + "64K/Yoshi (U).gb");
 
+	//Cartridge c("C:\\Documents and Settings\\Pablo\\Escritorio\\Pokemon - Blue Version (UE).gb");
 
-	//Tiene MBC - Cartridge c(basePath + "PDRoms/Pikakilla.gb");
-
-	if (!c.isLoaded())
+	if (!c.IsLoaded())
 	{
 		cout << "Press to finish ..." << endl;
 		cin.get();
