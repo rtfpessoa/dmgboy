@@ -25,7 +25,7 @@ int main ( int argc, char** argv )
 	basePath = "/media/disk/Descargas/GB/ROMS/";
 #endif
 
-	Cartridge c(basePath + "32K/Alleyway (JUA) [!].gb");
+	//Cartridge c(basePath + "32K/Alleyway (JUA) [!].gb");
 	//Cartridge c(basePath + "32K/Asteroids (UE).gb");
 	//Cartridge c(basePath + "32K/Boxxle (V1.1) (U) [!].gb");
 	//Cartridge c(basePath + "32K/Boxxle II (U).gb");
@@ -75,7 +75,7 @@ int main ( int argc, char** argv )
 	//Cartridge c(basePath + "PDRoms/Pong.gb");
 	//Cartridge c(basePath + "PDRoms/Puzzle.gb");
 	//Cartridge c(basePath + "PDRoms/Quiz.gb");
-	//Cartridge c(basePath + "PDRoms/Pikakilla.gb");
+	Cartridge c(basePath + "PDRoms/Pikakilla.gb");
 
 	//Cartridge c(basePath + "64K/Amazing Penguin (U).gb");
 	//Cartridge c(basePath + "64K/Amazing Spider-Man, The (UE).gb");

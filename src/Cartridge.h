@@ -13,12 +13,13 @@
 class Cartridge
 {
 private:
-	unsigned int size;
-	bool isLoaded;
+	unsigned int _RomSize;
+	bool _isLoaded;
 	BYTE * _memCartridge;
 
 	BYTE (*ptrRead)(WORD);
 	void (*ptrWrite)(WORD, BYTE);
+	int CheckRomSize(int numHeaderSize, int fileSize);
 public:
 	Cartridge(std::string path);
 	~Cartridge();

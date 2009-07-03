@@ -15,7 +15,7 @@ Cartridge::Cartridge(string path)
 	if (file.is_open())
 	{
 		size = file.tellg();
-		this->size = size;
+		this->_RomSize = size;
 		_memCartridge = new BYTE [size];
 		file.seekg (0, ios::beg);
 		file.read ((char *)_memCartridge, size);
@@ -30,7 +30,7 @@ Cartridge::Cartridge(string path)
 		cout << "Tamano de RAM:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_RAM_SIZE] << endl;
 		cout << "Tipo de cartucho:\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_TYPE] << endl;
 
-		SetMBCMemCart(_memCartridge);
+		CheckRomSize((int)_memCartridge[CART_ROM_SIZE], _RomSize);
 
 		switch(_memCartridge[CART_TYPE])
 		{
@@ -68,33 +68,36 @@ Cartridge::Cartridge(string path)
 		case 0xFF: mbc = HuC1; break;	//Hudson HuC-1*/
 		default: throw GBException("MBC no implementado todavia");
 		}
-		isLoaded = true;
+		_isLoaded = true;
+
+		InitMBC(_memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
 	}
 	else
 	{
 		cout << path << ": Error al intentar abrir el archivo" << endl;
-		isLoaded = false;
+		_isLoaded = false;
 	}
 }
 
 Cartridge::~Cartridge(void)
 {
+	DestroyMBC();
+	delete [] _memCartridge;
 }
 
-/*void Cartridge::Print(int beg, int end)
+int Cartridge::CheckRomSize(int numHeaderSize, int fileSize)
 {
-	int i, j;
-	BYTE byte;
-
-	for (i=beg;i<=end;i=i+16){
-		cout << setfill('0') << setw(6) << hex << i << "h: ";
-		for (j=i;j<i+16;j++){
-			byte = this->mem_cartridge[j];
-			cout << setfill('0') << setw(2) << hex << (int)byte << " ";
-		}
-		cout << endl;
+	int headerSize = 32768 << (numHeaderSize & 0x0F);
+	if (numHeaderSize & 0xF0)
+		headerSize += (32768 << ((numHeaderSize & 0xF0) >> 0x04));
+	if (headerSize != fileSize)
+	{
+		cout << "No coincide la cabecera con el tamaño del fichero" << endl;
+		return 0;
 	}
-}*/
+	else
+		return 1;
+}
 
 BYTE *Cartridge::GetData()
 {
@@ -103,12 +106,12 @@ BYTE *Cartridge::GetData()
 
 unsigned int Cartridge::GetSize()
 {
-	return size;
+	return _RomSize;
 }
 
 bool Cartridge::IsLoaded()
 {
-	return isLoaded;
+	return _isLoaded;
 }
 
 BYTE Cartridge::Read(WORD direction)

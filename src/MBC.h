@@ -3,7 +3,7 @@
 
 #include "Def.h"
 
-void SetMBCMemCart(BYTE * mem_cartridge);
+void InitMBC(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
 
 BYTE NoneRead(WORD direction);
 void NoneWrite(WORD direction, BYTE value);

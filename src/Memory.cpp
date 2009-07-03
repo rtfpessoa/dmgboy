@@ -127,7 +127,7 @@ BYTE Memory::MemR(WORD direction)
 		//case BGP: cout << "R BGP\n"; break;
 		//case P1: cout << "R P1: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)memory[direction] << endl; break;
 	//}
-	if (direction < 0x8000)
+	if ((direction < 0x8000) || ((direction >=0xA000) && (direction < 0xC000)))
 	{
 		return c->Read(direction);
 	}
