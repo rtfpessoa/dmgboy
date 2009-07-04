@@ -12,21 +12,25 @@ static int _RAMBank = 0;
 static int _RAMSize = 0;	//Bytes
 static int _RAMEnabled = 0;
 
-void InitMBC(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
+void InitMBC(BYTE * mem_cartridge, int RomSize)
 {
 	_memCartridge = mem_cartridge;
 	_memMode = 0;
 
 	_ROMBank = 1;
+	_ROMSize = RomSize;
+
 	_RAMBank = 0;
 	_RAMEnabled = 0;
+	_RAMSize = 0;
+	_memRamMBC = NULL;
+}
 
-	if (RamHeaderSize == 0x00)
-	{
-		_RAMSize = 0;			//0KB
-		_memRamMBC = NULL;
-	}
-	else if (RamHeaderSize == 0x01)
+void InitMBC1(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
+{
+	InitMBC(mem_cartridge, ROMSize);
+
+	if (RamHeaderSize == 0x01)
 		_RAMSize = 2048;		//2KB
 	else if (RamHeaderSize == 0x02)
 		_RAMSize = 8192;		//8KB
@@ -35,6 +39,15 @@ void InitMBC(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
 
 	if (_RAMSize)
 		_memRamMBC = new BYTE[_RAMSize];
+}
+
+void InitMBC2(BYTE * mem_cartridge, int ROMSize)
+{
+	InitMBC(mem_cartridge, ROMSize);
+
+	_RAMSize = 512;
+
+	_memRamMBC = new BYTE[_RAMSize];
 }
 
 void DestroyMBC()
@@ -97,4 +110,47 @@ BYTE MBC1Read(WORD direction)
 		return _memCartridge[(direction - 0x4000) + (0x4000*_ROMBank)];
 	else if ((direction >=0xA000) && (direction < 0xC000))
 		return _memRamMBC[direction - 0xA000 + (0x8000*_RAMBank)];
+}
+
+void MBC2Write(WORD direction, BYTE value)
+{
+	if (direction < 0x2000)	//Habilitar/Deshabilitar RAM
+	{
+		if (! (direction & 0x10))
+			_RAMEnabled = !_RAMEnabled;
+	}
+	else if (direction < 0x4000)	//Cambiar ROMBank
+	{
+		if (!(direction & 0x100))
+			return;
+
+		if ((value & 0x0F)== 0)
+			value++;
+
+		_ROMBank = value & 0x0F;
+	}
+	else if (direction < 0x6000)
+	{
+		return;
+	}
+	else if (direction < 0x8000)	//Seleccionar modo
+	{
+		return;
+	}
+	else if ((direction >=0xA000) && (direction < 0xA200))	//Intenta escribir en RAM
+	{
+		if (_RAMEnabled)
+			_memRamMBC[direction - 0xA000] = value & 0x0F;
+		//throw GBException("Intenta escribir en RAM de cartucho");
+	}
+}
+
+BYTE MBC2Read(WORD direction)
+{
+	if (direction < 0x4000)
+		return _memCartridge[direction];
+	else if (direction < 0x8000)
+		return _memCartridge[(direction - 0x4000) + (0x4000*_ROMBank)];
+	else if ((direction >=0xA000) && (direction < 0xC000))
+		return _memRamMBC[direction - 0xA000];
 }

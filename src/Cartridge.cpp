@@ -10,6 +10,7 @@ using namespace std;
 
 Cartridge::Cartridge(string path)
 {
+	int RamSize = 0;
 	ifstream::pos_type size;
 	ifstream file (path.c_str(), ios::in|ios::binary|ios::ate);
 	if (file.is_open())
@@ -36,18 +37,27 @@ Cartridge::Cartridge(string path)
 		{
 		case 0x00:						//ROM ONLY
 		case 0x08:						//ROM+RAM
-		case 0x09:						//ROM+RAM+BATTERY  
+		case 0x09:						//ROM+RAM+BATTERY
+			cout << "No MBC" << endl;
 			ptrRead = &NoneRead;
 			ptrWrite = &NoneWrite;
 			break;
 		case 0x01:						//ROM+MBC1 
 		case 0x02:						//ROM+MBC1+RAM 
-		case 0x03:						//ROM+MBC1+RAM+BATT 
+		case 0x03:						//ROM+MBC1+RAM+BATT
+			cout << "MBC1" << endl;
 			ptrRead = &MBC1Read;
 			ptrWrite = &MBC1Write;
+			InitMBC1(_memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
 			break;
-		/*case 0x05:						//ROM+MBC2 
-		case 0x06: mbc = MBC2; break;	//ROM+MBC2+BATTERY
+		case 0x05:						//ROM+MBC2 
+		case 0x06:						//ROM+MBC2+BATTERY
+			cout << "MBC2" << endl;
+			ptrRead = &MBC2Read;
+			ptrWrite = &MBC2Write;
+			InitMBC2(_memCartridge, _RomSize);
+			break;
+		/*
 		case 0x0B:						//ROM+MMM01
 		case 0x0C:						//ROM+MMM01+SRAM
 		case 0x0D: mbc = MMM01; break;	//ROM+MMM01+SRAM+BATT
@@ -69,8 +79,6 @@ Cartridge::Cartridge(string path)
 		default: throw GBException("MBC no implementado todavia");
 		}
 		_isLoaded = true;
-
-		InitMBC(_memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
 	}
 	else
 	{

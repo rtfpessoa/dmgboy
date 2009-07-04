@@ -75,7 +75,7 @@ int main ( int argc, char** argv )
 	//Cartridge c(basePath + "PDRoms/Pong.gb");
 	//Cartridge c(basePath + "PDRoms/Puzzle.gb");
 	//Cartridge c(basePath + "PDRoms/Quiz.gb");
-	Cartridge c(basePath + "PDRoms/Pikakilla.gb");
+	//Cartridge c(basePath + "PDRoms/Pikakilla.gb");
 
 	//Cartridge c(basePath + "64K/Amazing Penguin (U).gb");
 	//Cartridge c(basePath + "64K/Amazing Spider-Man, The (UE).gb");
@@ -83,6 +83,8 @@ int main ( int argc, char** argv )
 	//Cartridge c(basePath + "64K/Castlevania Adventure, The (U).gb");
 	//Cartridge c(basePath + "64K/Pac-Man (U).gb");
 	//Cartridge c(basePath + "64K/Yoshi (U).gb");
+
+	Cartridge c(basePath + "MBC2/Final Fantasy Legend (Sa-Ga) (U) [!].gb");
 
 	//Cartridge c("C:\\Documents and Settings\\Pablo\\Escritorio\\Pokemon - Blue Version (UE).gb");
 
