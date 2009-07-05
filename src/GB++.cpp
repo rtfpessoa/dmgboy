@@ -77,14 +77,41 @@ int main ( int argc, char** argv )
 	//Cartridge c(basePath + "PDRoms/Quiz.gb");
 	//Cartridge c(basePath + "PDRoms/Pikakilla.gb");
 
-	//Cartridge c(basePath + "64K/Amazing Penguin (U).gb");
-	//Cartridge c(basePath + "64K/Amazing Spider-Man, The (UE).gb");
-	//Cartridge c(basePath + "64K/Super Mario Land (JUE) (v1.1).gb");
-	//Cartridge c(basePath + "64K/Castlevania Adventure, The (U).gb");
-	//Cartridge c(basePath + "64K/Pac-Man (U).gb");
-	//Cartridge c(basePath + "64K/Yoshi (U).gb");
+	//Cartridge c(basePath + "MBC1/Amazing Penguin (U).gb");
+	//Cartridge c(basePath + "MBC1/Amazing Spider-Man, The (UE).gb");
+	//Cartridge c(basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb");
+	//Cartridge c(basePath + "MBC1/Castlevania Adventure, The (U).gb");
+	//Cartridge c(basePath + "MBC1/Pac-Man (U).gb");
+	//Cartridge c(basePath + "MBC1/Yoshi (U).gb");
+	//Cartridge c(basePath + "MBC1/Street Fighter II (UE) (v1.1).gb");
+	//Cartridge c(basePath + "MBC1/Ninja Gaiden Shadow (U).gb");
+	//Cartridge c(basePath + "MBC1/Mortal Kombat (UE).gb");
+	//Cartridge c(basePath + "MBC1/Mortal Kombat II (U).gb");
+	//Cartridge c(basePath + "MBC1/Mortal Kombat I & II (U).gb");
+	//Cartridge c(basePath + "MBC1/Megaman (U).gb");
+	//Cartridge c(basePath + "MBC1/Kirby's Dream Land (UE).gb");
+	//Cartridge c(basePath + "MBC1/King of Fighters '95, The (U).gb");
+	//Cartridge c(basePath + "MBC1/Killer Instinct (UE).gb");
+	//Cartridge c(basePath + "MBC1/FIFA International Soccer (U) (M4).gb");
+	//Cartridge c(basePath + "MBC1/Double Dragon (UE).gb");
+	//Cartridge c(basePath + "MBC1/Contra - The Alien Wars (U).gb");
+	//Cartridge c(basePath + "MBC1/Chase H.Q. (UE) (v1.1).gb");
+	//Cartridge c(basePath + "MBC1/Castlevania Legends (U).gb");
+	//Cartridge c(basePath + "MBC1/Bionic Commando (U).gb");
+	//Cartridge c(basePath + "MBC1/Battletoads (UE).gb");
 
-	Cartridge c(basePath + "MBC2/Final Fantasy Legend (Sa-Ga) (U) [!].gb");
+	//Cartridge c(basePath + "MBC1/RAM/Legend of Zelda, The - Link's Awakening (UE) (v1.2).gb");
+	//Cartridge c(basePath + "MBC1/RAM/Donkey Kong Land (UE).gb");
+	//Cartridge c(basePath + "MBC1/RAM/Donkey Kong (JUE) (v1.1).gb");
+	//Cartridge c(basePath + "MBC1/RAM/Metroid II - Return of Samus (JUE).gb");
+	//Cartridge c(basePath + "MBC1/RAM/Super Mario Land 2 - 6 Golden Coins (UE) (v1.2).gb");
+	Cartridge c(basePath + "MBC1/RAM/InfoGenius Systems - Personal Organizer (U).gb");
+
+
+
+	//Cartridge c(basePath + "MBC2/Final Fantasy Legend (Sa-Ga) (U) [!].gb");
+	//Cartridge c(basePath + "MBC2/Lazlos' Leap (U).gb");
+	//Cartridge c(basePath + "MBC2/Final Fantasy Adventure (U).gb");
 
 	//Cartridge c("C:\\Documents and Settings\\Pablo\\Escritorio\\Pokemon - Blue Version (UE).gb");
 

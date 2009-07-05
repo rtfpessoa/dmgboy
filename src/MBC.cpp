@@ -1,8 +1,8 @@
 #include "MBC.h"
 #include "GBException.h"
 
-static BYTE * _memCartridge;
-static BYTE * _memRamMBC;
+static BYTE * _memCartridge = NULL;
+static BYTE * _memRamMBC = NULL;
 static int _memMode = 0;
 
 static int _ROMBank = 1;
@@ -24,6 +24,11 @@ void InitMBC(BYTE * mem_cartridge, int RomSize)
 	_RAMEnabled = 0;
 	_RAMSize = 0;
 	_memRamMBC = NULL;
+}
+
+void InitMBCNone(BYTE * mem_cartridge, int ROMSize)
+{
+	InitMBC(mem_cartridge, ROMSize);
 }
 
 void InitMBC1(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
@@ -52,7 +57,8 @@ void InitMBC2(BYTE * mem_cartridge, int ROMSize)
 
 void DestroyMBC()
 {
-	delete [] _memRamMBC;
+	if (_memRamMBC)
+		delete [] _memRamMBC;
 }
 
 BYTE NoneRead(WORD direction)

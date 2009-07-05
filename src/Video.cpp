@@ -228,8 +228,7 @@ void Video::OrderOAM(int y)
 void Video::UpdateOAM(int y)
 {
 	int x, xSprite;
-	BYTE attrSprite, xTile, yTile, xFlip, yFlip, countX, countY, behind, mode16;
-	short ySprite;
+	int attrSprite, xTile, yTile, xFlip, yFlip, countX, countY, behind, mode16, ySprite;
 	WORD dirSprite, tileNumber, dirTile;
 	Uint32 color;
 	Uint32 palette[4], palette2[4];
@@ -249,6 +248,8 @@ void Video::UpdateOAM(int y)
 		dirSprite = (*it).second;
 		ySprite = mem->MemR(dirSprite) - 16;	//=mem->MemR(dirSprite + 0);
 		xSprite = (*it).first - 8;				//=mem->MemR(dirSprite + 1);
+		if (xSprite == -8)
+			continue;
 		tileNumber = mem->MemR(dirSprite + 2);
 		if (mode16)
 			tileNumber = tileNumber & 0xF0;
@@ -263,14 +264,15 @@ void Video::UpdateOAM(int y)
 		countY = yTile;
 		if (yFlip) yTile = (BYTE)abs((int)yTile - 7);
 
-		for (x=xSprite; ((x<xSprite+8) && (x<=SCREEN_W)); x++)
+		int xBeg = (xSprite>0) ? xSprite : 0;
+		for (x=xBeg; ((x<xSprite+8) && (x<=SCREEN_W)); x++)
 		{
 			xTile = xFlip ? (BYTE)abs((int)countX - 7) : countX;
 
 			line[0] = mem->MemR(dirTile + (yTile * 2));	//yTile * 2 porque cada linea de 1 tile ocupa 2 bytes
 			line[1] = mem->MemR(dirTile + (yTile * 2) + 1);
 
-			BYTE pixX = (BYTE)abs((int)xTile - 7);
+			int pixX = abs((int)xTile - 7);
 			//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 			//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
 			BYTE index = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);

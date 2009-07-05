@@ -10,6 +10,7 @@ using namespace std;
 
 Cartridge::Cartridge(string path)
 {
+	_memCartridge = NULL;
 	int RamSize = 0;
 	ifstream::pos_type size;
 	ifstream file (path.c_str(), ios::in|ios::binary|ios::ate);
@@ -29,7 +30,7 @@ Cartridge::Cartridge(string path)
 		cout << "Nombre de cartucho: " << name << endl;
 		cout << "Tamano de ROM:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_ROM_SIZE] << endl;
 		cout << "Tamano de RAM:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_RAM_SIZE] << endl;
-		cout << "Tipo de cartucho:\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_TYPE] << endl;
+		cout << "Tipo de cartucho:\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_TYPE] << " (";
 
 		CheckRomSize((int)_memCartridge[CART_ROM_SIZE], _RomSize);
 
@@ -38,21 +39,22 @@ Cartridge::Cartridge(string path)
 		case 0x00:						//ROM ONLY
 		case 0x08:						//ROM+RAM
 		case 0x09:						//ROM+RAM+BATTERY
-			cout << "No MBC" << endl;
+			cout << "No MBC)" << endl;
 			ptrRead = &NoneRead;
 			ptrWrite = &NoneWrite;
+			InitMBCNone(_memCartridge, _RomSize);
 			break;
 		case 0x01:						//ROM+MBC1 
 		case 0x02:						//ROM+MBC1+RAM 
 		case 0x03:						//ROM+MBC1+RAM+BATT
-			cout << "MBC1" << endl;
+			cout << "MBC1)" << endl;
 			ptrRead = &MBC1Read;
 			ptrWrite = &MBC1Write;
 			InitMBC1(_memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
 			break;
 		case 0x05:						//ROM+MBC2 
 		case 0x06:						//ROM+MBC2+BATTERY
-			cout << "MBC2" << endl;
+			cout << "MBC2)" << endl;
 			ptrRead = &MBC2Read;
 			ptrWrite = &MBC2Write;
 			InitMBC2(_memCartridge, _RomSize);
@@ -90,7 +92,8 @@ Cartridge::Cartridge(string path)
 Cartridge::~Cartridge(void)
 {
 	DestroyMBC();
-	delete [] _memCartridge;
+	if (_memCartridge)
+		delete [] _memCartridge;
 }
 
 int Cartridge::CheckRomSize(int numHeaderSize, int fileSize)

@@ -3,6 +3,7 @@
 
 #include "Def.h"
 
+void InitMBCNone(BYTE * mem_cartridge, int ROMSize);
 void InitMBC1(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
 void InitMBC2(BYTE * mem_cartridge, int ROMSize);
 void DestroyMBC();

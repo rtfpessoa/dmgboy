@@ -206,10 +206,6 @@ void Instructions::JR_CC_n(e_registers flag, BYTE value2check)
 		reg->Add_PC(2);
 }
 
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//Revisado hasta aquí
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 void Instructions::CALL_nn()
 {
 	reg->Add_SP(-1);
@@ -261,6 +257,10 @@ void Instructions::LD_SP_HL()
 
 	reg->Add_PC(1);
 }
+
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//Revisado hasta aquí
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 void Instructions::INC_n(e_registers lugar)
 {
