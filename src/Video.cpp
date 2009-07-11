@@ -201,8 +201,7 @@ void Video::UpdateWin(int y)
 
 void Video::OrderOAM(int y)
 {
-	short ySprite, hSprite;
-	int dir;
+	int ySprite, xSprite, hSprite, dir;
 
 	orderedOAM.clear();
 
@@ -210,24 +209,20 @@ void Video::OrderOAM(int y)
 		return;
 
 	hSprite = BIT2(mem->MemR(LCDC)) ? 16 : 8;
-	//!!!!Tal vez el modo 8x16 no esté bien
 
 	for(dir=0xFE00; dir<0xFEA0; dir+=0x04)
 	{
 		ySprite = mem->MemR(dir);
 
-		if ((ySprite==0) || (ySprite>=SCREEN_H+16))	//La y está fuera de la pantalla
-			continue;
-
 		ySprite -= 16;	//y en pantalla
-		if ((ySprite > (short)y-hSprite) && (ySprite <= y))
-			orderedOAM.insert(pair<int, int>(mem->MemR(dir+1), dir));
+		if ((ySprite > y-hSprite) && (ySprite <= y))
+				orderedOAM.insert(pair<int, int>(mem->MemR(dir+1), dir));
 	}
 }
 
 void Video::UpdateOAM(int y)
 {
-	int x, xSprite;
+	int x, xSprite, numSpritesLine, xBeg;
 	int attrSprite, xTile, yTile, xFlip, yFlip, countX, countY, behind, mode16, ySprite;
 	WORD dirSprite, tileNumber, dirTile;
 	Uint32 color;
@@ -243,8 +238,12 @@ void Video::UpdateOAM(int y)
 
 	multimap<int, int>::iterator it;
 
-	for (it=orderedOAM.begin(); it != orderedOAM.end(); it++)
+	numSpritesLine = 0;
+
+	for (it=orderedOAM.begin(); (it != orderedOAM.end()) && (numSpritesLine < 10); it++)
 	{
+		numSpritesLine++;
+
 		dirSprite = (*it).second;
 		ySprite = mem->MemR(dirSprite) - 16;	//=mem->MemR(dirSprite + 0);
 		xSprite = (*it).first - 8;				//=mem->MemR(dirSprite + 1);
@@ -252,7 +251,8 @@ void Video::UpdateOAM(int y)
 			continue;
 		tileNumber = mem->MemR(dirSprite + 2);
 		if (mode16)
-			tileNumber = tileNumber & 0xF0;
+			tileNumber = tileNumber & 0xFE;
+			//!!!!!!!!!Si toca la parte de abajo del tile de 8x16 hay que sumar uno (tileNumber | 0x01)
 		attrSprite = mem->MemR(dirSprite + 3);
 		dirTile = 0x8000 + tileNumber*16;
 		xFlip = BIT5(attrSprite);
@@ -262,12 +262,23 @@ void Video::UpdateOAM(int y)
 		xTile = countX = countY = 0;
 		yTile = y - ySprite;
 		countY = yTile;
-		if (yFlip) yTile = (BYTE)abs((int)yTile - 7);
+		if (yFlip)
+			yTile = abs(yTile - (mode16 ? 15 : 7));
 
-		int xBeg = (xSprite>0) ? xSprite : 0;
-		for (x=xBeg; ((x<xSprite+8) && (x<=SCREEN_W)); x++)
+		if (xSprite>0)
 		{
-			xTile = xFlip ? (BYTE)abs((int)countX - 7) : countX;
+			xBeg = xSprite;
+			countX = 0;
+		}
+		else
+		{
+			xBeg = 0;
+			countX = abs(xSprite);
+		}
+
+		for (x=xBeg; ((x<xSprite+8) && (x<SCREEN_W)); x++)
+		{
+			xTile = xFlip ? abs(countX - 7) : countX;
 
 			line[0] = mem->MemR(dirTile + (yTile * 2));	//yTile * 2 porque cada linea de 1 tile ocupa 2 bytes
 			line[1] = mem->MemR(dirTile + (yTile * 2) + 1);

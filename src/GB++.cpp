@@ -88,7 +88,7 @@ int main ( int argc, char** argv )
 	//Cartridge c(basePath + "MBC1/Mortal Kombat (UE).gb");
 	//Cartridge c(basePath + "MBC1/Mortal Kombat II (U).gb");
 	//Cartridge c(basePath + "MBC1/Mortal Kombat I & II (U).gb");
-	//Cartridge c(basePath + "MBC1/Megaman (U).gb");
+	Cartridge c(basePath + "MBC1/Megaman (U).gb");
 	//Cartridge c(basePath + "MBC1/Kirby's Dream Land (UE).gb");
 	//Cartridge c(basePath + "MBC1/King of Fighters '95, The (U).gb");
 	//Cartridge c(basePath + "MBC1/Killer Instinct (UE).gb");
@@ -105,15 +105,13 @@ int main ( int argc, char** argv )
 	//Cartridge c(basePath + "MBC1/RAM/Donkey Kong (JUE) (v1.1).gb");
 	//Cartridge c(basePath + "MBC1/RAM/Metroid II - Return of Samus (JUE).gb");
 	//Cartridge c(basePath + "MBC1/RAM/Super Mario Land 2 - 6 Golden Coins (UE) (v1.2).gb");
-	Cartridge c(basePath + "MBC1/RAM/InfoGenius Systems - Personal Organizer (U).gb");
+	//Cartridge c(basePath + "MBC1/RAM/InfoGenius Systems - Personal Organizer (U).gb");
 
 
 
 	//Cartridge c(basePath + "MBC2/Final Fantasy Legend (Sa-Ga) (U) [!].gb");
 	//Cartridge c(basePath + "MBC2/Lazlos' Leap (U).gb");
 	//Cartridge c(basePath + "MBC2/Final Fantasy Adventure (U).gb");
-
-	//Cartridge c("C:\\Documents and Settings\\Pablo\\Escritorio\\Pokemon - Blue Version (UE).gb");
 
 	if (!c.IsLoaded())
 	{
