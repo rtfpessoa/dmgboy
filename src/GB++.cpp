@@ -81,14 +81,14 @@ int main ( int argc, char** argv )
 	//Cartridge c(basePath + "MBC1/Amazing Spider-Man, The (UE).gb");
 	//Cartridge c(basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb");
 	//Cartridge c(basePath + "MBC1/Castlevania Adventure, The (U).gb");
-	//Cartridge c(basePath + "MBC1/Pac-Man (U).gb");
+	Cartridge c(basePath + "MBC1/Pac-Man (U).gb");
 	//Cartridge c(basePath + "MBC1/Yoshi (U).gb");
 	//Cartridge c(basePath + "MBC1/Street Fighter II (UE) (v1.1).gb");
 	//Cartridge c(basePath + "MBC1/Ninja Gaiden Shadow (U).gb");
 	//Cartridge c(basePath + "MBC1/Mortal Kombat (UE).gb");
 	//Cartridge c(basePath + "MBC1/Mortal Kombat II (U).gb");
 	//Cartridge c(basePath + "MBC1/Mortal Kombat I & II (U).gb");
-	Cartridge c(basePath + "MBC1/Megaman (U).gb");
+	//Cartridge c(basePath + "MBC1/Megaman (U).gb");
 	//Cartridge c(basePath + "MBC1/Kirby's Dream Land (UE).gb");
 	//Cartridge c(basePath + "MBC1/King of Fighters '95, The (U).gb");
 	//Cartridge c(basePath + "MBC1/Killer Instinct (UE).gb");

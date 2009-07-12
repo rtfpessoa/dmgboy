@@ -3,8 +3,13 @@
 
 #include "Def.h"
 
-			    //0				 5				  10					  15				 20
-enum e_registers {A, B, C, D, E, F, H, L, AF, BC, DE, HL, f_Z, f_N, f_H, f_C, PC, SP, $, n, c_BC, c_DE, c_HL, c_nn};
+enum e_registers {
+	A = 0x00, B, C, D, E, F, H, L,	//registros simples
+	AF = 0x10, BC, DE, HL,			//registros dobles
+	f_Z = 0x20, f_N, f_H, f_C,		//flags
+	PC = 0x30, SP, $, n, c_nn,
+	c_BC = 0x40, c_DE, c_HL,		//memoria apuntada por el registro doble
+};
 
 union u_register{
 	WORD doble;
