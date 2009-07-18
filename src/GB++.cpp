@@ -81,7 +81,7 @@ int main ( int argc, char** argv )
 	//Cartridge c(basePath + "MBC1/Amazing Spider-Man, The (UE).gb");
 	//Cartridge c(basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb");
 	//Cartridge c(basePath + "MBC1/Castlevania Adventure, The (U).gb");
-	Cartridge c(basePath + "MBC1/Pac-Man (U).gb");
+	//Cartridge c(basePath + "MBC1/Pac-Man (U).gb");
 	//Cartridge c(basePath + "MBC1/Yoshi (U).gb");
 	//Cartridge c(basePath + "MBC1/Street Fighter II (UE) (v1.1).gb");
 	//Cartridge c(basePath + "MBC1/Ninja Gaiden Shadow (U).gb");
@@ -100,7 +100,7 @@ int main ( int argc, char** argv )
 	//Cartridge c(basePath + "MBC1/Bionic Commando (U).gb");
 	//Cartridge c(basePath + "MBC1/Battletoads (UE).gb");
 
-	//Cartridge c(basePath + "MBC1/RAM/Legend of Zelda, The - Link's Awakening (UE) (v1.2).gb");
+	Cartridge c(basePath + "MBC1/RAM/Legend of Zelda, The - Link's Awakening (UE) (v1.2).gb");
 	//Cartridge c(basePath + "MBC1/RAM/Donkey Kong Land (UE).gb");
 	//Cartridge c(basePath + "MBC1/RAM/Donkey Kong (JUE) (v1.1).gb");
 	//Cartridge c(basePath + "MBC1/RAM/Metroid II - Return of Samus (JUE).gb");

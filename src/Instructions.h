@@ -50,8 +50,8 @@ public:
     void LD_n_nn(e_registers place);
 	void LD_nn_n(e_registers place);
 	void LD_A_n(e_registers place);
-	void LD_A_C();
-    void LD_C_A();
+	void LD_A_cC();
+    void LD_cC_A();
 	void LD_nn_SP();
 	void LD_r1_r2(e_registers e_reg1, e_registers e_reg2);
 	void LD_SP_HL();
