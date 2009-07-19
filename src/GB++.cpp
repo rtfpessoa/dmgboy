@@ -25,7 +25,7 @@ int main ( int argc, char** argv )
 	basePath = "/media/disk/Descargas/GB/ROMS/";
 #endif
 
-	//Cartridge c(basePath + "32K/Alleyway (JUA) [!].gb");
+	Cartridge c(basePath + "32K/Alleyway (JUA) [!].gb");
 	//Cartridge c(basePath + "32K/Asteroids (UE).gb");
 	//Cartridge c(basePath + "32K/Boxxle (V1.1) (U) [!].gb");
 	//Cartridge c(basePath + "32K/Boxxle II (U).gb");
@@ -100,7 +100,7 @@ int main ( int argc, char** argv )
 	//Cartridge c(basePath + "MBC1/Bionic Commando (U).gb");
 	//Cartridge c(basePath + "MBC1/Battletoads (UE).gb");
 
-	Cartridge c(basePath + "MBC1/RAM/Legend of Zelda, The - Link's Awakening (UE) (v1.2).gb");
+	//Cartridge c(basePath + "MBC1/RAM/Legend of Zelda, The - Link's Awakening (UE) (v1.2).gb");
 	//Cartridge c(basePath + "MBC1/RAM/Donkey Kong Land (UE).gb");
 	//Cartridge c(basePath + "MBC1/RAM/Donkey Kong (JUE) (v1.1).gb");
 	//Cartridge c(basePath + "MBC1/RAM/Metroid II - Return of Samus (JUE).gb");

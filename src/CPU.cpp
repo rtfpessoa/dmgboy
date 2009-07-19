@@ -83,7 +83,7 @@ void CPU::Interpreter()
 
 				case (0x20): inst.JR_CC_n(f_Z, 0); break;
 				case (0x21): inst.LD_n_nn(HL); break;
-				case (0x22): inst.LDI_HL_A(); break;
+				case (0x22): inst.LDI_cHL_A(); break;
 				case (0x23): inst.INC_nn(HL); break;
 				case (0x24): inst.INC_n(H); break;
 				case (0x25): inst.DEC_n(H); break;
@@ -91,7 +91,7 @@ void CPU::Interpreter()
 				case (0x27): inst.DAA(); break;
 				case (0x28): inst.JR_CC_n(f_Z, 1); break;
 				case (0x29): inst.ADD_HL_n(HL); break;
-				case (0x2A): inst.LDI_A_HL(); break;
+				case (0x2A): inst.LDI_A_cHL(); break;
 				case (0x2B): inst.DEC_nn(HL); break;
 				case (0x2C): inst.INC_n(L); break;
 				case (0x2D): inst.DEC_n(L); break;
@@ -100,7 +100,7 @@ void CPU::Interpreter()
 
 				case (0x30): inst.JR_CC_n(f_C, 0); break;
 				case (0x31): inst.LD_n_nn(SP); break;
-				case (0x32): inst.LDD_HL_A(); break;
+				case (0x32): inst.LDD_cHL_A(); break;
 				case (0x33): inst.INC_nn(SP); break;
 				case (0x34): inst.INC_n(c_HL); break;
 				case (0x35): inst.DEC_n(c_HL); break;
@@ -108,7 +108,7 @@ void CPU::Interpreter()
 				case (0x37): inst.SCF(); break;
 				case (0x38): inst.JR_CC_n(f_C, 1); break;
 				case (0x39): inst.ADD_HL_n(SP); break;
-				case (0x3A): inst.LDD_A_HL(); break;
+				case (0x3A): inst.LDD_A_cHL(); break;
 				case (0x3B): inst.DEC_nn(SP); break;
 				case (0x3C): inst.INC_n(A); break;
 				case (0x3D): inst.DEC_n(A); break;
@@ -282,7 +282,7 @@ void CPU::Interpreter()
 				case (0xDE): inst.SBC_A($); break;
 				case (0xDF): inst.RST_n(0x18); break;
 
-				case (0xE0): inst.LDH_n_A(); break;
+				case (0xE0): inst.LDH_c$_A(); break;
 				case (0xE1): inst.POP_nn(HL); break;
 				case (0xE2): inst.LD_cC_A(); break;
 				case (0xE5): inst.PUSH_nn(HL); break;

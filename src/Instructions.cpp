@@ -121,7 +121,7 @@ void Instructions::LDH_A_n()
 	reg->Add_PC(2);
 }
 
-void Instructions::LDH_n_A()
+void Instructions::LDH_c$_A()
 {
 	mem->MemW(0xFF00 + mem->MemR(reg->Get_PC() + 1), reg->Get_A());
 	reg->Add_PC(2);
@@ -222,28 +222,28 @@ void Instructions::CALL_cc_nn(e_registers flag, BYTE value2check)
 		reg->Add_PC(3);
 }
 
-void Instructions::LDI_A_HL()
+void Instructions::LDI_A_cHL()
 {
 	reg->Set_A(mem->MemR(reg->Get_HL()));
 	reg->Set_HL(reg->Get_HL() + 1);
 	reg->Add_PC(1);
 }
 
-void Instructions::LDI_HL_A()
+void Instructions::LDI_cHL_A()
 {
 	mem->MemW(reg->Get_HL(), reg->Get_A());
 	reg->Set_HL(reg->Get_HL() + 1);
 	reg->Add_PC(1);
 }
 
-void Instructions::LDD_A_HL()
+void Instructions::LDD_A_cHL()
 {
 	reg->Set_A(mem->MemR(reg->Get_HL()));
 	reg->Set_HL(reg->Get_HL() - 1);
 	reg->Add_PC(1);
 }
 
-void Instructions::LDD_HL_A()
+void Instructions::LDD_cHL_A()
 {
 	mem->MemW(reg->Get_HL(), reg->Get_A());
 	reg->Set_HL(reg->Get_HL() - 1);
@@ -331,7 +331,7 @@ void Instructions::ADC_A_n(e_registers lugar)
 
 	reg->Add_PC(length);
 }
-
+//Quitar esta funcion y dejar la generica teniendo encuenta la long. de la instruccion
 void Instructions::RLCA()
 {
 	BYTE bit7, value;
@@ -408,29 +408,32 @@ void Instructions::INC_nn(e_registers lugar)
 
 void Instructions::DAA()
 {
-	(reg->Get_A() > 99) ? reg->Set_flagC(1) : reg->Set_flagC(0);
+	reg->Set_flagC((reg->Get_A() > 99) ? 1 : 0);
 	reg->Set_flagH(0);
-	if (!reg->Get_A()) reg->Set_flagZ(1);
+	reg->Set_flagZ((!reg->Get_A()) ? 1 : 0);
 
 	reg->Set_A(((reg->Get_A() / 10) << 4) | (reg->Get_A() % 10));
 
 	reg->Add_PC(1);
 }
 
-void Instructions::DEC_n(e_registers lugar)
+void Instructions::DEC_n(e_registers place)
 {
-	if (lugar == c_HL)
+	BYTE value;
+
+	if (place == c_HL)
 	{
-		mem->MemW(reg->Get_HL(), mem->MemR(reg->Get_HL()) - 1);
-		if (mem->MemR(reg->Get_HL()) == 0x00) reg->Set_flagZ(1); else reg->Set_flagZ(0);
-		if ((mem->MemR(reg->Get_HL()) & 0x0F) == 0x0F) reg->Set_flagH(1); else reg->Set_flagH(0);
+		value = mem->MemR(reg->Get_HL()) - 1;
+		mem->MemW(reg->Get_HL(), value);
 	}
 	else
 	{
-		reg->Set_Reg(lugar, reg->Get_Reg(lugar) - 1);
-		if (reg->Get_Reg(lugar) == 0x00) reg->Set_flagZ(1); else reg->Set_flagZ(0);
-		if ((reg->Get_Reg(lugar) & 0x0F) == 0x0F) reg->Set_flagH(1); else reg->Set_flagH(0);
+		value = reg->Get_Reg(place) - 1;
+		reg->Set_Reg(place, value);
 	}
+	reg->Set_flagZ(!value ? 1 : 0);
+	//reg->Set_flagH(((value & 0x0F) == 0x0F) ? 1 : 0);
+	reg->Set_flagH((value+1) ? 1 : 0);
 	reg->Set_flagN(1);
 
 	reg->Add_PC(1);

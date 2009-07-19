@@ -39,13 +39,13 @@ public:
 	void JP_HL();
 	void JR();
     void JR_CC_n(e_registers flag, BYTE value2check);
-	void LDD_A_HL();
-    void LDD_HL_A();
-	void LDH_n_A();
+	void LDD_A_cHL();
+    void LDD_cHL_A();
+	void LDH_c$_A();
 	void LDH_A_n();
 	void LDHL_SP_n();
-	void LDI_A_HL();
-    void LDI_HL_A();
+	void LDI_A_cHL();
+    void LDI_cHL_A();
 	void LD_n_A(e_registers place);
     void LD_n_nn(e_registers place);
 	void LD_nn_n(e_registers place);

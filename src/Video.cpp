@@ -1,33 +1,22 @@
 #include "Video.h"
 #include <iostream>
+#include "sdlVideo.h"
 
 using namespace std;
 
 Video::Video(void)
 {
-	//if ( SDL_Init(SDL_INIT_AUDIO|SDL_INIT_VIDEO) < 0 ) {
-	if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
-		cerr << "No se puede iniciar SDL: " << SDL_GetError() << endl;
-        exit(1);
-    }
-
-	screen = SDL_SetVideoMode(SCREEN_W, SCREEN_H, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
-    if ( screen == NULL )
-    {
-		cerr << "No se puede establecer el modo de video: " << SDL_GetError() << endl;
-        exit(1);
-    }
-
-	hideScreen = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_W, SCREEN_H, 16, 0,0,0,0);
-
-	for (int i=0; i<4; i++)
-		colors[i] = SDL_MapRGB(hideScreen->format, i*85, i*85, i*85);
-
-	SDL_WM_SetCaption("GB++", "icon");
+	onVideoInit(SCREEN_W, SCREEN_H);
 }
 
 Video::~Video(void)
 {
+	
+}
+
+void Video::Close()
+{
+	onVideoClose();
 }
 
 void Video::SetMem(Memory *mem)
@@ -35,49 +24,30 @@ void Video::SetMem(Memory *mem)
 	this->mem = mem;
 }
 
-void Video::Close()
-{
-	atexit(SDL_Quit);
-}
-
 void Video::UpdateLine(BYTE y)
 {
-	if ( SDL_MUSTLOCK(screen) )
-    {
-        if ( SDL_LockSurface(screen) < 0 )
-		{
-            return;
-        }
-    }
+	onVideoPreDraw();
 
 	OrderOAM(y);
 	UpdateBG(y);
 	UpdateWin(y);
 	UpdateOAM(y);
 
-	if ( SDL_MUSTLOCK(screen) )
-    {
-        SDL_UnlockSurface(screen);
-    }
+	onVideoPostDraw();
 }
 
 void Video::RefreshScreen()
 {
-	//Copiar la superficie oculta a la principal
-	SDL_BlitSurface(hideScreen, NULL, screen, NULL);
-	//Hacer el cambio
-	SDL_Flip(screen);
+	onVideoRefreshScreen();
 	cout << ".";
 }
 
 void Video::UpdateBG(int y)
 {
-	int x, indexColor;
+	int x, indexColor, color, xScrolled, yScrolled;
 	BYTE x_tile, y_tile, valueLCDC, valueSCX;
 	int line[2];
-	Uint32 color;
-	Uint32 palette[4];
-	int xScrolled, yScrolled;
+	int palette[4];
 	WORD map_ini, map, dir_tile;
 
 	valueLCDC = mem->MemR(LCDC);
@@ -100,13 +70,13 @@ void Video::UpdateBG(int y)
 		//pintamos la linea de blanco
 		if (!BIT7(valueLCDC) || !BIT0(valueLCDC))
 		{
-			DrawPixel(hideScreen, colors[3], x, y);
+			onVideoDrawPixel(3, x, y);
 			//DrawPixel(hideScreen, colors[0], x, y);
 			continue;
 		}
 
 		xScrolled = (x + valueSCX);
-		if (xScrolled > 256)
+		if (xScrolled > 255)
 			xScrolled -= 256;
 
 		map = map_ini + ((yScrolled/8 * 32) + xScrolled/8);
@@ -132,7 +102,7 @@ void Video::UpdateBG(int y)
 		indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
 		color = palette[indexColor];
 
-		DrawPixel(hideScreen, color, x, y);
+		onVideoDrawPixel(color, x, y);
 		indexColorsBGWnd[x][y] = indexColor;
 	}
 }
@@ -143,8 +113,8 @@ void Video::UpdateWin(int y)
 	WORD map_ini, map, dir_tile, wndPosY;
 	BYTE x_tile, y_tile, xIni, xScrolled, yScrolled, indexColor;
 	BYTE line[2];
-	Uint32 color;
-	Uint32 palette[4];
+	int color;
+	int palette[4];
 	short wndPosX;
 
 	//Si la ventana está desactivada no hacemos nada
@@ -194,7 +164,7 @@ void Video::UpdateWin(int y)
 		indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
 		color = palette[indexColor];
 
-		DrawPixel(hideScreen, color, x, y);
+		onVideoDrawPixel(color, x, y);
 		indexColorsBGWnd[x][y] = indexColor;
 	}
 }
@@ -225,8 +195,8 @@ void Video::UpdateOAM(int y)
 	int x, xSprite, numSpritesLine, xBeg;
 	int attrSprite, xTile, yTile, xFlip, yFlip, countX, countY, behind, mode16, ySprite;
 	WORD dirSprite, tileNumber, dirTile;
-	Uint32 color;
-	Uint32 palette[4], palette2[4];
+	int color;
+	int palette[4], palette2[4];
 	BYTE line[2];
 
 	if (!BIT1(mem->MemR(LCDC)))	//OAM desactivado
@@ -293,7 +263,7 @@ void Video::UpdateOAM(int y)
 			{
 				color = palette[index];
 
-				DrawPixel(hideScreen, color, xSprite + countX, ySprite + countY);
+				onVideoDrawPixel(color, xSprite + countX, ySprite + countY);
 			}
 
 			countX++;
@@ -301,48 +271,12 @@ void Video::UpdateOAM(int y)
 	}
 }
 
-void Video::GetPalette(Uint32 * palette, int dir)
+void Video::GetPalette(int * palette, int dir)
 {
-	Uint32 paletteData;
+	BYTE paletteData = mem->MemR(dir);
 
-	paletteData = mem->MemR(dir);
-
-	palette[0] = colors[abs((int)(BITS01(paletteData) - 3))];
-	palette[1] = colors[abs((int)((BITS23(paletteData) >> 2) - 3))];
-	palette[2] = colors[abs((int)((BITS45(paletteData) >> 4) - 3))];
-	palette[3] = colors[abs((int)((BITS67(paletteData) >> 6) - 3))];
-}
-
-void Video::DrawPixel(SDL_Surface *screen, Uint32 color, int x, int y)
-{
-    int bpp = screen->format->BytesPerPixel;
-    /* Here p is the address to the pixel we want to set */
-    Uint8 *p = (Uint8 *)screen->pixels + y * screen->pitch + x * bpp;
-
-    switch(bpp) {
-    case 1:
-        *p = color;
-        break;
-
-    case 2:
-        *(Uint16 *)p = color;
-        break;
-
-    case 3:
-        if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-            p[0] = (color >> 16) & 0xff;
-            p[1] = (color >> 8) & 0xff;
-            p[2] = color & 0xff;
-        } else {
-            p[0] = color & 0xff;
-            p[1] = (color >> 8) & 0xff;
-            p[2] = (color >> 16) & 0xff;
-        }
-        break;
-
-    case 4:
-        *(Uint32 *)p = color;
-        break;
-    }
-
+	palette[0] = abs((int)(BITS01(paletteData) - 3));
+	palette[1] = abs((int)((BITS23(paletteData) >> 2) - 3));
+	palette[2] = abs((int)((BITS45(paletteData) >> 4) - 3));
+	palette[3] = abs((int)((BITS67(paletteData) >> 6) - 3));
 }

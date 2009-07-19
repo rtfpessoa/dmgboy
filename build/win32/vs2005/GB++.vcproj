@@ -212,6 +212,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\sdlVideo.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\Video.cpp"
 				>
 			</File>
@@ -254,6 +258,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\Registers.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\sdlVideo.h"
 				>
 			</File>
 			<File
