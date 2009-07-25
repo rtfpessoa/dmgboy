@@ -10,7 +10,6 @@ class Memory
 {
 private:
 	BYTE memory[SIZE_MEM];
-	Pad *p;
 	Cartridge *c;
 private:
 	void DmaTransfer(BYTE direction);
@@ -19,7 +18,6 @@ public:
 	~Memory();
 	Memory *GetPtrMemory();
 	void ResetMem();
-	void SetPad(Pad *p);
 	void LoadCartridge(Cartridge *c);
 	void MemW(WORD direction, BYTE value, bool checkDirAndValue);
 	void MemW(WORD direction, BYTE value);

@@ -17,11 +17,6 @@ void Memory::LoadCartridge(Cartridge *c)
 	this->c = c;
 }
 
-void Memory::SetPad(Pad *p)
-{
-	this->p = p;
-}
-
 void Memory::ResetMem()
 {
 	/*for (WORD i=0; i<(SIZE_MEM - 1); i++ )
@@ -83,7 +78,7 @@ inline void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
 				//cout << endl << "W P1   : 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl;
 				//cout << "Antes  : 0x" << setfill('0') << setw(2) << uppercase << hex << (int)memory[P1] << endl;
 				value = (value & 0x30) | (memory[P1] & ~0x30);
-				value = p->updateInput(value);
+				value = updateInput(value);
 				//cout << "Despues: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl;
 				break;
 			//case LCDC: cout << "W LCDC: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl; break;

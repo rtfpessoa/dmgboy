@@ -25,7 +25,7 @@ int main ( int argc, char** argv )
 	basePath = "/media/disk/Descargas/GB/ROMS/";
 #endif
 
-	Cartridge c(basePath + "32K/Alleyway (JUA) [!].gb");
+	//Cartridge c(basePath + "32K/Alleyway (JUA) [!].gb");
 	//Cartridge c(basePath + "32K/Asteroids (UE).gb");
 	//Cartridge c(basePath + "32K/Boxxle (V1.1) (U) [!].gb");
 	//Cartridge c(basePath + "32K/Boxxle II (U).gb");
@@ -107,11 +107,11 @@ int main ( int argc, char** argv )
 	//Cartridge c(basePath + "MBC1/RAM/Super Mario Land 2 - 6 Golden Coins (UE) (v1.2).gb");
 	//Cartridge c(basePath + "MBC1/RAM/InfoGenius Systems - Personal Organizer (U).gb");
 
-
-
 	//Cartridge c(basePath + "MBC2/Final Fantasy Legend (Sa-Ga) (U) [!].gb");
 	//Cartridge c(basePath + "MBC2/Lazlos' Leap (U).gb");
 	//Cartridge c(basePath + "MBC2/Final Fantasy Adventure (U).gb");
+
+	Cartridge c(basePath + "MBC3/Wario Land II (UE).gb");
 
 	if (!c.IsLoaded())
 	{
@@ -124,9 +124,8 @@ int main ( int argc, char** argv )
     cout << "Press to continue ..." << endl;
     cin.get();
     Video v;
-	Pad p;
 
-	CPU cpu(&v, &p, &c);
+	CPU cpu(&v, &c);
 	try
 	{
 		cpu.Run();

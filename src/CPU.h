@@ -16,9 +16,8 @@ private:
 	WORD cyclesTimer;
 	WORD cyclesDIV;
 	Video *v;
-	Pad *p;
 public:
-	CPU(Video *v, Pad *p, Cartridge *c);
+	CPU(Video *v, Cartridge *c);
 	~CPU();
 	
 	void Run();

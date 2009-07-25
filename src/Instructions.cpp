@@ -331,6 +331,32 @@ void Instructions::ADC_A_n(e_registers lugar)
 
 	reg->Add_PC(length);
 }
+
+void Instructions::INC_n(e_registers place)
+{
+	BYTE value;
+
+	if (place == c_HL)
+	{
+		value = mem->MemR(reg->Get_HL()) + 1;
+		mem->MemW(reg->Get_HL(), value);
+	}
+	else
+	{
+		value = reg->Get_Reg(place) + 1;
+		reg->Set_Reg(place, value);
+	}
+	reg->Set_flagZ(value ? 0 : 1);
+	reg->Set_flagN(0);
+	reg->Set_flagH((value & 0x0F) ? 0 : 1);
+
+	reg->Add_PC(1);
+}
+
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//Revisado hasta aquí
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 //Quitar esta funcion y dejar la generica teniendo encuenta la long. de la instruccion
 void Instructions::RLCA()
 {
@@ -375,29 +401,6 @@ void Instructions::RLC_n(e_registers place)
 	reg->Set_flagC(bit7);
 
 	reg->Add_PC(2);
-}
-
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//Revisado hasta aquí
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-void Instructions::INC_n(e_registers lugar)
-{
-	if (lugar == c_HL)
-	{
-		mem->MemW(reg->Get_HL(), mem->MemR(reg->Get_HL()) + 1);
-		if (mem->MemR(reg->Get_HL()) == 0x00) reg->Set_flagZ(1); else reg->Set_flagZ(0);
-		if ((mem->MemR(reg->Get_HL()) & 0x0F) == 0x00) reg->Set_flagH(1); else reg->Set_flagH(0);
-	}
-	else
-	{
-		reg->Set_Reg(lugar, reg->Get_Reg(lugar) + 1);
-		if (reg->Get_Reg(lugar) == 0x00) reg->Set_flagZ(1); else reg->Set_flagZ(0);
-		if ((reg->Get_Reg(lugar) & 0x0F) == 0x00) reg->Set_flagH(1); else reg->Set_flagH(0);
-	}
-	reg->Set_flagN(0);
-
-	reg->Add_PC(1);
 }
 
 void Instructions::INC_nn(e_registers lugar)

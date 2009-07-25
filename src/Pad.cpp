@@ -1,16 +1,13 @@
 #include "Pad.h"
 
-Pad::Pad(void)
-{
-	for (int i=0; i<8; i++)
-		joypad[i] = 0;
-}
+static BYTE joypad[8];
+//Pad::Pad(void)
+//{
+//	for (int i=0; i<8; i++)
+//		joypad[i] = 0;
+//}
 
-Pad::~Pad(void)
-{
-}
-
-BYTE Pad::updateInput(BYTE valueP1)
+int updateInput(int valueP1)
 {
 	//valueP1 = valueP1 | 0x0F;
 	if(!BIT5(valueP1))
@@ -26,15 +23,11 @@ BYTE Pad::updateInput(BYTE valueP1)
 
 //Si devuelve 1 debe producirse una petición de interrupción
 //En caso negativo devolverá 0
-BYTE Pad::updateKey(int eventType, SDLKey key, BYTE *valueP1)
+int checkKey(int eventType, SDLKey key, int *valueP1)
 {
 	char * keyName;
 
 	keyName = SDL_GetKeyName(key);
-	/*if (eventType == SDL_KEYDOWN)
-		printf( ">El usuario pulsa la tecla %s.\n", keyName);
-	else
-		printf( ">El usuario suelta la tecla %s.\n", keyName);*/
 
 	switch(key)
 	{
@@ -79,5 +72,42 @@ BYTE Pad::updateKey(int eventType, SDLKey key, BYTE *valueP1)
 				return 1;
 	}
 
+	return 0;
+}
+
+int onCheckKeyPad(int valueP1)
+{
+	SDL_Event ev;
+
+	while( SDL_PollEvent( &ev ) )
+	{
+		switch(ev.type)
+		{
+			case SDL_QUIT:
+				printf( ">El usuario quiere salir.\n" );
+				exit(0);
+				break;
+			case SDL_KEYDOWN:
+				if (ev.key.keysym.sym == SDLK_ESCAPE)
+				{
+					printf("Presionar de nuevo ESC para salir o cualquier otra tecla para continuar\n");
+					while(true)
+					{
+						SDL_WaitEvent(&ev);
+						if (ev.type == SDL_KEYDOWN)
+						{
+							if (ev.key.keysym.sym == SDLK_ESCAPE)
+								exit(0);
+							else
+								return 0;
+						}
+					}
+				}
+				//!!No hay break. Cuando SDL_KEYDOWN también SDL_KEYUP
+			case SDL_KEYUP:
+				return checkKey(ev.type, ev.key.keysym.sym, &valueP1);
+				break;
+		}
+	}
 	return 0;
 }

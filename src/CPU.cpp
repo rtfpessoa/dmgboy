@@ -7,13 +7,11 @@
 
 using namespace std;
 
-CPU::CPU(Video *v, Pad *p, Cartridge *c)
+CPU::CPU(Video *v, Cartridge *c)
 {
 	cyclesLCD = 0;
 	this->v = v;
 	v->SetMem(this->GetPtrMemory());
-	this->p = p;
-	SetPad(p);
 	LoadCartridge(c);
 }
 
@@ -796,7 +794,11 @@ void CPU::TareasRutinarias()
 {
 	UpdateStateLCD();
 	UpdateTimer();
-	eventsSDL();
+	int valueP1 = MemR(P1);
+	int interrupt = onCheckKeyPad(valueP1);
+	MemW(P1, valueP1, false);
+	if (interrupt)
+		MemW(IF, MemR(IF) | 0x10);
 }
 
 void CPU::UpdateStateLCD()
@@ -969,45 +971,5 @@ void CPU::UpdateTimer()
 	{
 		MemW(DIV, MemR(DIV) + 1);
 		cyclesDIV = 0;
-	}
-}
-
-void CPU::eventsSDL()
-{
-	SDL_Event ev;
-
-	while( SDL_PollEvent( &ev ) )
-	{
-		switch(ev.type)
-		{
-			case SDL_QUIT:
-				printf( ">El usuario quiere salir.\n" );
-				exit(0);
-				break;
-			case SDL_KEYDOWN:
-				if (ev.key.keysym.sym == SDLK_ESCAPE)
-				{
-					printf("Presionar de nuevo ESC para salir o cualquier otra tecla para continuar\n");
-					while(true)
-					{
-						SDL_WaitEvent(&ev);
-						if (ev.type == SDL_KEYDOWN)
-						{
-							if (ev.key.keysym.sym == SDLK_ESCAPE)
-								exit(0);
-							else
-								return;
-						}
-					}
-				}
-				//!!No hay break. Cuando SDL_KEYDOWN también SDL_KEYUP
-			case SDL_KEYUP:
-				BYTE valueP1 = MemR(P1);
-				BYTE interrupt = p->updateKey(ev.type, ev.key.keysym.sym, &valueP1);
-				MemW(P1, valueP1, false);
-				if (interrupt)
-					MemW(IF, MemR(IF) | 0x10);
-				break;
-		}
 	}
 }

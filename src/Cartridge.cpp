@@ -62,13 +62,18 @@ Cartridge::Cartridge(string path)
 		/*
 		case 0x0B:						//ROM+MMM01
 		case 0x0C:						//ROM+MMM01+SRAM
-		case 0x0D: mbc = MMM01; break;	//ROM+MMM01+SRAM+BATT
+		case 0x0D: mbc = MMM01; break;	//ROM+MMM01+SRAM+BATT*/
 		case 0x0F:						//ROM+MBC3+TIMER+BATT
 		case 0x10:						//ROM+MBC3+TIMER+RAM+BATT
 		case 0x11:						//ROM+MBC3
 		case 0x12:						//ROM+MBC3+RAM
-		case 0x13: mbc = MBC3; break;	//ROM+MBC3+RAM+BATT
-		case 0x19:						//ROM+MBC5
+		case 0x13:						//ROM+MBC3+RAM+BATT
+			cout << "MBC3)" << endl;
+			ptrRead = &MBC3Read;
+			ptrWrite = &MBC3Write;
+			InitMBC3(_memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
+			break;
+		/*case 0x19:						//ROM+MBC5
 		case 0x1A:						//ROM+MBC5+RAM
 		case 0x1B:						//ROM+MBC5+RAM+BATT
 		case 0x1C:						//ROM+MBC5+RUMBLE
