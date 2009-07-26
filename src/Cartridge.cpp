@@ -73,13 +73,18 @@ Cartridge::Cartridge(string path)
 			ptrWrite = &MBC3Write;
 			InitMBC3(_memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
 			break;
-		/*case 0x19:						//ROM+MBC5
+		case 0x19:						//ROM+MBC5
 		case 0x1A:						//ROM+MBC5+RAM
 		case 0x1B:						//ROM+MBC5+RAM+BATT
 		case 0x1C:						//ROM+MBC5+RUMBLE
 		case 0x1D:						//ROM+MBC5+RUMBLE+SRAM
-		case 0x1E: mbc = MBC5; break;	//ROM+MBC5+RUMBLE+SRAM+BATT
-		case 0x1F:						//Pocket Camera
+		case 0x1E:						//ROM+MBC5+RUMBLE+SRAM+BATT
+			cout << "MBC5)" << endl;
+			ptrRead = &MBC5Read;
+			ptrWrite = &MBC5Write;
+			InitMBC5(_memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
+			break;
+		/*case 0x1F:						//Pocket Camera
 		case 0xFD:						//Bandai TAMA5
 		case 0xFE: mbc = Other; break;	//Hudson HuC-3
 		case 0xFF: mbc = HuC1; break;	//Hudson HuC-1*/

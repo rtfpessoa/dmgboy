@@ -60,6 +60,11 @@ void InitMBC3(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
 	InitMBC1(mem_cartridge, ROMSize, RamHeaderSize);
 }
 
+void InitMBC5(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
+{
+	InitMBC1(mem_cartridge, ROMSize, RamHeaderSize);
+}
+
 void DestroyMBC()
 {
 	if (_memRamMBC)
@@ -108,7 +113,7 @@ void MBC1Write(WORD direction, BYTE value)
 	else if ((direction >=0xA000) && (direction < 0xC000))	//Intenta escribir en RAM
 	{
 		if (_RAMEnabled)
-			_memRamMBC[direction - 0xA000 + (0x8000*_RAMBank)] = value;
+			_memRamMBC[direction - 0xA000 + (0x2000*_RAMBank)] = value;
 		//throw GBException("Intenta escribir en RAM de cartucho");
 	}
 }
@@ -120,7 +125,7 @@ BYTE MBC1Read(WORD direction)
 	else if (direction < 0x8000)
 		return _memCartridge[(direction - 0x4000) + (0x4000*_ROMBank)];
 	else if ((direction >=0xA000) && (direction < 0xC000))
-		return _memRamMBC[direction - 0xA000 + (0x8000*_RAMBank)];
+		return _memRamMBC[direction - 0xA000 + (0x2000*_RAMBank)];
 }
 
 void MBC2Write(WORD direction, BYTE value)
@@ -176,7 +181,7 @@ void MBC3Write(WORD direction, BYTE value)
 	{
 		value = value ? value : 1;
 
-		_ROMBank = _ROMBank & 0x7F;
+		_ROMBank = value & 0x7F;
 	}
 	else if (direction < 0x6000)	//Cambiar RAMBank o RTC
 	{
@@ -186,17 +191,17 @@ void MBC3Write(WORD direction, BYTE value)
 		}
 		else if ((value >= 0x08) && (value <=0x0C))	//Seleccionar RTC
 		{
-			throw GBException("RTC no implementado");
+			//throw GBException("RTC no implementado");
 		}
 	}
 	else if (direction < 0x8000)	
 	{
-		throw GBException("RTC no implementado");
+		//throw GBException("RTC no implementado");
 	}
 	else if ((direction >=0xA000) && (direction < 0xC000))	//Intenta escribir en RAM
 	{
 		if (_RAMEnabled)
-			_memRamMBC[direction - 0xA000 + (0x8000*_RAMBank)] = value;
+			_memRamMBC[direction - 0xA000 + (0x2000*_RAMBank)] = value;
 	}
 }
 
@@ -207,5 +212,44 @@ BYTE MBC3Read(WORD direction)
 	else if (direction < 0x8000)
 		return _memCartridge[(direction - 0x4000) + (0x4000*_ROMBank)];
 	else if ((direction >=0xA000) && (direction < 0xC000))
-		return _memRamMBC[direction - 0xA000 + (0x8000*_RAMBank)];
+		return _memRamMBC[direction - 0xA000 + (0x2000*_RAMBank)];
+}
+
+void MBC5Write(WORD direction, BYTE value)
+{
+	if (direction < 0x2000)	//Habilitar/Deshabilitar RAM
+	{
+		_RAMEnabled = ((value & 0x0F) == 0x0A);
+	}
+	else if (direction < 0x3000)	//Cambiar ROMBank
+	{
+		_ROMBank = (_ROMBank & 0x100) | value;
+	}
+	else if (direction < 0x4000)	//Cambiar ROMBank
+	{
+		_ROMBank = ((value & 0x01) << 8) | (_ROMBank & 0xFF);
+	}
+	else if (direction < 0x6000)	//Cambiar RAMBank o RTC
+	{
+		_RAMBank = value & 0x0F;
+	}
+	else if (direction < 0x8000)	
+	{
+		//throw GBException("Zona no conocida");
+	}
+	else if ((direction >=0xA000) && (direction < 0xC000))	//Intenta escribir en RAM
+	{
+		if (_RAMEnabled)
+			_memRamMBC[direction - 0xA000 + (0x2000*_RAMBank)] = value;
+	}
+}
+
+BYTE MBC5Read(WORD direction)
+{
+	if (direction < 0x4000)
+		return _memCartridge[direction];
+	else if (direction < 0x8000)
+		return _memCartridge[(direction - 0x4000) + (0x4000*_ROMBank)];
+	else if ((direction >=0xA000) && (direction < 0xC000))
+		return _memRamMBC[direction - 0xA000 + (0x2000*_RAMBank)];
 }

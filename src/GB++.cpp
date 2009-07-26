@@ -111,7 +111,9 @@ int main ( int argc, char** argv )
 	//Cartridge c(basePath + "MBC2/Lazlos' Leap (U).gb");
 	//Cartridge c(basePath + "MBC2/Final Fantasy Adventure (U).gb");
 
-	Cartridge c(basePath + "MBC3/Wario Land II (UE).gb");
+	//Cartridge c(basePath + "MBC3/Wario Land II (UE).gb");
+
+	Cartridge c(basePath + "MBC5/Pokemon Azul (Blue) (S) [S].gb");
 
 	if (!c.IsLoaded())
 	{
