@@ -15,12 +15,20 @@ using namespace std;
 //WinMain16 no encontrada
 #undef main
 
+//TODO:
+//	- Guardar a disco duro la memoria de los cartuchos que llevan batería
+//	- Permitir Savestates en cualquier momento
+//	- Integrar interfaz gráfica (QT)
+//	- Revisar compilación en gcc
+//	- Poder cambiar los botones del pad en cualquier momento
+//	- Sonido
+
 int main ( int argc, char** argv )
 {
 	string basePath;
 
 #ifdef WIN32
-	basePath = "D:/Descargas/GB/ROMS/";
+	basePath = "C:/ROMS/";
 #else
 	basePath = "/media/disk/Descargas/GB/ROMS/";
 #endif

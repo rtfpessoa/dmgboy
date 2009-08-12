@@ -31,7 +31,7 @@ void Instructions::LD_r1_r2(e_registers e_reg1, e_registers e_reg2)
 			length = 2;
 		}
 		else
-			mem->MemW(reg->Get_HL(), reg->Get_Reg(e_reg2));
+			mem->MemW(reg->Get_HL(), (BYTE)reg->Get_Reg(e_reg2));
 	}
 	else
 	{
@@ -150,7 +150,7 @@ void Instructions::CP_n(e_registers place)
 			value = mem->MemR(reg->Get_HL());
 			break;
 		default:
-			value = reg->Get_Reg(place);
+			value = (BYTE)reg->Get_Reg(place);
 	}
 
 	reg->Set_flagZ((reg->Get_A() == value) ? 1 : 0);
@@ -290,7 +290,7 @@ void Instructions::ADD_A_n(e_registers place)
 	{
 		case $:		valueReg = mem->MemR(reg->Get_PC() + 1); length = 2; break;
 		case c_HL:	valueReg = mem->MemR(reg->Get_HL()); break;
-		default:	valueReg = reg->Get_Reg(place); break;
+		default:	valueReg = (BYTE)reg->Get_Reg(place); break;
 	}
 
 	value = reg->Get_A() + valueReg;
@@ -314,7 +314,7 @@ void Instructions::ADC_A_n(e_registers lugar)
 	{
 		case $:		valueReg = mem->MemR(reg->Get_PC() + 1); length = 2; break;
 		case c_HL:	valueReg = mem->MemR(reg->Get_HL()); break;
-		default:	valueReg = reg->Get_Reg(lugar); break;
+		default:	valueReg = (BYTE)reg->Get_Reg(lugar); break;
 	}
 
 	value = reg->Get_flagC() + valueReg + reg->Get_A();
@@ -389,7 +389,7 @@ void Instructions::RLC_n(e_registers place)
 	}
 	else
 	{
-		value = reg->Get_Reg(place);
+		value = (BYTE)reg->Get_Reg(place);
 		bit7 = BIT7(value) >> 7;
 		value = (value << 1) | bit7;
 		reg->Set_Reg(place, value);
@@ -558,7 +558,7 @@ void Instructions::BIT_b_r(BYTE bit, e_registers lugar)
 	if (lugar == c_HL)
 		value = mem->MemR(reg->Get_HL());
 	else
-		value = reg->Get_Reg(lugar);
+		value = (BYTE)reg->Get_Reg(lugar);
 
 	if (!(value & (1 << bit)))
 		reg->Set_flagZ(1);
@@ -691,7 +691,7 @@ void Instructions::SRA_n(e_registers lugar)
 		bit0 = BIT0(reg->Get_Reg(lugar));
 		bit7 = BIT7(reg->Get_Reg(lugar));
 		reg->Set_Reg(lugar, bit7 | (reg->Get_Reg(lugar) >> 1));
-		value = reg->Get_Reg(lugar);
+		value = (BYTE)reg->Get_Reg(lugar);
 	}
 
 	reg->Set_flagZ(!value ? 1 : 0);
@@ -822,7 +822,7 @@ void Instructions::SWAP(e_registers place)
 	}
 	else
 	{
-		value = reg->Get_Reg(place);
+		value = (BYTE)reg->Get_Reg(place);
 		value = ((value & 0x0F) << 4) | ((value & 0xF0) >> 4);
 		reg->Set_Reg(place, value);
 	}
@@ -906,7 +906,7 @@ void Instructions::RR_n(e_registers place)
 	}
 	else
 	{
-		value = reg->Get_Reg(place);
+		value = (BYTE)reg->Get_Reg(place);
 		bit0 = BIT0(value);
 		value = (reg->Get_flagC() << 7) | (value >> 1);
 		reg->Set_Reg(place, value);
@@ -936,7 +936,7 @@ void Instructions::RRC_n(e_registers place)
 	}
 	else
 	{
-		value = reg->Get_Reg(place);
+		value = (BYTE)reg->Get_Reg(place);
 		bit0 = BIT0(value);
 		value = (bit0 << 7) | (value >> 1);
 		reg->Set_Reg(place, value);

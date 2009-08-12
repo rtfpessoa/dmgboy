@@ -57,7 +57,17 @@ void InitMBC2(BYTE * mem_cartridge, int ROMSize)
 
 void InitMBC3(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
 {
-	InitMBC1(mem_cartridge, ROMSize, RamHeaderSize);
+	InitMBC(mem_cartridge, ROMSize);
+
+	if (RamHeaderSize == 0x01)
+		_RAMSize = 8192;		//8KB = 64Kb
+	else if (RamHeaderSize == 0x02)
+		_RAMSize = 32768;		//32KB = 256Kb
+	else if (RamHeaderSize == 0x03)
+		_RAMSize = 131072;		//128KB = 1Mb
+
+	if (_RAMSize)
+		_memRamMBC = new BYTE[_RAMSize];
 }
 
 void InitMBC5(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
@@ -124,8 +134,10 @@ BYTE MBC1Read(WORD direction)
 		return _memCartridge[direction];
 	else if (direction < 0x8000)
 		return _memCartridge[(direction - 0x4000) + (0x4000*_ROMBank)];
-	else if ((direction >=0xA000) && (direction < 0xC000))
+	else if ((direction >=0xA000) && (direction < 0xC000) && _RAMEnabled)
 		return _memRamMBC[direction - 0xA000 + (0x2000*_RAMBank)];
+
+	return 0;
 }
 
 void MBC2Write(WORD direction, BYTE value)
@@ -169,6 +181,8 @@ BYTE MBC2Read(WORD direction)
 		return _memCartridge[(direction - 0x4000) + (0x4000*_ROMBank)];
 	else if ((direction >=0xA000) && (direction < 0xC000))
 		return _memRamMBC[direction - 0xA000];
+
+	return 0;
 }
 
 void MBC3Write(WORD direction, BYTE value)
@@ -213,6 +227,8 @@ BYTE MBC3Read(WORD direction)
 		return _memCartridge[(direction - 0x4000) + (0x4000*_ROMBank)];
 	else if ((direction >=0xA000) && (direction < 0xC000))
 		return _memRamMBC[direction - 0xA000 + (0x2000*_RAMBank)];
+
+	return 0;
 }
 
 void MBC5Write(WORD direction, BYTE value)
@@ -252,4 +268,6 @@ BYTE MBC5Read(WORD direction)
 		return _memCartridge[(direction - 0x4000) + (0x4000*_ROMBank)];
 	else if ((direction >=0xA000) && (direction < 0xC000))
 		return _memRamMBC[direction - 0xA000 + (0x2000*_RAMBank)];
+
+	return 0;
 }

@@ -21,13 +21,4 @@ enum e_joypad {jRIGHT, jLEFT, jUP, jDOWN, jA, jB, jSELECT, jSTART};
 int onCheckKeyPad(int valueP1);
 int updateInput(int valueP1);
 
-//class Pad
-//{
-//public:
-//	Pad(void);
-//	~Pad(void);
-//	BYTE updateInput(BYTE valueP1);
-//	BYTE updateKey(int eventType, SDLKey key, BYTE *valueP1);
-//};
-
 #endif

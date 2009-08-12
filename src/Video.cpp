@@ -109,13 +109,11 @@ void Video::UpdateBG(int y)
 
 void Video::UpdateWin(int y)
 {
-	int x;
+	int x, wndPosX, color, xIni;
 	WORD map_ini, map, dir_tile, wndPosY;
-	BYTE x_tile, y_tile, xIni, xScrolled, yScrolled, indexColor;
+	BYTE x_tile, y_tile, xScrolled, yScrolled, indexColor;
 	BYTE line[2];
-	int color;
 	int palette[4];
-	short wndPosX;
 
 	//Si la ventana está desactivada no hacemos nada
 	if (!BIT5(mem->MemR(LCDC)))
@@ -171,7 +169,7 @@ void Video::UpdateWin(int y)
 
 void Video::OrderOAM(int y)
 {
-	int ySprite, xSprite, hSprite, dir;
+	int ySprite, hSprite, dir;
 
 	orderedOAM.clear();
 
@@ -196,7 +194,7 @@ void Video::UpdateOAM(int y)
 	int attrSprite, xTile, yTile, xFlip, yFlip, countX, countY, behind, mode16, ySprite;
 	WORD dirSprite, tileNumber, dirTile;
 	int color;
-	int palette[4], palette2[4];
+	int palette0[4], palette1[4];
 	BYTE line[2];
 
 	if (!BIT1(mem->MemR(LCDC)))	//OAM desactivado
@@ -204,7 +202,8 @@ void Video::UpdateOAM(int y)
 
 	mode16 = BIT2(mem->MemR(LCDC));
 
-	GetPalette(palette, OBP0);
+	GetPalette(palette0, OBP0);
+	GetPalette(palette1, OBP1);
 
 	multimap<int, int>::iterator it;
 
@@ -261,7 +260,12 @@ void Video::UpdateOAM(int y)
 			//El 0 es transparente (no pintar)
 			if ((index) && ((!behind) || (!indexColorsBGWnd[xSprite + countX][ySprite + countY])))
 			{
-				color = palette[index];
+				//color = !BIT4(attrSprite) ? palette0[index] : palette1[index];
+				if (!BIT4(attrSprite))
+					color = palette0[index];
+				else
+					color = palette1[index];
+
 
 				onVideoDrawPixel(color, xSprite + countX, ySprite + countY);
 			}

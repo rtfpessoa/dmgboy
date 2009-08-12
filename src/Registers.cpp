@@ -80,14 +80,14 @@ WORD Registers::Get_Reg(e_registers reg)
 void Registers::Set_Reg(e_registers reg, WORD value)
 {
 	switch (reg){
-		case A: this->Set_A(value); break;
-		case B: this->Set_B(value); break;
-		case C: this->Set_C(value); break;
-		case D: this->Set_D(value); break;
-		case E: this->Set_E(value); break;
-		case F: this->Set_F(value); break;
-		case H: this->Set_H(value); break;
-		case L: this->Set_L(value); break;
+		case A: this->Set_A((BYTE)value); break;
+		case B: this->Set_B((BYTE)value); break;
+		case C: this->Set_C((BYTE)value); break;
+		case D: this->Set_D((BYTE)value); break;
+		case E: this->Set_E((BYTE)value); break;
+		case F: this->Set_F((BYTE)value); break;
+		case H: this->Set_H((BYTE)value); break;
+		case L: this->Set_L((BYTE)value); break;
 		case AF: this->Set_AF(value); break;
 		case BC: this->Set_BC(value); break;
 		case DE: this->Set_DE(value); break;
