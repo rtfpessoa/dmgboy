@@ -60,7 +60,7 @@ void Memory::ResetMem()
 	memory[P1]	  = 0x3F;
 }
 
-inline void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
+void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
 {
 	if (checkDirAndValue)
 	{
@@ -103,11 +103,6 @@ inline void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
 	}//Fin if
 
 	memory[direction] = value;
-}
-
-inline void Memory::MemW(WORD direction, BYTE value)
-{
-	MemW(direction, value, true);
 }
 
 BYTE Memory::MemR(WORD direction)

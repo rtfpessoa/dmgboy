@@ -18,10 +18,9 @@
 					<Add option="-D_DEBUG" />
 					<Add option="-D_CONSOLE" />
 					<Add directory="C:\Archivos de programa\SDL-1.2.13 MinGW\include\SDL" />
+					<Add directory="C:\Archivos de programa\SDL-1.2.13_mingw32\bin" />
 				</Compiler>
 				<Linker>
-					<Add library="C:\Archivos de programa\SDL-1.2.13 MinGW\lib\libSDLmain.a" />
-					<Add library="C:\Archivos de programa\SDL-1.2.13 MinGW\lib\libSDL.dll.a" />
 					<Add directory="C:\Archivos de programa\SDL-1.2.13 MinGW\lib" />
 				</Linker>
 			</Target>
@@ -48,16 +47,24 @@
 				</Linker>
 			</Target>
 		</Build>
+		<Compiler>
+			<Add directory="C:\Archivos de programa\SDL-1.2.13_mingw32\include\SDL" />
+		</Compiler>
+		<Linker>
+			<Add library="libSDLmain.a" />
+			<Add library="libSDL.dll.a" />
+			<Add directory="C:\Archivos de programa\SDL-1.2.13_mingw32\lib" />
+		</Linker>
 		<Unit filename="..\..\..\src\CPU.cpp" />
 		<Unit filename="..\..\..\src\CPU.h" />
 		<Unit filename="..\..\..\src\Cartridge.cpp" />
 		<Unit filename="..\..\..\src\Cartridge.h" />
-		<Unit filename="..\..\..\src\Definiciones.h" />
+		<Unit filename="..\..\..\src\Def.h" />
 		<Unit filename="..\..\..\src\GB++.cpp" />
 		<Unit filename="..\..\..\src\GBException.cpp" />
 		<Unit filename="..\..\..\src\GBException.h" />
-		<Unit filename="..\..\..\src\Instrucciones.cpp" />
-		<Unit filename="..\..\..\src\Instrucciones.h" />
+		<Unit filename="..\..\..\src\Instructions.cpp" />
+		<Unit filename="..\..\..\src\Instructions.h" />
 		<Unit filename="..\..\..\src\MBC.cpp" />
 		<Unit filename="..\..\..\src\MBC.h" />
 		<Unit filename="..\..\..\src\Memory.cpp" />
@@ -68,6 +75,8 @@
 		<Unit filename="..\..\..\src\Registers.h" />
 		<Unit filename="..\..\..\src\Video.cpp" />
 		<Unit filename="..\..\..\src\Video.h" />
+		<Unit filename="..\..\..\src\sdlVideo.cpp" />
+		<Unit filename="..\..\..\src\sdlVideo.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

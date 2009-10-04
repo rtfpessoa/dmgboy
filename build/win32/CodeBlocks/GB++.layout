@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="..\..\..\src\CPU.cpp" open="1" top="0" tabpos="5">
+	<File name="..\..\..\src\CPU.cpp" open="0" top="0" tabpos="5">
 		<Cursor position="11398" topLine="300" />
 	</File>
-	<File name="..\..\..\src\CPU.h" open="1" top="0" tabpos="3">
-		<Cursor position="677" topLine="13" />
+	<File name="..\..\..\src\CPU.h" open="0" top="0" tabpos="3">
+		<Cursor position="662" topLine="9" />
 	</File>
-	<File name="..\..\..\src\GB++.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="257" topLine="0" />
+	<File name="..\..\..\src\GB++.cpp" open="1" top="1" tabpos="1">
+		<Cursor position="175" topLine="1" />
 	</File>
-	<File name="..\..\..\src\GBException.cpp" open="1" top="1" tabpos="6">
+	<File name="..\..\..\src\GBException.cpp" open="0" top="0" tabpos="6">
 		<Cursor position="97" topLine="0" />
 	</File>
-	<File name="..\..\..\src\GBException.h" open="1" top="0" tabpos="2">
+	<File name="..\..\..\src\GBException.h" open="0" top="0" tabpos="2">
 		<Cursor position="207" topLine="0" />
 	</File>
-	<File name="..\..\..\src\Video.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="7799" topLine="284" />
+	<File name="..\..\..\src\Memory.h" open="1" top="0" tabpos="4">
+		<Cursor position="492" topLine="0" />
+	</File>
+	<File name="..\..\..\src\Pad.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="922" topLine="19" />
+	</File>
+	<File name="..\..\..\src\Pad.h" open="1" top="0" tabpos="2">
+		<Cursor position="40" topLine="0" />
+	</File>
+	<File name="..\..\..\src\Video.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="7201" topLine="260" />
 	</File>
 </CodeBlocks_layout_file>

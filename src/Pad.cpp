@@ -1,15 +1,18 @@
 #include "Pad.h"
 
+static int	kR = SDLK_RIGHT;
+static int	kL = SDLK_LEFT;
+static int	kU = SDLK_UP;
+static int	kD = SDLK_DOWN;
+static int	kA = SDLK_a;
+static int	kB = SDLK_s;
+static int	kSE = SDLK_q;
+static int	kST = SDLK_w;
+
 static BYTE joypad[8];
-//Pad::Pad(void)
-//{
-//	for (int i=0; i<8; i++)
-//		joypad[i] = 0;
-//}
 
 int updateInput(int valueP1)
 {
-	//valueP1 = valueP1 | 0x0F;
 	if(!BIT5(valueP1))
 		return ((valueP1 & 0x30) |
 			(!joypad[jSTART] << 3) | (!joypad[jSELECT] << 2) | (!joypad[jB] << 1) | (!joypad[jA]));
@@ -29,35 +32,22 @@ int checkKey(int eventType, SDLKey key, int *valueP1)
 
 	keyName = SDL_GetKeyName(key);
 
-	switch(key)
-	{
-		case(kA):
-			joypad[jA] = (eventType == SDL_KEYDOWN);
-			break;
-		case(kB):
-			joypad[jB] = (eventType == SDL_KEYDOWN);
-			break;
-		case(kSE):
-			joypad[jSELECT] = (eventType == SDL_KEYDOWN);
-			break;
-		case(kST):
-			joypad[jSTART] = (eventType == SDL_KEYDOWN);
-			break;
-		case(kL):
-			joypad[jLEFT] = (eventType == SDL_KEYDOWN);
-			break;
-		case(kR):
-			joypad[jRIGHT] = (eventType == SDL_KEYDOWN);
-			break;
-		case(kU):
-			joypad[jUP] = (eventType == SDL_KEYDOWN);
-			break;
-		case(kD):
-			joypad[jDOWN] = (eventType == SDL_KEYDOWN);
-			break;
-		default:
-			return 0;
-	}
+	if (key == kR)
+		joypad[jRIGHT] = (eventType == SDL_KEYDOWN);
+	else if (key == kL)
+		joypad[jLEFT] = (eventType == SDL_KEYDOWN);
+	else if (key == kA)
+		joypad[jA] = (eventType == SDL_KEYDOWN);
+	else if (key == kB)
+		joypad[jB] = (eventType == SDL_KEYDOWN);
+	else if (key == kSE)
+		joypad[jSELECT] = (eventType == SDL_KEYDOWN);
+	else if (key == kST)
+		joypad[jSTART] = (eventType == SDL_KEYDOWN);
+	else if (key == kU)
+		joypad[jUP] = (eventType == SDL_KEYDOWN);
+	else if (key == kD)
+		joypad[jDOWN] = (eventType == SDL_KEYDOWN);
 
 	*valueP1 = updateInput(*valueP1);
 

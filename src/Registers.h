@@ -31,60 +31,60 @@ public:
 
 	Registers *GetPtrRegisters();
 
-	inline BYTE Get_A();
-	inline void Set_A(BYTE value);
-	inline BYTE Get_B();
-	inline void Set_B(BYTE value);
-	inline BYTE Get_C();
-	inline void Set_C(BYTE value);
-	inline BYTE Get_D();
-	inline void Set_D(BYTE value);
-	inline BYTE Get_E();
-	inline void Set_E(BYTE value);
-	inline BYTE Get_F();
-	inline void Set_F(BYTE value);
-	inline BYTE Get_H();
-	inline void Set_H(BYTE value);
-	inline BYTE Get_L();
-	inline void Set_L(BYTE value);
+	inline BYTE Get_A()				{return this->af.simple[1];}
+	inline void Set_A(BYTE value)	{this->af.simple[1] = value;}
+	inline BYTE Get_B()				{return this->bc.simple[1];}
+	inline void Set_B(BYTE value)	{this->bc.simple[1] = value;}
+	inline BYTE Get_C()				{return this->bc.simple[0];}
+	inline void Set_C(BYTE value)	{this->bc.simple[0] = value;}
+	inline BYTE Get_D()				{return this->de.simple[1];}
+	inline void Set_D(BYTE value)	{this->de.simple[1] = value;}
+	inline BYTE Get_E()				{return this->de.simple[0];}
+	inline void Set_E(BYTE value)	{this->de.simple[0] = value;}
+	inline BYTE Get_F()				{return this->af.simple[0];}
+	inline void Set_F(BYTE value)	{this->af.simple[0] = value;}
+	inline BYTE Get_H()				{return this->hl.simple[1];}
+	inline void Set_H(BYTE value)	{this->hl.simple[1] = value;}
+	inline BYTE Get_L()				{return this->hl.simple[0];}
+	inline void Set_L(BYTE value)	{this->hl.simple[0] = value;}
 
-	inline WORD Get_AF();
-	inline void Set_AF(WORD value);
-	inline WORD Get_BC();
-	inline void Set_BC(WORD value);
-	inline WORD Get_DE();
-	inline void Set_DE(WORD value);
-	inline WORD Get_HL();
-	inline void Set_HL(WORD value);
+	inline WORD Get_AF()			{return this->af.doble;}
+	inline void Set_AF(WORD value)	{this->af.doble = value;}
+	inline WORD Get_BC()			{return this->bc.doble;}
+	inline void Set_BC(WORD value)	{this->bc.doble = value;}
+	inline WORD Get_DE()			{return this->de.doble;}
+	inline void Set_DE(WORD value)	{this->de.doble = value;}
+	inline WORD Get_HL()			{return this->hl.doble;}
+	inline void Set_HL(WORD value)	{this->hl.doble = value;}
 
-	inline WORD Get_PC();
-	inline void Set_PC(WORD value);
-	void Add_PC(int value);
-	inline WORD Get_SP();
-	inline void Set_SP(WORD value);
-	void Add_SP(int value);
+	inline WORD Get_PC()			{return this->pc;}
+	inline void Set_PC(WORD value)  {this->pc = value;}
+	inline void Add_PC(int value)   {this->pc += value;};
+	inline WORD Get_SP()			{return this->sp;}
+	inline void Set_SP(WORD value)  {this->sp = value;}
+	inline void Add_SP(int value)   {this->sp += value;};
 
-	bool Get_IME();
-	inline void Set_IME(bool value);
+	inline bool Get_IME()			{return this->IME;}
+	inline void Set_IME(bool value)	{this->IME = value;}
 
-	bool Get_Halt();
-	inline void Set_Halt(bool value);
+	inline bool Get_Halt()				{return this->halt;}
+	inline void Set_Halt(bool value)	{this->halt = value;}
 
-	bool Get_Stop();
-	inline void Set_Stop(bool value);
+	inline bool Get_Stop()				{return this->stop;}
+	inline void Set_Stop(bool value)	{this->stop = value;}
 
 	WORD Get_Reg(e_registers reg);
 	void Set_Reg(e_registers reg, WORD value);
 
-	inline BYTE Get_flagZ();
-	inline void Set_flagZ(BYTE value);
-	inline BYTE Get_flagN();
-	inline void Set_flagN(BYTE value);
-	inline BYTE Get_flagH();
-	inline void Set_flagH(BYTE value);
-	inline BYTE Get_flagC();
-	inline void Set_flagC(BYTE value);
-
+	inline BYTE Get_flagZ() {return (this->af.simple[0] >> 7);}
+	inline void Set_flagZ(BYTE value) {this->af.simple[0] = (this->af.simple[0] & 0x7F) | (value << 7);}
+	inline BYTE Get_flagN() {return ((this->af.simple[0] & 0x40) >> 6);}
+	inline void Set_flagN(BYTE value) {this->af.simple[0] = (this->af.simple[0] & 0xBF) | (value << 6);}
+	inline BYTE Get_flagH() {return ((this->af.simple[0] & 0x20) >> 5);}
+	inline void Set_flagH(BYTE value) {this->af.simple[0] = (this->af.simple[0] & 0xDF) | (value << 5);}
+	inline BYTE Get_flagC() {return ((this->af.simple[0] & 0x10) >> 4);}
+	inline void Set_flagC(BYTE value) {this->af.simple[0] = (this->af.simple[0] & 0xEF) | (value << 4);}
+	
 	BYTE Get_Flag(e_registers flag);
 	void Set_Flag(e_registers flag, BYTE value);
 

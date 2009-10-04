@@ -20,8 +20,8 @@ public:
 	void ResetMem();
 	void LoadCartridge(Cartridge *c);
 	void MemW(WORD direction, BYTE value, bool checkDirAndValue);
-	void MemW(WORD direction, BYTE value);
-	inline BYTE MemR(WORD direction);
+	inline void MemW(WORD direction, BYTE value){ MemW(direction, value, true); };
+	BYTE MemR(WORD direction);
 };
 
 #endif
