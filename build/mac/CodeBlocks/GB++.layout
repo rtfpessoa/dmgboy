@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="../../../src/GB++.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="5709" topLine="126" />
+	</File>
+	<File name="../../../src/Memory.cpp" open="1" top="0" tabpos="5">
+		<Cursor position="3508" topLine="66" />
+	</File>
+	<File name="../../../src/Memory.h" open="1" top="0" tabpos="4">
+		<Cursor position="451" topLine="0" />
+	</File>
+	<File name="../../../src/Registers.h" open="1" top="0" tabpos="3">
+		<Cursor position="1293" topLine="38" />
+	</File>
+	<File name="../../../src/sdlVideo.cpp" open="1" top="1" tabpos="2">
+		<Cursor position="551" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>

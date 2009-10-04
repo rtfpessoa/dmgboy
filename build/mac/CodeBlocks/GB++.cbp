@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="GB++" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/GB++" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/GB++" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add option="-D__MAC__" />
+			<Add directory="/usr/local/include/SDL" />
+		</Compiler>
+		<Linker>
+			<Add option="-framework Cocoa" />
+			<Add library="libSDL.a" />
+			<Add library="libSDLmain.a" />
+		</Linker>
+		<Unit filename="../../../src/CPU.cpp" />
+		<Unit filename="../../../src/CPU.h" />
+		<Unit filename="../../../src/Cartridge.cpp" />
+		<Unit filename="../../../src/Cartridge.h" />
+		<Unit filename="../../../src/Def.h" />
+		<Unit filename="../../../src/GB++.cpp" />
+		<Unit filename="../../../src/GBException.cpp" />
+		<Unit filename="../../../src/GBException.h" />
+		<Unit filename="../../../src/Instructions.cpp" />
+		<Unit filename="../../../src/Instructions.h" />
+		<Unit filename="../../../src/MBC.cpp" />
+		<Unit filename="../../../src/MBC.h" />
+		<Unit filename="../../../src/Memory.cpp" />
+		<Unit filename="../../../src/Memory.h" />
+		<Unit filename="../../../src/Pad.cpp" />
+		<Unit filename="../../../src/Pad.h" />
+		<Unit filename="../../../src/Registers.cpp" />
+		<Unit filename="../../../src/Registers.h" />
+		<Unit filename="../../../src/Video.cpp" />
+		<Unit filename="../../../src/Video.h" />
+		<Unit filename="../../../src/sdlVideo.cpp" />
+		<Unit filename="../../../src/sdlVideo.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
