@@ -14,23 +14,42 @@ using namespace std;
 //#undef main
 
 //TODO:
+//	- Controlar la velocidad de pintado
 //	- Guardar a disco duro la memoria de los cartuchos que llevan batería
 //	- Permitir Savestates en cualquier momento
 //	- Integrar interfaz gráfica (QT)
-//	- Revisar compilación en gcc
 //	- Poder cambiar los botones del pad en cualquier momento
 //	- Sonido
 //	- Permitir cargar roms comprimidas en zip y 7z
+//		http://www.winimage.com/zLibDll/minizip.html
+//		http://www.boost.org/doc/libs/1_41_0/libs/iostreams/doc/index.html
 //	- Permitir cargar una rom por línea de comandos
+//OK:
+//	- Revisar compilación en gcc
 
-string selectROM()
+string selectROM(int argc, char*argv[])
 {
 	string basePath, fullPath;
+	
+	cout << "argc: " << argc << endl;
+	
+	if (argc >= 2)
+	{
+		cout << "argv[1]: " << argv[1] << endl;
+		if (argc > 2) {
+			cout << "Number of arguments incorrect" << endl;
+		}
+		else {
+			fullPath = argv[1];
+			return fullPath;
+		}
+
+	}
 
 #ifdef WIN32
-	basePath = "//.host/Shared Folders/Mi Documentos/Programacion/ROMS/";
+	basePath = "//.psf/Home/Documents/Programacion/GB/ROMS/";
 #elif __MAC__
-    basePath = "/Users/pablo/Documents/Programacion/ROMS/";
+    basePath = "/Users/pablo/Documents/Programacion/GB/ROMS/";
 #else
 	basePath = "/media/disk/Descargas/GB/ROMS/";
 #endif
@@ -86,6 +105,7 @@ string selectROM()
 	//fullPath = basePath + "PDRoms/Puzzle.gb";
 	//fullPath = basePath + "PDRoms/Quiz.gb";
 	//fullPath = basePath + "PDRoms/Pikakilla.gb";
+	//fullPath = basePath + "PDRoms/Runtime - Test Rom (PD) [b1].gb";
 
 	//fullPath = basePath + "MBC1/Amazing Penguin (U).gb";
 	//fullPath = basePath + "MBC1/Amazing Spider-Man, The (UE).gb";
@@ -123,14 +143,14 @@ string selectROM()
 
 	//fullPath = basePath + "MBC3/Wario Land II (UE).gb";
 
-	fullPath = basePath + "MBC5/Pokemon Azul (Blue) (S) [S].gb";
+	//fullPath = basePath + "MBC5/Pokemon Azul (Blue) (S) [S].gb";
 
 	return fullPath;
 }
 
 int main(int argc, char*argv[])
 {
-	Cartridge c(selectROM());
+	Cartridge c(selectROM(argc, argv));
 
 	if (!c.IsLoaded())
 	{

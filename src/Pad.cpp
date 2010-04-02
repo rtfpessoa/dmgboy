@@ -28,7 +28,7 @@ int updateInput(int valueP1)
 //En caso negativo devolverá 0
 int checkKey(int eventType, SDLKey key, int *valueP1)
 {
-	char * keyName;
+	const char * keyName;
 
 	keyName = SDL_GetKeyName(key);
 

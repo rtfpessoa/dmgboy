@@ -411,12 +411,165 @@ void Instructions::INC_nn(e_registers lugar)
 
 void Instructions::DAA()
 {
+	/*
 	reg->Set_flagC((reg->Get_A() > 99) ? 1 : 0);
 	reg->Set_flagH(0);
 	reg->Set_flagZ((!reg->Get_A()) ? 1 : 0);
 
 	reg->Set_A(((reg->Get_A() / 10) << 4) | (reg->Get_A() % 10));
 
+	reg->Add_PC(1);
+	 */
+	
+	/*
+	 http://www.emutalk.net/showthread.php?t=41525&page=108
+	 
+	 Detailed info DAA
+	 Instruction Format:
+	 OPCODE                    CYCLES
+	 --------------------------------
+	 27h                       4
+	 
+	 
+	 Description:
+	 This instruction conditionally adjusts the accumulator for BCD addition
+	 and subtraction operations. For addition (ADD, ADC, INC) or subtraction
+	 (SUB, SBC, DEC, NEC), the following table indicates the operation performed:
+	 
+	 --------------------------------------------------------------------------------
+	 |           | C Flag  | HEX value in | H Flag | HEX value in | Number  | C flag|
+	 | Operation | Before  | upper digit  | Before | lower digit  | added   | After |
+	 |           | DAA     | (bit 7-4)    | DAA    | (bit 3-0)    | to byte | DAA   |
+	 |------------------------------------------------------------------------------|
+	 |           |    0    |     0-9      |   0    |     0-9      |   00    |   0   |
+	 |   ADD     |    0    |     0-8      |   0    |     A-F      |   06    |   0   |
+	 |           |    0    |     0-9      |   1    |     0-3      |   06    |   0   |
+	 |   ADC     |    0    |     A-F      |   0    |     0-9      |   60    |   1   |
+	 |           |    0    |     9-F      |   0    |     A-F      |   66    |   1   |
+	 |   INC     |    0    |     A-F      |   1    |     0-3      |   66    |   1   |
+	 |           |    1    |     0-2      |   0    |     0-9      |   60    |   1   |
+	 |           |    1    |     0-2      |   0    |     A-F      |   66    |   1   |
+	 |           |    1    |     0-3      |   1    |     0-3      |   66    |   1   |
+	 |------------------------------------------------------------------------------|
+	 |   SUB     |    0    |     0-9      |   0    |     0-9      |   00    |   0   |
+	 |   SBC     |    0    |     0-8      |   1    |     6-F      |   FA    |   0   |
+	 |   DEC     |    1    |     7-F      |   0    |     0-9      |   A0    |   1   |
+	 |   NEG     |    1    |     6-F      |   1    |     6-F      |   9A    |   1   |
+	 |------------------------------------------------------------------------------|
+	 
+	 
+	 Flags:
+	 C:   See instruction.
+	 N:   Unaffected.
+	 P/V: Set if Acc. is even parity after operation, reset otherwise.
+	 H:   See instruction.
+	 Z:   Set if Acc. is Zero after operation, reset otherwise.
+	 S:   Set if most significant bit of Acc. is 1 after operation, reset otherwise.
+	 
+	 Example:
+	 
+	 If an addition operation is performed between 15 (BCD) and 27 (BCD), simple decimal
+	 arithmetic gives this result:
+	 
+	 15
+	 +27
+	 ----
+	 42
+	 
+	 But when the binary representations are added in the Accumulator according to
+	 standard binary arithmetic:
+	 
+	 0001 0101  15
+	 +0010 0111  27
+	 ---------------
+	 0011 1100  3C
+	 
+	 The sum is ambiguous. The DAA instruction adjusts this result so that correct
+	 BCD representation is obtained:
+	 
+	 0011 1100  3C result
+	 +0000 0110  06 +error
+	 ---------------
+	 0100 0010  42 Correct BCD!
+	 
+	 #defing CarryMask 0x10
+	 #define HalfCarryMask 0x20
+	 #define NegFlagMask 0x40
+	 
+	void op0x27() //DAA 
+	{ 
+		if(regF & NegFlagMask) //Negative Flag Set 
+		{ 
+			if((regA & 0x0F)>0x09 || regF & HalfCarryMask) 
+			{ 
+				regA-=0x06; //Half borrow: (0-1) = (0xF-0x6) = 9 
+				if((regA & 0xF0) == 0xF0) regF |= CarryMask; 
+				// We don't clear the carry/barrow flag in the DAA
+				//else regF &= ~CarryMask; 
+			} 
+
+			if((regA & 0xF0) > 0x90 || regF & CarryMask) 
+			{
+				regA-=0x60; 
+				regF |= CarryMask;
+			}
+		} 
+		else 
+		{ 
+			if((regA & 0x0F)>9 || regF & HalfCarryMask) 
+			{ 
+				regA += 0x06; //Half carry: (9+1) = (0xA+0x6) = 10 
+				// never happens in BCD math 
+				//if((regA & 0xF0)==0) regF |= CarryMask; 
+				// We don't clear the carry/barrow flag in the DAA
+				//else regF &= ~CarryMask; 
+			} 
+
+			if((regA&0xF0)>0x90 || regF & 0x10) 
+			{
+				regA+=0x60;
+				regF |= CarryMask;
+			}
+		} 
+		if(regA==0) regF|=0x80; else regF&=~0x80; 
+	}
+	 */
+	
+	if (reg->Get_flagN())
+	{
+		if((reg->Get_A() & 0x0F)>0x09 || reg->Get_flagH()) 
+		{ 
+			reg->Set_A(reg->Get_A()-0x06); //Half borrow: (0-1) = (0xF-0x6) = 9 
+			if((reg->Get_A() & 0xF0) == 0xF0) reg->Set_flagC(1); 
+			// We don't clear the carry/barrow flag in the DAA
+			//else regF &= ~CarryMask; 
+		} 
+		
+		if((reg->Get_A() & 0xF0) > 0x90 || reg->Get_flagC()) 
+		{
+			reg->Set_A(reg->Get_A()-0x60); 
+			reg->Set_flagC(1);
+		}
+	}
+	else
+	{
+		if((reg->Get_A() & 0x0F)>9 || reg->Get_flagH()) 
+		{ 
+			reg->Set_A(reg->Get_A()+0x06); //Half carry: (9+1) = (0xA+0x6) = 10 
+			// never happens in BCD math 
+			//if((regA & 0xF0)==0) regF |= CarryMask; 
+			// We don't clear the carry/barrow flag in the DAA
+			//else regF &= ~CarryMask; 
+		} 
+		
+		if((reg->Get_A() & 0xF0)>0x90 || reg->Get_flagC()) 
+		{
+			reg->Set_A(reg->Get_A()+0x60); 
+			reg->Set_flagC(1);
+		}
+	} 
+	if(reg->Get_A()==0) reg->Set_F(reg->Get_F()|0x80); else reg->Set_F(reg->Get_F()&~0x80);
+	
 	reg->Add_PC(1);
 }
 
@@ -435,8 +588,8 @@ void Instructions::DEC_n(e_registers place)
 		reg->Set_Reg(place, value);
 	}
 	reg->Set_flagZ(!value ? 1 : 0);
-	//reg->Set_flagH(((value & 0x0F) == 0x0F) ? 1 : 0);
-	reg->Set_flagH((value+1) ? 1 : 0);
+	reg->Set_flagH(((value & 0x0F) == 0x0F) ? 1 : 0);
+	//reg->Set_flagH((value+1) ? 1 : 0);
 	reg->Set_flagN(1);
 
 	reg->Add_PC(1);
@@ -641,7 +794,7 @@ void Instructions::AND(e_registers lugar)
 			reg->Set_A(reg->Get_A() & reg->Get_Reg(lugar));
 	}
 
-	if (reg->Get_A() == 0x00) reg->Set_flagZ(1); else reg->Set_flagZ(0);
+	reg->Set_flagZ(reg->Get_A() ? 0 : 1);
 	reg->Set_flagN(0);
 	reg->Set_flagH(1);
 	reg->Set_flagC(0);

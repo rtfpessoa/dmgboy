@@ -21,7 +21,14 @@ public:
 	void LoadCartridge(Cartridge *c);
 	void MemW(WORD direction, BYTE value, bool checkDirAndValue);
 	inline void MemW(WORD direction, BYTE value){ MemW(direction, value, true); };
-	BYTE MemR(WORD direction);
+	inline BYTE MemR(WORD direction)
+	{
+		if ((direction < 0x8000) || ((direction >=0xA000) && (direction < 0xC000)))
+		{
+			return c->Read(direction);
+		}
+		return memory[direction];
+	}
 };
 
 #endif

@@ -11,31 +11,6 @@ Registers::~Registers()
 
 Registers *Registers::GetPtrRegisters() {return this;}
 
-//WORD Registers::Get_AF()			{return this->af.doble;}
-//void Registers::Set_AF(WORD value)	{this->af.doble = value;}
-//WORD Registers::Get_BC()			{return this->bc.doble;}
-//void Registers::Set_BC(WORD value)	{this->bc.doble = value;}
-//WORD Registers::Get_DE()			{return this->de.doble;}
-//void Registers::Set_DE(WORD value)	{this->de.doble = value;}
-//WORD Registers::Get_HL()			{return this->hl.doble;}
-//void Registers::Set_HL(WORD value)	{this->hl.doble = value;}
-//
-//WORD Registers::Get_PC()			{return this->pc;}
-//void Registers::Set_PC(WORD value)  {this->pc = value;}
-//void Registers::Add_PC(int value)  {this->pc += value;};
-//WORD Registers::Get_SP()			{return this->sp;}
-//void Registers::Set_SP(WORD value)  {this->sp = value;}
-//void Registers::Add_SP(int value)  {this->sp += value;};
-//
-//bool Registers::Get_IME()			{return this->IME;}
-//void Registers::Set_IME(bool value)	{this->IME = value;}
-//
-//bool Registers::Get_Halt()				{return this->halt;}
-//void Registers::Set_Halt(bool value)	{this->halt = value;}
-//
-//bool Registers::Get_Stop()				{return this->stop;}
-//void Registers::Set_Stop(bool value)	{this->stop = value;}
-
 WORD Registers::Get_Reg(e_registers reg)
 {
 	switch (reg){
@@ -83,15 +58,6 @@ void Registers::Set_Reg(e_registers reg, WORD value)
 			throw GBException(out.str().data());
 	}
 }
-
-//BYTE Registers::Get_flagZ() {return (this->af.simple[0] >> 7);}
-//void Registers::Set_flagZ(BYTE value) {this->af.simple[0] = (this->af.simple[0] & 0x7F) | (value << 7);}
-//BYTE Registers::Get_flagN() {return ((this->af.simple[0] & 0x40) >> 6);}
-//void Registers::Set_flagN(BYTE value) {this->af.simple[0] = (this->af.simple[0] & 0xBF) | (value << 6);}
-//BYTE Registers::Get_flagH() {return ((this->af.simple[0] & 0x20) >> 5);}
-//void Registers::Set_flagH(BYTE value) {this->af.simple[0] = (this->af.simple[0] & 0xDF) | (value << 5);}
-//BYTE Registers::Get_flagC() {return ((this->af.simple[0] & 0x10) >> 4);}
-//void Registers::Set_flagC(BYTE value) {this->af.simple[0] = (this->af.simple[0] & 0xEF) | (value << 4);}
 
 BYTE Registers::Get_Flag(e_registers flag)
 {

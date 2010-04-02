@@ -1,5 +1,8 @@
 #include "MBC.h"
 #include "GBException.h"
+#include <fstream>
+#include <iostream>
+using namespace std;
 
 static BYTE * _memCartridge = NULL;
 static BYTE * _memRamMBC = NULL;
@@ -12,8 +15,14 @@ static int _RAMBank = 0;
 static int _RAMSize = 0;	//Bytes
 static int _RAMEnabled = 0;
 
-void InitMBC(BYTE * mem_cartridge, int RomSize)
+static char * _ROMName = NULL;
+
+void MBCSaveRam();
+void MBCLoadRam();
+
+void InitMBC(char * nameROM, BYTE * mem_cartridge, int RomSize)
 {
+	_ROMName = nameROM;
 	_memCartridge = mem_cartridge;
 	_memMode = 0;
 
@@ -24,16 +33,18 @@ void InitMBC(BYTE * mem_cartridge, int RomSize)
 	_RAMEnabled = 0;
 	_RAMSize = 0;
 	_memRamMBC = NULL;
+	
+	MBCLoadRam();
 }
 
-void InitMBCNone(BYTE * mem_cartridge, int ROMSize)
+void InitMBCNone(char * nameROM, BYTE * mem_cartridge, int ROMSize)
 {
-	InitMBC(mem_cartridge, ROMSize);
+	InitMBC(nameROM, mem_cartridge, ROMSize);
 }
 
-void InitMBC1(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
+void InitMBC1(char * nameROM, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
 {
-	InitMBC(mem_cartridge, ROMSize);
+	InitMBC(nameROM, mem_cartridge, ROMSize);
 
 	if (RamHeaderSize == 0x01)
 		_RAMSize = 2048;		//2KB
@@ -46,18 +57,18 @@ void InitMBC1(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
 		_memRamMBC = new BYTE[_RAMSize];
 }
 
-void InitMBC2(BYTE * mem_cartridge, int ROMSize)
+void InitMBC2(char * nameROM, BYTE * mem_cartridge, int ROMSize)
 {
-	InitMBC(mem_cartridge, ROMSize);
+	InitMBC(nameROM, mem_cartridge, ROMSize);
 
 	_RAMSize = 512;
 
 	_memRamMBC = new BYTE[_RAMSize];
 }
 
-void InitMBC3(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
+void InitMBC3(char * nameROM, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
 {
-	InitMBC(mem_cartridge, ROMSize);
+	InitMBC(nameROM, mem_cartridge, ROMSize);
 
 	if (RamHeaderSize == 0x01)
 		_RAMSize = 8192;		//8KB = 64Kb
@@ -70,9 +81,9 @@ void InitMBC3(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
 		_memRamMBC = new BYTE[_RAMSize];
 }
 
-void InitMBC5(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
+void InitMBC5(char * nameROM, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
 {
-	InitMBC1(mem_cartridge, ROMSize, RamHeaderSize);
+	InitMBC1(nameROM, mem_cartridge, ROMSize, RamHeaderSize);
 }
 
 void DestroyMBC()
@@ -179,7 +190,7 @@ BYTE MBC2Read(WORD direction)
 		return _memCartridge[direction];
 	else if (direction < 0x8000)
 		return _memCartridge[(direction - 0x4000) + (0x4000*_ROMBank)];
-	else if ((direction >=0xA000) && (direction < 0xC000))
+	else if ((direction >=0xA000) && (direction < 0xC000) && (_RAMEnabled))
 		return _memRamMBC[direction - 0xA000];
 
 	return 0;
@@ -225,7 +236,7 @@ BYTE MBC3Read(WORD direction)
 		return _memCartridge[direction];
 	else if (direction < 0x8000)
 		return _memCartridge[(direction - 0x4000) + (0x4000*_ROMBank)];
-	else if ((direction >=0xA000) && (direction < 0xC000))
+	else if ((direction >=0xA000) && (direction < 0xC000) && (_RAMEnabled))
 		return _memRamMBC[direction - 0xA000 + (0x2000*_RAMBank)];
 
 	return 0;
@@ -236,6 +247,8 @@ void MBC5Write(WORD direction, BYTE value)
 	if (direction < 0x2000)	//Habilitar/Deshabilitar RAM
 	{
 		_RAMEnabled = ((value & 0x0F) == 0x0A);
+		if (!_RAMEnabled)
+			MBCSaveRam();
 	}
 	else if (direction < 0x3000)	//Cambiar ROMBank
 	{
@@ -266,8 +279,34 @@ BYTE MBC5Read(WORD direction)
 		return _memCartridge[direction];
 	else if (direction < 0x8000)
 		return _memCartridge[(direction - 0x4000) + (0x4000*_ROMBank)];
-	else if ((direction >=0xA000) && (direction < 0xC000))
+	else if ((direction >=0xA000) && (direction < 0xC000) && (_RAMEnabled))
 		return _memRamMBC[direction - 0xA000 + (0x2000*_RAMBank)];
 
 	return 0;
+}
+
+void MBCLoadRam()
+{
+	string fileName = _ROMName;
+	fileName += ".BATT";
+	ifstream file(fileName.c_str(), ios::in|ios::binary);
+	
+	if (file)
+	{
+		file.read((char *)_memRamMBC, _RAMSize);
+		file.close();
+	}
+}
+
+void MBCSaveRam()
+{
+	string fileName = _ROMName;
+	fileName += ".BATT";
+	ofstream file(fileName.c_str(), ios::out|ios::binary);
+	
+	if (file)
+	{
+		file.write((char *)_memRamMBC, _RAMSize);
+		file.close();
+	}
 }

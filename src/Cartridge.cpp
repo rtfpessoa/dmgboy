@@ -11,7 +11,6 @@ using namespace std;
 Cartridge::Cartridge(string path)
 {
 	_memCartridge = NULL;
-	int RamSize = 0;
 	ifstream::pos_type size;
 	ifstream file (path.c_str(), ios::in|ios::binary|ios::ate);
 	if (file.is_open())
@@ -24,10 +23,10 @@ Cartridge::Cartridge(string path)
 		file.close();
 
 		cout << path << ":\nArchivo cargado en memoria correctamente" << endl;
-		char name[17];
-		memcpy(name, &_memCartridge[CART_NAME], 17);
-		name[16] = '\0';
-		cout << "Nombre de cartucho: " << name << endl;
+		
+		memcpy(nameROM, &_memCartridge[CART_NAME], 17);
+		nameROM[16] = '\0';
+		cout << "Nombre de cartucho: " << nameROM << endl;
 		cout << "Tamano de ROM:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_ROM_SIZE] << endl;
 		cout << "Tamano de RAM:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_RAM_SIZE] << endl;
 		cout << "Tipo de cartucho:\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_TYPE] << " (";
@@ -42,7 +41,7 @@ Cartridge::Cartridge(string path)
 			cout << "No MBC)" << endl;
 			ptrRead = &NoneRead;
 			ptrWrite = &NoneWrite;
-			InitMBCNone(_memCartridge, _RomSize);
+			InitMBCNone(nameROM, _memCartridge, _RomSize);
 			break;
 		case 0x01:						//ROM+MBC1 
 		case 0x02:						//ROM+MBC1+RAM 
@@ -50,14 +49,14 @@ Cartridge::Cartridge(string path)
 			cout << "MBC1)" << endl;
 			ptrRead = &MBC1Read;
 			ptrWrite = &MBC1Write;
-			InitMBC1(_memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
+			InitMBC1(nameROM, _memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
 			break;
 		case 0x05:						//ROM+MBC2 
 		case 0x06:						//ROM+MBC2+BATTERY
 			cout << "MBC2)" << endl;
 			ptrRead = &MBC2Read;
 			ptrWrite = &MBC2Write;
-			InitMBC2(_memCartridge, _RomSize);
+			InitMBC2(nameROM, _memCartridge, _RomSize);
 			break;
 		/*
 		case 0x0B:						//ROM+MMM01
@@ -71,7 +70,7 @@ Cartridge::Cartridge(string path)
 			cout << "MBC3)" << endl;
 			ptrRead = &MBC3Read;
 			ptrWrite = &MBC3Write;
-			InitMBC3(_memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
+			InitMBC3(nameROM, _memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
 			break;
 		case 0x19:						//ROM+MBC5
 		case 0x1A:						//ROM+MBC5+RAM
@@ -82,7 +81,7 @@ Cartridge::Cartridge(string path)
 			cout << "MBC5)" << endl;
 			ptrRead = &MBC5Read;
 			ptrWrite = &MBC5Write;
-			InitMBC5(_memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
+			InitMBC5(nameROM, _memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
 			break;
 		/*case 0x1F:						//Pocket Camera
 		case 0xFD:						//Bandai TAMA5
@@ -135,12 +134,12 @@ bool Cartridge::IsLoaded()
 	return _isLoaded;
 }
 
-BYTE Cartridge::Read(WORD direction)
+/*BYTE Cartridge::Read(WORD direction)
 {
 	return ptrRead(direction);
-}
+}*/
 
-void Cartridge::Write(WORD direction, BYTE value)
+/*void Cartridge::Write(WORD direction, BYTE value)
 {
 	ptrWrite(direction, value);
-}
+}*/

@@ -3,11 +3,11 @@
 
 #include "Def.h"
 
-void InitMBCNone(BYTE * mem_cartridge, int ROMSize);
-void InitMBC1(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
-void InitMBC2(BYTE * mem_cartridge, int ROMSize);
-void InitMBC3(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
-void InitMBC5(BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
+void InitMBCNone(char * nameROM, BYTE * mem_cartridge, int ROMSize);
+void InitMBC1(char * nameROM, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
+void InitMBC2(char * nameROM, BYTE * mem_cartridge, int ROMSize);
+void InitMBC3(char * nameROM, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
+void InitMBC5(char * nameROM, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
 void DestroyMBC();
 
 BYTE NoneRead(WORD direction);

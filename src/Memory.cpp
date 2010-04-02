@@ -57,7 +57,7 @@ void Memory::ResetMem()
     memory[IE]   = 0x00; //IE
 
 	//Puesto por mi
-	memory[P1]	  = 0x3F;
+	//memory[P1]	  = 0x3F;
 }
 
 void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
@@ -105,7 +105,7 @@ void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
 	memory[direction] = value;
 }
 
-BYTE Memory::MemR(WORD direction)
+/*BYTE Memory::MemR(WORD direction)
 {
 	//switch (direction)
 	//{
@@ -122,7 +122,7 @@ BYTE Memory::MemR(WORD direction)
 		return c->Read(direction);
 	}
 	return memory[direction];
-}
+}*/
 
 void Memory::DmaTransfer(BYTE direction)
 {

@@ -21,13 +21,14 @@ private:
 	void (*ptrWrite)(WORD, BYTE);
 	int CheckRomSize(int numHeaderSize, int fileSize);
 public:
+	char nameROM[17];
 	Cartridge(std::string path);
 	~Cartridge();
 	void Print(int beg, int end);
 	BYTE *GetData();
 	unsigned int GetSize();
-	BYTE Read(WORD direction);
-	void Write(WORD direction, BYTE value);
+	inline BYTE Read(WORD direction) { return ptrRead(direction); };
+	inline void Write(WORD direction, BYTE value) { ptrWrite(direction, value); };
 	bool IsLoaded();
 };
 

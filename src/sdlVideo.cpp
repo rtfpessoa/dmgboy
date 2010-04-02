@@ -16,8 +16,8 @@ void onVideoInit(int width, int height)
         exit(1);
     }
 
-	//screen = SDL_SetVideoMode(width, height, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
-	screen = SDL_SetVideoMode(width, height, 16, SDL_HWSURFACE);
+	screen = SDL_SetVideoMode(width, height, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	//screen = SDL_SetVideoMode(width, height, 16, SDL_HWSURFACE);
     if ( screen == NULL )
     {
 		cerr << "No se puede establecer el modo de video: " << SDL_GetError() << endl;

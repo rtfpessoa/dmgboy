@@ -320,6 +320,7 @@ void CPU::Interpreter()
 		cyclesLCD += lastCycles;
 		cyclesTimer += lastCycles;
 		cyclesDIV += lastCycles;
+		cyclesPad += lastCycles;
 
         TareasRutinarias();
         Interrupciones(&inst);
@@ -794,11 +795,15 @@ void CPU::TareasRutinarias()
 {
 	UpdateStateLCD();
 	UpdateTimer();
-	int valueP1 = MemR(P1);
-	int interrupt = onCheckKeyPad(valueP1);
-	MemW(P1, valueP1, false);
-	if (interrupt)
-		MemW(IF, MemR(IF) | 0x10);
+	if (cyclesPad > 110500)
+	{
+		int valueP1 = MemR(P1);
+		int interrupt = onCheckKeyPad(valueP1);
+		MemW(P1, valueP1, false);
+		if (interrupt)
+			MemW(IF, MemR(IF) | 0x10);
+		cyclesPad = 0;
+	}
 }
 
 void CPU::UpdateStateLCD()

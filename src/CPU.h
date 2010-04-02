@@ -15,6 +15,7 @@ private:
 	WORD cyclesLCD;
 	WORD cyclesTimer;
 	WORD cyclesDIV;
+	int cyclesPad;
 	Video *v;
 public:
 	CPU(Video *v, Cartridge *c);
