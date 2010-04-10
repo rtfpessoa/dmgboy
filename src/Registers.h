@@ -2,6 +2,8 @@
 #define __REGISTERS_H__
 
 #include "Def.h"
+#include <iostream>
+using namespace std;
 
 enum e_registers {
 	A = 0x00, B, C, D, E, F, H, L,	//registros simples
@@ -89,6 +91,8 @@ public:
 	void Set_Flag(e_registers flag, BYTE value);
 
 	void ResetRegs();
+	
+	string ToString();
 };
 
 #endif

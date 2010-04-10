@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6E4393EB1076CA4100D8E68E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E4393EA1076CA4100D8E68E /* Cocoa.framework */; };
+		6EA6591E1168CA94002843C9 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EA6591D1168CA94002843C9 /* Log.cpp */; };
 		6EAF5FD01078E514006BAC2B /* Cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF5FBA1078E514006BAC2B /* Cartridge.cpp */; };
 		6EAF5FD11078E514006BAC2B /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF5FBC1078E514006BAC2B /* CPU.cpp */; };
 		6EAF5FD21078E514006BAC2B /* GB++.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF5FBF1078E514006BAC2B /* GB++.cpp */; };
@@ -39,6 +40,8 @@
 
 /* Begin PBXFileReference section */
 		6E4393EA1076CA4100D8E68E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		6EA6591C1168CA94002843C9 /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Log.h; path = ../../../src/Log.h; sourceTree = SOURCE_ROOT; };
+		6EA6591D1168CA94002843C9 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Log.cpp; path = ../../../src/Log.cpp; sourceTree = SOURCE_ROOT; };
 		6EAF5FBA1078E514006BAC2B /* Cartridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Cartridge.cpp; path = ../../../src/Cartridge.cpp; sourceTree = SOURCE_ROOT; };
 		6EAF5FBB1078E514006BAC2B /* Cartridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cartridge.h; path = ../../../src/Cartridge.h; sourceTree = SOURCE_ROOT; };
 		6EAF5FBC1078E514006BAC2B /* CPU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CPU.cpp; path = ../../../src/CPU.cpp; sourceTree = SOURCE_ROOT; };
@@ -119,6 +122,8 @@
 				6EAF5FCD1078E514006BAC2B /* sdlVideo.h */,
 				6EAF5FCE1078E514006BAC2B /* Video.cpp */,
 				6EAF5FCF1078E514006BAC2B /* Video.h */,
+				6EA6591C1168CA94002843C9 /* Log.h */,
+				6EA6591D1168CA94002843C9 /* Log.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -193,6 +198,7 @@
 				6EAF5FD81078E514006BAC2B /* Registers.cpp in Sources */,
 				6EAF5FD91078E514006BAC2B /* sdlVideo.cpp in Sources */,
 				6EAF5FDA1078E514006BAC2B /* Video.cpp in Sources */,
+				6EA6591E1168CA94002843C9 /* Log.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,10 +214,8 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"_GLIBCXX_DEBUG=1",
-					"_GLIBCXX_DEBUG_PEDANTIC=1",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				HEADER_SEARCH_PATHS = /usr/local/include/SDL;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = "GB++";
 			};

@@ -1,6 +1,7 @@
 #include "Registers.h"
 #include <sstream>
 #include "GBException.h"
+#include <iomanip>
 using namespace std;
 
 Registers::Registers() {ResetRegs();}
@@ -30,7 +31,7 @@ WORD Registers::Get_Reg(e_registers reg)
 		case SP: return this->Get_SP(); break;
 		default:
 			stringstream out;
-			out << "Get_Reg - Error, registro incorrecto: " << reg << "\n";
+			out << "Get_Reg - Error, registro incorrecto: " << reg << endl;
 			throw GBException(out.str().data());
 	}
 }
@@ -54,7 +55,7 @@ void Registers::Set_Reg(e_registers reg, WORD value)
 		case SP: this->Set_SP(value); break;
 		default:
 			stringstream out;
-			out << "Set_Reg - Error, registro incorrecto: " << reg << "\n";
+			out << "Set_Reg - Error, registro incorrecto: " << reg << endl;
 			throw GBException(out.str().data());
 	}
 }
@@ -68,7 +69,7 @@ BYTE Registers::Get_Flag(e_registers flag)
 		case f_Z: return this->Get_flagZ();
 		default:
 			stringstream out;
-			out << "Error, flag incorrecto (Get): " << flag << "\n";
+			out << "Error, flag incorrecto (Get): " << flag << endl;
 			throw GBException(out.str().data());
 	}
 }
@@ -82,7 +83,7 @@ void Registers::Set_Flag(e_registers flag, BYTE value)
 		case f_Z: this->Set_flagZ(value);
 		default:
 			stringstream out;
-			out << "Error, flag incorrecto (Set): " << flag << "\n";
+			out << "Error, flag incorrecto (Set): " << flag << endl;
 			throw GBException(out.str().data());
 	}
 }
@@ -98,4 +99,19 @@ void Registers::ResetRegs()
 	this->Set_Halt(false);
 	this->Set_Stop(false);
 	this->Set_IME(false);
+}
+
+string Registers::ToString()
+{
+	stringstream out;
+	
+	out << "PC:" << setfill('0') << setw(4) << uppercase << hex << (int)Get_PC()
+		<< ", AF: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_AF()
+		<< ", BC: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_BC()
+		<< ", DE: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_DE()
+		<< ", HL:"  << setfill('0') << setw(4) << uppercase << hex << (int)Get_HL()
+		<< ", SP: " << setfill('0') << setw(4) << uppercase << hex << (int) Get_SP()
+		<< ", Halt: " << Get_Halt() << ", Stop: " << Get_Stop() << ", IME: " << Get_IME();
+	
+	return out.str();
 }

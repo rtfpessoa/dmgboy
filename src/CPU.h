@@ -7,6 +7,7 @@
 #include "Video.h"
 #include "Pad.h"
 #include "Cartridge.h"
+#include "Log.h"
 
 class CPU: public Registers, public Memory
 {
@@ -17,12 +18,14 @@ private:
 	WORD cyclesDIV;
 	int cyclesPad;
 	Video *v;
+	QueueLog *log;
 public:
 	CPU(Video *v, Cartridge *c);
 	~CPU();
 	
 	void Run();
 	void Reset();
+	void SaveLog();
 private:
 	void Interpreter();
 	BYTE CiclosInstruccion(WORD OpCode);

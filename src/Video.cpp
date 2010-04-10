@@ -39,7 +39,6 @@ void Video::UpdateLine(BYTE y)
 void Video::RefreshScreen()
 {
 	onVideoRefreshScreen();
-	cout << ".";
 }
 
 void Video::UpdateBG(int y)

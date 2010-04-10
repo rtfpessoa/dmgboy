@@ -4,6 +4,7 @@
 #include <sstream>
 #include "Registers.h"
 #include "GBException.h"
+#include "Log.h"
 
 using namespace std;
 
@@ -13,6 +14,7 @@ CPU::CPU(Video *v, Cartridge *c)
 	this->v = v;
 	v->SetMem(this->GetPtrMemory());
 	LoadCartridge(c);
+	this->log = new QueueLog(1000);
 }
 
 CPU::~CPU()
@@ -307,8 +309,8 @@ void CPU::Interpreter()
 				case (0xFF): inst.RST_n(0x38); break;
 				default:
 					stringstream out;
-					out << "Error, instruccion no implementada: 0x";
-					out << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << "\n";
+					out << "Error, instruction not implemented: 0x";
+					out << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << endl;
 					throw GBException(out.str().data());
 			}
 
@@ -324,6 +326,8 @@ void CPU::Interpreter()
 
         TareasRutinarias();
         Interrupciones(&inst);
+		
+		log->Enqueue(this->GetPtrRegisters());
 	}
 }
 
@@ -611,7 +615,7 @@ void CPU::OpCodeCB(Instructions * inst)
 
         default:
 			stringstream out;
-			out << "Error, instruccion no implementada: 0xCB";
+			out << "Error, instruction not implemented: 0xCB";
 			out << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << "\n";
 			throw GBException(out.str().data());
     }
@@ -977,4 +981,9 @@ void CPU::UpdateTimer()
 		MemW(DIV, MemR(DIV) + 1);
 		cyclesDIV = 0;
 	}
+}
+
+void CPU::SaveLog()
+{
+	log->Save("log.txt");
 }

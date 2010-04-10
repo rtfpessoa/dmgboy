@@ -23,9 +23,9 @@ using namespace std;
 //	- Permitir cargar roms comprimidas en zip y 7z
 //		http://www.winimage.com/zLibDll/minizip.html
 //		http://www.boost.org/doc/libs/1_41_0/libs/iostreams/doc/index.html
-//	- Permitir cargar una rom por línea de comandos
 //OK:
 //	- Revisar compilación en gcc
+//	- Permitir cargar una rom por línea de comandos
 
 string selectROM(int argc, char*argv[])
 {
@@ -85,6 +85,8 @@ string selectROM(int argc, char*argv[])
 	//fullPath = basePath + "32K/Tesserae (U).gb";
 	//fullPath = basePath + "32K/Tetris (JUE) (v1.1).gb";
 	//fullPath = basePath + "32K/World Bowling (U).gb";
+	
+	//fullPath = basePath + "128K/4 in 1 Funpak Vol. II (U).gb";
 
 	//fullPath = basePath + "PDRoms/AsciiWars.gb";
 	//fullPath = basePath + "PDRoms/Big Scroller Demo (PD).gb";
@@ -109,7 +111,7 @@ string selectROM(int argc, char*argv[])
 
 	//fullPath = basePath + "MBC1/Amazing Penguin (U).gb";
 	//fullPath = basePath + "MBC1/Amazing Spider-Man, The (UE).gb";
-	//fullPath = basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb";
+	fullPath = basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb";
 	//fullPath = basePath + "MBC1/Castlevania Adventure, The (U).gb";
 	//fullPath = basePath + "MBC1/Pac-Man (U).gb";
 	//fullPath = basePath + "MBC1/Yoshi (U).gb";
@@ -160,8 +162,6 @@ int main(int argc, char*argv[])
 		return 0;
 	}
 
-    cout << "Press to continue ..." << endl;
-    cin.get();
     Video v;
 
 	CPU cpu(&v, &c);
@@ -171,13 +171,13 @@ int main(int argc, char*argv[])
 	}
 	catch(GBException &e)
 	{
-		cerr << e.what() << endl;
+		if (e.GetType() != Exit)
+			cerr << e.what() << endl;
 	}
+	
+	cpu.SaveLog();
 
 	v.Close();
-
-    cout << "Press to finish ..." << endl;
-    cin.get();
 
 	return 0;
 }

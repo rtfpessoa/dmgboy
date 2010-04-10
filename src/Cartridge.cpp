@@ -22,14 +22,14 @@ Cartridge::Cartridge(string path)
 		file.read ((char *)_memCartridge, size);
 		file.close();
 
-		cout << path << ":\nArchivo cargado en memoria correctamente" << endl;
+		cout << path << ":\nFile loaded in memory correctly" << endl;
 		
 		memcpy(nameROM, &_memCartridge[CART_NAME], 17);
 		nameROM[16] = '\0';
-		cout << "Nombre de cartucho: " << nameROM << endl;
-		cout << "Tamano de ROM:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_ROM_SIZE] << endl;
-		cout << "Tamano de RAM:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_RAM_SIZE] << endl;
-		cout << "Tipo de cartucho:\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_TYPE] << " (";
+		cout << "Cartridge name: " << nameROM << endl;
+		cout << "ROM Size:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_ROM_SIZE] << endl;
+		cout << "RAM Size:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_RAM_SIZE] << endl;
+		cout << "Cartridge Type:\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_TYPE] << " (";
 
 		CheckRomSize((int)_memCartridge[CART_ROM_SIZE], _RomSize);
 
@@ -87,13 +87,13 @@ Cartridge::Cartridge(string path)
 		case 0xFD:						//Bandai TAMA5
 		case 0xFE: mbc = Other; break;	//Hudson HuC-3
 		case 0xFF: mbc = HuC1; break;	//Hudson HuC-1*/
-		default: throw GBException("MBC no implementado todavia");
+		default: throw GBException("MBC not implemented yet");
 		}
 		_isLoaded = true;
 	}
 	else
 	{
-		cout << path << ": Error al intentar abrir el archivo" << endl;
+		cout << path << ": Error trying to open the file" << endl;
 		_isLoaded = false;
 	}
 }
@@ -112,7 +112,7 @@ int Cartridge::CheckRomSize(int numHeaderSize, int fileSize)
 		headerSize += (32768 << ((numHeaderSize & 0xF0) >> 0x04));
 	if (headerSize != fileSize)
 	{
-		cout << "No coincide la cabecera con el tamaño del fichero" << endl;
+		cout << "The header does not match with the file size" << endl;
 		return 0;
 	}
 	else

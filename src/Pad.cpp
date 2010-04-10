@@ -1,4 +1,7 @@
 #include "Pad.h"
+#include "GBException.h"
+#include <iostream>
+using namespace std;
 
 static int	kR = SDLK_RIGHT;
 static int	kL = SDLK_LEFT;
@@ -24,8 +27,8 @@ int updateInput(int valueP1)
 	return ((valueP1 & 0x30) | 0x0F);
 }
 
-//Si devuelve 1 debe producirse una petición de interrupción
-//En caso negativo devolverá 0
+//Si devuelve 1 debe producirse una petici—n de interrupci—n
+//En caso negativo devolver‡ 0
 int checkKey(int eventType, SDLKey key, int *valueP1)
 {
 	const char * keyName;
@@ -65,6 +68,9 @@ int checkKey(int eventType, SDLKey key, int *valueP1)
 	return 0;
 }
 
+
+//Si devuelve 1 debe producirse una petici—n de interrupci—n
+//En caso negativo devolver‡ 0
 int onCheckKeyPad(int valueP1)
 {
 	SDL_Event ev;
@@ -74,26 +80,25 @@ int onCheckKeyPad(int valueP1)
 		switch(ev.type)
 		{
 			case SDL_QUIT:
-				printf( ">El usuario quiere salir.\n" );
-				exit(0);
+				throw GBException("Close window", Exit);
 				break;
 			case SDL_KEYDOWN:
 				if (ev.key.keysym.sym == SDLK_ESCAPE)
 				{
-					printf("Presionar de nuevo ESC para salir o cualquier otra tecla para continuar\n");
+					cout << "Press ESC another time to exit or another key to continue" << endl;
 					while(true)
 					{
 						SDL_WaitEvent(&ev);
 						if (ev.type == SDL_KEYDOWN)
 						{
 							if (ev.key.keysym.sym == SDLK_ESCAPE)
-								exit(0);
+								throw GBException("2 consec. times ESC", Exit);
 							else
 								return 0;
 						}
 					}
 				}
-				//!!No hay break. Cuando SDL_KEYDOWN también SDL_KEYUP
+				//!!No hay break. Cuando SDL_KEYDOWN tambiŽn SDL_KEYUP
 			case SDL_KEYUP:
 				return checkKey(ev.type, ev.key.keysym.sym, &valueP1);
 				break;
