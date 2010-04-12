@@ -5,6 +5,7 @@
 
 using namespace std;
 
+#define _8bitsInmValue (mem->MemR(reg->Get_PC() + 1))
 #define _16bitsInmValue ((mem->MemR(reg->Get_PC() + 2)) << 8) | mem->MemR(reg->Get_PC() + 1)
 
 Instructions::Instructions(Registers* reg, Memory* mem)
@@ -27,7 +28,7 @@ void Instructions::LD_r1_r2(e_registers e_reg1, e_registers e_reg2)
 	{
 		if (e_reg2 == $)
 		{
-			mem->MemW(reg->Get_HL(), mem->MemR(reg->Get_PC() + 1));
+			mem->MemW(reg->Get_HL(), _8bitsInmValue);
 			length = 2;
 		}
 		else
@@ -56,7 +57,7 @@ void Instructions::LD_A_n(e_registers place)
 	switch(place)
 	{
 		case $:
-			value = mem->MemR(reg->Get_PC()+1);
+			value = _8bitsInmValue;
 			length = 2;
 			break;
 		case c_$$:
@@ -117,13 +118,13 @@ void Instructions::JP_nn()
 
 void Instructions::LDH_A_n()
 {
-	reg->Set_A(mem->MemR(0xFF00 + mem->MemR(reg->Get_PC() + 1)));
+	reg->Set_A(mem->MemR(0xFF00 + _8bitsInmValue));
 	reg->Add_PC(2);
 }
 
 void Instructions::LDH_c$_A()
 {
-	mem->MemW(0xFF00 + mem->MemR(reg->Get_PC() + 1), reg->Get_A());
+	mem->MemW(0xFF00 + _8bitsInmValue, reg->Get_A());
 	reg->Add_PC(2);
 }
 
@@ -143,7 +144,7 @@ void Instructions::CP_n(e_registers place)
 	switch (place)
 	{
 		case $:
-			value = mem->MemR(reg->Get_PC() + 1);
+			value = _8bitsInmValue;
 			length = 2;
 			break;
 		case c_HL:
@@ -190,7 +191,7 @@ void Instructions::JR()
 {
     char address;	//Con signo
 
-	address = mem->MemR(reg->Get_PC() + 1);
+	address = _8bitsInmValue;
 
 	//El "2 +" es porque antes de saltar ha tenido que ver cuales eran los dos opcodes de la instrucción
 	//y tiene importancia al ser un salto relativo con respecto al actual PC.
@@ -265,7 +266,7 @@ void Instructions::SUB_n(e_registers place)
 		value = mem->MemR(reg->Get_HL());
 	else if (place == $)
 	{
-		value = mem->MemR(reg->Get_PC() + 1);
+		value = _8bitsInmValue;
 		length = 2;
 	}
 	else
@@ -288,7 +289,7 @@ void Instructions::ADD_A_n(e_registers place)
 
 	switch (place)
 	{
-		case $:		valueReg = mem->MemR(reg->Get_PC() + 1); length = 2; break;
+		case $:		valueReg = _8bitsInmValue; length = 2; break;
 		case c_HL:	valueReg = mem->MemR(reg->Get_HL()); break;
 		default:	valueReg = (BYTE)reg->Get_Reg(place); break;
 	}
@@ -312,7 +313,7 @@ void Instructions::ADC_A_n(e_registers lugar)
 
 	switch (lugar)
 	{
-		case $:		valueReg = mem->MemR(reg->Get_PC() + 1); length = 2; break;
+		case $:		valueReg = _8bitsInmValue; length = 2; break;
 		case c_HL:	valueReg = mem->MemR(reg->Get_HL()); break;
 		default:	valueReg = (BYTE)reg->Get_Reg(lugar); break;
 	}
@@ -608,7 +609,7 @@ void Instructions::OR_n(e_registers lugar)
 	switch (lugar)
 	{
 		case $:
-			reg->Set_A(reg->Get_A() | mem->MemR(reg->Get_PC() + 1));
+			reg->Set_A(reg->Get_A() | _8bitsInmValue);
 			longitud = 2;
 			break;
 		case c_HL:
@@ -634,7 +635,7 @@ void Instructions::XOR_n(e_registers lugar)
 	switch (lugar)
 	{
 		case $:
-			reg->Set_A(reg->Get_A() ^ mem->MemR(reg->Get_PC() + 1));
+			reg->Set_A(reg->Get_A() ^ _8bitsInmValue);
 			longitud = 2;
 			break;
 		case c_HL:
@@ -678,7 +679,7 @@ void Instructions::PUSH_nn(e_registers lugar)
 */
 void Instructions::LD_nn_n(e_registers lugar)
 {
-	reg->Set_Reg(lugar, mem->MemR(reg->Get_PC() + 1));
+	reg->Set_Reg(lugar, _8bitsInmValue);
 	reg->Add_PC(2);
 }
 
@@ -757,7 +758,7 @@ void Instructions::SBC_A(e_registers place)
 			aux = mem->MemR(reg->Get_HL()) + reg->Get_flagC();
 			break;
 		case $:
-			aux = mem->MemR(reg->Get_PC() + 1) + reg->Get_flagC();
+			aux = _8bitsInmValue + reg->Get_flagC();
 			length = 2;
 			break;
 		default:
@@ -784,7 +785,7 @@ void Instructions::AND(e_registers lugar)
 	switch (lugar)
 	{
 		case $:
-			reg->Set_A(reg->Get_A() & mem->MemR(reg->Get_PC() + 1));
+			reg->Set_A(reg->Get_A() & _8bitsInmValue);
 			longitud = 2;
 			break;
 		case c_HL:
@@ -914,7 +915,7 @@ void Instructions::ADD_SP_n()
 	reg->Set_flagN(0);
 
 	lNibbleSP = reg->Get_SP() & 0x00FF;
-	lNibbleN = mem->MemR(reg->Get_PC() + 1);
+	lNibbleN = _8bitsInmValue;
 
 	(((lNibbleSP & 0x0F) + (lNibbleN & 0x0F)) > 0x0F) ? reg->Set_flagH(1) : reg->Set_flagH(0);
 
@@ -1010,7 +1011,7 @@ void Instructions::JP_cc_nn(e_registers flag, BYTE value2check)
 {
 	WORD nn;
 
-	nn = (mem->MemR((reg->Get_PC()+2)) << 8) | mem->MemR(reg->Get_PC() + 1);
+	nn = _16bitsInmValue;
 
 	reg->Add_PC(3);
 
@@ -1133,7 +1134,7 @@ void Instructions::LDHL_SP_n()
 {
 	char n;
 
-	n = mem->MemR(reg->Get_PC() + 1);
+	n = _8bitsInmValue;
 
 	reg->Set_flagZ(0);
 	reg->Set_flagN(0);

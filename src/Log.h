@@ -5,7 +5,7 @@
 
 struct ItemLog {
 	string prefix;
-	Registers regs;
+	Registers * regs;
 	string suffix;
 	ItemLog * next;
 	ItemLog * prev;
@@ -28,7 +28,7 @@ private:
 public:
 	QueueLog(int maxItems);
 	~QueueLog();
-	void Enqueue(std::prefix, Registers * regs, std::string suffix);
+	void Enqueue(std::string prefix, Registers * regs, std::string suffix);
 	void Save(std::string path);
 };
 

@@ -30,7 +30,12 @@ void QueueLog::Enqueue(string prefix, Registers * regs, string suffix)
 {
 	ItemLog * newItem = new ItemLog;
 	newItem->prefix = prefix;
-	newItem->regs = *regs;
+	newItem->regs = NULL;
+	if (regs)
+	{
+		newItem->regs = new Registers();
+		*newItem->regs = *regs;
+	}
 	newItem->suffix = suffix;
 	newItem->next = NULL;
 	newItem->prev = NULL;
@@ -71,7 +76,8 @@ void QueueLog::Save(string path)
 		item = first;
 		while (item) {
 			file << item->prefix;
-			file << item->regs.ToString() << endl;
+			if (item->regs)
+				file << item->regs->ToString() << endl;
 			file << item->suffix;
 			item = item->next;
 		}

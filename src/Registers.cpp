@@ -111,7 +111,7 @@ string Registers::ToString()
 		<< ", DE: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_DE()
 		<< ", HL:"  << setfill('0') << setw(4) << uppercase << hex << (int)Get_HL()
 		<< ", SP: " << setfill('0') << setw(4) << uppercase << hex << (int) Get_SP()
-		<< ", Halt: " << Get_Halt() << ", Stop: " << Get_Stop() << ", IME: " << Get_IME();
+		<< ", H: " << Get_Halt() << ", S: " << Get_Stop() << ", I: " << Get_IME();
 	
 	return out.str();
 }

@@ -14,7 +14,7 @@ CPU::CPU(Video *v, Cartridge *c)
 	this->v = v;
 	v->SetMem(this->GetPtrMemory());
 	LoadCartridge(c);
-	this->log = new QueueLog(1000);
+	this->log = new QueueLog(10000);
 }
 
 CPU::~CPU()
@@ -34,6 +34,7 @@ void CPU::Reset()
 
 void CPU::Interpreter()
 {
+	unsigned long numCycles = 0;
 	BYTE OpCode = 0, NextOpcode = 0, lastOpCode = 0;
 
 	Instructions inst(this->GetPtrRegisters(), this->GetPtrMemory());
@@ -43,6 +44,13 @@ void CPU::Interpreter()
 		lastOpCode = OpCode;
 		OpCode = MemR(Get_PC());
         NextOpcode = MemR(Get_PC() + 1);
+		
+		stringstream ssOpCode;
+		ssOpCode << numCycles << " - ";
+		ssOpCode << "OpCode: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << ", ";
+		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
+		numCycles++;
+		
         //Counter-=Cycles[OpCode];
 		if (!Get_Halt() && !Get_Stop())
 			switch(OpCode)
@@ -311,7 +319,7 @@ void CPU::Interpreter()
 					stringstream out;
 					out << "Error, instruction not implemented: 0x";
 					out << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << endl;
-					throw GBException(out.str().data());
+					throw GBException(out.str());
 			}
 
         if (OpCode == 0xCB)
@@ -326,8 +334,6 @@ void CPU::Interpreter()
 
         TareasRutinarias();
         Interrupciones(&inst);
-		
-		log->Enqueue(this->GetPtrRegisters());
 	}
 }
 
@@ -805,7 +811,11 @@ void CPU::TareasRutinarias()
 		int interrupt = onCheckKeyPad(valueP1);
 		MemW(P1, valueP1, false);
 		if (interrupt)
+		{
 			MemW(IF, MemR(IF) | 0x10);
+			//ÀPorque de normal NO entra aqui?????
+			log->Enqueue("Tecla pulsada", NULL, "");
+		}
 		cyclesPad = 0;
 	}
 }
