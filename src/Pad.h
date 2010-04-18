@@ -18,7 +18,7 @@
 
 enum e_joypad {jRIGHT, jLEFT, jUP, jDOWN, jA, jB, jSELECT, jSTART};
 
-int onCheckKeyPad(int valueP1);
+int onCheckKeyPad(int * valueP1);
 int updateInput(int valueP1);
 
 #endif

@@ -21,6 +21,8 @@ QueueLog::~QueueLog()
 	item = first;
 	while (item) {
 		auxItem = item->next;
+		if (item->regs)
+			delete item->regs;
 		delete item;
 		item = auxItem;
 	}

@@ -83,7 +83,7 @@ string selectROM(int argc, char*argv[])
 	//fullPath = basePath + "32K/Tasmania Story (U).gb";
 	//fullPath = basePath + "32K/Tennis (JUE).gb";
 	//fullPath = basePath + "32K/Tesserae (U).gb";
-	//fullPath = basePath + "32K/Tetris (JUE) (v1.1).gb";
+	fullPath = basePath + "32K/Tetris (JUE) (v1.1).gb";
 	//fullPath = basePath + "32K/World Bowling (U).gb";
 	
 	//fullPath = basePath + "128K/4 in 1 Funpak Vol. II (U).gb";
@@ -111,7 +111,7 @@ string selectROM(int argc, char*argv[])
 
 	//fullPath = basePath + "MBC1/Amazing Penguin (U).gb";
 	//fullPath = basePath + "MBC1/Amazing Spider-Man, The (UE).gb";
-	fullPath = basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb";
+	//fullPath = basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb";
 	//fullPath = basePath + "MBC1/Castlevania Adventure, The (U).gb";
 	//fullPath = basePath + "MBC1/Pac-Man (U).gb";
 	//fullPath = basePath + "MBC1/Yoshi (U).gb";

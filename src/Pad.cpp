@@ -24,7 +24,8 @@ int updateInput(int valueP1)
 		return ((valueP1 & 0x30) |
 			(!joypad[jDOWN] << 3) | (!joypad[jUP] << 2) | (!joypad[jLEFT] << 1) | (!joypad[jRIGHT]));
 
-	return ((valueP1 & 0x30) | 0x0F);
+	//Desactivar los botones
+	return 0x3F;
 }
 
 //Si devuelve 1 debe producirse una petici—n de interrupci—n
@@ -34,23 +35,24 @@ int checkKey(int eventType, SDLKey key, int *valueP1)
 	const char * keyName;
 
 	keyName = SDL_GetKeyName(key);
+	bool pressed = (eventType == SDL_KEYDOWN);
 
 	if (key == kR)
-		joypad[jRIGHT] = (eventType == SDL_KEYDOWN);
+		joypad[jRIGHT] = pressed;
 	else if (key == kL)
-		joypad[jLEFT] = (eventType == SDL_KEYDOWN);
+		joypad[jLEFT] = pressed;
 	else if (key == kA)
-		joypad[jA] = (eventType == SDL_KEYDOWN);
+		joypad[jA] = pressed;
 	else if (key == kB)
-		joypad[jB] = (eventType == SDL_KEYDOWN);
+		joypad[jB] = pressed;
 	else if (key == kSE)
-		joypad[jSELECT] = (eventType == SDL_KEYDOWN);
+		joypad[jSELECT] = pressed;
 	else if (key == kST)
-		joypad[jSTART] = (eventType == SDL_KEYDOWN);
+		joypad[jSTART] = pressed;
 	else if (key == kU)
-		joypad[jUP] = (eventType == SDL_KEYDOWN);
+		joypad[jUP] = pressed;
 	else if (key == kD)
-		joypad[jDOWN] = (eventType == SDL_KEYDOWN);
+		joypad[jDOWN] = pressed;
 
 	*valueP1 = updateInput(*valueP1);
 
@@ -71,7 +73,7 @@ int checkKey(int eventType, SDLKey key, int *valueP1)
 
 //Si devuelve 1 debe producirse una petici—n de interrupci—n
 //En caso negativo devolver‡ 0
-int onCheckKeyPad(int valueP1)
+int onCheckKeyPad(int * valueP1)
 {
 	SDL_Event ev;
 
@@ -100,7 +102,7 @@ int onCheckKeyPad(int valueP1)
 				}
 				//!!No hay break. Cuando SDL_KEYDOWN tambiŽn SDL_KEYUP
 			case SDL_KEYUP:
-				return checkKey(ev.type, ev.key.keysym.sym, &valueP1);
+				return checkKey(ev.type, ev.key.keysym.sym, valueP1);
 				break;
 		}
 	}

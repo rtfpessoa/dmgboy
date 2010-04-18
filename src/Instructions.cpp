@@ -354,6 +354,22 @@ void Instructions::INC_n(e_registers place)
 	reg->Add_PC(1);
 }
 
+void Instructions::ADD_HL_n(e_registers place)
+{
+	WORD value, hl;
+	
+	value = reg->Get_Reg(place);
+	hl = reg->Get_HL();
+	
+	reg->Set_flagN(0);
+	reg->Set_flagH((((hl & 0x0FFF) + (value & 0x0FFF)) > 0x0FFF) ? 1 : 0);
+	reg->Set_flagC(((hl + value) > 0xFFFF) ? 1 : 0);
+	
+	reg->Set_HL(hl + value);
+	
+	reg->Add_PC(1);
+}
+
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //Revisado hasta aquí
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -879,31 +895,6 @@ void Instructions::SRL_n(e_registers place)
 	reg->Set_flagC(bit0);
 
 	reg->Add_PC(2);
-}
-
-void Instructions::ADD_HL_n(e_registers lugar)
-{
-	int valor;
-	WORD valor_reg;
-
-	switch (lugar)
-	{
-		case BC:
-		case DE:
-		case HL:
-		case SP: valor_reg = reg->Get_Reg(lugar); break;
-		default: throw GBException("Error, registro incorrecto. Instrucción: ADD_HL");
-	}
-
-	valor = reg->Get_HL() + valor_reg;
-
-	reg->Set_flagN(0);
-	if (((reg->Get_HL() & 0x0FFF) + (valor_reg & 0x0FFF)) > 0x0FFF) reg->Set_flagH(1); else reg->Set_flagH(0);
-	if (valor > 0xFFFF) reg->Set_flagC(1); else reg->Set_flagC(0);
-
-	reg->Set_HL(valor & 0xFFFF);
-
-	reg->Add_PC(1);
 }
 
 void Instructions::ADD_SP_n()

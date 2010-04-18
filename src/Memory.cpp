@@ -67,24 +67,23 @@ void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
 		switch (direction)
 		{
 			case DMA:
-				//cout << "W DMA: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl;
 				DmaTransfer(value);
 				break;
-			//case TIMA: cout << "W TIMA: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl; break;
-			//case TMA: cout << "W TMA: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl; break;
-			//case TAC: cout << "W TAC: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl; break;
-			//case BGP: cout << "W BGP: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl; break;
 			case P1:
-				//cout << endl << "W P1   : 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl;
-				//cout << "Antes  : 0x" << setfill('0') << setw(2) << uppercase << hex << (int)memory[P1] << endl;
-				value = (value & 0x30) | (memory[P1] & ~0x30);
+				BYTE oldP1;
+				oldP1 = memory[P1];
+				value = (value & 0x30) | (oldP1 & ~0x30);
 				value = updateInput(value);
-				//cout << "Despues: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl;
+				if ((value != oldP1) && ((value & 0x0F) != 0x0F))
+				{
+					//Debe producir una interrupcion
+					memory[IF] |=  0x10;
+				}
 				break;
 			//case LCDC: cout << "W LCDC: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl; break;
 			//case SCX: cout << "W SCX: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl; break;
 			//case SCY: cout << "W SCY: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl; break;
-			case STAT: value = (value & ~0x07) | (MemR(STAT) & 0x07); break;
+			case STAT: value = (value & ~0x07) | (memory[STAT] & 0x07); break;
 			case LY:
 			case DIV: value = 0; break;
 			//case 0xC6E8: cout << "0xC6E8" << endl; break;

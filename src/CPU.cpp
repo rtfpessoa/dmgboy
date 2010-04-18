@@ -14,7 +14,7 @@ CPU::CPU(Video *v, Cartridge *c)
 	this->v = v;
 	v->SetMem(this->GetPtrMemory());
 	LoadCartridge(c);
-	this->log = new QueueLog(10000);
+	this->log = new QueueLog(200000);
 }
 
 CPU::~CPU()
@@ -808,7 +808,7 @@ void CPU::TareasRutinarias()
 	if (cyclesPad > 110500)
 	{
 		int valueP1 = MemR(P1);
-		int interrupt = onCheckKeyPad(valueP1);
+		int interrupt = onCheckKeyPad(&valueP1);
 		MemW(P1, valueP1, false);
 		if (interrupt)
 		{
