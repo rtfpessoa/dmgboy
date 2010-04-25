@@ -47,7 +47,10 @@ void CPU::Interpreter()
 		
 		stringstream ssOpCode;
 		ssOpCode << numCycles << " - ";
-		ssOpCode << "OpCode: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << ", ";
+		ssOpCode << "OpCode: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
+		if (OpCode == 0xCB)
+			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
+		ssOpCode << ", ";
 		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
 		numCycles++;
 		

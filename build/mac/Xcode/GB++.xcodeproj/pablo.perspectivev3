@@ -273,7 +273,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>9</integer>
+									<integer>6</integer>
 									<integer>3</integer>
 									<integer>0</integer>
 								</array>
@@ -314,7 +314,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>6E22935F107F3BC700A178FA</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>GB++.cpp</string>
+								<string>CPU.cpp</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -322,11 +322,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>6E229360107F3BC700A178FA</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>GB++.cpp</string>
+										<string>CPU.cpp</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>6ED4BCFA117A2E8C004E649F</string>
+										<string>6EB5557E1183AB07006AF17F</string>
 										<key>history</key>
 										<array>
 											<string>6EE73999113AD03800E5422D</string>
@@ -356,9 +356,9 @@
 											<string>6ED4BCDB1179F9FD004E649F</string>
 											<string>6ED4BCDC1179F9FD004E649F</string>
 											<string>6ED4BCDD1179F9FD004E649F</string>
-											<string>6ED4BCF7117A2E8C004E649F</string>
-											<string>6ED4BCF8117A2E8C004E649F</string>
-											<string>6ED4BCF9117A2E8C004E649F</string>
+											<string>6EB5557B1183AB07006AF17F</string>
+											<string>6EB5557C1183AB07006AF17F</string>
+											<string>6EB5557D1183AB07006AF17F</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -398,6 +398,8 @@
 									<dict>
 										<key>Frame</key>
 										<string>{{10, 27}, {1073, -27}}</string>
+										<key>RubberWindowFrame</key>
+										<string>0 59 1280 719 0 0 1280 778 </string>
 									</dict>
 									<key>Module</key>
 									<string>XCDetailModule</string>
@@ -451,9 +453,7 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {1073, -27}}</string>
-										<key>RubberWindowFrame</key>
-										<string>0 59 1280 719 0 0 1280 778 </string>
+										<string>{{0, 0}, {568, 405}}</string>
 									</dict>
 									<key>Module</key>
 									<string>PBXBuildResultsModule</string>
@@ -481,11 +481,11 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>6ED4BCE11179F9FD004E649F</string>
+				<string>6EB55574118273BD006AF17F</string>
 				<string>1CA23ED40692098700951B8B</string>
-				<string>6ED4BCE21179F9FD004E649F</string>
+				<string>6EB55575118273BD006AF17F</string>
 				<string>6E22935F107F3BC700A178FA</string>
-				<string>6ED4BCE31179F9FD004E649F</string>
+				<string>6EB55576118273BD006AF17F</string>
 				<string>1CA23EDF0692099D00951B8B</string>
 				<string>1CA23EE00692099D00951B8B</string>
 				<string>1CA23EE10692099D00951B8B</string>
@@ -634,14 +634,14 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>6ED4BCE41179F9FD004E649F</string>
+				<string>6EB5557F1183AB07006AF17F</string>
 				<string>1CCC7628064C1048000F2A68</string>
 				<string>1CCC7629064C1048000F2A68</string>
-				<string>6ED4BCE51179F9FD004E649F</string>
-				<string>6ED4BCE61179F9FD004E649F</string>
-				<string>6ED4BCE71179F9FD004E649F</string>
-				<string>6ED4BCE81179F9FD004E649F</string>
-				<string>6ED4BCE91179F9FD004E649F</string>
+				<string>6EB555801183AB07006AF17F</string>
+				<string>6EB555811183AB07006AF17F</string>
+				<string>6EB555821183AB07006AF17F</string>
+				<string>6EB555831183AB07006AF17F</string>
+				<string>6EB555841183AB07006AF17F</string>
 			</array>
 			<key>ToolbarConfigUserDefaultsMinorVersion</key>
 			<string>2</string>
@@ -675,9 +675,9 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>6ED4BCFB117A2E8C004E649F</string>
-		<string>6ED4BCEB1179F9FD004E649F</string>
-		<string>6ED4BCEC1179F9FD004E649F</string>
+		<string>6EB555851183AB07006AF17F</string>
+		<string>6EB555861183AB07006AF17F</string>
+		<string>6EB555871183AB07006AF17F</string>
 		<string>/Users/pablo/Documents/Programacion/GB++/build/mac/Xcode/GB++.xcodeproj</string>
 	</array>
 	<key>WindowString</key>

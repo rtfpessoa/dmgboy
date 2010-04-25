@@ -31,7 +31,7 @@ WORD Registers::Get_Reg(e_registers reg)
 		case SP: return this->Get_SP(); break;
 		default:
 			stringstream out;
-			out << "Get_Reg - Error, registro incorrecto: " << reg << endl;
+			out << "Get_Reg - Error, incorrect register: " << reg << endl;
 			throw GBException(out.str().data());
 	}
 }
@@ -55,7 +55,7 @@ void Registers::Set_Reg(e_registers reg, WORD value)
 		case SP: this->Set_SP(value); break;
 		default:
 			stringstream out;
-			out << "Set_Reg - Error, registro incorrecto: " << reg << endl;
+			out << "Set_Reg - Error, incorrect register: " << reg << endl;
 			throw GBException(out.str().data());
 	}
 }
@@ -69,7 +69,7 @@ BYTE Registers::Get_Flag(e_registers flag)
 		case f_Z: return this->Get_flagZ();
 		default:
 			stringstream out;
-			out << "Error, flag incorrecto (Get): " << flag << endl;
+			out << "Error, incorrect flag (Get): " << flag << endl;
 			throw GBException(out.str().data());
 	}
 }
@@ -83,7 +83,7 @@ void Registers::Set_Flag(e_registers flag, BYTE value)
 		case f_Z: this->Set_flagZ(value);
 		default:
 			stringstream out;
-			out << "Error, flag incorrecto (Set): " << flag << endl;
+			out << "Error, incorrect flag (Set): " << flag << endl;
 			throw GBException(out.str().data());
 	}
 }
@@ -105,11 +105,11 @@ string Registers::ToString()
 {
 	stringstream out;
 	
-	out << "PC:" << setfill('0') << setw(4) << uppercase << hex << (int)Get_PC()
+	out << "PC: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_PC()
 		<< ", AF: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_AF()
 		<< ", BC: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_BC()
 		<< ", DE: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_DE()
-		<< ", HL:"  << setfill('0') << setw(4) << uppercase << hex << (int)Get_HL()
+		<< ", HL: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_HL()
 		<< ", SP: " << setfill('0') << setw(4) << uppercase << hex << (int) Get_SP()
 		<< ", H: " << Get_Halt() << ", S: " << Get_Stop() << ", I: " << Get_IME();
 	
