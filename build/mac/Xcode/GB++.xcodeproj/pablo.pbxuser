@@ -119,6 +119,13 @@
 			6E7F499B118C8AFF00243E7E /* PBXTextBookmark */ = 6E7F499B118C8AFF00243E7E /* PBXTextBookmark */;
 			6E7F499F118C8B4A00243E7E /* PBXTextBookmark */ = 6E7F499F118C8B4A00243E7E /* PBXTextBookmark */;
 			6E7F49A1118C8B7300243E7E /* PBXTextBookmark */ = 6E7F49A1118C8B7300243E7E /* PBXTextBookmark */;
+			6E7F49A6118CA62600243E7E /* PBXTextBookmark */ = 6E7F49A6118CA62600243E7E /* PBXTextBookmark */;
+			6E7F49A7118CA62600243E7E /* PBXTextBookmark */ = 6E7F49A7118CA62600243E7E /* PBXTextBookmark */;
+			6E7F49A8118CA62600243E7E /* PBXTextBookmark */ = 6E7F49A8118CA62600243E7E /* PBXTextBookmark */;
+			6E7F49A9118CA62600243E7E /* PBXTextBookmark */ = 6E7F49A9118CA62600243E7E /* PBXTextBookmark */;
+			6E7F49AA118CA62600243E7E /* PBXTextBookmark */ = 6E7F49AA118CA62600243E7E /* PBXTextBookmark */;
+			6E7F49AE118CAA1F00243E7E /* PBXTextBookmark */ = 6E7F49AE118CAA1F00243E7E /* PBXTextBookmark */;
+			6E7F49B2118CAA5F00243E7E /* PBXTextBookmark */ = 6E7F49B2118CAA5F00243E7E /* PBXTextBookmark */;
 			6EA658FC1167AC23002843C9 = 6EA658FC1167AC23002843C9 /* PBXTextBookmark */;
 			6EA658FE1167AC23002843C9 = 6EA658FE1167AC23002843C9 /* PBXTextBookmark */;
 			6EA65950116A2533002843C9 = 6EA65950116A2533002843C9 /* PBXTextBookmark */;
@@ -342,7 +349,7 @@
 		fRef = 6EAF5FBF1078E514006BAC2B /* GB++.cpp */;
 		name = "GB++.cpp: 89";
 		rLen = 0;
-		rLoc = 3083;
+		rLoc = 3085;
 		rType = 0;
 		vrLen = 2389;
 		vrLoc = 1301;
@@ -352,7 +359,7 @@
 		fRef = 6EAF5FBF1078E514006BAC2B /* GB++.cpp */;
 		name = "GB++.cpp: 89";
 		rLen = 0;
-		rLoc = 3083;
+		rLoc = 3085;
 		rType = 0;
 		vrLen = 966;
 		vrLoc = 2724;
@@ -362,7 +369,7 @@
 		fRef = 6EAF5FBF1078E514006BAC2B /* GB++.cpp */;
 		name = "GB++.cpp: 93";
 		rLen = 0;
-		rLoc = 3261;
+		rLoc = 3263;
 		rType = 0;
 		vrLen = 2439;
 		vrLoc = 1910;
@@ -372,7 +379,7 @@
 		fRef = 6EAF5FBF1078E514006BAC2B /* GB++.cpp */;
 		name = "GB++.cpp: 57";
 		rLen = 0;
-		rLoc = 1445;
+		rLoc = 1447;
 		rType = 0;
 		vrLen = 2249;
 		vrLoc = 1301;
@@ -392,7 +399,7 @@
 		fRef = 6EAF5FBF1078E514006BAC2B /* GB++.cpp */;
 		name = "GB++.cpp: 57";
 		rLen = 0;
-		rLoc = 1445;
+		rLoc = 1447;
 		rType = 0;
 		vrLen = 2096;
 		vrLoc = 1214;
@@ -406,6 +413,76 @@
 		rType = 0;
 		vrLen = 1840;
 		vrLoc = 976;
+	};
+	6E7F49A6118CA62600243E7E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 6EAF5FC61078E514006BAC2B /* Memory.cpp */;
+		name = "Memory.cpp: 57";
+		rLen = 0;
+		rLoc = 1402;
+		rType = 0;
+		vrLen = 1403;
+		vrLoc = 1576;
+	};
+	6E7F49A7118CA62600243E7E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 6EAF5FC71078E514006BAC2B /* Memory.h */;
+		name = "Memory.h: 23";
+		rLen = 0;
+		rLoc = 410;
+		rType = 0;
+		vrLen = 689;
+		vrLoc = 0;
+	};
+	6E7F49A8118CA62600243E7E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 6EAF5FBC1078E514006BAC2B /* CPU.cpp */;
+		name = "CPU.cpp: 1001";
+		rLen = 0;
+		rLoc = 35734;
+		rType = 0;
+		vrLen = 954;
+		vrLoc = 34859;
+	};
+	6E7F49A9118CA62600243E7E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 6EAF5FBF1078E514006BAC2B /* GB++.cpp */;
+		name = "GB++.cpp: 146";
+		rLen = 2;
+		rLoc = 6149;
+		rType = 0;
+		vrLen = 1840;
+		vrLoc = 976;
+	};
+	6E7F49AA118CA62600243E7E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 6EAF5FBF1078E514006BAC2B /* GB++.cpp */;
+		name = "GB++.cpp: 86";
+		rLen = 0;
+		rLoc = 2974;
+		rType = 0;
+		vrLen = 2379;
+		vrLoc = 1710;
+	};
+	6E7F49AE118CAA1F00243E7E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 6EAF5FBF1078E514006BAC2B /* GB++.cpp */;
+		name = "GB++.cpp: 139";
+		rLen = 0;
+		rLoc = 5780;
+		rType = 0;
+		vrLen = 2303;
+		vrLoc = 4091;
+	};
+	6E7F49B2118CAA5F00243E7E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 6EAF5FBF1078E514006BAC2B /* GB++.cpp */;
+		name = "GB++.cpp: 113";
+		rLen = 0;
+		rLoc = 4219;
+		rType = 0;
+		vrLen = 2506;
+		vrLoc = 2971;
 	};
 	6E87F084113ACF1600550944 /* qglobal.h */ = {
 		isa = PBXFileReference;
@@ -499,10 +576,10 @@
 	};
 	6EAF5FBC1078E514006BAC2B /* CPU.cpp */ = {
 		uiCtxt = {
-			sepNavFolds = "{\n    c =     (\n                {\n            r = \"{12434, 12220}\";\n            s = 0;\n        },\n                {\n            r = \"{24702, 6045}\";\n            s = 0;\n        },\n                {\n            r = \"{31157, 2975}\";\n            s = 0;\n        }\n    );\n    r = \"{0, 35807}\";\n    s = 0;\n}";
+			sepNavFolds = "{\n    c =     (\n                {\n            r = \"{12434, 12220}\";\n            s = 0;\n        },\n                {\n            r = \"{24702, 6045}\";\n            s = 0;\n        },\n                {\n            r = \"{31157, 2975}\";\n            s = 0;\n        }\n    );\n    r = \"{0, 35814}\";\n    s = 0;\n}";
 			sepNavIntBoundsRect = "{{0, 0}, {1012, 6162}}";
-			sepNavSelRange = "{13455, 0}";
-			sepNavVisRange = "{13327, 1078}";
+			sepNavSelRange = "{14497, 0}";
+			sepNavVisRange = "{13622, 954}";
 		};
 	};
 	6EAF5FBD1078E514006BAC2B /* CPU.h */ = {
@@ -522,9 +599,9 @@
 	};
 	6EAF5FBF1078E514006BAC2B /* GB++.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1012, 2470}}";
-			sepNavSelRange = "{6149, 2}";
-			sepNavVisRange = "{976, 1840}";
+			sepNavIntBoundsRect = "{{0, 0}, {1012, 2093}}";
+			sepNavSelRange = "{4219, 0}";
+			sepNavVisRange = "{2971, 2506}";
 			sepNavWindowFrame = "{{15, 215}, {750, 558}}";
 		};
 	};
@@ -573,9 +650,9 @@
 	};
 	6EAF5FC61078E514006BAC2B /* Memory.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1012, 1742}}";
-			sepNavSelRange = "{1673, 0}";
-			sepNavVisRange = "{1373, 1450}";
+			sepNavIntBoundsRect = "{{0, 0}, {1012, 1638}}";
+			sepNavSelRange = "{1402, 0}";
+			sepNavVisRange = "{1576, 1403}";
 		};
 	};
 	6EAF5FC71078E514006BAC2B /* Memory.h */ = {
@@ -698,7 +775,7 @@
 		fRef = 6EAF5FBF1078E514006BAC2B /* GB++.cpp */;
 		name = "GB++.cpp: 86";
 		rLen = 0;
-		rLoc = 2972;
+		rLoc = 2974;
 		rType = 0;
 		vrLen = 2494;
 		vrLoc = 2019;
@@ -768,7 +845,7 @@
 		fRef = 6EAF5FC61078E514006BAC2B /* Memory.cpp */;
 		name = "Memory.cpp: 74";
 		rLen = 0;
-		rLoc = 1673;
+		rLoc = 1628;
 		rType = 0;
 		vrLen = 1450;
 		vrLoc = 1373;

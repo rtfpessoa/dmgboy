@@ -54,7 +54,7 @@ string selectROM(int argc, char*argv[])
 	basePath = "/media/disk/Descargas/GB/ROMS/";
 #endif
 
-	fullPath = basePath + "32K/Alleyway (JUA) [!].gb";
+	//fullPath = basePath + "32K/Alleyway (JUA) [!].gb";
 	//fullPath = basePath + "32K/Asteroids (UE).gb";
 	//fullPath = basePath + "32K/Boxxle (V1.1) (U) [!].gb";
 	//fullPath = basePath + "32K/Boxxle II (U).gb";
@@ -110,7 +110,7 @@ string selectROM(int argc, char*argv[])
 	//fullPath = basePath + "PDRoms/Runtime - Test Rom (PD) [b1].gb";
 
 	//fullPath = basePath + "MBC1/Amazing Penguin (U).gb";
-	//fullPath = basePath + "MBC1/Amazing Spider-Man, The (UE).gb";
+	fullPath = basePath + "MBC1/Amazing Spider-Man, The (UE).gb";
 	//fullPath = basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb";
 	//fullPath = basePath + "MBC1/Castlevania Adventure, The (U).gb";
 	//fullPath = basePath + "MBC1/Pac-Man (U).gb";

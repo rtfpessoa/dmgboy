@@ -998,7 +998,7 @@ void CPU::UpdateTimer()
 
 	if (cyclesDIV >= 256)
 	{
-		MemW(DIV, MemR(DIV) + 1);
+		MemW(DIV, MemR(DIV) + 1, false);
 		cyclesDIV = 0;
 	}
 }

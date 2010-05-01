@@ -55,9 +55,6 @@ void Memory::ResetMem()
     memory[WY]   = 0x00; //WY
     memory[WX]   = 0x00; //WX
     memory[IE]   = 0x00; //IE
-
-	//Puesto por mi
-	//memory[P1]	  = 0x3F;
 }
 
 void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
@@ -80,13 +77,9 @@ void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
 					memory[IF] |=  0x10;
 				}
 				break;
-			//case LCDC: cout << "W LCDC: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)valor << endl; break;
-			//case SCX: cout << "W SCX: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl; break;
-			//case SCY: cout << "W SCY: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)value << endl; break;
 			case STAT: value = (value & ~0x07) | (memory[STAT] & 0x07); break;
 			case LY:
 			case DIV: value = 0; break;
-			//case 0xC6E8: cout << "0xC6E8" << endl; break;
 		}
 
 		if ((direction >= 0xC000) && (direction < 0xDE00))//C000-DDFF

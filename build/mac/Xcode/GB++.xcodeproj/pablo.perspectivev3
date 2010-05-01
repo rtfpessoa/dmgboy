@@ -326,7 +326,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>6E7F49A1118C8B7300243E7E</string>
+										<string>6E7F49B2118CAA5F00243E7E</string>
 										<key>history</key>
 										<array>
 											<string>6EE73999113AD03800E5422D</string>
@@ -350,15 +350,15 @@
 											<string>6EAFAC861179054D004473E1</string>
 											<string>6EAFAC881179054D004473E1</string>
 											<string>6ED4BCDB1179F9FD004E649F</string>
-											<string>6ED4BCDC1179F9FD004E649F</string>
-											<string>6ED4BCDD1179F9FD004E649F</string>
 											<string>6EB5558C1184D9B5006AF17F</string>
 											<string>6E7F497F118C881E00243E7E</string>
 											<string>6E7F4980118C881E00243E7E</string>
 											<string>6E7F4981118C881E00243E7E</string>
-											<string>6E7F4982118C881E00243E7E</string>
 											<string>6E7F4983118C881E00243E7E</string>
-											<string>6E7F4986118C886C00243E7E</string>
+											<string>6E7F49A6118CA62600243E7E</string>
+											<string>6E7F49A7118CA62600243E7E</string>
+											<string>6E7F49A8118CA62600243E7E</string>
+											<string>6E7F49A9118CA62600243E7E</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -675,6 +675,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>6E7F49B3118CAA5F00243E7E</string>
 		<string>6E7F4993118C889500243E7E</string>
 		<string>6E7F4994118C889500243E7E</string>
 		<string>/Users/pablo/Documents/Programacion/GB++/build/mac/Xcode/GB++.xcodeproj</string>
