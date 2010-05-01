@@ -54,7 +54,7 @@ string selectROM(int argc, char*argv[])
 	basePath = "/media/disk/Descargas/GB/ROMS/";
 #endif
 
-	//fullPath = basePath + "32K/Alleyway (JUA) [!].gb";
+	fullPath = basePath + "32K/Alleyway (JUA) [!].gb";
 	//fullPath = basePath + "32K/Asteroids (UE).gb";
 	//fullPath = basePath + "32K/Boxxle (V1.1) (U) [!].gb";
 	//fullPath = basePath + "32K/Boxxle II (U).gb";
@@ -83,7 +83,7 @@ string selectROM(int argc, char*argv[])
 	//fullPath = basePath + "32K/Tasmania Story (U).gb";
 	//fullPath = basePath + "32K/Tennis (JUE).gb";
 	//fullPath = basePath + "32K/Tesserae (U).gb";
-	fullPath = basePath + "32K/Tetris (JUE) (v1.1).gb";
+	//fullPath = basePath + "32K/Tetris (JUE) (v1.1).gb";
 	//fullPath = basePath + "32K/World Bowling (U).gb";
 	
 	//fullPath = basePath + "128K/4 in 1 Funpak Vol. II (U).gb";

@@ -46,6 +46,8 @@ void QueueLog::Enqueue(string prefix, Registers * regs, string suffix)
 	{
 		first = first->next;
 		//Borrar el más viejo
+		if (first->prev->regs)
+			delete first->prev->regs;
 		delete first->prev;
 		first->prev = NULL;
 		numItems--;
@@ -79,8 +81,8 @@ void QueueLog::Save(string path)
 		while (item) {
 			file << item->prefix;
 			if (item->regs)
-				file << item->regs->ToString() << endl;
-			file << item->suffix;
+				file << item->regs->ToString();
+			file << item->suffix << endl;
 			item = item->next;
 		}
 		file.close();

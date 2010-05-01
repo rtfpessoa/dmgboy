@@ -52,6 +52,10 @@ void CPU::Interpreter()
 			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
 		ssOpCode << ", ";
 		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
+		/*stringstream ssOpCode;
+		ssOpCode << " FF80 = " << hex << (int)MemR(0xFF80);
+		log->Enqueue("", this->GetPtrRegisters(), ssOpCode.str());*/
+
 		numCycles++;
 		
         //Counter-=Cycles[OpCode];
@@ -336,7 +340,7 @@ void CPU::Interpreter()
 		cyclesPad += lastCycles;
 
         TareasRutinarias();
-        Interrupciones(&inst);
+        Interruptions(&inst);
 	}
 }
 
@@ -915,7 +919,7 @@ void CPU::UpdateStateLCD()
 		MemW(STAT, MemR(STAT) & ~0x40, false);
 }
 
-void CPU::Interrupciones(Instructions * inst)
+void CPU::Interruptions(Instructions * inst)
 {
 	if (!Get_IME())
 		return;
@@ -970,12 +974,15 @@ void CPU::Interrupciones(Instructions * inst)
 
 void CPU::UpdateTimer()
 {
-	//int FreqTimer = {4096, 262144, 65536, 16384};
+	// Estos serian los valores en kHz que puede tomar TAC:
+	// 4096, 262144, 65536, 16384
+	// En overflowTimer se encuentran estos valores en ciclos
+	// maquina
 	WORD overflowTimer[] = {1024, 16, 64, 256};
 
-	if (BIT2(MemR(TAC))) //Si está habilitado el timer
+	if (BIT2(MemR(TAC))) //Si esta habilitado el timer
 	{
-		if (cyclesTimer >= overflowTimer[MemR(TAC) & 0x11])
+		if (cyclesTimer >= overflowTimer[BITS01(MemR(TAC))])
 		{
 			if (MemR(TIMA) == 0xFF)
 			{

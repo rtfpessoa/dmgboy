@@ -33,7 +33,7 @@ private:
 	void TareasRutinarias();
 	void UpdateStateLCD();
 	void UpdateTimer();
-	void Interrupciones(Instructions * inst);
+	void Interruptions(Instructions * inst);
 	void eventsSDL();
 };
 
