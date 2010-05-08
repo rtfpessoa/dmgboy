@@ -14,7 +14,7 @@ CPU::CPU(Video *v, Cartridge *c)
 	this->v = v;
 	v->SetMem(this->GetPtrMemory());
 	LoadCartridge(c);
-	this->log = new QueueLog(200000);
+	this->log = new QueueLog(1000000);
 }
 
 CPU::~CPU()
@@ -45,21 +45,23 @@ void CPU::Interpreter()
 		OpCode = MemR(Get_PC());
         NextOpcode = MemR(Get_PC() + 1);
 		
-		stringstream ssOpCode;
+		/*stringstream ssOpCode;
 		ssOpCode << numCycles << " - ";
 		ssOpCode << "OpCode: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
 		if (OpCode == 0xCB)
 			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
 		ssOpCode << ", ";
-		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
-		/*stringstream ssOpCode;
-		ssOpCode << " FF80 = " << hex << (int)MemR(0xFF80);
-		log->Enqueue("", this->GetPtrRegisters(), ssOpCode.str());*/
+		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");*/
 
 		numCycles++;
 		
         //Counter-=Cycles[OpCode];
 		if (!Get_Halt() && !Get_Stop())
+			
+			/*stringstream ssOpCode;
+			ssOpCode << " FF80 = " << hex << (int)MemR(0xFF80) << " ";
+			log->Enqueue("", this->GetPtrRegisters(), ssOpCode.str());*/
+		
 			switch(OpCode)
 			{
 				case (0x00): inst.NOP(); break;
@@ -339,7 +341,7 @@ void CPU::Interpreter()
 		cyclesDIV += lastCycles;
 		cyclesPad += lastCycles;
 
-        TareasRutinarias();
+        CyclicTasks();
         Interruptions(&inst);
 	}
 }
@@ -808,21 +810,17 @@ BYTE CPU::CiclosInstruccion(WORD OpCode)
 }
 
 
-void CPU::TareasRutinarias()
+void CPU::CyclicTasks()
 {
 	UpdateStateLCD();
 	UpdateTimer();
 	if (cyclesPad > 110500)
 	{
-		int valueP1 = MemR(P1);
+		int valueP1 = memory[P1];
 		int interrupt = onCheckKeyPad(&valueP1);
-		MemW(P1, valueP1, false);
+		memory[P1] = valueP1;
 		if (interrupt)
-		{
-			MemW(IF, MemR(IF) | 0x10);
-			//ÀPorque de normal NO entra aqui?????
-			log->Enqueue("Tecla pulsada", NULL, "");
-		}
+			memory[IF] = memory[IF] | 0x10;
 		cyclesPad = 0;
 	}
 }
@@ -831,37 +829,37 @@ void CPU::UpdateStateLCD()
 {
 	BYTE mode;
 
-    mode = BITS01(MemR(STAT));
+    mode = BITS01(memory[STAT]);
 
     switch (mode)
     {
         case (0):	//Durante H-Blank
             if (cyclesLCD > MAX_LCD_MODE_0)
             {
-                if (MemR(LY) == 144) //Si estamos en la linea 144, cambiamos al modo 1 (V-Blank)
+                if (memory[LY] == 144) //Si estamos en la linea 144, cambiamos al modo 1 (V-Blank)
                 {
                     //Poner a 01 el flag (bits 0-1) del modo 1.
-					MemW(STAT, (MemR(STAT) & ~0x03) | 0x01, false);
+					memory[STAT] = (memory[STAT] & ~0x03) | 0x01;
 					//Interrupcion V-Blank
-					MemW(IF, MemR(IF) | 0x01);
+					memory[IF] = memory[IF] | 0x01;
 					//Si interrupcion V-Blank habilitada, marcar peticion de interrupcion
 					//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT.
-					if (BIT4(MemR(STAT)))
-						MemW(IF, MemR(IF) | 0x02);
+					if (BIT4(memory[STAT]))
+						memory[IF] = memory[IF] | 0x02;
 					v->RefreshScreen();
                 }
                 else    //Sino, cambiamos al modo 2
                 {
                     //Poner a 10 el flag (bits 0-1) del modo 2.
-					MemW(STAT, (MemR(STAT) & ~0x03) | 0x02, false);
+					memory[STAT] = (memory[STAT] & ~0x03) | 0x02;
 					//Si interrupcion OAM habilitada, marcar peticion de interrupcion
 					//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
-					if (BIT5(MemR(STAT)))
-						MemW(IF, MemR(IF) | 0x02);
+					if (BIT5(memory[STAT]))
+						memory[IF] = memory[IF] | 0x02;
 
-					v->UpdateLine(MemR(LY));
+					v->UpdateLine(memory[LY]);
                 }
-                MemW(LY, MemR(LY) + 1, false);
+                memory[LY] = memory[LY] + 1;
                 cyclesLCD = 0;
             }
             break;
@@ -869,54 +867,54 @@ void CPU::UpdateStateLCD()
             if (cyclesLCD > MAX_LCD_MODE_1)
             {
                 //Si hemos llegado al final
-                if (MemR(LY) == 153)
+                if (memory[LY] == 153)
                 {
-                    MemW(LY, 0, false);
+                    memory[LY] = 0;
                     //Poner a 10 el flag (bits 0-1) del modo 2.
-					MemW(STAT, (MemR(STAT) & ~0x03) | 0x02, false);
+					memory[STAT] = (memory[STAT] & ~0x03) | 0x02;
 					//Si interrupcion OAM habilitada, marcar peticion de interrupcion
 					//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
-					if (BIT5(MemR(STAT)))
-						MemW(IF, MemR(IF) | 0x02);
+					if (BIT5(memory[STAT]))
+						memory[IF] = memory[IF] | 0x02;
                 }
                 else
-                    MemW(LY, MemR(LY) + 1, false);
+                    memory[LY] = memory[LY] + 1;
 
                 cyclesLCD = 0;
             }
             break;
-        case (2):	//Cuando OAM se está usando
+        case (2):	//Cuando OAM se esta usando
             if (cyclesLCD > MAX_LCD_MODE_2)
             {
 				//Poner a 11 el flag (bits 0-1) del modo 3.
-				MemW(STAT, (MemR(STAT) & ~0x03) | 0x03, false);
+				memory[STAT] = (memory[STAT] & ~0x03) | 0x03;
 
                 cyclesLCD = 0;
             }
             break;
-        case (3):	//Cuando OAM y memoria de video se están usando (Se está pasando información al LCD)
+        case (3):	//Cuando OAM y memoria de video se estan usando (Se esta pasando información al LCD)
             if (cyclesLCD > MAX_LCD_MODE_3)
             {
 				//Poner a 00 el flag (bits 0-1) del modo 0.
-				MemW(STAT, (MemR(STAT) & ~0x03) | 0x00, false);
+				memory[STAT] = (memory[STAT] & ~0x03) | 0x00;
 				//Si interrupcion H-Blank habilitada, marcar peticion de interrupcion
 				//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
-				if (BIT3(MemR(STAT)))
-					MemW(IF, MemR(IF) | 0x02);
+				if (BIT3(memory[STAT]))
+					memory[IF] = memory[IF] | 0x02;
 
                 cyclesLCD = 0;
             }
             break;
 	}
 
-	if (MemR(LY) == MemR(LYC))
+	if (memory[LY] == memory[LYC])
 	{
-		MemW(STAT, MemR(STAT) | 0x40, false);
-		if (BIT6(MemR(STAT)))
-			MemW(IF, MemR(IF) | 0x02);
+		memory[STAT] = memory[STAT] | 0x40;
+		if (BIT6(memory[STAT]))
+			memory[IF] = memory[IF] | 0x02;
 	}
 	else
-		MemW(STAT, MemR(STAT) & ~0x40, false);
+		memory[STAT] = memory[STAT] & ~0x40;
 }
 
 void CPU::Interruptions(Instructions * inst)
@@ -926,8 +924,8 @@ void CPU::Interruptions(Instructions * inst)
 
 	BYTE valueIE, valueIF;
 
-	valueIE = MemR(IE);
-	valueIF = MemR(IF);
+	valueIE = memory[IE];
+	valueIF = memory[IF];
 
 	if (BIT0(valueIE) && BIT0(valueIF))	//V-Blank
 	{
@@ -935,7 +933,7 @@ void CPU::Interruptions(Instructions * inst)
 		Set_Halt(false);
 		Add_PC(-1);
 		inst->RST_n(0x40);
-		MemW(IF, valueIF & ~0x01);
+		memory[IF] = valueIF & ~0x01;
 	}
 	else if (BIT1(valueIE) && BIT1(valueIF))	//LCD-Stat
 	{
@@ -943,7 +941,7 @@ void CPU::Interruptions(Instructions * inst)
 		Set_Halt(false);
 		Add_PC(-1);
 		inst->RST_n(0x48);
-		MemW(IF, valueIF & ~0x02);
+		memory[IF] = valueIF & ~0x02;
 	}
 	else if (BIT2(valueIE) && BIT2(valueIF))	//Timer
 	{
@@ -951,7 +949,7 @@ void CPU::Interruptions(Instructions * inst)
 		Set_Halt(false);
 		Add_PC(-1);
 		inst->RST_n(0x50);
-		MemW(IF, valueIF & ~0x04);
+		memory[IF] = valueIF & ~0x04;
 	}
 	else if(BIT3(valueIE) && BIT3(valueIF))	//Serial
 	{
@@ -959,7 +957,7 @@ void CPU::Interruptions(Instructions * inst)
 		Set_Halt(false);
 		Add_PC(-1);
 		inst->RST_n(0x58);
-		MemW(IF, valueIF & ~0x08);
+		memory[IF] = valueIF & ~0x08;
 	}
 	else if (BIT4(valueIE) && BIT4(valueIF))	//Joypad
 	{
@@ -968,7 +966,7 @@ void CPU::Interruptions(Instructions * inst)
 		Set_Stop(false);
 		Add_PC(-1);
 		inst->RST_n(0x60);
-		MemW(IF, valueIF & ~0x10);
+		memory[IF] = valueIF & ~0x10;
 	}
 }
 
@@ -980,17 +978,17 @@ void CPU::UpdateTimer()
 	// maquina
 	WORD overflowTimer[] = {1024, 16, 64, 256};
 
-	if (BIT2(MemR(TAC))) //Si esta habilitado el timer
+	if (BIT2(memory[TAC])) //Si esta habilitado el timer
 	{
-		if (cyclesTimer >= overflowTimer[BITS01(MemR(TAC))])
+		if (cyclesTimer >= overflowTimer[BITS01(memory[TAC])])
 		{
-			if (MemR(TIMA) == 0xFF)
+			if (memory[TIMA] == 0xFF)
 			{
-				MemW(TIMA, MemR(TMA));
-				MemW(IF, MemR(IF) | 0x04);
+				memory[TIMA] = memory[TMA];
+				memory[IF] = memory[IF] | 0x04;
 			}
 			else
-				MemW(TIMA, MemR(TIMA) + 1);
+				memory[TIMA] = memory[TIMA] + 1;
 
 			cyclesTimer = 0;
 		}
@@ -998,7 +996,7 @@ void CPU::UpdateTimer()
 
 	if (cyclesDIV >= 256)
 	{
-		MemW(DIV, MemR(DIV) + 1, false);
+		memory[DIV] = memory[DIV] + 1;
 		cyclesDIV = 0;
 	}
 }

@@ -30,7 +30,7 @@ private:
 	void Interpreter();
 	BYTE CiclosInstruccion(WORD OpCode);
 	void OpCodeCB(Instructions * inst);
-	void TareasRutinarias();
+	void CyclicTasks();
 	void UpdateStateLCD();
 	void UpdateTimer();
 	void Interruptions(Instructions * inst);

@@ -9,10 +9,11 @@
 class Memory
 {
 private:
-	BYTE memory[SIZE_MEM];
 	Cartridge *c;
 private:
 	void DmaTransfer(BYTE direction);
+public:
+	BYTE memory[SIZE_MEM];
 public:
 	Memory();
 	~Memory();

@@ -56,12 +56,12 @@ string selectROM(int argc, char*argv[])
 
 	//fullPath = basePath + "32K/Alleyway (JUA) [!].gb";
 	//fullPath = basePath + "32K/Asteroids (UE).gb";
-	//fullPath = basePath + "32K/Boxxle (V1.1) (U) [!].gb";
+	//fullPath = basePath + "32K/Boxxle (V1.1) (U) [!].gb"; // Pass:BXBX
 	//fullPath = basePath + "32K/Boxxle II (U).gb";
 	//fullPath = basePath + "32K/Brainbender (U).gb";
 	//fullPath = basePath + "32K/Bubble Ghost (U).gb";
 	//fullPath = basePath + "32K/Castelian (U).gb";
-	//fullPath = basePath + "32K/Catrap (U).gb";
+	//fullPath = basePath + "32K/Catrap (U).gb"; // Password: 2ARW
 	//fullPath = basePath + "32K/Cool Ball (U).gb";
 	//fullPath = basePath + "32K/Crystal Quest (U).gb";
 	//fullPath = basePath + "32K/Daedalian Opus (U).gb";
@@ -110,8 +110,8 @@ string selectROM(int argc, char*argv[])
 	//fullPath = basePath + "PDRoms/Runtime - Test Rom (PD) [b1].gb";
 
 	//fullPath = basePath + "MBC1/Amazing Penguin (U).gb";
-	fullPath = basePath + "MBC1/Amazing Spider-Man, The (UE).gb";
-	//fullPath = basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb";
+	//fullPath = basePath + "MBC1/Amazing Spider-Man, The (UE).gb";
+	fullPath = basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb";
 	//fullPath = basePath + "MBC1/Castlevania Adventure, The (U).gb";
 	//fullPath = basePath + "MBC1/Pac-Man (U).gb";
 	//fullPath = basePath + "MBC1/Yoshi (U).gb";

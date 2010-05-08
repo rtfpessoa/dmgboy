@@ -274,8 +274,8 @@ void Instructions::SUB_n(e_registers place)
 
 	reg->Set_flagZ((reg->Get_A() - value) ? 0 : 1);
 	reg->Set_flagN(1);
-	((((int)reg->Get_A() & 0x0F) - (value & 0x0F)) < 0) ? reg->Set_flagH(1) : reg->Set_flagH(0);
-	((reg->Get_A() - value) < 0) ? reg->Set_flagC(1) : reg->Set_flagC(0);
+	reg->Set_flagH(((reg->Get_A() & 0x0F) < (value & 0x0F)) ? 1 : 0);
+	reg->Set_flagC((reg->Get_A() < value) ? 1 : 0);
 
 	reg->Set_A(reg->Get_A() - value);
 
@@ -604,10 +604,10 @@ void Instructions::DEC_n(e_registers place)
 		value = reg->Get_Reg(place) - 1;
 		reg->Set_Reg(place, value);
 	}
+	
 	reg->Set_flagZ(!value ? 1 : 0);
-	reg->Set_flagH(((value & 0x0F) == 0x0F) ? 1 : 0);
-	//reg->Set_flagH((value+1) ? 1 : 0);
 	reg->Set_flagN(1);
+	reg->Set_flagH(((value & 0x0F) == 0x0F) ? 1 : 0);
 
 	reg->Add_PC(1);
 }
@@ -780,14 +780,11 @@ void Instructions::SBC_A(e_registers place)
 		default:
 			aux = reg->Get_Reg(place) + reg->Get_flagC();
 	}
-
-	if (!(reg->Get_A() - aux))
-		reg->Set_flagZ(1);
-	else
-		reg->Set_flagZ(0);
+	
+	reg->Set_flagZ((reg->Get_A() - aux) ? 0 : 1);
 	reg->Set_flagN(1);
-	((reg->Get_A() & 0x0F) < (aux & 0x0F)) ? reg->Set_flagH(1) : reg->Set_flagH(0);
-	(reg->Get_A() < aux) ? reg->Set_flagC(1) : reg->Set_flagC(0);
+	reg->Set_flagH(((reg->Get_A() & 0x0F) < (aux & 0x0F)) ? 1 : 0);
+	reg->Set_flagC((reg->Get_A() < aux) ? 1 : 0);
 
 	reg->Set_A(reg->Get_A() - aux);
 
