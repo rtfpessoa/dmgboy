@@ -1,5 +1,6 @@
 #include "Log.h"
 #include <fstream>
+#include <string>
 using namespace std;
 
 QueueLog::QueueLog(int maxItems)

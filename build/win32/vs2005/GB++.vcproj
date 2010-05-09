@@ -196,6 +196,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\Log.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\MBC.cpp"
 				>
 			</File>
@@ -242,6 +246,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\Instructions.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\Log.h"
 				>
 			</File>
 			<File

@@ -111,7 +111,7 @@ string selectROM(int argc, char*argv[])
 
 	//fullPath = basePath + "MBC1/Amazing Penguin (U).gb";
 	//fullPath = basePath + "MBC1/Amazing Spider-Man, The (UE).gb";
-	fullPath = basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb";
+	//fullPath = basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb";
 	//fullPath = basePath + "MBC1/Castlevania Adventure, The (U).gb";
 	//fullPath = basePath + "MBC1/Pac-Man (U).gb";
 	//fullPath = basePath + "MBC1/Yoshi (U).gb";
@@ -139,7 +139,7 @@ string selectROM(int argc, char*argv[])
 	//fullPath = basePath + "MBC1/RAM/Super Mario Land 2 - 6 Golden Coins (UE) (v1.2).gb";
 	//fullPath = basePath + "MBC1/RAM/InfoGenius Systems - Personal Organizer (U).gb";
 
-	//fullPath = basePath + "MBC2/Final Fantasy Legend (Sa-Ga) (U) [!].gb";
+	fullPath = basePath + "MBC2/Final Fantasy Legend (Sa-Ga) (U) [!].gb";
 	//fullPath = basePath + "MBC2/Lazlos' Leap (U).gb";
 	//fullPath = basePath + "MBC2/Final Fantasy Adventure (U).gb";
 

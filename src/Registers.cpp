@@ -105,20 +105,20 @@ string Registers::ToString()
 {
 	stringstream out;
 	
-	out << "PC: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_PC()
+	/*out << "PC: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_PC()
 		<< ", AF: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_AF()
 		<< ", BC: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_BC()
 		<< ", DE: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_DE()
 		<< ", HL: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_HL()
 		<< ", SP: " << setfill('0') << setw(4) << uppercase << hex << (int) Get_SP()
-		<< ", H: " << Get_Halt() << ", S: " << Get_Stop() << ", I: " << Get_IME();
-	/*out << "PC = " << hex << (int)Get_PC()
+		<< ", H: " << Get_Halt() << ", S: " << Get_Stop() << ", I: " << Get_IME();*/
+	out << "PC = " << hex << (int)Get_PC()
 	<< " SP = " << hex << (int)Get_SP()
 	<< " AF = " << hex << (int)Get_AF()
 	<< " BC = " << hex << (int)Get_BC()
 	<< " DE = " << hex << (int)Get_DE()
 	<< " HL = " <<	hex << (int)Get_HL()
-	<< " Interrupts = " << Get_IME();*/
+	<< " Interrupts = " << Get_IME();
 
 	
 	return out.str();

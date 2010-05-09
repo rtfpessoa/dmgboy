@@ -14,7 +14,7 @@ CPU::CPU(Video *v, Cartridge *c)
 	this->v = v;
 	v->SetMem(this->GetPtrMemory());
 	LoadCartridge(c);
-	this->log = new QueueLog(1000000);
+	this->log = new QueueLog(500000);
 }
 
 CPU::~CPU()
@@ -45,21 +45,20 @@ void CPU::Interpreter()
 		OpCode = MemR(Get_PC());
         NextOpcode = MemR(Get_PC() + 1);
 		
-		/*stringstream ssOpCode;
-		ssOpCode << numCycles << " - ";
+		stringstream ssOpCode;
+		/*ssOpCode << numCycles << " - ";
 		ssOpCode << "OpCode: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
 		if (OpCode == 0xCB)
 			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
 		ssOpCode << ", ";
 		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");*/
-
+		
 		numCycles++;
 		
         //Counter-=Cycles[OpCode];
 		if (!Get_Halt() && !Get_Stop())
 			
-			/*stringstream ssOpCode;
-			ssOpCode << " FF80 = " << hex << (int)MemR(0xFF80) << " ";
+			/*ssOpCode << " FF80 = " << hex << (int)memory[0xFF80] << " ";
 			log->Enqueue("", this->GetPtrRegisters(), ssOpCode.str());*/
 		
 			switch(OpCode)
