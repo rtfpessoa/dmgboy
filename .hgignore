@@ -16,3 +16,4 @@ glob:*Xcode/build/*
 glob:build/mac/Xcode/GB++.xcodeproj/*.mode1v3
 glob:build/mac/Xcode/GB++.xcodeproj/*.pbxuser
 glob:build/mac/Xcode/GB++.xcodeproj/*.perspectivev3
+glob:build/win32/CodeBlocks/GB++.layout
