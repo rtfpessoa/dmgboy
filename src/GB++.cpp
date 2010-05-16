@@ -1,3 +1,20 @@
+/*
+ This file is part of gbpablog.
+ 
+ gbpablog is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ gbpablog is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 // GB++.cpp: define el punto de entrada de la aplicación de consola.
 //
 #include <iostream>
@@ -11,7 +28,9 @@ using namespace std;
 
 //Para evitar que el gcc en windows de un mensaje de error de referencia al linkar
 //WinMain16 no encontrada
-//#undef main
+#ifdef WIN32
+#undef main
+#endif
 
 //TODO:
 //	- Controlar la velocidad de pintado
@@ -30,9 +49,9 @@ using namespace std;
 string selectROM(int argc, char*argv[])
 {
 	string basePath, fullPath;
-	
+
 	cout << "argc: " << argc << endl;
-	
+
 	if (argc >= 2)
 	{
 		cout << "argv[1]: " << argv[1] << endl;
@@ -85,7 +104,7 @@ string selectROM(int argc, char*argv[])
 	//fullPath = basePath + "32K/Tesserae (U).gb";
 	//fullPath = basePath + "32K/Tetris (JUE) (v1.1).gb";
 	//fullPath = basePath + "32K/World Bowling (U).gb";
-	
+
 	//fullPath = basePath + "128K/4 in 1 Funpak Vol. II (U).gb";
 
 	//fullPath = basePath + "PDRoms/AsciiWars.gb";
@@ -111,7 +130,7 @@ string selectROM(int argc, char*argv[])
 
 	//fullPath = basePath + "MBC1/Amazing Penguin (U).gb";
 	//fullPath = basePath + "MBC1/Amazing Spider-Man, The (UE).gb";
-	//fullPath = basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb";
+	fullPath = basePath + "MBC1/Super Mario Land (JUE) (v1.1).gb";
 	//fullPath = basePath + "MBC1/Castlevania Adventure, The (U).gb";
 	//fullPath = basePath + "MBC1/Pac-Man (U).gb";
 	//fullPath = basePath + "MBC1/Yoshi (U).gb";
@@ -139,7 +158,7 @@ string selectROM(int argc, char*argv[])
 	//fullPath = basePath + "MBC1/RAM/Super Mario Land 2 - 6 Golden Coins (UE) (v1.2).gb";
 	//fullPath = basePath + "MBC1/RAM/InfoGenius Systems - Personal Organizer (U).gb";
 
-	fullPath = basePath + "MBC2/Final Fantasy Legend (Sa-Ga) (U) [!].gb";
+	//fullPath = basePath + "MBC2/Final Fantasy Legend (Sa-Ga) (U) [!].gb";
 	//fullPath = basePath + "MBC2/Lazlos' Leap (U).gb";
 	//fullPath = basePath + "MBC2/Final Fantasy Adventure (U).gb";
 
@@ -174,11 +193,10 @@ int main(int argc, char*argv[])
 		if (e.GetType() != Exit)
 			cerr << e.what() << endl;
 	}
-	
+
 	cpu.SaveLog();
 
 	v.Close();
 
 	return 0;
 }
-
