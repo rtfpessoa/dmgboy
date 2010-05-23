@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E027FC711A99EE6004160B8 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E027FC611A99EE6004160B8 /* SDL.framework */; };
+		6E02803211A9AD1F004160B8 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E02803111A9AD1F004160B8 /* SDLMain.m */; };
 		6E4393EB1076CA4100D8E68E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E4393EA1076CA4100D8E68E /* Cocoa.framework */; };
 		6EA6591E1168CA94002843C9 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EA6591D1168CA94002843C9 /* Log.cpp */; };
 		6EAF5FD01078E514006BAC2B /* Cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF5FBA1078E514006BAC2B /* Cartridge.cpp */; };
@@ -20,8 +22,6 @@
 		6EAF5FD81078E514006BAC2B /* Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF5FCA1078E514006BAC2B /* Registers.cpp */; };
 		6EAF5FD91078E514006BAC2B /* sdlVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF5FCC1078E514006BAC2B /* sdlVideo.cpp */; };
 		6EAF5FDA1078E514006BAC2B /* Video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF5FCE1078E514006BAC2B /* Video.cpp */; };
-		6EB554E01080F57E00955DED /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB554DF1080F57E00955DED /* libSDL.a */; };
-		6EB554E21080F59600955DED /* libSDLmain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB554E11080F59600955DED /* libSDLmain.a */; };
 		8DD76F6A0486A84900D96B5E /* GB++.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859E8B029090EE04C91782 /* GB++.1 */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +39,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6E027FC611A99EE6004160B8 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = Library/Frameworks/SDL.framework; sourceTree = SDKROOT; };
+		6E02803011A9AD1F004160B8 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLMain.h; path = ../../../src/mac/SDLMain.h; sourceTree = SOURCE_ROOT; };
+		6E02803111A9AD1F004160B8 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDLMain.m; path = ../../../src/mac/SDLMain.m; sourceTree = SOURCE_ROOT; };
 		6E4393EA1076CA4100D8E68E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		6EA6591C1168CA94002843C9 /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Log.h; path = ../../../src/Log.h; sourceTree = SOURCE_ROOT; };
 		6EA6591D1168CA94002843C9 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Log.cpp; path = ../../../src/Log.cpp; sourceTree = SOURCE_ROOT; };
@@ -64,8 +67,6 @@
 		6EAF5FCD1078E514006BAC2B /* sdlVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sdlVideo.h; path = ../../../src/sdlVideo.h; sourceTree = SOURCE_ROOT; };
 		6EAF5FCE1078E514006BAC2B /* Video.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Video.cpp; path = ../../../src/Video.cpp; sourceTree = SOURCE_ROOT; };
 		6EAF5FCF1078E514006BAC2B /* Video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Video.h; path = ../../../src/Video.h; sourceTree = SOURCE_ROOT; };
-		6EB554DF1080F57E00955DED /* libSDL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL.a; path = /usr/local/lib/libSDL.a; sourceTree = "<absolute>"; };
-		6EB554E11080F59600955DED /* libSDLmain.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDLmain.a; path = /usr/local/lib/libSDLmain.a; sourceTree = "<absolute>"; };
 		8DD76F6C0486A84900D96B5E /* GB++ */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "GB++"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6859E8B029090EE04C91782 /* GB++.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = "GB++.1"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -76,8 +77,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E4393EB1076CA4100D8E68E /* Cocoa.framework in Frameworks */,
-				6EB554E01080F57E00955DED /* libSDL.a in Frameworks */,
-				6EB554E21080F59600955DED /* libSDLmain.a in Frameworks */,
+				6E027FC711A99EE6004160B8 /* SDL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,12 +87,11 @@
 		08FB7794FE84155DC02AAC07 /* GB++ */ = {
 			isa = PBXGroup;
 			children = (
-				6EB554DF1080F57E00955DED /* libSDL.a */,
-				6EB554E11080F59600955DED /* libSDLmain.a */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859E8C029090F304C91782 /* Documentation */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
 				6E4393EA1076CA4100D8E68E /* Cocoa.framework */,
+				6E027FC611A99EE6004160B8 /* SDL.framework */,
 			);
 			name = "GB++";
 			sourceTree = "<group>";
@@ -100,6 +99,8 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				6E02803011A9AD1F004160B8 /* SDLMain.h */,
+				6E02803111A9AD1F004160B8 /* SDLMain.m */,
 				6EAF5FBA1078E514006BAC2B /* Cartridge.cpp */,
 				6EAF5FBB1078E514006BAC2B /* Cartridge.h */,
 				6EAF5FBC1078E514006BAC2B /* CPU.cpp */,
@@ -199,6 +200,7 @@
 				6EAF5FD91078E514006BAC2B /* sdlVideo.cpp in Sources */,
 				6EAF5FDA1078E514006BAC2B /* Video.cpp in Sources */,
 				6EA6591E1168CA94002843C9 /* Log.cpp in Sources */,
+				6E02803211A9AD1F004160B8 /* SDLMain.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,10 +244,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = __MAC__;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/QtGui.framework/Versions/4/Headers,
-					/usr/local/include/SDL,
-				);
+				HEADER_SEARCH_PATHS = /Library/Frameworks/SDL.framework/Headers;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;
@@ -261,10 +260,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = __MAC__;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/QtCore.framework/Versions/4/Headers,
-					/usr/local/include/SDL,
-				);
+				HEADER_SEARCH_PATHS = /usr/local/include/SDL;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;
