@@ -1,0 +1,17 @@
+# list of source files
+srcFiles = Glob('../../src/*.cpp')
+
+# create build environment
+env = Environment()
+
+# add additional compiler flags
+env.Append(CCFLAGS = ['-g', '-Wall'])
+
+if (env['PLATFORM'] == 'darwin'):
+	srcFiles += ['../../src/mac/SDLmain.m']
+	env.Append(CPPDEFINES = ['__MAC__'])
+	env.Append(CPPPATH = ['.', 'mac/', '/Library/Frameworks/SDL.framework/Headers'])
+	env.Append(FRAMEWORKS = ['SDL', 'Cocoa'])
+
+# build target
+env.Program(target = 'GB++', source = srcFiles)

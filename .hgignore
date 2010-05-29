@@ -19,3 +19,4 @@ glob:build/mac/Xcode/GB++.xcodeproj/*.perspectivev3
 glob:build/win32/CodeBlocks/GB++.layout
 glob:*.backup
 glob:*/log.txt
+build/SCons/.sconsign.dblite
