@@ -1,0 +1,481 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		6E23C6C511D7CA0C0043AF47 /* wxSDLApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6BF11D7CA0C0043AF47 /* wxSDLApp.cpp */; };
+		6E23C6C611D7CA0C0043AF47 /* wxSDLFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */; };
+		6E23C6C711D7CA0C0043AF47 /* wxSDLPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C311D7CA0C0043AF47 /* wxSDLPanel.cpp */; };
+		6E23C6DC11D7CB770043AF47 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E23C6DB11D7CB770043AF47 /* SDL.framework */; };
+		6E23C73511D7CD510043AF47 /* Cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C71D11D7CD510043AF47 /* Cartridge.cpp */; };
+		6E23C73611D7CD510043AF47 /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C71F11D7CD510043AF47 /* CPU.cpp */; };
+		6E23C73711D7CD510043AF47 /* GB++.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72211D7CD510043AF47 /* GB++.cpp */; };
+		6E23C73811D7CD510043AF47 /* GBException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72311D7CD510043AF47 /* GBException.cpp */; };
+		6E23C73911D7CD510043AF47 /* Instructions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72511D7CD510043AF47 /* Instructions.cpp */; };
+		6E23C73A11D7CD510043AF47 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72711D7CD510043AF47 /* Log.cpp */; };
+		6E23C73B11D7CD510043AF47 /* MBC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72911D7CD510043AF47 /* MBC.cpp */; };
+		6E23C73C11D7CD510043AF47 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72B11D7CD510043AF47 /* Memory.cpp */; };
+		6E23C73D11D7CD510043AF47 /* Pad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72D11D7CD510043AF47 /* Pad.cpp */; };
+		6E23C73E11D7CD510043AF47 /* Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72F11D7CD510043AF47 /* Registers.cpp */; };
+		6E23C73F11D7CD510043AF47 /* sdlVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C73111D7CD510043AF47 /* sdlVideo.cpp */; };
+		6E23C74011D7CD510043AF47 /* Video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C73311D7CD510043AF47 /* Video.cpp */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		6E23C6BE11D7CA0C0043AF47 /* wxIDControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxIDControls.h; sourceTree = "<group>"; };
+		6E23C6BF11D7CA0C0043AF47 /* wxSDLApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxSDLApp.cpp; sourceTree = "<group>"; };
+		6E23C6C011D7CA0C0043AF47 /* wxSDLApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSDLApp.h; sourceTree = "<group>"; };
+		6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxSDLFrame.cpp; sourceTree = "<group>"; };
+		6E23C6C211D7CA0C0043AF47 /* wxSDLFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSDLFrame.h; sourceTree = "<group>"; };
+		6E23C6C311D7CA0C0043AF47 /* wxSDLPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxSDLPanel.cpp; sourceTree = "<group>"; };
+		6E23C6C411D7CA0C0043AF47 /* wxSDLPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSDLPanel.h; sourceTree = "<group>"; };
+		6E23C6DB11D7CB770043AF47 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = Library/Frameworks/SDL.framework; sourceTree = SDKROOT; };
+		6E23C71D11D7CD510043AF47 /* Cartridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Cartridge.cpp; path = ../../../src/Cartridge.cpp; sourceTree = SOURCE_ROOT; };
+		6E23C71E11D7CD510043AF47 /* Cartridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cartridge.h; path = ../../../src/Cartridge.h; sourceTree = SOURCE_ROOT; };
+		6E23C71F11D7CD510043AF47 /* CPU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CPU.cpp; path = ../../../src/CPU.cpp; sourceTree = SOURCE_ROOT; };
+		6E23C72011D7CD510043AF47 /* CPU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPU.h; path = ../../../src/CPU.h; sourceTree = SOURCE_ROOT; };
+		6E23C72111D7CD510043AF47 /* Def.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Def.h; path = ../../../src/Def.h; sourceTree = SOURCE_ROOT; };
+		6E23C72211D7CD510043AF47 /* GB++.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "GB++.cpp"; path = "../../../src/GB++.cpp"; sourceTree = SOURCE_ROOT; };
+		6E23C72311D7CD510043AF47 /* GBException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GBException.cpp; path = ../../../src/GBException.cpp; sourceTree = SOURCE_ROOT; };
+		6E23C72411D7CD510043AF47 /* GBException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GBException.h; path = ../../../src/GBException.h; sourceTree = SOURCE_ROOT; };
+		6E23C72511D7CD510043AF47 /* Instructions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Instructions.cpp; path = ../../../src/Instructions.cpp; sourceTree = SOURCE_ROOT; };
+		6E23C72611D7CD510043AF47 /* Instructions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Instructions.h; path = ../../../src/Instructions.h; sourceTree = SOURCE_ROOT; };
+		6E23C72711D7CD510043AF47 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Log.cpp; path = ../../../src/Log.cpp; sourceTree = SOURCE_ROOT; };
+		6E23C72811D7CD510043AF47 /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Log.h; path = ../../../src/Log.h; sourceTree = SOURCE_ROOT; };
+		6E23C72911D7CD510043AF47 /* MBC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MBC.cpp; path = ../../../src/MBC.cpp; sourceTree = SOURCE_ROOT; };
+		6E23C72A11D7CD510043AF47 /* MBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBC.h; path = ../../../src/MBC.h; sourceTree = SOURCE_ROOT; };
+		6E23C72B11D7CD510043AF47 /* Memory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Memory.cpp; path = ../../../src/Memory.cpp; sourceTree = SOURCE_ROOT; };
+		6E23C72C11D7CD510043AF47 /* Memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Memory.h; path = ../../../src/Memory.h; sourceTree = SOURCE_ROOT; };
+		6E23C72D11D7CD510043AF47 /* Pad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Pad.cpp; path = ../../../src/Pad.cpp; sourceTree = SOURCE_ROOT; };
+		6E23C72E11D7CD510043AF47 /* Pad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Pad.h; path = ../../../src/Pad.h; sourceTree = SOURCE_ROOT; };
+		6E23C72F11D7CD510043AF47 /* Registers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Registers.cpp; path = ../../../src/Registers.cpp; sourceTree = SOURCE_ROOT; };
+		6E23C73011D7CD510043AF47 /* Registers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Registers.h; path = ../../../src/Registers.h; sourceTree = SOURCE_ROOT; };
+		6E23C73111D7CD510043AF47 /* sdlVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sdlVideo.cpp; path = ../../../src/sdlVideo.cpp; sourceTree = SOURCE_ROOT; };
+		6E23C73211D7CD510043AF47 /* sdlVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sdlVideo.h; path = ../../../src/sdlVideo.h; sourceTree = SOURCE_ROOT; };
+		6E23C73311D7CD510043AF47 /* Video.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Video.cpp; path = ../../../src/Video.cpp; sourceTree = SOURCE_ROOT; };
+		6E23C73411D7CD510043AF47 /* Video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Video.h; path = ../../../src/Video.h; sourceTree = SOURCE_ROOT; };
+		8D1107310486CEB800E47090 /* gbpablog-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "gbpablog-Info.plist"; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* gbpablog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gbpablog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				6E23C6DC11D7CB770043AF47 /* SDL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* gbpablog.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* gbpablog */ = {
+			isa = PBXGroup;
+			children = (
+				6E23C6BD11D7CA0C0043AF47 /* GUI */,
+				6E23C71411D7CD090043AF47 /* HW */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = gbpablog;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107310486CEB800E47090 /* gbpablog-Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6E23C6DB11D7CB770043AF47 /* SDL.framework */,
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6E23C6BD11D7CA0C0043AF47 /* GUI */ = {
+			isa = PBXGroup;
+			children = (
+				6E23C6BE11D7CA0C0043AF47 /* wxIDControls.h */,
+				6E23C6BF11D7CA0C0043AF47 /* wxSDLApp.cpp */,
+				6E23C6C011D7CA0C0043AF47 /* wxSDLApp.h */,
+				6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */,
+				6E23C6C211D7CA0C0043AF47 /* wxSDLFrame.h */,
+				6E23C6C311D7CA0C0043AF47 /* wxSDLPanel.cpp */,
+				6E23C6C411D7CA0C0043AF47 /* wxSDLPanel.h */,
+			);
+			name = GUI;
+			path = ../../../src/GUI;
+			sourceTree = SOURCE_ROOT;
+		};
+		6E23C71411D7CD090043AF47 /* HW */ = {
+			isa = PBXGroup;
+			children = (
+				6E23C71D11D7CD510043AF47 /* Cartridge.cpp */,
+				6E23C71E11D7CD510043AF47 /* Cartridge.h */,
+				6E23C71F11D7CD510043AF47 /* CPU.cpp */,
+				6E23C72011D7CD510043AF47 /* CPU.h */,
+				6E23C72111D7CD510043AF47 /* Def.h */,
+				6E23C72211D7CD510043AF47 /* GB++.cpp */,
+				6E23C72311D7CD510043AF47 /* GBException.cpp */,
+				6E23C72411D7CD510043AF47 /* GBException.h */,
+				6E23C72511D7CD510043AF47 /* Instructions.cpp */,
+				6E23C72611D7CD510043AF47 /* Instructions.h */,
+				6E23C72711D7CD510043AF47 /* Log.cpp */,
+				6E23C72811D7CD510043AF47 /* Log.h */,
+				6E23C72911D7CD510043AF47 /* MBC.cpp */,
+				6E23C72A11D7CD510043AF47 /* MBC.h */,
+				6E23C72B11D7CD510043AF47 /* Memory.cpp */,
+				6E23C72C11D7CD510043AF47 /* Memory.h */,
+				6E23C72D11D7CD510043AF47 /* Pad.cpp */,
+				6E23C72E11D7CD510043AF47 /* Pad.h */,
+				6E23C72F11D7CD510043AF47 /* Registers.cpp */,
+				6E23C73011D7CD510043AF47 /* Registers.h */,
+				6E23C73111D7CD510043AF47 /* sdlVideo.cpp */,
+				6E23C73211D7CD510043AF47 /* sdlVideo.h */,
+				6E23C73311D7CD510043AF47 /* Video.cpp */,
+				6E23C73411D7CD510043AF47 /* Video.h */,
+			);
+			name = HW;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* gbpablog */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "gbpablog" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = gbpablog;
+			productInstallPath = "$(HOME)/Applications";
+			productName = gbpablog;
+			productReference = 8D1107320486CEB800E47090 /* gbpablog.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "gbpablog" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* gbpablog */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* gbpablog */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E23C6C511D7CA0C0043AF47 /* wxSDLApp.cpp in Sources */,
+				6E23C6C611D7CA0C0043AF47 /* wxSDLFrame.cpp in Sources */,
+				6E23C6C711D7CA0C0043AF47 /* wxSDLPanel.cpp in Sources */,
+				6E23C73511D7CD510043AF47 /* Cartridge.cpp in Sources */,
+				6E23C73611D7CD510043AF47 /* CPU.cpp in Sources */,
+				6E23C73711D7CD510043AF47 /* GB++.cpp in Sources */,
+				6E23C73811D7CD510043AF47 /* GBException.cpp in Sources */,
+				6E23C73911D7CD510043AF47 /* Instructions.cpp in Sources */,
+				6E23C73A11D7CD510043AF47 /* Log.cpp in Sources */,
+				6E23C73B11D7CD510043AF47 /* MBC.cpp in Sources */,
+				6E23C73C11D7CD510043AF47 /* Memory.cpp in Sources */,
+				6E23C73D11D7CD510043AF47 /* Pad.cpp in Sources */,
+				6E23C73E11D7CD510043AF47 /* Registers.cpp in Sources */,
+				6E23C73F11D7CD510043AF47 /* sdlVideo.cpp in Sources */,
+				6E23C74011D7CD510043AF47 /* Video.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1DDD58140DA1D0A300B32029 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DDD58150DA1D0A300B32029 /* English */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = /Library/Frameworks/SDL.framework/Versions/A/Headers;
+				INFOPLIST_FILE = "gbpablog-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_CFLAGS = (
+					"-I$(WXWIN)/osx-build/lib/wx/include/mac-ansi-release-static-2.8",
+					"-I$(WXWIN)/include",
+					"-I$(WXWIN)/contrib/include",
+					"-D_FILE_OFFSET_BITS=64",
+					"-D_LARGE_FILES",
+					"-D__WXMAC__",
+				);
+				OTHER_LDFLAGS = (
+					"-L$(WXWIN)/osx-build/lib",
+					"-arch",
+					i386,
+					"-framework",
+					IOKit,
+					"-framework",
+					Carbon,
+					"-framework",
+					Cocoa,
+					"-framework",
+					System,
+					"-framework",
+					QuickTime,
+					"-framework",
+					OpenGL,
+					"-framework",
+					AGL,
+					"$(WXWIN)/osx-build/lib/libwx_mac_richtext-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_mac_aui-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_mac_xrc-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_mac_qa-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_mac_html-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_mac_adv-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_mac_core-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_base_carbon_xml-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_base_carbon_net-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_base_carbon-2.8.a",
+					"-framework",
+					WebKit,
+					"-lexpat",
+					"-lwxtiff-2.8",
+					"-lwxjpeg-2.8",
+					"-lwxpng-2.8",
+					"-lz",
+					"-lpthread",
+					"-liconv",
+				);
+				PRODUCT_NAME = gbpablog;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = /Library/Frameworks/SDL.framework/Versions/A/Headers;
+				INFOPLIST_FILE = "gbpablog-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_CFLAGS = (
+					"-I$(WXWIN)/osx-build/lib/wx/include/mac-ansi-release-static-2.8",
+					"-I$(WXWIN)/include",
+					"-I$(WXWIN)/contrib/include",
+					"-D_FILE_OFFSET_BITS=64",
+					"-D_LARGE_FILES",
+					"-D__WXMAC__",
+				);
+				OTHER_LDFLAGS = (
+					"-L$(WXWIN)/osx-build/lib",
+					"-arch",
+					i386,
+					"-framework",
+					IOKit,
+					"-framework",
+					Carbon,
+					"-framework",
+					Cocoa,
+					"-framework",
+					System,
+					"-framework",
+					QuickTime,
+					"-framework",
+					OpenGL,
+					"-framework",
+					AGL,
+					"$(WXWIN)/osx-build/lib/libwx_mac_richtext-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_mac_aui-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_mac_xrc-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_mac_qa-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_mac_html-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_mac_adv-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_mac_core-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_base_carbon_xml-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_base_carbon_net-2.8.a",
+					"$(WXWIN)/osx-build/lib/libwx_base_carbon-2.8.a",
+					"-framework",
+					WebKit,
+					"-lexpat",
+					"-lwxtiff-2.8",
+					"-lwxjpeg-2.8",
+					"-lwxpng-2.8",
+					"-lz",
+					"-lpthread",
+					"-liconv",
+				);
+				PRODUCT_NAME = gbpablog;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "gbpablog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "gbpablog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

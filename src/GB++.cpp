@@ -28,15 +28,13 @@ using namespace std;
 
 //Para evitar que el gcc en windows de un mensaje de error de referencia al linkar
 //WinMain16 no encontrada
-#ifdef WIN32
 #undef main
-#endif
 
 //TODO:
 //	- Controlar la velocidad de pintado
 //	- Guardar a disco duro la memoria de los cartuchos que llevan batería
 //	- Permitir Savestates en cualquier momento
-//	- Integrar interfaz gráfica (QT)
+//	- Integrar interfaz gráfica (wxWidgets)
 //	- Poder cambiar los botones del pad en cualquier momento
 //	- Sonido
 //	- Permitir cargar roms comprimidas en zip y 7z
@@ -169,7 +167,7 @@ string selectROM(int argc, char*argv[])
 	return fullPath;
 }
 
-int main(int argc, char*argv[])
+/*int main(int argc, char*argv[])
 {
 	Cartridge c(selectROM(argc, argv));
 
@@ -199,4 +197,4 @@ int main(int argc, char*argv[])
 	v.Close();
 
 	return 0;
-}
+}*/

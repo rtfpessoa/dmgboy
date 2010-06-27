@@ -20,3 +20,5 @@ glob:build/win32/CodeBlocks/GB++.layout
 glob:*.backup
 glob:*/log.txt
 build/SCons/.sconsign.dblite
+build/mac/Xcode/gbpablog.xcodeproj/pablo.pbxuser
+build/mac/Xcode/gbpablog.xcodeproj/pablo.perspectivev3
