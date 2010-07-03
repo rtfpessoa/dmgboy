@@ -21,18 +21,17 @@
 #include "Def.h"
 #include "Memory.h"
 #include "map"
-
-#define SCREEN_W 160
-#define SCREEN_H 144
+#include "wxSDLScreen.h"
 
 class Video
 {
 private:
 	Memory *mem;
 	std::multimap<int, int> orderedOAM;	//posicion x, dir. memoria
-	int indexColorsBGWnd[SCREEN_W][SCREEN_H];	//Indice de color en pantalla pintadas por background y window 
+	int indexColorsBGWnd[SCREEN_W][SCREEN_H];	//Indice de color en pantalla pintadas por background y window
+	SDLScreen * screen;
 public:
-	Video();
+	Video(SDLScreen * screen);
 	~Video(void);
 	void SetMem(Memory *mem);
 	void RefreshScreen();

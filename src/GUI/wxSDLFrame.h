@@ -16,7 +16,7 @@
  */
 
 #include <wx/wx.h>
-#include "wxSDLPanel.h"
+#include "wxSDLScreen.h"
 
 /*******************************************************************************
  // SDLFrame Class
@@ -27,7 +27,7 @@ class SDLFrame : public wxFrame {
     DECLARE_EVENT_TABLE()
     
 private:
-    SDLPanel *panel;
+    SDLScreen *panel;
     
     /**
      * Called when exit from the file menu is selected.
@@ -51,5 +51,5 @@ public:
      * @return The SDLPanel.
      */
 	
-	inline SDLPanel &getPanel() { return *panel; }
+	inline SDLScreen &getPanel() { return *panel; }
 };

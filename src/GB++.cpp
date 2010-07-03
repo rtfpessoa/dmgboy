@@ -28,20 +28,20 @@ using namespace std;
 
 //Para evitar que el gcc en windows de un mensaje de error de referencia al linkar
 //WinMain16 no encontrada
-#undef main
+//#undef main
 
 //TODO:
 //	- Controlar la velocidad de pintado
-//	- Guardar a disco duro la memoria de los cartuchos que llevan batería
+//	- Guardar a disco duro la memoria de los cartuchos que llevan bateria
 //	- Permitir Savestates en cualquier momento
-//	- Integrar interfaz gráfica (wxWidgets)
+//	- Integrar interfaz grafica (wxWidgets)
 //	- Poder cambiar los botones del pad en cualquier momento
 //	- Sonido
 //	- Permitir cargar roms comprimidas en zip y 7z
 //		http://www.winimage.com/zLibDll/minizip.html
 //		http://www.boost.org/doc/libs/1_41_0/libs/iostreams/doc/index.html
 //OK:
-//	- Revisar compilación en gcc
+//	- Revisar compilacion en gcc
 //	- Permitir cargar una rom por línea de comandos
 
 string selectROM(int argc, char*argv[])

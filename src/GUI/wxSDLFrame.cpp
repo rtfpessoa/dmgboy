@@ -52,7 +52,7 @@ SDLFrame::SDLFrame() {
     SetMenuBar(mb);
     
     // create the SDLPanel
-    panel = new SDLPanel(this);
+    panel = new SDLScreen(this);
 }
 
 void SDLFrame::onHelpAbout(wxCommandEvent &) {

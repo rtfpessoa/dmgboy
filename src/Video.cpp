@@ -17,13 +17,14 @@
 
 #include "Video.h"
 #include <iostream>
-#include "sdlVideo.h"
+#include "wxSDLScreen.h"
 
 using namespace std;
 
-Video::Video(void)
+Video::Video(SDLScreen * screen)
 {
-	onVideoInit(SCREEN_W, SCREEN_H);
+	this->screen = screen;
+	//onVideoInit(SCREEN_W, SCREEN_H);
 }
 
 Video::~Video(void)
@@ -33,7 +34,7 @@ Video::~Video(void)
 
 void Video::Close()
 {
-	onVideoClose();
+	//onVideoClose();
 }
 
 void Video::SetMem(Memory *mem)
@@ -43,19 +44,19 @@ void Video::SetMem(Memory *mem)
 
 void Video::UpdateLine(BYTE y)
 {
-	onVideoPreDraw();
+	screen->onVideoPreDraw();
 
 	OrderOAM(y);
 	UpdateBG(y);
 	UpdateWin(y);
 	UpdateOAM(y);
 
-	onVideoPostDraw();
+	screen->onVideoPostDraw();
 }
 
 void Video::RefreshScreen()
 {
-	onVideoRefreshScreen();
+	screen->onVideoRefreshScreen();
 }
 
 void Video::UpdateBG(int y)
@@ -86,7 +87,7 @@ void Video::UpdateBG(int y)
 		//pintamos la linea de blanco
 		if (!BIT7(valueLCDC) || !BIT0(valueLCDC))
 		{
-			onVideoDrawPixel(3, x, y);
+			screen->onVideoDrawPixel(3, x, y);
 			//DrawPixel(hideScreen, colors[0], x, y);
 			continue;
 		}
@@ -118,7 +119,7 @@ void Video::UpdateBG(int y)
 		indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
 		color = palette[indexColor];
 
-		onVideoDrawPixel(color, x, y);
+		screen->onVideoDrawPixel(color, x, y);
 		indexColorsBGWnd[x][y] = indexColor;
 	}
 }
@@ -178,7 +179,7 @@ void Video::UpdateWin(int y)
 		indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
 		color = palette[indexColor];
 
-		onVideoDrawPixel(color, x, y);
+		screen->onVideoDrawPixel(color, x, y);
 		indexColorsBGWnd[x][y] = indexColor;
 	}
 }
@@ -283,7 +284,7 @@ void Video::UpdateOAM(int y)
 					color = palette1[index];
 
 
-				onVideoDrawPixel(color, xSprite + countX, ySprite + countY);
+				screen->onVideoDrawPixel(color, xSprite + countX, ySprite + countY);
 			}
 
 			countX++;

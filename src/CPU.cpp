@@ -38,20 +38,15 @@ CPU::~CPU()
 {
 }
 
-void CPU::Run()
-{
-	Interpreter();
-}
-
 void CPU::Reset()
 {
 	ResetRegs();
 	ResetMem();
 }
 
-void CPU::Interpreter()
+void CPU::Run(unsigned long exitCycles)
 {
-	unsigned long numCycles = 0;
+	unsigned long actualCycles = 0;
 	BYTE OpCode = 0, NextOpcode = 0, lastOpCode = 0;
 
 	Instructions inst(this->GetPtrRegisters(), this->GetPtrMemory());
@@ -70,11 +65,9 @@ void CPU::Interpreter()
 		ssOpCode << ", ";
 		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");*/
 		
-		numCycles++;
-		
         //Counter-=Cycles[OpCode];
 		if (!Get_Halt() && !Get_Stop())
-			
+		{
 			/*ssOpCode << " FF80 = " << hex << (int)memory[0xFF80] << " ";
 			log->Enqueue("", this->GetPtrRegisters(), ssOpCode.str());*/
 		
@@ -347,18 +340,28 @@ void CPU::Interpreter()
 					throw GBException(out.str());
 			}
 
-        if (OpCode == 0xCB)
-            lastCycles = CiclosInstruccion((OpCode << 8) | NextOpcode);
-        else
-            lastCycles = CiclosInstruccion(OpCode);
+			if (OpCode == 0xCB)
+				lastCycles = CiclosInstruccion((OpCode << 8) | NextOpcode);
+			else
+				lastCycles = CiclosInstruccion(OpCode);
+		}
+		else
+		{
+			lastCycles = 8;
+		}
+
 
 		cyclesLCD += lastCycles;
 		cyclesTimer += lastCycles;
 		cyclesDIV += lastCycles;
 		cyclesPad += lastCycles;
+		actualCycles += lastCycles;
 
         CyclicTasks();
         Interruptions(&inst);
+		
+		if (exitCycles > actualCycles)
+			break;
 	}
 }
 

@@ -10,7 +10,7 @@
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		6E23C6C511D7CA0C0043AF47 /* wxSDLApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6BF11D7CA0C0043AF47 /* wxSDLApp.cpp */; };
 		6E23C6C611D7CA0C0043AF47 /* wxSDLFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */; };
-		6E23C6C711D7CA0C0043AF47 /* wxSDLPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C311D7CA0C0043AF47 /* wxSDLPanel.cpp */; };
+		6E23C6C711D7CA0C0043AF47 /* wxSDLScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C311D7CA0C0043AF47 /* wxSDLScreen.cpp */; };
 		6E23C6DC11D7CB770043AF47 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E23C6DB11D7CB770043AF47 /* SDL.framework */; };
 		6E23C73511D7CD510043AF47 /* Cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C71D11D7CD510043AF47 /* Cartridge.cpp */; };
 		6E23C73611D7CD510043AF47 /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C71F11D7CD510043AF47 /* CPU.cpp */; };
@@ -40,8 +40,8 @@
 		6E23C6C011D7CA0C0043AF47 /* wxSDLApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSDLApp.h; sourceTree = "<group>"; };
 		6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxSDLFrame.cpp; sourceTree = "<group>"; };
 		6E23C6C211D7CA0C0043AF47 /* wxSDLFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSDLFrame.h; sourceTree = "<group>"; };
-		6E23C6C311D7CA0C0043AF47 /* wxSDLPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxSDLPanel.cpp; sourceTree = "<group>"; };
-		6E23C6C411D7CA0C0043AF47 /* wxSDLPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSDLPanel.h; sourceTree = "<group>"; };
+		6E23C6C311D7CA0C0043AF47 /* wxSDLScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxSDLScreen.cpp; sourceTree = "<group>"; };
+		6E23C6C411D7CA0C0043AF47 /* wxSDLScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSDLScreen.h; sourceTree = "<group>"; };
 		6E23C6DB11D7CB770043AF47 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = Library/Frameworks/SDL.framework; sourceTree = SDKROOT; };
 		6E23C71D11D7CD510043AF47 /* Cartridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Cartridge.cpp; path = ../../../src/Cartridge.cpp; sourceTree = SOURCE_ROOT; };
 		6E23C71E11D7CD510043AF47 /* Cartridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cartridge.h; path = ../../../src/Cartridge.h; sourceTree = SOURCE_ROOT; };
@@ -166,8 +166,8 @@
 				6E23C6C011D7CA0C0043AF47 /* wxSDLApp.h */,
 				6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */,
 				6E23C6C211D7CA0C0043AF47 /* wxSDLFrame.h */,
-				6E23C6C311D7CA0C0043AF47 /* wxSDLPanel.cpp */,
-				6E23C6C411D7CA0C0043AF47 /* wxSDLPanel.h */,
+				6E23C6C311D7CA0C0043AF47 /* wxSDLScreen.cpp */,
+				6E23C6C411D7CA0C0043AF47 /* wxSDLScreen.h */,
 			);
 			name = GUI;
 			path = ../../../src/GUI;
@@ -261,7 +261,7 @@
 			files = (
 				6E23C6C511D7CA0C0043AF47 /* wxSDLApp.cpp in Sources */,
 				6E23C6C611D7CA0C0043AF47 /* wxSDLFrame.cpp in Sources */,
-				6E23C6C711D7CA0C0043AF47 /* wxSDLPanel.cpp in Sources */,
+				6E23C6C711D7CA0C0043AF47 /* wxSDLScreen.cpp in Sources */,
 				6E23C73511D7CD510043AF47 /* Cartridge.cpp in Sources */,
 				6E23C73611D7CD510043AF47 /* CPU.cpp in Sources */,
 				6E23C73711D7CD510043AF47 /* GB++.cpp in Sources */,
@@ -303,6 +303,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -368,6 +369,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_MODEL_TUNING = G5;
@@ -376,6 +378,7 @@
 				HEADER_SEARCH_PATHS = /Library/Frameworks/SDL.framework/Versions/A/Headers;
 				INFOPLIST_FILE = "gbpablog-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-I$(WXWIN)/osx-build/lib/wx/include/mac-ansi-release-static-2.8",
 					"-I$(WXWIN)/include",
@@ -448,6 +451,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				SDKROOT = macosx10.6;

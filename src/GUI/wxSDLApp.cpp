@@ -17,6 +17,7 @@
 
 #include <iostream>
 #include "wxSDLApp.h"
+#include "Def.h"
 
 IMPLEMENT_CLASS(SDLApp, wxApp)
 IMPLEMENT_APP(SDLApp)
@@ -24,7 +25,7 @@ IMPLEMENT_APP(SDLApp)
 bool SDLApp::OnInit() {
     // create the SDLFrame
     frame = new SDLFrame;
-    frame->SetClientSize(640, 480);
+    frame->SetClientSize(SCREEN_W, SCREEN_H);
     frame->Centre();
     frame->Show();
     

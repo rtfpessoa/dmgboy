@@ -40,11 +40,10 @@ public:
 	CPU(Video *v, Cartridge *c);
 	~CPU();
 	
-	void Run();
+	void Run(unsigned long exitCycles);
 	void Reset();
 	void SaveLog();
 private:
-	void Interpreter();
 	BYTE CiclosInstruccion(WORD OpCode);
 	void OpCodeCB(Instructions * inst);
 	void CyclicTasks();

@@ -21,6 +21,9 @@
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
 
+#define SCREEN_W 160
+#define SCREEN_H 144
+
 #define MAX_LCD_MODE_0 204    //201-207
 #define MAX_LCD_MODE_1 4560    //456 * 10 = 4560
 #define MAX_LCD_MODE_2 80     //77-83

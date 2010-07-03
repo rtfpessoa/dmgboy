@@ -15,6 +15,9 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __WXSDLSCREEN_H__
+#define __WXSDLSCREEN_H__
+
 #include <wx/wx.h>
 #include "SDL.h"
 
@@ -22,12 +25,14 @@
  * SDLPanel Class
  *******************************************************************************/
 
-class SDLPanel : public wxPanel {
-    DECLARE_CLASS(SDLPanel)
+class SDLScreen : public wxPanel {
+    DECLARE_CLASS(SDLScreen)
     DECLARE_EVENT_TABLE()
-    
+
 private:
+	Uint32 colors[4];
     SDL_Surface *screen;
+	SDL_Surface *hideScreen;
 	
     /**
      * Called to paint the panel.
@@ -55,10 +60,20 @@ public:
      *
      * @param parent The wxWindow parent.
      */
-    SDLPanel(wxWindow *parent);
+    SDLScreen(wxWindow *parent);
     
     /**
      * Destructor for the SDLPanel.
      */
-    ~SDLPanel();
+    ~SDLScreen();
+	
+	void onVideoPreDraw();
+	
+	void onVideoPostDraw();
+	
+	void onVideoDrawPixel(int idColor, int x, int y);
+	
+	void onVideoRefreshScreen();
 };
+
+#endif
