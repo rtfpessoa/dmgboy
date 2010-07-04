@@ -18,6 +18,7 @@
 #include <wx/dcbuffer.h>
 #include <wx/image.h>
 #include "wxSDLScreen.h"
+#include "wxSDLFrame.h"
 #include "wxIDControls.h"
 #include "Def.h"
 
@@ -37,6 +38,8 @@ SDLScreen::SDLScreen(wxWindow *parent) : wxPanel(parent, IDP_PANEL), screen(0) {
     
     SetMinSize(size);
     SetMaxSize(size);
+	
+	windowParent = parent;
 	
 	createScreen();
 }
@@ -94,34 +97,26 @@ void SDLScreen::onVideoPostDraw()
 
 void SDLScreen::onIdle(wxIdleEvent &) {
     
-    // refresh the panel
-    Refresh(false);
+	((SDLFrame *)windowParent)->cpu->Run(100000);
     
     // throttle to keep from flooding the event queue
-    wxMilliSleep(33);
+    //wxMilliSleep(33);
 }
 
 void SDLScreen::onVideoRefreshScreen()
 {
-	//Copiar la superficie oculta a la principal
-	SDL_BlitSurface(hideScreen, NULL, screen, NULL);
-	//Hacer el cambio
-	SDL_Flip(screen);
+	// refresh the panel
+    Refresh(false);
 }
 
 void SDLScreen::createScreen() {
     if (!screen) {
-        int width, height;
-        GetSize(&width, &height);
-        
-        screen = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 
+        screen = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_W, SCREEN_H, 
                                       24, 0, 0, 0, 0);
 		
 		//Inicializar un array con los 4 colores posibles (negro, gris oscuro, gris claro, blanco)
 		for (int i=0; i<4; i++)
 			colors[i] = SDL_MapRGB(screen->format, i*85, i*85, i*85);
-		
-		hideScreen = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 16, 0,0,0,0);
     }
 }
 
@@ -129,34 +124,19 @@ void SDLScreen::createScreen() {
 void SDLScreen::onVideoDrawPixel(int idColor, int x, int y)
 {
 	Uint32 color = colors[idColor];
-    int bpp = hideScreen->format->BytesPerPixel;
-    /* Here p is the address to the pixel we want to set */
-    Uint8 *p = (Uint8 *)hideScreen->pixels + y * hideScreen->pitch + x * bpp;
 	
-    switch(bpp) {
-		case 1:
-			*p = color;
-			break;
-			
-		case 2:
-			*(Uint16 *)p = color;
-			break;
-			
-		case 3:
-			if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-				p[0] = (color >> 16) & 0xff;
-				p[1] = (color >> 8) & 0xff;
-				p[2] = color & 0xff;
-			} else {
-				p[0] = color & 0xff;
-				p[1] = (color >> 8) & 0xff;
-				p[2] = (color >> 16) & 0xff;
-			}
-			break;
-			
-		case 4:
-			*(Uint32 *)p = color;
-			break;
-    }
+	wxUint8 *pixels = static_cast<wxUint8 *>(screen->pixels) + 
+	(y * screen->pitch) +
+	(x * screen->format->BytesPerPixel);
+	
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	pixels[0] = color & 0xFF;
+	pixels[1] = (color >> 8) & 0xFF;
+	pixels[2] = (color >> 16) & 0xFF;
+#else
+	pixels[0] = (color >> 16) & 0xFF;
+	pixels[1] = (color >> 8) & 0xFF;
+	pixels[2] = color & 0xFF;
+#endif
 	
 }

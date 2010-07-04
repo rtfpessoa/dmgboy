@@ -360,9 +360,10 @@ void CPU::Run(unsigned long exitCycles)
         CyclicTasks();
         Interruptions(&inst);
 		
-		if (exitCycles > actualCycles)
+		if (actualCycles > exitCycles)
 			break;
-	}
+		
+	}//end for
 }
 
 

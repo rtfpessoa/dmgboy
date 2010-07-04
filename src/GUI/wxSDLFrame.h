@@ -15,8 +15,12 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __WXSDLFRAME_H__
+#define __WXSDLFRAME_H__
+
 #include <wx/wx.h>
 #include "wxSDLScreen.h"
+#include "CPU.h"
 
 /*******************************************************************************
  // SDLFrame Class
@@ -33,13 +37,12 @@ private:
      * Called when exit from the file menu is selected.
      */
     inline void onFileExit(wxCommandEvent &) { Close(); }
-    
-    /**
-     * Called when about from the help menu is selected.
-     */
-    void onHelpAbout(wxCommandEvent &);
+	
+	void onFileLoad(wxCommandEvent &);
     
 public:
+	CPU * cpu;
+	
     /**
      * Creates a new SDLFrame.
      */
@@ -53,3 +56,5 @@ public:
 	
 	inline SDLScreen &getPanel() { return *panel; }
 };
+
+#endif

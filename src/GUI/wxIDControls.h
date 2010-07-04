@@ -21,5 +21,9 @@
 
 enum {
     IDF_FRAME = wxID_HIGHEST + 1,
-    IDP_PANEL
+    IDP_PANEL,
+	IDM_LOAD,
+	IDM_START,
+	IDM_PAUSE,
+	IDM_STOP
 };

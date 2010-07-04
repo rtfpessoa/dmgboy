@@ -15,6 +15,9 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __WXSDLAPP_H__
+#define __WXSDLAPP_H__
+
 #include <wx/wx.h>
 #include "wxSDLFrame.h"
 #undef main
@@ -51,3 +54,5 @@ public:
      */
     int OnExit();
 };
+
+#endif

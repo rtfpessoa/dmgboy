@@ -21,6 +21,7 @@
 #include <wx/wx.h>
 #include "SDL.h"
 
+
 /*******************************************************************************
  * SDLPanel Class
  *******************************************************************************/
@@ -30,9 +31,9 @@ class SDLScreen : public wxPanel {
     DECLARE_EVENT_TABLE()
 
 private:
+	wxWindow * windowParent;
 	Uint32 colors[4];
     SDL_Surface *screen;
-	SDL_Surface *hideScreen;
 	
     /**
      * Called to paint the panel.
