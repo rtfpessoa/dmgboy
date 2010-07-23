@@ -25,5 +25,6 @@ enum {
 	IDM_LOAD,
 	IDM_START,
 	IDM_PAUSE,
-	IDM_STOP
+	IDM_STOP,
+	IDT_TIMER
 };

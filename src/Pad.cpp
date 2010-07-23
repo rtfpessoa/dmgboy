@@ -15,113 +15,50 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/wx.h>
+#include <iostream>
 #include "Pad.h"
 #include "GBException.h"
-#include <iostream>
 using namespace std;
 
-static int	kR = SDLK_RIGHT;
-static int	kL = SDLK_LEFT;
-static int	kU = SDLK_UP;
-static int	kD = SDLK_DOWN;
-static int	kA = SDLK_a;
-static int	kB = SDLK_s;
-static int	kSE = SDLK_q;
-static int	kST = SDLK_w;
+enum e_gbpad { gbRIGHT, gbLEFT, gbUP, gbDOWN, gbA, gbB, gbSELECT, gbSTART };
 
-static BYTE joypad[8];
+static wxKeyCode keysUsed[] = { WXK_RIGHT, WXK_LEFT, WXK_UP, WXK_DOWN, (wxKeyCode)'A', (wxKeyCode)'S', (wxKeyCode)'Q', (wxKeyCode)'W' };
 
-int updateInput(int valueP1)
+static BYTE gbPadState[8];
+
+BYTE updateInput(BYTE valueP1)
 {
 	if(!BIT5(valueP1))
 		return ((valueP1 & 0x30) |
-			(!joypad[jSTART] << 3) | (!joypad[jSELECT] << 2) | (!joypad[jB] << 1) | (!joypad[jA]));
+			(!gbPadState[gbSTART] << 3) | (!gbPadState[gbSELECT] << 2) | (!gbPadState[gbB] << 1) | (!gbPadState[gbA]));
 
 	if(!BIT4(valueP1))
 		return ((valueP1 & 0x30) |
-			(!joypad[jDOWN] << 3) | (!joypad[jUP] << 2) | (!joypad[jLEFT] << 1) | (!joypad[jRIGHT]));
+			(!gbPadState[gbDOWN] << 3) | (!gbPadState[gbUP] << 2) | (!gbPadState[gbLEFT] << 1) | (!gbPadState[gbRIGHT]));
 
 	//Desactivar los botones
 	return 0x3F;
 }
 
-//Si devuelve 1 debe producirse una petici—n de interrupci—n
-//En caso negativo devolver‡ 0
-int checkKey(int eventType, SDLKey key, int *valueP1)
+// Devuelve 1 cuando se ha pulsado una tecla
+// 0 en caso contrario
+int checkKeyboard(BYTE * valueP1)
 {
-	const char * keyName;
-
-	keyName = SDL_GetKeyName(key);
-	bool pressed = (eventType == SDL_KEYDOWN);
-
-	if (key == kR)
-		joypad[jRIGHT] = pressed;
-	else if (key == kL)
-		joypad[jLEFT] = pressed;
-	else if (key == kA)
-		joypad[jA] = pressed;
-	else if (key == kB)
-		joypad[jB] = pressed;
-	else if (key == kSE)
-		joypad[jSELECT] = pressed;
-	else if (key == kST)
-		joypad[jSTART] = pressed;
-	else if (key == kU)
-		joypad[jUP] = pressed;
-	else if (key == kD)
-		joypad[jDOWN] = pressed;
-
-	*valueP1 = updateInput(*valueP1);
-
-	if (eventType == SDL_KEYDOWN)
+	
+	int interrupt = 0;
+	
+	for (int i=0; i<8; i++)
 	{
-		if(!BIT5(*valueP1))
-			if ((key == kA) || (key == kB) || (key == kSE) || (key == kST))
-				return 1;
-
-		if(!BIT4(*valueP1))
-			if ((key == kL) || (key == kR) || (key == kU) || (key == kD))
-				return 1;
-	}
-
-	return 0;
-}
-
-
-//Si devuelve 1 debe producirse una petici—n de interrupci—n
-//En caso negativo devolver‡ 0
-int onCheckKeyPad(int * valueP1)
-{
-	SDL_Event ev;
-
-	while( SDL_PollEvent( &ev ) )
-	{
-		switch(ev.type)
+		if ((gbPadState[i] == 0) && (wxGetKeyState(keysUsed[i]) == true))
 		{
-			case SDL_QUIT:
-				throw GBException("Close window", Exit);
-				break;
-			case SDL_KEYDOWN:
-				if (ev.key.keysym.sym == SDLK_ESCAPE)
-				{
-					cout << "Press ESC another time to exit or another key to continue" << endl;
-					while(true)
-					{
-						SDL_WaitEvent(&ev);
-						if (ev.type == SDL_KEYDOWN)
-						{
-							if (ev.key.keysym.sym == SDLK_ESCAPE)
-								throw GBException("2 consec. times ESC", Exit);
-							else
-								return 0;
-						}
-					}
-				}
-				//!!No hay break. Cuando SDL_KEYDOWN tambiŽn SDL_KEYUP
-			case SDL_KEYUP:
-				return checkKey(ev.type, ev.key.keysym.sym, valueP1);
-				break;
+			interrupt = 1;
 		}
+		
+		gbPadState[i] = wxGetKeyState(keysUsed[i]);
 	}
+	
+	*valueP1 = updateInput(*valueP1);
+	
 	return 0;
 }

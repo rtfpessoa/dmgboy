@@ -48,7 +48,7 @@ private:
     /**
      * Called to update the panel in idle time.
      */
-    void onIdle(wxIdleEvent &);
+    void onIdle(wxIdleEvent &event);
     
     /**
      * Creates the SDL_Surface used by this SDLPanel.

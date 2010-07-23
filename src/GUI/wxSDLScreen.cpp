@@ -95,10 +95,9 @@ void SDLScreen::onVideoPostDraw()
     }
 }
 
-void SDLScreen::onIdle(wxIdleEvent &) {
+void SDLScreen::onIdle(wxIdleEvent &event) {
     
-	((SDLFrame *)windowParent)->cpu->Run(100000);
-    
+	//event.RequestMore(true);
     // throttle to keep from flooding the event queue
     //wxMilliSleep(33);
 }

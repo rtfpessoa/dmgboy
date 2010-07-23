@@ -23,6 +23,7 @@ IMPLEMENT_CLASS(SDLFrame, wxFrame)
 BEGIN_EVENT_TABLE(SDLFrame, wxFrame)
 EVT_MENU(wxID_EXIT, SDLFrame::onFileExit)
 EVT_MENU(IDM_LOAD, SDLFrame::onFileLoad)
+EVT_TIMER(IDT_TIMER, SDLFrame::onProgressTimer)
 END_EVENT_TABLE()
 
 SDLFrame::SDLFrame() {
@@ -66,10 +67,12 @@ SDLFrame::SDLFrame() {
 	
 	
 	Cartridge * c = new Cartridge("/Users/pablo/Documents/Programacion/GB/ROMS/MBC1/Super Mario Land (JUE) (v1.1).gb");
-	
     Video * v = new Video(panel);
-	
 	cpu = new CPU(v, c);
+	
+	m_timer = new wxTimer(this, IDT_TIMER);
+	m_timer->Start(17);
+	
 }
 
 void SDLFrame::onFileLoad(wxCommandEvent &) {
@@ -77,3 +80,10 @@ void SDLFrame::onFileLoad(wxCommandEvent &) {
                  wxT("about wx-sdl tutorial"), wxOK | wxICON_INFORMATION);
 }
 
+void SDLFrame::onProgressTimer(wxTimerEvent& event)
+{
+	cpu->UpdatePad();
+	
+	cpu->Run(100000);
+	
+}

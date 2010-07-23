@@ -41,6 +41,7 @@ public:
 	~CPU();
 	
 	void Run(unsigned long exitCycles);
+	void UpdatePad();
 	void Reset();
 	void SaveLog();
 private:

@@ -834,15 +834,13 @@ void CPU::CyclicTasks()
 {
 	UpdateStateLCD();
 	UpdateTimer();
-	if (cyclesPad > 110500)
-	{
-		int valueP1 = memory[P1];
-		int interrupt = onCheckKeyPad(&valueP1);
-		memory[P1] = valueP1;
-		if (interrupt)
-			memory[IF] = memory[IF] | 0x10;
-		cyclesPad = 0;
-	}
+}
+
+void CPU::UpdatePad()
+{
+	int interrupt = checkKeyboard(&memory[P1]);
+	if (interrupt)
+		memory[IF] = memory[IF] | 0x10;
 }
 
 void CPU::UpdateStateLCD()

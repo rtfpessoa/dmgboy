@@ -37,11 +37,13 @@ private:
      * Called when exit from the file menu is selected.
      */
     inline void onFileExit(wxCommandEvent &) { Close(); }
-	
 	void onFileLoad(wxCommandEvent &);
+	void onProgressTimer(wxTimerEvent& event);
     
 public:
 	CPU * cpu;
+	
+	wxTimer * m_timer;
 	
     /**
      * Creates a new SDLFrame.
