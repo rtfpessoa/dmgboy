@@ -76,7 +76,7 @@ void SDLScreen::onPaint(wxPaintEvent &) {
     wxBufferedPaintDC dc(this, bmp);
 }
 
-void SDLScreen::onVideoPreDraw()
+void SDLScreen::onPreDraw()
 {
 	if ( SDL_MUSTLOCK(screen) )
     {
@@ -87,7 +87,7 @@ void SDLScreen::onVideoPreDraw()
     }
 }
 
-void SDLScreen::onVideoPostDraw()
+void SDLScreen::onPostDraw()
 {
 	if ( SDL_MUSTLOCK(screen) )
     {
@@ -102,7 +102,7 @@ void SDLScreen::onIdle(wxIdleEvent &event) {
     //wxMilliSleep(33);
 }
 
-void SDLScreen::onVideoRefreshScreen()
+void SDLScreen::onRefreshScreen()
 {
 	// refresh the panel
     Refresh(false);
@@ -119,8 +119,13 @@ void SDLScreen::createScreen() {
     }
 }
 
+void SDLScreen::onClear()
+{
+	SDL_FillRect( screen, NULL, 0 );
+}
+
 //idColor = 0, 1, 2, 3 = negro, gris oscuro, gris claro, blanco
-void SDLScreen::onVideoDrawPixel(int idColor, int x, int y)
+void SDLScreen::onDrawPixel(int idColor, int x, int y)
 {
 	Uint32 color = colors[idColor];
 	

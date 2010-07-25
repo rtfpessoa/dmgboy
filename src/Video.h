@@ -35,6 +35,7 @@ public:
 	~Video(void);
 	void SetMem(Memory *mem);
 	void RefreshScreen();
+	void ClearScreen();
 	void UpdateLine(BYTE line);
 	void Close();
 private:

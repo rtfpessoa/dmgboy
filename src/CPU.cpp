@@ -25,14 +25,25 @@
 
 using namespace std;
 
+CPU::CPU(Video *v)
+{
+	init(v);
+}
+
 CPU::CPU(Video *v, Cartridge *c)
+{
+	init(v);
+	LoadCartridge(c);
+}
+
+void CPU::init(Video *v)
 {
 	cyclesLCD = 0;
 	this->v = v;
 	v->SetMem(this->GetPtrMemory());
-	LoadCartridge(c);
-	this->log = new QueueLog(500000);
+	//this->log = new QueueLog(500000);
 }
+
 
 CPU::~CPU()
 {
@@ -42,10 +53,14 @@ void CPU::Reset()
 {
 	ResetRegs();
 	ResetMem();
+	v->ClearScreen();
 }
 
 void CPU::Run(unsigned long exitCycles)
 {
+	if (!this->c)
+		return;
+	
 	unsigned long actualCycles = 0;
 	BYTE OpCode = 0, NextOpcode = 0, lastOpCode = 0;
 
@@ -755,14 +770,14 @@ BYTE CPU::CiclosInstruccion(WORD OpCode)
         case (0xCB2E): valor = 16; break;
         case (0xCB36): valor = 16; break;
         case (0xCB3E): valor = 16; break;
-        case (0xCB46): valor = 12; break;//¿16?
-        case (0xCB4E): valor = 12; break;//¿16?
-        case (0xCB56): valor = 12; break;//¿16?
-        case (0xCB5E): valor = 12; break;//¿16?
-        case (0xCB66): valor = 12; break;//¿16?
-        case (0xCB6E): valor = 12; break;//¿16?
-        case (0xCB76): valor = 12; break;//¿16?
-        case (0xCB7E): valor = 12; break;//¿16?
+        case (0xCB46): valor = 12; break;//16?
+        case (0xCB4E): valor = 12; break;//16?
+        case (0xCB56): valor = 12; break;//16?
+        case (0xCB5E): valor = 12; break;//16?
+        case (0xCB66): valor = 12; break;//16?
+        case (0xCB6E): valor = 12; break;//16?
+        case (0xCB76): valor = 12; break;//16?
+        case (0xCB7E): valor = 12; break;//16?
         case (0xCB86): valor = 16; break;
         case (0xCB8E): valor = 16; break;
         case (0xCB96): valor = 16; break;
@@ -910,7 +925,7 @@ void CPU::UpdateStateLCD()
                 cyclesLCD = 0;
             }
             break;
-        case (3):	//Cuando OAM y memoria de video se estan usando (Se esta pasando información al LCD)
+        case (3):	//Cuando OAM y memoria de video se estan usando (Se esta pasando informacion al LCD)
             if (cyclesLCD > MAX_LCD_MODE_3)
             {
 				//Poner a 00 el flag (bits 0-1) del modo 0.

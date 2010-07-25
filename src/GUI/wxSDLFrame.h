@@ -31,14 +31,28 @@ class SDLFrame : public wxFrame {
     DECLARE_EVENT_TABLE()
     
 private:
+	wxMenuBar *mb;
+	wxToolBar* toolBar;
     SDLScreen *panel;
+	
+	enum enumEmuStates { NotStartedYet, Stopped, Paused, Playing };
+	
+	enumEmuStates emuState;
     
     /**
      * Called when exit from the file menu is selected.
      */
     inline void onFileExit(wxCommandEvent &) { Close(); }
-	void onFileLoad(wxCommandEvent &);
+	void onFileOpen(wxCommandEvent &);
+	void onStart(wxCommandEvent &);
+	void onPause(wxCommandEvent &);
+	void onStop(wxCommandEvent &);
+	void onStartUpdate(wxUpdateUIEvent& event);
+	void onPauseUpdate(wxUpdateUIEvent& event);
+	void onStopUpdate(wxUpdateUIEvent& event);
 	void onProgressTimer(wxTimerEvent& event);
+	void createMenuBar();
+	void createToolBar();
     
 public:
 	CPU * cpu;

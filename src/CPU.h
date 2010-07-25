@@ -37,6 +37,7 @@ private:
 	Video *v;
 	QueueLog *log;
 public:
+	CPU(Video *v);
 	CPU(Video *v, Cartridge *c);
 	~CPU();
 	
@@ -45,6 +46,7 @@ public:
 	void Reset();
 	void SaveLog();
 private:
+	void init(Video *v);
 	BYTE CiclosInstruccion(WORD OpCode);
 	void OpCodeCB(Instructions * inst);
 	void CyclicTasks();

@@ -20,6 +20,7 @@
 
 Memory::Memory()
 {
+	this->c = NULL;
 	ResetMem();
 }
 
@@ -27,10 +28,12 @@ Memory::~Memory()
 {
 }
 
-Memory *Memory::GetPtrMemory() {return this;}
+Memory *Memory::GetPtrMemory() { return this; }
 
 void Memory::LoadCartridge(Cartridge *c)
 {
+	if (this->c)
+		delete this->c;
 	this->c = c;
 }
 

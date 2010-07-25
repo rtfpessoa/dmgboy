@@ -25,7 +25,7 @@
 
 class Memory
 {
-private:
+protected:
 	Cartridge *c;
 private:
 	void DmaTransfer(BYTE direction);

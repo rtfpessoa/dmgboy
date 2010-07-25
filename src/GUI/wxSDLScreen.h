@@ -68,13 +68,15 @@ public:
      */
     ~SDLScreen();
 	
-	void onVideoPreDraw();
+	void onPreDraw();
 	
-	void onVideoPostDraw();
+	void onPostDraw();
 	
-	void onVideoDrawPixel(int idColor, int x, int y);
+	void onDrawPixel(int idColor, int x, int y);
 	
-	void onVideoRefreshScreen();
+	void onRefreshScreen();
+	
+	void onClear();
 };
 
 #endif
