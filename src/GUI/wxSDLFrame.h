@@ -34,6 +34,8 @@ private:
 	wxMenuBar *mb;
 	wxToolBar* toolBar;
     SDLScreen *panel;
+	Video * video;
+	Cartridge * cartridge;
 	
 	enum enumEmuStates { NotStartedYet, Stopped, Paused, Playing };
 	
@@ -42,7 +44,7 @@ private:
     /**
      * Called when exit from the file menu is selected.
      */
-    inline void onFileExit(wxCommandEvent &) { Close(); }
+    void onFileExit(wxCommandEvent &);
 	void onFileOpen(wxCommandEvent &);
 	void onStart(wxCommandEvent &);
 	void onPause(wxCommandEvent &);
@@ -64,6 +66,8 @@ public:
      */
     SDLFrame();
     
+	void Clean();
+	
     /**
      * Gets the SDLPanel within this SDLFrame.
      *

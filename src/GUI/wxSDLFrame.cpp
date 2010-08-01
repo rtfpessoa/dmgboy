@@ -49,8 +49,8 @@ SDLFrame::SDLFrame() {
     panel = new SDLScreen(this);
 	
 	
-    Video * v = new Video(panel);
-	cpu = new CPU(v);
+    video = new Video(panel);
+	cpu = new CPU(video);
 	
 	m_timer = new wxTimer(this, ID_TIMER);
 	m_timer->Start(17);
@@ -121,29 +121,36 @@ void SDLFrame::onFileOpen(wxCommandEvent &) {
 												_("Gameboy roms (*.gb)|*.gb"),
 												wxFD_OPEN, wxDefaultPosition);
 	
-	/*wxFileDialog* OpenDialog = new wxFileDialog(
-												this, _("Choose a file to open"), wxEmptyString, wxEmptyString, 
-												_("Text files (*.txt)|*.txt|C++ Source Files (*.cpp, *.cxx)|*.cpp;*.cxx|
-												  C Source files (*.c)|*.c|C header files (*.h)|*.h"),
-												wxFD_OPEN, wxDefaultPosition);*/
-	
 	// Creates a "open file" dialog with 4 file types
 	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 	{
 		cpu->Reset();
-		Cartridge * c = new Cartridge(OpenDialog->GetPath().c_str());
-		cpu->LoadCartridge(c);
+		if (cartridge)
+			delete cartridge;
+		cartridge = new Cartridge(OpenDialog->GetPath().c_str());
+		cpu->LoadCartridge(cartridge);
 		emuState = Playing;
-		/*mb->Enable(ID_START, true);
-		mb->Enable(ID_PAUSE, true);
-		mb->Enable(ID_STOP, true);
-		toolBar->EnableTool(ID_START, true);
-		toolBar->EnableTool(ID_PAUSE, true);
-		toolBar->EnableTool(ID_STOP, true);*/
 	}
 	
 	// Clean up after ourselves
 	OpenDialog->Destroy();
+}
+
+void SDLFrame::onFileExit(wxCommandEvent &)
+{
+	Clean();
+}
+
+void SDLFrame::Clean()
+{
+	emuState = Stopped;
+	m_timer->Stop();
+	delete cpu;
+	delete video;
+	if (cartridge)
+		delete cartridge;
+	
+	Close();
 }
 
 void SDLFrame::onStart(wxCommandEvent &)

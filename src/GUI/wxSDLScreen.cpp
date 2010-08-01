@@ -29,7 +29,7 @@ IMPLEMENT_CLASS(SDLScreen, wxPanel)
 BEGIN_EVENT_TABLE(SDLScreen, wxPanel)
 EVT_PAINT(SDLScreen::onPaint)
 EVT_ERASE_BACKGROUND(SDLScreen::onEraseBackground)
-EVT_IDLE(SDLScreen::onIdle)
+//EVT_IDLE(SDLScreen::onIdle)
 END_EVENT_TABLE()
 
 SDLScreen::SDLScreen(wxWindow *parent) : wxPanel(parent, IDP_PANEL), screen(0) {

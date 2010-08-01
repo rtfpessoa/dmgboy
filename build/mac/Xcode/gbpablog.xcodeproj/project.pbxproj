@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		6E205760120589BF00079331 /* gbpablog.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6E20575F120589BF00079331 /* gbpablog.icns */; };
 		6E23C6C511D7CA0C0043AF47 /* wxSDLApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6BF11D7CA0C0043AF47 /* wxSDLApp.cpp */; };
 		6E23C6C611D7CA0C0043AF47 /* wxSDLFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */; };
 		6E23C6C711D7CA0C0043AF47 /* wxSDLScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C311D7CA0C0043AF47 /* wxSDLScreen.cpp */; };
 		6E23C6DC11D7CB770043AF47 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E23C6DB11D7CB770043AF47 /* SDL.framework */; };
 		6E23C73511D7CD510043AF47 /* Cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C71D11D7CD510043AF47 /* Cartridge.cpp */; };
 		6E23C73611D7CD510043AF47 /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C71F11D7CD510043AF47 /* CPU.cpp */; };
-		6E23C73711D7CD510043AF47 /* GB++.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72211D7CD510043AF47 /* GB++.cpp */; };
 		6E23C73811D7CD510043AF47 /* GBException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72311D7CD510043AF47 /* GBException.cpp */; };
 		6E23C73911D7CD510043AF47 /* Instructions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72511D7CD510043AF47 /* Instructions.cpp */; };
 		6E23C73A11D7CD510043AF47 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72711D7CD510043AF47 /* Log.cpp */; };
@@ -38,6 +38,7 @@
 		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		6E20575F120589BF00079331 /* gbpablog.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = gbpablog.icns; sourceTree = "<group>"; };
 		6E23C6BE11D7CA0C0043AF47 /* wxIDControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxIDControls.h; sourceTree = "<group>"; };
 		6E23C6BF11D7CA0C0043AF47 /* wxSDLApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxSDLApp.cpp; sourceTree = "<group>"; };
 		6E23C6C011D7CA0C0043AF47 /* wxSDLApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSDLApp.h; sourceTree = "<group>"; };
@@ -51,7 +52,6 @@
 		6E23C71F11D7CD510043AF47 /* CPU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CPU.cpp; path = ../../../src/CPU.cpp; sourceTree = SOURCE_ROOT; };
 		6E23C72011D7CD510043AF47 /* CPU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPU.h; path = ../../../src/CPU.h; sourceTree = SOURCE_ROOT; };
 		6E23C72111D7CD510043AF47 /* Def.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Def.h; path = ../../../src/Def.h; sourceTree = SOURCE_ROOT; };
-		6E23C72211D7CD510043AF47 /* GB++.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "GB++.cpp"; path = "../../../src/GB++.cpp"; sourceTree = SOURCE_ROOT; };
 		6E23C72311D7CD510043AF47 /* GBException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GBException.cpp; path = ../../../src/GBException.cpp; sourceTree = SOURCE_ROOT; };
 		6E23C72411D7CD510043AF47 /* GBException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GBException.h; path = ../../../src/GBException.h; sourceTree = SOURCE_ROOT; };
 		6E23C72511D7CD510043AF47 /* Instructions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Instructions.cpp; path = ../../../src/Instructions.cpp; sourceTree = SOURCE_ROOT; };
@@ -146,6 +146,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6E20575F120589BF00079331 /* gbpablog.icns */,
 				8D1107310486CEB800E47090 /* gbpablog-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
@@ -190,7 +191,6 @@
 				6E23C71F11D7CD510043AF47 /* CPU.cpp */,
 				6E23C72011D7CD510043AF47 /* CPU.h */,
 				6E23C72111D7CD510043AF47 /* Def.h */,
-				6E23C72211D7CD510043AF47 /* GB++.cpp */,
 				6E23C72311D7CD510043AF47 /* GBException.cpp */,
 				6E23C72411D7CD510043AF47 /* GBException.h */,
 				6E23C72511D7CD510043AF47 /* Instructions.cpp */,
@@ -260,6 +260,7 @@
 				6EF945BE11FC886C000260D3 /* open.xpm in Resources */,
 				6EF945BF11FC886C000260D3 /* pause.xpm in Resources */,
 				6EF945C011FC886C000260D3 /* stop.xpm in Resources */,
+				6E205760120589BF00079331 /* gbpablog.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,7 +276,6 @@
 				6E23C6C711D7CA0C0043AF47 /* wxSDLScreen.cpp in Sources */,
 				6E23C73511D7CD510043AF47 /* Cartridge.cpp in Sources */,
 				6E23C73611D7CD510043AF47 /* CPU.cpp in Sources */,
-				6E23C73711D7CD510043AF47 /* GB++.cpp in Sources */,
 				6E23C73811D7CD510043AF47 /* GBException.cpp in Sources */,
 				6E23C73911D7CD510043AF47 /* Instructions.cpp in Sources */,
 				6E23C73A11D7CD510043AF47 /* Log.cpp in Sources */,

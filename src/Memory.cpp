@@ -32,8 +32,6 @@ Memory *Memory::GetPtrMemory() { return this; }
 
 void Memory::LoadCartridge(Cartridge *c)
 {
-	if (this->c)
-		delete this->c;
 	this->c = c;
 }
 
