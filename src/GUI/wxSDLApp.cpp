@@ -17,7 +17,7 @@
 
 #include <iostream>
 #include "wxSDLApp.h"
-#include "Def.h"
+#include "../Def.h"
 
 IMPLEMENT_CLASS(SDLApp, wxApp)
 IMPLEMENT_APP(SDLApp)
@@ -54,9 +54,9 @@ int SDLApp::OnRun() {
 }
 
 int SDLApp::OnExit() {
-	frame->Clean();
+	//frame->Clean();
     // cleanup SDL
-    SDL_Quit();
+    //SDL_Quit();
     
     // return the standard exit code
     return wxApp::OnExit();

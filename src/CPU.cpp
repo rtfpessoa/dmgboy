@@ -72,7 +72,7 @@ void CPU::Run(unsigned long exitCycles)
 		OpCode = MemR(Get_PC());
         NextOpcode = MemR(Get_PC() + 1);
 		
-		stringstream ssOpCode;
+		//stringstream ssOpCode;
 		/*ssOpCode << numCycles << " - ";
 		ssOpCode << "OpCode: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
 		if (OpCode == 0xCB)

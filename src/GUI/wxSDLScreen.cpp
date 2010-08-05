@@ -20,7 +20,7 @@
 #include "wxSDLScreen.h"
 #include "wxSDLFrame.h"
 #include "wxIDControls.h"
-#include "Def.h"
+#include "../Def.h"
 
 inline void SDLScreen::onEraseBackground(wxEraseEvent &) { /* do nothing */ }
 

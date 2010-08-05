@@ -21,12 +21,12 @@ using namespace std;
 
 GBException::GBException(): exception()
 {
-	newException("", Unknown);
+	newException("", GBUnknown);
 }
 
 GBException::GBException(string description): exception()
 {
-	newException(description, Unknown);
+	newException(description, GBUnknown);
 }
 
 GBException::GBException(string description, ExceptionType type): exception()

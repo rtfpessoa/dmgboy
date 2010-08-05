@@ -51,6 +51,8 @@ SDLFrame::SDLFrame() {
 	
     video = new Video(panel);
 	cpu = new CPU(video);
+
+	cartridge = NULL;
 	
 	m_timer = new wxTimer(this, ID_TIMER);
 	m_timer->Start(17);
@@ -66,8 +68,8 @@ void SDLFrame::createMenuBar()
     
     // create the file menu
     wxMenu *fileMenu = new wxMenu;
-    fileMenu->Append(wxID_EXIT, wxT("E&xit"));
 	fileMenu->Append(wxID_OPEN, wxT("&Open"));
+	fileMenu->Append(wxID_EXIT, wxT("E&xit"));
     
     // add the file menu to the menu bar
     mb->Append(fileMenu, wxT("&File"));

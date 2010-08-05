@@ -20,7 +20,7 @@
 
 #include <string>
 
-enum ExceptionType { Unknown, Error, Exit };
+enum ExceptionType { GBUnknown, GBError, GBExit };
 
 class GBException: public std::exception
 {

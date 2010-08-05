@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{4861e1cf-2efa-493e-ba9c-9c63b428d2ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HW">
+      <UniqueIdentifier>{8f6ade8e-23a1-4242-af58-42389df0e459}</UniqueIdentifier>
+      <Extensions>*.cpp</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\GUI\wxSDLScreen.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\wxIDControls.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\wxSDLApp.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\wxSDLFrame.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Video.h">
+      <Filter>HW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Cartridge.h">
+      <Filter>HW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\CPU.h">
+      <Filter>HW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Def.h">
+      <Filter>HW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GBException.h">
+      <Filter>HW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Instructions.h">
+      <Filter>HW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Log.h">
+      <Filter>HW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\MBC.h">
+      <Filter>HW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Memory.h">
+      <Filter>HW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Pad.h">
+      <Filter>HW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Registers.h">
+      <Filter>HW</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\GUI\wxSDLApp.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\wxSDLFrame.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\wxSDLScreen.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Cartridge.cpp">
+      <Filter>HW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\CPU.cpp">
+      <Filter>HW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GBException.cpp">
+      <Filter>HW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Instructions.cpp">
+      <Filter>HW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Log.cpp">
+      <Filter>HW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\MBC.cpp">
+      <Filter>HW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Memory.cpp">
+      <Filter>HW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Pad.cpp">
+      <Filter>HW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Registers.cpp">
+      <Filter>HW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Video.cpp">
+      <Filter>HW</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

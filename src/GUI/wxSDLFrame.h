@@ -20,7 +20,7 @@
 
 #include <wx/wx.h>
 #include "wxSDLScreen.h"
-#include "CPU.h"
+#include "../CPU.h"
 
 /*******************************************************************************
  // SDLFrame Class

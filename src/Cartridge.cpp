@@ -33,7 +33,7 @@ Cartridge::Cartridge(string path)
 	if (file.is_open())
 	{
 		size = file.tellg();
-		this->_RomSize = size;
+		this->_RomSize = (unsigned int)size;
 		_memCartridge = new BYTE [size];
 		file.seekg (0, ios::beg);
 		file.read ((char *)_memCartridge, size);

@@ -17,7 +17,7 @@
 
 #include "Video.h"
 #include <iostream>
-#include "wxSDLScreen.h"
+#include "GUI/wxSDLScreen.h"
 
 using namespace std;
 
@@ -180,7 +180,7 @@ void Video::UpdateWin(int y)
 
 		BYTE pixX = (BYTE)abs((int)x_tile - 7);
 		//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
-		//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
+		//Esto devolvera un numero de color que junto a la paleta de color nos dara el color requerido
 		indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
 		color = palette[indexColor];
 
@@ -276,7 +276,7 @@ void Video::UpdateOAM(int y)
 
 			int pixX = abs((int)xTile - 7);
 			//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
-			//Esto devolverá un numero de color que junto a la paleta de color nos dará el color requerido
+			//Esto devolvera un numero de color que junto a la paleta de color nos dara el color requerido
 			BYTE index = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
 
 			//El 0 es transparente (no pintar)

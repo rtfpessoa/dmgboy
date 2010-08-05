@@ -21,7 +21,7 @@
 #include "Def.h"
 #include "Memory.h"
 #include "map"
-#include "wxSDLScreen.h"
+#include "GUI/wxSDLScreen.h"
 
 class Video
 {
