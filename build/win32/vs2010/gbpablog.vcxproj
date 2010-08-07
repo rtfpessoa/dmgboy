@@ -42,6 +42,9 @@
     <ClCompile Include="..\..\..\src\Registers.cpp" />
     <ClCompile Include="..\..\..\src\Video.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\src\GUI\Windows\gbpablog.rc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F8EA2224-322E-4208-BDE5-3DF28CEB5100}</ProjectGuid>
     <RootNamespace>GB</RootNamespace>
@@ -110,6 +113,9 @@
       <AdditionalLibraryDirectories>$(WXWIN)\lib\vc_lib</AdditionalLibraryDirectories>
       <Profile>true</Profile>
     </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

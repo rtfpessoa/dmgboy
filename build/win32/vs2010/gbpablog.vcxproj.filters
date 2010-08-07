@@ -97,4 +97,9 @@
       <Filter>HW</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\src\GUI\Windows\gbpablog.rc">
+      <Filter>GUI</Filter>
+    </ResourceCompile>
+  </ItemGroup>
 </Project>

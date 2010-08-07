@@ -21,6 +21,7 @@
 #include "play.xpm"
 #include "pause.xpm"
 #include "stop.xpm"
+#include "gb16.xpm"
 
 IMPLEMENT_CLASS(SDLFrame, wxFrame)
 
@@ -41,6 +42,8 @@ SDLFrame::SDLFrame() {
     Create(0, IDF_FRAME, wxT("gbpablog"), wxDefaultPosition,
            wxDefaultSize, wxCAPTION | wxSYSTEM_MENU | 
            wxMINIMIZE_BOX | wxCLOSE_BOX);
+
+	SetIcon(wxIcon(gb16_xpm));
 	
     createMenuBar();
 	createToolBar();
