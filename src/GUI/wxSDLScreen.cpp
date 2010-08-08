@@ -29,7 +29,6 @@ IMPLEMENT_CLASS(SDLScreen, wxPanel)
 BEGIN_EVENT_TABLE(SDLScreen, wxPanel)
 EVT_PAINT(SDLScreen::onPaint)
 EVT_ERASE_BACKGROUND(SDLScreen::onEraseBackground)
-//EVT_IDLE(SDLScreen::onIdle)
 END_EVENT_TABLE()
 
 SDLScreen::SDLScreen(wxWindow *parent) : wxPanel(parent, IDP_PANEL), screen(0) {
@@ -93,13 +92,6 @@ void SDLScreen::onPostDraw()
     {
         SDL_UnlockSurface(screen);
     }
-}
-
-void SDLScreen::onIdle(wxIdleEvent &event) {
-    
-	//event.RequestMore(true);
-    // throttle to keep from flooding the event queue
-    //wxMilliSleep(33);
 }
 
 void SDLScreen::onRefreshScreen()

@@ -34,10 +34,11 @@ EVT_MENU(ID_STOP, SDLFrame::onStop)
 EVT_UPDATE_UI( ID_START, SDLFrame::onStartUpdate )
 EVT_UPDATE_UI( ID_PAUSE, SDLFrame::onPauseUpdate )
 EVT_UPDATE_UI( ID_STOP, SDLFrame::onStopUpdate )
-EVT_TIMER(ID_TIMER, SDLFrame::onProgressTimer)
+EVT_IDLE(SDLFrame::onIdle)
 END_EVENT_TABLE()
 
-SDLFrame::SDLFrame() {
+SDLFrame::SDLFrame()
+{
     // Create the SDLFrame
     Create(0, IDF_FRAME, wxT("gbpablog"), wxDefaultPosition,
            wxDefaultSize, wxCAPTION | wxSYSTEM_MENU | 
@@ -56,9 +57,6 @@ SDLFrame::SDLFrame() {
 	cpu = new CPU(video);
 
 	cartridge = NULL;
-	
-	m_timer = new wxTimer(this, ID_TIMER);
-	m_timer->Start(17);
 	
 	emuState = NotStartedYet;
 	
@@ -149,7 +147,6 @@ void SDLFrame::onFileExit(wxCommandEvent &)
 void SDLFrame::Clean()
 {
 	emuState = Stopped;
-	m_timer->Stop();
 	delete cpu;
 	delete video;
 	if (cartridge)
@@ -211,13 +208,33 @@ void SDLFrame::onStopUpdate(wxUpdateUIEvent& event)
 
 }
 
-void SDLFrame::onProgressTimer(wxTimerEvent& event)
+void SDLFrame::onIdle(wxIdleEvent &event)
 {
-	if (emuState == Playing)
+	long duration = 16;
+	
+	long lastDuration = swFrame.Time();
+	swFrame.Start();
+	//printf("The slow boring function took %ldms to execute\n", lastDuration);
+	
+	long delay = 0;
+	
+	if (lastDuration > duration)
+		delay = lastDuration - duration;
+	
+    if (emuState == Playing)
 	{
+		swExecution.Start();
+		
 		cpu->UpdatePad();
 		
-		cpu->Run(100000);
+		cpu->Run(70149);
+		
+		delay += swExecution.Time();
 	}
 	
+	if (delay > duration)
+		delay = duration;
+	
+	event.RequestMore(true);
+    wxMilliSleep(duration-delay);
 }

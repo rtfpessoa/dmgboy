@@ -52,14 +52,15 @@ private:
 	void onStartUpdate(wxUpdateUIEvent& event);
 	void onPauseUpdate(wxUpdateUIEvent& event);
 	void onStopUpdate(wxUpdateUIEvent& event);
-	void onProgressTimer(wxTimerEvent& event);
+	void onIdle(wxIdleEvent &event);
 	void createMenuBar();
 	void createToolBar();
     
 public:
 	CPU * cpu;
 	
-	wxTimer * m_timer;
+	wxStopWatch swExecution;
+	wxStopWatch swFrame;
 	
     /**
      * Creates a new SDLFrame.

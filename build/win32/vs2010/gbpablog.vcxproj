@@ -111,7 +111,7 @@
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalLibraryDirectories>$(WXWIN)\lib\vc_lib</AdditionalLibraryDirectories>
-      <Profile>true</Profile>
+      <Profile>false</Profile>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc</AdditionalIncludeDirectories>
