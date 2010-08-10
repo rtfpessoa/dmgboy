@@ -55,6 +55,8 @@ private:
 	void onIdle(wxIdleEvent &event);
 	void createMenuBar();
 	void createToolBar();
+	
+	void Clean();
     
 public:
 	CPU * cpu;
@@ -66,8 +68,7 @@ public:
      * Creates a new SDLFrame.
      */
     SDLFrame();
-    
-	void Clean();
+	~SDLFrame();
 	
     /**
      * Gets the SDLPanel within this SDLFrame.

@@ -62,6 +62,11 @@ SDLFrame::SDLFrame()
 	
 }
 
+SDLFrame::~SDLFrame()
+{
+	Clean();
+}
+
 void SDLFrame::createMenuBar()
 {
 	// create the main menubar
@@ -93,10 +98,6 @@ void SDLFrame::createMenuBar()
     
     // add the menu bar to the SDLFrame
     SetMenuBar(mb);
-    
-	/*mb->Enable(ID_START, false);
-	mb->Enable(ID_PAUSE, false);
-	mb->Enable(ID_STOP, false);*/
 }
 
 void SDLFrame::createToolBar()
@@ -105,16 +106,18 @@ void SDLFrame::createToolBar()
 	toolBar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxNO_BORDER);
 	wxBitmap bmpOpen(open_xpm);
 	toolBar->AddTool(wxID_OPEN, bmpOpen, wxT("Open"));
+	
 	toolBar->AddSeparator();
+	
 	wxBitmap bmpPlay(play_xpm);
 	toolBar->AddTool(ID_START, bmpPlay, wxT("Start"));
-	//toolBar->EnableTool(ID_START, false);
+
 	wxBitmap bmpPause(pause_xpm);
 	toolBar->AddTool(ID_PAUSE, bmpPause, wxT("Pause"));
-	//toolBar->EnableTool(ID_PAUSE, false);
+	
 	wxBitmap bmpStop(stop_xpm);
 	toolBar->AddTool(ID_STOP, bmpStop, wxT("Stop"));
-	//toolBar->EnableTool(ID_STOP, false);
+	
 	toolBar->Realize();
 	SetToolBar(toolBar);
 }
@@ -124,7 +127,7 @@ void SDLFrame::onFileOpen(wxCommandEvent &) {
 												_("Gameboy roms (*.gb)|*.gb"),
 												wxFD_OPEN, wxDefaultPosition);
 	
-	// Creates a "open file" dialog with 4 file types
+	// Creates a "open file" dialog
 	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 	{
 		cpu->Reset();
@@ -141,7 +144,7 @@ void SDLFrame::onFileOpen(wxCommandEvent &) {
 
 void SDLFrame::onFileExit(wxCommandEvent &)
 {
-	Clean();
+	Close();
 }
 
 void SDLFrame::Clean()
@@ -151,8 +154,6 @@ void SDLFrame::Clean()
 	delete video;
 	if (cartridge)
 		delete cartridge;
-	
-	Close();
 }
 
 void SDLFrame::onPlay(wxCommandEvent &)
@@ -208,13 +209,20 @@ void SDLFrame::onStopUpdate(wxUpdateUIEvent& event)
 
 }
 
+/**
+ * Esta funcion se encarga de dar la orden de hacer aproximadamente los calculos
+ * de la emulacion de un frame, pero lo hara cuando la interfaz haya terminado de
+ * procesar todos los eventos. Se quiere que pinte los frames cada 16.6 milisegundos
+ * (60 frames por segundo). Para ello se tiene en cuenta el tiempo que hace que se
+ * llamo por ultima vez a esta funcion y el tiempo que ha tardado la emulacion en
+ * calcularse.
+ */
 void SDLFrame::onIdle(wxIdleEvent &event)
 {
 	long duration = 16;
 	
 	long lastDuration = swFrame.Time();
 	swFrame.Start();
-	//printf("The slow boring function took %ldms to execute\n", lastDuration);
 	
 	long delay = 0;
 	

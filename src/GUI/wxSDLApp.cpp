@@ -45,20 +45,13 @@ int SDLApp::OnRun() {
         
         return -1;
     }
-    
-    // generate an initial idle event to start things
-    //wxIdleEvent event;
-    //event.SetEventObject(&frame->getPanel());
-    //frame->getPanel().AddPendingEvent(event);
 	
     // start the main loop
     return wxApp::OnRun();
 }
 
 int SDLApp::OnExit() {
-	//frame->Clean();
-    // cleanup SDL
-    //SDL_Quit();
+    SDL_Quit();
     
     // return the standard exit code
     return wxApp::OnExit();
