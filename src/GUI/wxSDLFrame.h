@@ -46,10 +46,10 @@ private:
      */
     void onFileExit(wxCommandEvent &);
 	void onFileOpen(wxCommandEvent &);
-	void onStart(wxCommandEvent &);
+	void onPlay(wxCommandEvent &);
 	void onPause(wxCommandEvent &);
 	void onStop(wxCommandEvent &);
-	void onStartUpdate(wxUpdateUIEvent& event);
+	void onPlayUpdate(wxUpdateUIEvent& event);
 	void onPauseUpdate(wxUpdateUIEvent& event);
 	void onStopUpdate(wxUpdateUIEvent& event);
 	void onIdle(wxIdleEvent &event);

@@ -28,10 +28,10 @@ IMPLEMENT_CLASS(SDLFrame, wxFrame)
 BEGIN_EVENT_TABLE(SDLFrame, wxFrame)
 EVT_MENU(wxID_EXIT, SDLFrame::onFileExit)
 EVT_MENU(wxID_OPEN, SDLFrame::onFileOpen)
-EVT_MENU(ID_START, SDLFrame::onStart)
+EVT_MENU(ID_START, SDLFrame::onPlay)
 EVT_MENU(ID_PAUSE, SDLFrame::onPause)
 EVT_MENU(ID_STOP, SDLFrame::onStop)
-EVT_UPDATE_UI( ID_START, SDLFrame::onStartUpdate )
+EVT_UPDATE_UI( ID_START, SDLFrame::onPlayUpdate )
 EVT_UPDATE_UI( ID_PAUSE, SDLFrame::onPauseUpdate )
 EVT_UPDATE_UI( ID_STOP, SDLFrame::onStopUpdate )
 EVT_IDLE(SDLFrame::onIdle)
@@ -155,7 +155,7 @@ void SDLFrame::Clean()
 	Close();
 }
 
-void SDLFrame::onStart(wxCommandEvent &)
+void SDLFrame::onPlay(wxCommandEvent &)
 {
 	emuState = Playing;
 }
@@ -175,9 +175,9 @@ void SDLFrame::onStop(wxCommandEvent &)
 	emuState = Stopped;
 }
 
-void SDLFrame::onStartUpdate(wxUpdateUIEvent& event)
+void SDLFrame::onPlayUpdate(wxUpdateUIEvent& event)
 {
-	if (emuState == NotStartedYet) {
+	if ((emuState == NotStartedYet) || (emuState == Playing)){
 		event.Enable(false);
 	}
 	else {
