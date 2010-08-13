@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="../../../src/GUI/gb16.xpm" open="0" top="0" tabpos="0">
+		<Cursor position="439" topLine="0" />
+	</File>
+	<File name="../../../src/GUI/wxSDLApp.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1114" topLine="30" />
+	</File>
+	<File name="../../../src/GUI/wxSDLFrame.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3698" topLine="125" />
+	</File>
+	<File name="../../../src/GUI/wxSDLScreen.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2748" topLine="103" />
+	</File>
+	<File name="../../../src/GUI/wxSDLScreen.h" open="0" top="0" tabpos="0">
+		<Cursor position="726" topLine="0" />
+	</File>
+	<File name="../../../src/Memory.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="711" topLine="15" />
+	</File>
+</CodeBlocks_layout_file>
