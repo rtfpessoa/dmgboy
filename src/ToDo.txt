@@ -1,4 +1,3 @@
-- Revisar versiones linux y windows
 - Poder cambiar los botones del pad en cualquier momento: fichero + interfaz gráfica
 - Hacer la pantalla más grande (2x, 4x, etc)
 - Guardar a disco duro la memoria de los cartuchos que llevan bateria
