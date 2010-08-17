@@ -41,9 +41,11 @@ void CPU::init(Video *v)
 	cyclesLCD = 0;
 	this->v = v;
 	v->SetMem(this->GetPtrMemory());
-	//this->log = new QueueLog(500000);
+	
 	FillInstructionCycles();
 	FillInstructionCyclesCB();
+	
+	//this->log = new QueueLog(500000);
 }
 
 
@@ -83,6 +85,8 @@ void CPU::Run(unsigned long exitCycles)
 		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");*/
 		
         //Counter-=Cycles[OpCode];
+		lastCycles = 4;
+		
 		if (!Get_Halt() && !Get_Stop())
 		{
 			/*ssOpCode << " FF80 = " << hex << (int)memory[0xFF80] << " ";
@@ -362,11 +366,6 @@ void CPU::Run(unsigned long exitCycles)
 			else
 				lastCycles = instructionCycles[OpCode];
 		}
-		else
-		{
-			lastCycles = 8;
-		}
-
 
 		cyclesLCD += lastCycles;
 		cyclesTimer += lastCycles;
