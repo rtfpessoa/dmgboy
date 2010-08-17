@@ -36,6 +36,8 @@ private:
 	int cyclesPad;
 	Video *v;
 	QueueLog *log;
+	BYTE instructionCycles[0xFF];
+	BYTE instructionCyclesCB[0xFF];
 public:
 	CPU(Video *v, Cartridge *c);
 	~CPU();
@@ -45,7 +47,8 @@ public:
 	void SaveLog();
 private:
 	void Interpreter();
-	BYTE CiclosInstruccion(WORD OpCode);
+	void FillInstructionCycles();
+	void FillInstructionCyclesCB();
 	void OpCodeCB(Instructions * inst);
 	void CyclicTasks();
 	void UpdateStateLCD();
