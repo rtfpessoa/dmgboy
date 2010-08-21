@@ -237,7 +237,8 @@ void SDLFrame::onIdle(wxIdleEvent &event)
 
 		cpu->UpdatePad();
 
-		cpu->Run(70149);
+		// Valor obtenido comparandolo con otros emuladores
+		cpu->Run(113000);
 
 		delay += swExecution.Time();
 	}
