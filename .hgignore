@@ -22,5 +22,5 @@ glob:*/log.txt
 build/SCons/.sconsign.dblite
 build/mac/Xcode/gbpablog.xcodeproj/pablo.pbxuser
 build/mac/Xcode/gbpablog.xcodeproj/pablo.perspectivev3
-build/installers
+build/installers/gbpablog*
 build/linux/CodeBlocks/gbpablog

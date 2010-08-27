@@ -29,6 +29,7 @@ IMPLEMENT_CLASS(SDLFrame, wxFrame)
 BEGIN_EVENT_TABLE(SDLFrame, wxFrame)
 EVT_MENU(wxID_EXIT, SDLFrame::onFileExit)
 EVT_MENU(wxID_OPEN, SDLFrame::onFileOpen)
+EVT_MENU(wxID_PREFERENCES, SDLFrame::onOptions)
 EVT_MENU(ID_START, SDLFrame::onPlay)
 EVT_MENU(ID_PAUSE, SDLFrame::onPause)
 EVT_MENU(ID_STOP, SDLFrame::onStop)
@@ -75,7 +76,7 @@ void SDLFrame::createMenuBar()
 
     // create the file menu
     wxMenu *fileMenu = new wxMenu;
-	fileMenu->Append(wxID_OPEN, wxT("&Open"));
+	fileMenu->Append(wxID_OPEN, wxT("&Open\tCtrl+O"));
 	fileMenu->Append(wxID_EXIT, wxT("E&xit"));
 
     // add the file menu to the menu bar
@@ -83,6 +84,7 @@ void SDLFrame::createMenuBar()
 
 	// create the emulation menu
     wxMenu *emulationMenu = new wxMenu;
+	emulationMenu->Append(wxID_PREFERENCES, wxT("&Options"));
     emulationMenu->Append(ID_START, wxT("&Start"));
 	emulationMenu->Append(ID_PAUSE, wxT("&Pause"));
 	emulationMenu->Append(ID_STOP, wxT("S&top"));
@@ -156,6 +158,11 @@ void SDLFrame::Clean()
 	delete video;
 	if (cartridge)
 		delete cartridge;
+}
+
+void SDLFrame::onOptions(wxCommandEvent &)
+{
+	wxMessageBox(wxT("Options window not yet available"), wxT("Options"), wxOK|wxICON_INFORMATION, this);
 }
 
 void SDLFrame::onPlay(wxCommandEvent &)

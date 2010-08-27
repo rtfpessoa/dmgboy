@@ -1,8 +1,17 @@
-- Poder cambiar los botones del pad en cualquier momento: fichero + interfaz gráfica
-- Hacer la pantalla más grande (2x, 4x, etc)
+- http://docs.wxwidgets.org/2.8/wx_wxstandardpaths.html
+- http://wyoguide.sourceforge.net/guidelines/prefs.html
+- ventana para opciones
+- accesos rapidos: Ctrl+R o Cmd+R
+- Lista de ultimas ROMS
+- drag & drop
+- Corregir instalador windows7
+- Cambiar colores visualizacion (escala de verdes)
+- Poder cambiar los botones del pad en cualquier momento: fichero + interfaz grafica
+- Hacer la pantalla mas grande (2x, 4x, etc)
 - Guardar a disco duro la memoria de los cartuchos que llevan bateria
 - Permitir Savestates en cualquier momento
 - Permitir cargar roms comprimidas en zip y 7z
+	http://docs.wxwidgets.org/2.8.11/wx_wxarc.html
 	http://www.winimage.com/zLibDll/minizip.html
 	http://www.boost.org/doc/libs/1_41_0/libs/iostreams/doc/index.html
 - Sonido

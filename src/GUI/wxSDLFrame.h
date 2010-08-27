@@ -46,6 +46,7 @@ private:
      */
     void onFileExit(wxCommandEvent &);
 	void onFileOpen(wxCommandEvent &);
+	void onOptions(wxCommandEvent &);
 	void onPlay(wxCommandEvent &);
 	void onPause(wxCommandEvent &);
 	void onStop(wxCommandEvent &);
