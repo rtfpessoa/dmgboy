@@ -15,22 +15,27 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __WXIDCONSTROLS_H__
-#define __WXIDCONSTROLS_H__
+#ifndef __WXSETTINGSFRAME_H__
+#define __WXSETTINGSFRAME_H__
 
-/*******************************************************************************
- * Global Declarations
- *******************************************************************************/
+#include <wx/wx.h>
+#include <wx/propdlg.h>
+#include <wx/generic/propdlg.h>
+#include <wx/imaglist.h>
 
-enum {
-    ID_SDLFRAME = wxID_HIGHEST + 1,
-    ID_SDLPANEL,
-	ID_LOAD,
-	ID_START,
-	ID_PAUSE,
-	ID_STOP,
-	ID_TIMER,
-	ID_SETTINGSFRAME
+class SettingsDialog: public wxPropertySheetDialog
+{
+	DECLARE_CLASS(SettingsDialog)
+	DECLARE_EVENT_TABLE()
+public:
+    SettingsDialog(wxWindow* parent);
+    ~SettingsDialog();
+	
+    wxPanel* CreateGeneralSettingsPage(wxWindow* parent);
+    wxPanel* CreateAestheticSettingsPage(wxWindow* parent);
+protected:
+	wxImageList*    m_imageList;
 };
+
 
 #endif

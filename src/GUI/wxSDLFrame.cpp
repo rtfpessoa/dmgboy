@@ -17,6 +17,7 @@
 
 #include "wxSDLFrame.h"
 #include "wxIDControls.h"
+#include "wxSettings.h"
 #include "open.xpm"
 #include "play.xpm"
 #include "pause.xpm"
@@ -29,7 +30,7 @@ IMPLEMENT_CLASS(SDLFrame, wxFrame)
 BEGIN_EVENT_TABLE(SDLFrame, wxFrame)
 EVT_MENU(wxID_EXIT, SDLFrame::onFileExit)
 EVT_MENU(wxID_OPEN, SDLFrame::onFileOpen)
-EVT_MENU(wxID_PREFERENCES, SDLFrame::onOptions)
+EVT_MENU(wxID_PREFERENCES, SDLFrame::onSettings)
 EVT_MENU(ID_START, SDLFrame::onPlay)
 EVT_MENU(ID_PAUSE, SDLFrame::onPause)
 EVT_MENU(ID_STOP, SDLFrame::onStop)
@@ -42,7 +43,7 @@ END_EVENT_TABLE()
 SDLFrame::SDLFrame()
 {
     // Create the SDLFrame
-    Create(0, IDF_FRAME, wxT("gbpablog"), wxDefaultPosition,
+    Create(0, ID_SDLFRAME, wxT("gbpablog"), wxDefaultPosition,
            wxDefaultSize, wxCAPTION | wxSYSTEM_MENU |
            wxMINIMIZE_BOX | wxCLOSE_BOX);
 
@@ -84,7 +85,7 @@ void SDLFrame::createMenuBar()
 
 	// create the emulation menu
     wxMenu *emulationMenu = new wxMenu;
-	emulationMenu->Append(wxID_PREFERENCES, wxT("&Options"));
+	emulationMenu->Append(wxID_PREFERENCES, wxT("&Settings"));
     emulationMenu->Append(ID_START, wxT("&Start"));
 	emulationMenu->Append(ID_PAUSE, wxT("&Pause"));
 	emulationMenu->Append(ID_STOP, wxT("S&top"));
@@ -160,9 +161,11 @@ void SDLFrame::Clean()
 		delete cartridge;
 }
 
-void SDLFrame::onOptions(wxCommandEvent &)
+void SDLFrame::onSettings(wxCommandEvent &)
 {
-	wxMessageBox(wxT("Options window not yet available"), wxT("Options"), wxOK|wxICON_INFORMATION, this);
+	//wxMessageBox(wxT("Options window not yet available"), wxT("Options"), wxOK|wxICON_INFORMATION, this);
+	SettingsDialog dialog(this);
+    dialog.ShowModal();
 }
 
 void SDLFrame::onPlay(wxCommandEvent &)

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		6E205760120589BF00079331 /* gbpablog.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6E20575F120589BF00079331 /* gbpablog.icns */; };
+		6E22367A1233B4C6009D019F /* wxSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2236791233B4C6009D019F /* wxSettings.cpp */; };
 		6E23C6C511D7CA0C0043AF47 /* wxSDLApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6BF11D7CA0C0043AF47 /* wxSDLApp.cpp */; };
 		6E23C6C611D7CA0C0043AF47 /* wxSDLFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */; };
 		6E23C6C711D7CA0C0043AF47 /* wxSDLScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C311D7CA0C0043AF47 /* wxSDLScreen.cpp */; };
@@ -39,6 +40,8 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		6E20575F120589BF00079331 /* gbpablog.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = gbpablog.icns; sourceTree = "<group>"; };
+		6E2236781233B4C6009D019F /* wxSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSettings.h; sourceTree = "<group>"; };
+		6E2236791233B4C6009D019F /* wxSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxSettings.cpp; sourceTree = "<group>"; };
 		6E23C6BE11D7CA0C0043AF47 /* wxIDControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxIDControls.h; sourceTree = "<group>"; };
 		6E23C6BF11D7CA0C0043AF47 /* wxSDLApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxSDLApp.cpp; sourceTree = "<group>"; };
 		6E23C6C011D7CA0C0043AF47 /* wxSDLApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSDLApp.h; sourceTree = "<group>"; };
@@ -168,16 +171,18 @@
 			isa = PBXGroup;
 			children = (
 				6E23C6BE11D7CA0C0043AF47 /* wxIDControls.h */,
-				6E23C6BF11D7CA0C0043AF47 /* wxSDLApp.cpp */,
 				6E23C6C011D7CA0C0043AF47 /* wxSDLApp.h */,
-				6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */,
+				6E23C6BF11D7CA0C0043AF47 /* wxSDLApp.cpp */,
 				6E23C6C211D7CA0C0043AF47 /* wxSDLFrame.h */,
-				6E23C6C311D7CA0C0043AF47 /* wxSDLScreen.cpp */,
+				6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */,
 				6E23C6C411D7CA0C0043AF47 /* wxSDLScreen.h */,
+				6E23C6C311D7CA0C0043AF47 /* wxSDLScreen.cpp */,
 				6EF945BB11FC886C000260D3 /* open.xpm */,
 				6EF945AB11FC845C000260D3 /* play.xpm */,
 				6EF945BC11FC886C000260D3 /* pause.xpm */,
 				6EF945BD11FC886C000260D3 /* stop.xpm */,
+				6E2236781233B4C6009D019F /* wxSettings.h */,
+				6E2236791233B4C6009D019F /* wxSettings.cpp */,
 			);
 			name = GUI;
 			path = ../../../src/GUI;
@@ -284,6 +289,7 @@
 				6E23C73D11D7CD510043AF47 /* Pad.cpp in Sources */,
 				6E23C73E11D7CD510043AF47 /* Registers.cpp in Sources */,
 				6E23C74011D7CD510043AF47 /* Video.cpp in Sources */,
+				6E22367A1233B4C6009D019F /* wxSettings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,6 +465,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;

@@ -31,7 +31,7 @@ EVT_PAINT(SDLScreen::onPaint)
 EVT_ERASE_BACKGROUND(SDLScreen::onEraseBackground)
 END_EVENT_TABLE()
 
-SDLScreen::SDLScreen(wxWindow *parent) : wxPanel(parent, IDP_PANEL), screen(0) {
+SDLScreen::SDLScreen(wxWindow *parent) : wxPanel(parent, ID_SDLPANEL), screen(0) {
     // ensure the size of the wxPanel
     wxSize size(SCREEN_W, SCREEN_H);
     
