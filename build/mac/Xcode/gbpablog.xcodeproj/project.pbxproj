@@ -28,6 +28,7 @@
 		6EF945BE11FC886C000260D3 /* open.xpm in Resources */ = {isa = PBXBuildFile; fileRef = 6EF945BB11FC886C000260D3 /* open.xpm */; };
 		6EF945BF11FC886C000260D3 /* pause.xpm in Resources */ = {isa = PBXBuildFile; fileRef = 6EF945BC11FC886C000260D3 /* pause.xpm */; };
 		6EF945C011FC886C000260D3 /* stop.xpm in Resources */ = {isa = PBXBuildFile; fileRef = 6EF945BD11FC886C000260D3 /* stop.xpm */; };
+		6EFEDB441245230600646E83 /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEDB421245230600646E83 /* Settings.cpp */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -75,6 +76,8 @@
 		6EF945BB11FC886C000260D3 /* open.xpm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = open.xpm; sourceTree = "<group>"; };
 		6EF945BC11FC886C000260D3 /* pause.xpm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pause.xpm; sourceTree = "<group>"; };
 		6EF945BD11FC886C000260D3 /* stop.xpm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stop.xpm; sourceTree = "<group>"; };
+		6EFEDB421245230600646E83 /* Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Settings.cpp; path = ../../../src/Settings.cpp; sourceTree = SOURCE_ROOT; };
+		6EFEDB431245230600646E83 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Settings.h; path = ../../../src/Settings.h; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* gbpablog-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "gbpablog-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* gbpablog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gbpablog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -212,6 +215,8 @@
 				6E23C73011D7CD510043AF47 /* Registers.h */,
 				6E23C73311D7CD510043AF47 /* Video.cpp */,
 				6E23C73411D7CD510043AF47 /* Video.h */,
+				6EFEDB421245230600646E83 /* Settings.cpp */,
+				6EFEDB431245230600646E83 /* Settings.h */,
 			);
 			name = HW;
 			sourceTree = "<group>";
@@ -290,6 +295,7 @@
 				6E23C73E11D7CD510043AF47 /* Registers.cpp in Sources */,
 				6E23C74011D7CD510043AF47 /* Video.cpp in Sources */,
 				6E22367A1233B4C6009D019F /* wxSettings.cpp in Sources */,
+				6EFEDB441245230600646E83 /* Settings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

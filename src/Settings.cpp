@@ -14,24 +14,31 @@
  You should have received a copy of the GNU General Public License
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "Settings.h"
 
-#ifndef __WXIDCONSTROLS_H__
-#define __WXIDCONSTROLS_H__
+Settings settings;
 
-/*******************************************************************************
- * Global Declarations
- *******************************************************************************/
+Settings::Settings()
+{
+	greenscale = false;
+}
 
-enum {
-    ID_SDLFRAME = wxID_HIGHEST + 1,
-    ID_SDLPANEL,
-	ID_LOAD,
-	ID_START,
-	ID_PAUSE,
-	ID_STOP,
-	ID_TIMER,
-	ID_SETTINGSFRAME,
-	ID_GREENSCALE
-};
+Settings SettingsGetCopy()
+{
+	return settings;
+}
 
-#endif
+void SettingsSetNewValues(Settings newSettings)
+{
+	settings = newSettings;
+}
+
+bool SettingsGetGreenscale()
+{
+	return settings.greenscale;
+}
+
+void SettingsSetGreenScale(bool greenscale)
+{
+	settings.greenscale = greenscale;
+}

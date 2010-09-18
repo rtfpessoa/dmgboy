@@ -24,6 +24,7 @@
 #include "stop.xpm"
 #include "gb16.xpm"
 #include <string>
+#include "../Settings.h"
 
 IMPLEMENT_CLASS(SDLFrame, wxFrame)
 
@@ -163,9 +164,20 @@ void SDLFrame::Clean()
 
 void SDLFrame::onSettings(wxCommandEvent &)
 {
-	//wxMessageBox(wxT("Options window not yet available"), wxT("Options"), wxOK|wxICON_INFORMATION, this);
+	enumEmuStates lastState = emuState;
+	if (emuState == Playing)
+		emuState = Paused;
+
 	SettingsDialog dialog(this);
-    dialog.ShowModal();
+    if (dialog.ShowModal() == wxID_OK)
+	{
+		SettingsSetNewValues(dialog.settings);
+		panel->changePalette(SettingsGetGreenscale());
+	}
+	
+	dialog.Destroy();
+	
+	emuState = lastState;
 }
 
 void SDLFrame::onPlay(wxCommandEvent &)

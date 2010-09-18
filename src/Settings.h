@@ -15,34 +15,20 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __WXSETTINGSFRAME_H__
-#define __WXSETTINGSFRAME_H__
+#ifndef __SETTINGS_H__
+#define __SETTINGS_H__
 
-#include <wx/wx.h>
-#include <wx/propdlg.h>
-#include <wx/generic/propdlg.h>
-#include <wx/imaglist.h>
-#include "../Settings.h"
-
-class SettingsDialog: public wxPropertySheetDialog
+class Settings
 {
-	DECLARE_CLASS(SettingsDialog)
-	DECLARE_EVENT_TABLE()
-private:
-	bool TransferDataToWindow();
-	bool TransferDataFromWindow();
-	
 public:
-    SettingsDialog(wxWindow* parent);
-    ~SettingsDialog();
-	
-	Settings settings;
-    wxPanel* CreateGeneralSettingsPage(wxWindow* parent);
-	wxPanel* CreateGeneralSettingsPage2(wxWindow* parent);
-    wxPanel* CreateAestheticSettingsPage(wxWindow* parent);
-protected:
-	wxImageList*    m_imageList;
+	bool greenscale;
+public:
+	Settings();
 };
 
+Settings SettingsGetCopy();
+void SettingsSetNewValues(Settings newSettings);
+bool SettingsGetGreenscale();
+void SettingsSetGreenscale(bool greenscale);
 
 #endif

@@ -63,6 +63,8 @@ public:
      */
     ~SDLScreen();
 	
+	void changePalette(bool original);
+	
 	void onPreDraw();
 	
 	void onPostDraw();

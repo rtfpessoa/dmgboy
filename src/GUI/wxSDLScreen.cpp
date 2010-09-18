@@ -21,6 +21,7 @@
 #include "wxSDLFrame.h"
 #include "wxIDControls.h"
 #include "../Def.h"
+#include "../Settings.h"
 
 inline void SDLScreen::onEraseBackground(wxEraseEvent &) { /* do nothing */ }
 
@@ -105,10 +106,28 @@ void SDLScreen::createScreen() {
         screen = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_W, SCREEN_H, 
                                       24, 0, 0, 0, 0);
 		
+		changePalette(SettingsGetGreenscale());
+    }
+}
+
+void SDLScreen::changePalette(bool original)
+{
+	if (!screen)
+		return;
+	
+	if (original)
+	{
+		colors[0] = SDL_MapRGB(screen->format,  16,  57, 16);
+		colors[1] = SDL_MapRGB(screen->format,  49,  99, 49);
+		colors[2] = SDL_MapRGB(screen->format, 140, 173, 16);
+		colors[3] = SDL_MapRGB(screen->format, 156, 189, 16);
+	}
+	else {
 		//Inicializar un array con los 4 colores posibles (negro, gris oscuro, gris claro, blanco)
 		for (int i=0; i<4; i++)
 			colors[i] = SDL_MapRGB(screen->format, i*85, i*85, i*85);
-    }
+	}
+
 }
 
 void SDLScreen::onClear()
