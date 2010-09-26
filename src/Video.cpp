@@ -86,7 +86,7 @@ void Video::UpdateBG(int y)
 	else if (yScrolled > 255)
 		yScrolled -= 256;
 
-	for (x=0; x<SCREEN_W; x++)
+	for (x=0; x<GB_SCREEN_W; x++)
 	{
 		//Si el LCD o Background desactivado
 		//pintamos la linea de blanco
@@ -148,14 +148,14 @@ void Video::UpdateWin(int y)
 		return;
 
 	if (wndPosX < 0) xIni = 0;
-	else if (wndPosX > SCREEN_W) xIni = SCREEN_W;
+	else if (wndPosX > GB_SCREEN_W) xIni = GB_SCREEN_W;
 	else xIni = wndPosX;
 
 	GetPalette(palette, BGP);
 
 	map_ini = BIT6(mem->memory[LCDC]) ? 0x9C00 : 0x9800;
 
-	for (x=xIni; x<SCREEN_W; x++)
+	for (x=xIni; x<GB_SCREEN_W; x++)
 	{
 		xScrolled = x - wndPosX;
 		yScrolled = y - wndPosY;
@@ -267,7 +267,7 @@ void Video::UpdateOAM(int y)
 			countX = abs(xSprite);
 		}
 
-		for (x=xBeg; ((x<xSprite+8) && (x<SCREEN_W)); x++)
+		for (x=xBeg; ((x<xSprite+8) && (x<GB_SCREEN_W)); x++)
 		{
 			xTile = xFlip ? abs(countX - 7) : countX;
 

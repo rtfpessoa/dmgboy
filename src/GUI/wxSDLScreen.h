@@ -48,7 +48,7 @@ private:
     /**
      * Creates the SDL_Surface used by this SDLPanel.
      */
-    void createScreen();
+    void CreateScreen();
     
 public:
     /**
@@ -63,7 +63,9 @@ public:
      */
     ~SDLScreen();
 	
-	void changePalette(bool original);
+	void ChangeSize();
+	
+	void ChangePalette(bool original);
 	
 	void onPreDraw();
 	

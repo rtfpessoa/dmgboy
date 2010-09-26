@@ -27,7 +27,6 @@ bool SDLApp::OnInit() {
 
     // create the SDLFrame
     frame = new SDLFrame;
-    frame->SetClientSize(SCREEN_W, SCREEN_H);
     frame->Centre();
     frame->Show();
     

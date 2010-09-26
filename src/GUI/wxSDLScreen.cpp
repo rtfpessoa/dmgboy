@@ -33,21 +33,26 @@ EVT_ERASE_BACKGROUND(SDLScreen::onEraseBackground)
 END_EVENT_TABLE()
 
 SDLScreen::SDLScreen(wxWindow *parent) : wxPanel(parent, ID_SDLPANEL), screen(0) {
-    // ensure the size of the wxPanel
-    wxSize size(SCREEN_W, SCREEN_H);
     
-    SetMinSize(size);
-    SetMaxSize(size);
+	ChangeSize();
+    windowParent = parent;
 	
-	windowParent = parent;
-	
-	createScreen();
+	CreateScreen();
 }
 
 SDLScreen::~SDLScreen() {
     if (screen) {
         SDL_FreeSurface(screen);
     }
+}
+
+void SDLScreen::ChangeSize()
+{
+	// ensure the size of the wxPanel
+	wxSize size(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
+    
+    SetMinSize(size);
+    SetMaxSize(size);
 }
 
 void SDLScreen::onPaint(wxPaintEvent &) {
@@ -64,8 +69,12 @@ void SDLScreen::onPaint(wxPaintEvent &) {
     }
     
     // create a bitmap from our pixel data
-    wxBitmap bmp(wxImage(screen->w, screen->h, 
-						 static_cast<unsigned char *>(screen->pixels), true));
+	wxImage img = wxImage(screen->w, screen->h, static_cast<unsigned char *>(screen->pixels), true);
+	
+	int winZoom = SettingsGetWindowZoom();
+	if (winZoom > 1)
+		img.Rescale(GB_SCREEN_W*winZoom, GB_SCREEN_H*winZoom, wxIMAGE_QUALITY_NORMAL);
+    wxBitmap bmp(img);
     
     // unlock the screen
     if (SDL_MUSTLOCK(screen)) {
@@ -74,6 +83,8 @@ void SDLScreen::onPaint(wxPaintEvent &) {
     
     // paint the screen
     wxBufferedPaintDC dc(this, bmp);
+	//wxAutoBufferedPaintDC dc(this);
+	//dc.DrawBitmap(bmp, 0, 0, false);
 }
 
 void SDLScreen::onPreDraw()
@@ -101,16 +112,16 @@ void SDLScreen::onRefreshScreen()
     Refresh(false);
 }
 
-void SDLScreen::createScreen() {
+void SDLScreen::CreateScreen() {
     if (!screen) {
-        screen = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_W, SCREEN_H, 
+        screen = SDL_CreateRGBSurface(SDL_SWSURFACE, GB_SCREEN_W, GB_SCREEN_H, 
                                       24, 0, 0, 0, 0);
 		
-		changePalette(SettingsGetGreenscale());
+		ChangePalette(SettingsGetGreenscale());
     }
 }
 
-void SDLScreen::changePalette(bool original)
+void SDLScreen::ChangePalette(bool original)
 {
 	if (!screen)
 		return;

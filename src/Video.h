@@ -28,7 +28,7 @@ class Video
 private:
 	Memory *mem;
 	std::multimap<int, int> orderedOAM;	//posicion x, dir. memoria
-	int indexColorsBGWnd[SCREEN_W][SCREEN_H];	//Indice de color en pantalla pintadas por background y window
+	int indexColorsBGWnd[GB_SCREEN_W][GB_SCREEN_H];	//Indice de color en pantalla pintadas por background y window
 	SDLScreen * screen;
 public:
 	Video(SDLScreen * screen);

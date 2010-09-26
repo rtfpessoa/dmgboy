@@ -92,8 +92,10 @@ SettingsDialog::~SettingsDialog()
 bool SettingsDialog::TransferDataToWindow()
 {
 	wxRadioBox* greenscaleCtrl = (wxRadioBox*) FindWindow(ID_GREENSCALE);
+	wxChoice* winZoomCtrl = (wxChoice*) FindWindow(ID_WINZOOM);
 	
 	greenscaleCtrl->SetSelection(settings.greenscale);
+	winZoomCtrl->SetSelection(settings.windowZoom - 1);
 	
 	return true;
 }
@@ -102,8 +104,10 @@ bool SettingsDialog::TransferDataToWindow()
 bool SettingsDialog::TransferDataFromWindow()
 {
 	wxRadioBox* greenscaleCtrl = (wxRadioBox*) FindWindow(ID_GREENSCALE);
+	wxChoice* winZoomCtrl = (wxChoice*) FindWindow(ID_WINZOOM);
 	
 	settings.greenscale = greenscaleCtrl->GetSelection();
+	settings.windowZoom = winZoomCtrl->GetSelection()+1;
 	
 	return true;
 }
@@ -113,17 +117,41 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
     wxPanel* panel = new wxPanel(parent, wxID_ANY);
 	wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
 	
-	
+	// Paleta de colores (verde o gris)
 	wxString grayOrGreenChoices[2];
     grayOrGreenChoices[0] = wxT("Grayscale");
     grayOrGreenChoices[1] = wxT("Greenscale");
 	
     wxRadioBox* grayOrGreen = new wxRadioBox(panel, ID_GREENSCALE, wxT("Color palette:"),
 												 wxDefaultPosition, wxDefaultSize, 2, grayOrGreenChoices, 1, wxRA_SPECIFY_COLS);
-    topSizer->Add(grayOrGreen, 0, wxGROW|wxALL, 5);
 	
-    panel->SetSizer(topSizer);
-    topSizer->Fit(panel);
+	// Tamaño de ventana
+	wxArrayString winZoomChoices;
+    winZoomChoices.Add(wxT("1x"));
+    winZoomChoices.Add(wxT("2x"));
+	winZoomChoices.Add(wxT("3x"));
+	winZoomChoices.Add(wxT("4x"));
+    //wxStaticBox* staticBox3 = new wxStaticBox(panel, wxID_ANY, wxT("Window size:"));
+	
+    //wxBoxSizer* winSizeSizer = new wxStaticBoxSizer( staticBox3, wxVERTICAL );
+    //topSizer->Add(winSizeSizer, 0, wxGROW|wxALL, 5);
+	
+    wxBoxSizer* winZoomSizer = new wxBoxSizer( wxHORIZONTAL );
+	
+    wxChoice* choiceWinZoom = new wxChoice(panel, ID_WINZOOM, wxDefaultPosition, wxDefaultSize, winZoomChoices);
+	
+    winZoomSizer->Add(new wxStaticText(panel, wxID_ANY, wxT("Window size:")), 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+    winZoomSizer->Add(5, 5, 1, wxALL, 0);
+    winZoomSizer->Add(choiceWinZoom, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+	
+    //styleSizer->Add(winSizeSizer, 0, wxGROW|wxALL, 5);
+	
+    topSizer->Add(grayOrGreen, 0, wxGROW|wxALL, 5);
+	topSizer->Add(winZoomSizer, 0, wxGROW|wxALL, 5);
+	
+    //panel->SetSizer(topSizer);
+    //topSizer->Fit(panel);
+	panel->SetSizerAndFit(topSizer);
 	
     return panel;
 }

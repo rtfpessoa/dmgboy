@@ -63,7 +63,8 @@ SDLFrame::SDLFrame()
 	cartridge = NULL;
 
 	emuState = NotStartedYet;
-
+	
+	SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
 }
 
 SDLFrame::~SDLFrame()
@@ -122,7 +123,7 @@ void SDLFrame::createToolBar()
 
 	wxBitmap bmpStop(stop_xpm);
 	toolBar->AddTool(ID_STOP, bmpStop, wxT("Stop"));
-
+	
 	toolBar->Realize();
 	SetToolBar(toolBar);
 }
@@ -172,7 +173,9 @@ void SDLFrame::onSettings(wxCommandEvent &)
     if (dialog.ShowModal() == wxID_OK)
 	{
 		SettingsSetNewValues(dialog.settings);
-		panel->changePalette(SettingsGetGreenscale());
+		panel->ChangePalette(SettingsGetGreenscale());
+		panel->ChangeSize();
+		SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
 	}
 	
 	dialog.Destroy();

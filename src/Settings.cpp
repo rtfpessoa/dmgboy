@@ -21,6 +21,7 @@ Settings settings;
 Settings::Settings()
 {
 	greenscale = false;
+	windowZoom = 1;
 }
 
 Settings SettingsGetCopy()
@@ -41,4 +42,14 @@ bool SettingsGetGreenscale()
 void SettingsSetGreenScale(bool greenscale)
 {
 	settings.greenscale = greenscale;
+}
+
+int SettingsGetWindowZoom()
+{
+	return settings.windowZoom;
+}
+
+void SettingsSetWindowZoom(int windowZoom)
+{
+	settings.windowZoom = windowZoom;
 }
