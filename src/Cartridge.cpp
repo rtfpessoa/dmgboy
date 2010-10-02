@@ -33,7 +33,7 @@ Cartridge::Cartridge(string path)
 	if (file.is_open())
 	{
 		size = file.tellg();
-		this->_RomSize = (unsigned int)size;
+		this->_RomSize = (unsigned long)size;
 		_memCartridge = new BYTE [size];
 		file.seekg (0, ios::beg);
 		file.read ((char *)_memCartridge, size);
@@ -41,17 +41,47 @@ Cartridge::Cartridge(string path)
 
 		cout << path << ":\nFile loaded in memory correctly" << endl;
 		
-		memcpy(nameROM, &_memCartridge[CART_NAME], 17);
-		nameROM[16] = '\0';
-		cout << "Cartridge name: " << nameROM << endl;
-		cout << "ROM Size:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_ROM_SIZE] << endl;
-		cout << "RAM Size:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_RAM_SIZE] << endl;
-		cout << "Cartridge Type:\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_TYPE] << " (";
+		CheckCartridge();
+		
+		_isLoaded = true;
+	}
+	else
+	{
+		cerr << path << ": Error trying to open the file" << endl;
+		_isLoaded = false;
+	}
+}
 
-		CheckRomSize((int)_memCartridge[CART_ROM_SIZE], _RomSize);
+Cartridge::Cartridge(BYTE * cartridgeBuffer, unsigned long size)
+{
+	_RomSize = size;
+	_memCartridge = cartridgeBuffer;
+	
+	CheckCartridge();
+	
+	_isLoaded = true;
+}
 
-		switch(_memCartridge[CART_TYPE])
-		{
+Cartridge::~Cartridge(void)
+{
+	DestroyMBC();
+	if (_memCartridge)
+		delete [] _memCartridge;
+}
+
+void Cartridge::CheckCartridge()
+{
+	memcpy(nameROM, &_memCartridge[CART_NAME], 17);
+	nameROM[16] = '\0';
+	cout << "Cartridge name: " << nameROM << endl;
+	cout << "ROM Size:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_ROM_SIZE] << endl;
+	cout << "RAM Size:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_RAM_SIZE] << endl;
+	cout << "Cartridge Type:\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_TYPE] << " (";
+	
+	CheckRomSize((int)_memCartridge[CART_ROM_SIZE], _RomSize);
+	
+	switch(_memCartridge[CART_TYPE])
+	{
 		case 0x00:						//ROM ONLY
 		case 0x08:						//ROM+RAM
 		case 0x09:						//ROM+RAM+BATTERY
@@ -75,10 +105,10 @@ Cartridge::Cartridge(string path)
 			ptrWrite = &MBC2Write;
 			InitMBC2(nameROM, _memCartridge, _RomSize);
 			break;
-		/*
-		case 0x0B:						//ROM+MMM01
-		case 0x0C:						//ROM+MMM01+SRAM
-		case 0x0D: mbc = MMM01; break;	//ROM+MMM01+SRAM+BATT*/
+			/*
+			 case 0x0B:						//ROM+MMM01
+			 case 0x0C:						//ROM+MMM01+SRAM
+			 case 0x0D: mbc = MMM01; break;	//ROM+MMM01+SRAM+BATT*/
 		case 0x0F:						//ROM+MBC3+TIMER+BATT
 		case 0x10:						//ROM+MBC3+TIMER+RAM+BATT
 		case 0x11:						//ROM+MBC3
@@ -100,26 +130,12 @@ Cartridge::Cartridge(string path)
 			ptrWrite = &MBC5Write;
 			InitMBC5(nameROM, _memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
 			break;
-		/*case 0x1F:						//Pocket Camera
-		case 0xFD:						//Bandai TAMA5
-		case 0xFE: mbc = Other; break;	//Hudson HuC-3
-		case 0xFF: mbc = HuC1; break;	//Hudson HuC-1*/
+			/*case 0x1F:						//Pocket Camera
+			 case 0xFD:						//Bandai TAMA5
+			 case 0xFE: mbc = Other; break;	//Hudson HuC-3
+			 case 0xFF: mbc = HuC1; break;	//Hudson HuC-1*/
 		default: throw GBException("MBC not implemented yet");
-		}
-		_isLoaded = true;
 	}
-	else
-	{
-		cout << path << ": Error trying to open the file" << endl;
-		_isLoaded = false;
-	}
-}
-
-Cartridge::~Cartridge(void)
-{
-	DestroyMBC();
-	if (_memCartridge)
-		delete [] _memCartridge;
 }
 
 int Cartridge::CheckRomSize(int numHeaderSize, int fileSize)

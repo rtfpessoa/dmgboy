@@ -15,6 +15,9 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string>
+#include <wx/filesys.h>
+#include <wx/fs_arc.h>
 #include "wxSDLFrame.h"
 #include "wxIDControls.h"
 #include "wxSettings.h"
@@ -23,7 +26,6 @@
 #include "pause.xpm"
 #include "stop.xpm"
 #include "gb16.xpm"
-#include <string>
 #include "../Settings.h"
 
 IMPLEMENT_CLASS(SDLFrame, wxFrame)
@@ -129,18 +131,60 @@ void SDLFrame::createToolBar()
 }
 
 void SDLFrame::onFileOpen(wxCommandEvent &) {
-	wxFileDialog* OpenDialog = new wxFileDialog(this, _("Choose a gameboy rom to open"), wxEmptyString, wxEmptyString,
-												_("Gameboy roms (*.gb)|*.gb"),
+	BYTE * buffer = NULL;
+	unsigned long size = 0;
+	bool isZip = false;
+	
+	wxFileDialog* OpenDialog = new wxFileDialog(this, wxT("Choose a gameboy rom to open"), wxEmptyString, wxEmptyString,
+												wxT("Gameboy roms (*.gb; *.zip)|*.gb;*.zip"),
 												wxFD_OPEN, wxDefaultPosition);
 
 	// Creates a "open file" dialog
 	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 	{
+		wxString fileName = OpenDialog->GetPath();
+		if (fileName.EndsWith(".zip"))
+		{
+			isZip = true;
+			wxFileSystem::AddHandler(new wxArchiveFSHandler);
+			wxFileSystem fs;
+			wxString filter = wxT(fileName+"#zip:*.gb");
+			wxString fileInZip;
+			fileInZip = fs.FindFirst(filter, wxFILE);
+			if (!fileInZip.IsEmpty())
+			{
+				wxFSFile * file = fs.OpenFile(fileInZip);
+				if(file)
+				{
+					wxInputStream * stream = file->GetStream();
+					size = stream->GetSize();
+					buffer = new BYTE[size];
+					stream->Read(buffer, size);
+					wxDELETE(file);
+				}
+				else {
+					wxMessageBox("The zip seems corrupt", "Error");
+					return;
+				}
+
+			}
+			else {
+				wxMessageBox("GameBoy rom not found in the file:\n"+fileName, "Error");
+				return;
+			}
+		}
+		
 		cpu->Reset();
 		if (cartridge)
 			delete cartridge;
 
-		cartridge = new Cartridge(std::string(OpenDialog->GetPath().mb_str()));
+		if (isZip) {
+			cartridge = new Cartridge(buffer, size);
+		}else {
+			cartridge = new Cartridge(std::string(fileName.mb_str()));
+		}
+
+		
 		cpu->LoadCartridge(cartridge);
 		emuState = Playing;
 	}

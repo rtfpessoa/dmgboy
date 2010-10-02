@@ -30,16 +30,18 @@
 class Cartridge
 {
 private:
-	unsigned int _RomSize;
+	unsigned long _RomSize;
 	bool _isLoaded;
 	BYTE * _memCartridge;
 
 	BYTE (*ptrRead)(WORD);
 	void (*ptrWrite)(WORD, BYTE);
+	void CheckCartridge();
 	int CheckRomSize(int numHeaderSize, int fileSize);
 public:
 	char nameROM[17];
 	Cartridge(std::string path);
+	Cartridge(BYTE * cartridgeBuffer, unsigned long size);
 	~Cartridge();
 	void Print(int beg, int end);
 	BYTE *GetData();
