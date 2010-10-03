@@ -56,6 +56,7 @@ private:
 	void onIdle(wxIdleEvent &event);
 	void createMenuBar();
 	void createToolBar();
+	void LoadZip(wxString fileName, BYTE ** buffer, unsigned long * size);
 	
 	void Clean();
     

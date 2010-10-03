@@ -146,32 +146,9 @@ void SDLFrame::onFileOpen(wxCommandEvent &) {
 		if (fileName.EndsWith(".zip"))
 		{
 			isZip = true;
-			wxFileSystem::AddHandler(new wxArchiveFSHandler);
-			wxFileSystem fs;
-			wxString filter = wxT(fileName+"#zip:*.gb");
-			wxString fileInZip;
-			fileInZip = fs.FindFirst(filter, wxFILE);
-			if (!fileInZip.IsEmpty())
-			{
-				wxFSFile * file = fs.OpenFile(fileInZip);
-				if(file)
-				{
-					wxInputStream * stream = file->GetStream();
-					size = stream->GetSize();
-					buffer = new BYTE[size];
-					stream->Read(buffer, size);
-					wxDELETE(file);
-				}
-				else {
-					wxMessageBox("The zip seems corrupt", "Error");
-					return;
-				}
-
-			}
-			else {
-				wxMessageBox("GameBoy rom not found in the file:\n"+fileName, "Error");
+			LoadZip(fileName, &buffer, &size);
+			if ((buffer == NULL) || (size == 0))
 				return;
-			}
 		}
 		
 		cpu->Reset();
@@ -193,6 +170,41 @@ void SDLFrame::onFileOpen(wxCommandEvent &) {
 	OpenDialog->Destroy();
 }
 
+/*
+ * Carga un fichero comprimido con zip y busca una rom de gameboy (un fichero con extension gb).
+ * Si existe mas de una rom solo carga la primera. Si se ha encontrado, la rom se devuelve en un buffer
+ * junto con su tamaño, sino las variables se dejan intactas
+ */
+void SDLFrame::LoadZip(wxString fileName, BYTE ** buffer, unsigned long * size)
+{
+	wxFileSystem::AddHandler(new wxArchiveFSHandler);
+	wxFileSystem fs;
+	wxString filter = wxT(fileName+"#zip:*.gb");
+	wxString fileInZip;
+	fileInZip = fs.FindFirst(filter, wxFILE);
+	if (!fileInZip.IsEmpty())
+	{
+		wxFSFile * file = fs.OpenFile(fileInZip);
+		if(file)
+		{
+			wxInputStream * stream = file->GetStream();
+			*size = stream->GetSize();
+			*buffer = new BYTE[*size];
+			stream->Read(*buffer, *size);
+			wxDELETE(file);
+		}
+		else {
+			wxMessageBox("The zip seems corrupt", "Error");
+			return;
+		}
+		
+	}
+	else {
+		wxMessageBox("GameBoy rom not found in the file:\n"+fileName, "Error");
+		return;
+	}
+}
+
 void SDLFrame::onFileExit(wxCommandEvent &)
 {
 	Close();
@@ -207,6 +219,9 @@ void SDLFrame::Clean()
 		delete cartridge;
 }
 
+/*
+ * Abre un dialogo de configuracion. Cuando se cierra se encarga de aplicar ciertos cambios a la emulacion
+ */
 void SDLFrame::onSettings(wxCommandEvent &)
 {
 	enumEmuStates lastState = emuState;

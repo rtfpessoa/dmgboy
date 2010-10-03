@@ -25,6 +25,9 @@
 
 using namespace std;
 
+/*
+ * Constructor que recibe un fichero, lo carga en memoria y lo procesa
+ */
 Cartridge::Cartridge(string path)
 {
 	_memCartridge = NULL;
@@ -52,6 +55,9 @@ Cartridge::Cartridge(string path)
 	}
 }
 
+/*
+ * Constructor que recibe un buffer y su tamaño y lo procesa
+ */
 Cartridge::Cartridge(BYTE * cartridgeBuffer, unsigned long size)
 {
 	_RomSize = size;
@@ -69,6 +75,9 @@ Cartridge::~Cartridge(void)
 		delete [] _memCartridge;
 }
 
+/*
+ * Comprueba el buffer de la rom, extrae el nombre, compara el tamaño e inicializa el MBC
+ */
 void Cartridge::CheckCartridge()
 {
 	memcpy(nameROM, &_memCartridge[CART_NAME], 17);
@@ -138,6 +147,9 @@ void Cartridge::CheckCartridge()
 	}
 }
 
+/*
+ * Compara el tamaño de la rom con el valor de la cabecera
+ */
 int Cartridge::CheckRomSize(int numHeaderSize, int fileSize)
 {
 	int headerSize = 32768 << (numHeaderSize & 0x0F);
