@@ -20,7 +20,6 @@
 #include <wx/fs_arc.h>
 #include "wxSDLFrame.h"
 #include "wxIDControls.h"
-#include "wxSettings.h"
 #include "open.xpm"
 #include "play.xpm"
 #include "pause.xpm"
@@ -55,6 +54,11 @@ SDLFrame::SDLFrame()
     createMenuBar();
 	createToolBar();
 
+	settingsDialog = new SettingsDialog(this);
+	settingsDialog->CentreOnScreen();
+	settingsDialog->LoadFromFile();
+	SettingsSetNewValues(settingsDialog->settings);
+	
     // create the SDLPanel
     panel = new SDLScreen(this);
 
@@ -91,7 +95,7 @@ void SDLFrame::createMenuBar()
     wxMenu *emulationMenu = new wxMenu;
 	emulationMenu->Append(wxID_PREFERENCES, wxT("&Settings"));
     emulationMenu->Append(ID_START, wxT("&Start"));
-	emulationMenu->Append(ID_PAUSE, wxT("&Pause"));
+	emulationMenu->Append(ID_PAUSE, wxT("&Pause\tCtrl+P"));
 	emulationMenu->Append(ID_STOP, wxT("S&top"));
 
     // add the file menu to the menu bar
@@ -217,6 +221,8 @@ void SDLFrame::Clean()
 	delete video;
 	if (cartridge)
 		delete cartridge;
+	if (settingsDialog)
+		settingsDialog->Destroy();
 }
 
 /*
@@ -228,16 +234,14 @@ void SDLFrame::onSettings(wxCommandEvent &)
 	if (emuState == Playing)
 		emuState = Paused;
 
-	SettingsDialog dialog(this);
-    if (dialog.ShowModal() == wxID_OK)
+	
+    if (settingsDialog->ShowModal() == wxID_OK)
 	{
-		SettingsSetNewValues(dialog.settings);
-		panel->ChangePalette(SettingsGetGreenscale());
+		SettingsSetNewValues(settingsDialog->settings);
+		panel->ChangePalette(SettingsGetGreenScale());
 		panel->ChangeSize();
 		SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
 	}
-	
-	dialog.Destroy();
 	
 	emuState = lastState;
 }

@@ -21,7 +21,7 @@
 class Settings
 {
 public:
-	bool greenscale;
+	bool greenScale;
 	int windowZoom;
 public:
 	Settings();
@@ -29,8 +29,8 @@ public:
 
 Settings SettingsGetCopy();
 void SettingsSetNewValues(Settings newSettings);
-bool SettingsGetGreenscale();
-void SettingsSetGreenscale(bool greenscale);
+bool SettingsGetGreenScale();
+void SettingsSetGreenScale(bool greenScale);
 int SettingsGetWindowZoom();
 void SettingsSetWindowZoom(int windowZoom);
 

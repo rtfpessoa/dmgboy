@@ -117,7 +117,7 @@ void SDLScreen::CreateScreen() {
         screen = SDL_CreateRGBSurface(SDL_SWSURFACE, GB_SCREEN_W, GB_SCREEN_H, 
                                       24, 0, 0, 0, 0);
 		
-		ChangePalette(SettingsGetGreenscale());
+		ChangePalette(SettingsGetGreenScale());
     }
 }
 

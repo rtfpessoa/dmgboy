@@ -32,14 +32,18 @@ private:
 	bool TransferDataToWindow();
 	bool TransferDataFromWindow();
 	
+	wxPanel* CreateGeneralSettingsPage(wxWindow* parent);
+	wxPanel* CreateGeneralSettingsPage2(wxWindow* parent);
+    wxPanel* CreateAestheticSettingsPage(wxWindow* parent);
+	
 public:
     SettingsDialog(wxWindow* parent);
     ~SettingsDialog();
+	void SaveToFile();
+	void LoadFromFile();
 	
 	Settings settings;
-    wxPanel* CreateGeneralSettingsPage(wxWindow* parent);
-	wxPanel* CreateGeneralSettingsPage2(wxWindow* parent);
-    wxPanel* CreateAestheticSettingsPage(wxWindow* parent);
+	
 protected:
 	wxImageList*    m_imageList;
 };

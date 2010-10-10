@@ -15,12 +15,14 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/artprov.h>
+#include <wx/bookctrl.h>
+#include <wx/spinctrl.h>
+#include <wx/config.h>
 #include "wxSettings.h"
 #include "wxIDControls.h"
 #include "gb32.xpm"
-#include <wx/artprov.h>
-#include <wx/bookctrl.h>
-#include "wx/spinctrl.h"
+
 
 IMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog)
 
@@ -43,8 +45,8 @@ SettingsDialog::SettingsDialog(wxWindow* win)
         int sheetStyle = wxPROPSHEET_SHRINKTOFIT | wxPROPSHEET_BUTTONTOOLBOOK;
 		
         SetSheetStyle(sheetStyle);
-        SetSheetInnerBorder(2);
-        SetSheetOuterBorder(2);
+        //SetSheetInnerBorder(0);
+        //SetSheetOuterBorder(0);
 		
 		wxBitmap gb32(gb32_xpm);
 		
@@ -69,7 +71,7 @@ SettingsDialog::SettingsDialog(wxWindow* win)
     notebook->SetImageList(m_imageList);
 	
 	//wxColour backColour(168, 168, 168);
-	//wxColour backColour(255, 255, 255);
+	wxColour backColour(255, 255, 255);
 	//notebook->SetBackgroundColour(backColour);
 	
     wxPanel* generalSettings = CreateGeneralSettingsPage(notebook);
@@ -94,7 +96,7 @@ bool SettingsDialog::TransferDataToWindow()
 	wxRadioBox* greenscaleCtrl = (wxRadioBox*) FindWindow(ID_GREENSCALE);
 	wxChoice* winZoomCtrl = (wxChoice*) FindWindow(ID_WINZOOM);
 	
-	greenscaleCtrl->SetSelection(settings.greenscale);
+	greenscaleCtrl->SetSelection(settings.greenScale);
 	winZoomCtrl->SetSelection(settings.windowZoom - 1);
 	
 	return true;
@@ -106,8 +108,10 @@ bool SettingsDialog::TransferDataFromWindow()
 	wxRadioBox* greenscaleCtrl = (wxRadioBox*) FindWindow(ID_GREENSCALE);
 	wxChoice* winZoomCtrl = (wxChoice*) FindWindow(ID_WINZOOM);
 	
-	settings.greenscale = greenscaleCtrl->GetSelection();
+	settings.greenScale = greenscaleCtrl->GetSelection();
 	settings.windowZoom = winZoomCtrl->GetSelection()+1;
+	
+	SaveToFile();
 	
 	return true;
 }
@@ -131,10 +135,6 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
     winZoomChoices.Add(wxT("2x"));
 	winZoomChoices.Add(wxT("3x"));
 	winZoomChoices.Add(wxT("4x"));
-    //wxStaticBox* staticBox3 = new wxStaticBox(panel, wxID_ANY, wxT("Window size:"));
-	
-    //wxBoxSizer* winSizeSizer = new wxStaticBoxSizer( staticBox3, wxVERTICAL );
-    //topSizer->Add(winSizeSizer, 0, wxGROW|wxALL, 5);
 	
     wxBoxSizer* winZoomSizer = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -142,18 +142,32 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 	
     winZoomSizer->Add(new wxStaticText(panel, wxID_ANY, wxT("Window size:")), 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
     winZoomSizer->Add(5, 5, 1, wxALL, 0);
-    winZoomSizer->Add(choiceWinZoom, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+    winZoomSizer->Add(choiceWinZoom, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
 	
-    //styleSizer->Add(winSizeSizer, 0, wxGROW|wxALL, 5);
+    topSizer->Add(grayOrGreen, 0, wxGROW|wxALL, 0);
+	topSizer->Add(winZoomSizer, 0, wxGROW|wxALL, 0);
 	
-    topSizer->Add(grayOrGreen, 0, wxGROW|wxALL, 5);
-	topSizer->Add(winZoomSizer, 0, wxGROW|wxALL, 5);
-	
-    //panel->SetSizer(topSizer);
-    //topSizer->Fit(panel);
-	panel->SetSizerAndFit(topSizer);
+    panel->SetSizerAndFit(topSizer);
 	
     return panel;
+}
+
+void SettingsDialog::SaveToFile()
+{
+	// Guardar a disco
+	wxFileConfig fileConfig("gbpablog", "pablogasco");
+	
+	fileConfig.Write("General/greenScale", settings.greenScale);
+	fileConfig.Write("General/windowZoom", settings.windowZoom);
+}
+
+void SettingsDialog::LoadFromFile()
+{
+	// Cargar de disco
+	wxFileConfig fileConfig("gbpablog", "pablogasco");
+	
+	fileConfig.Read("General/greenScale", &settings.greenScale);
+	fileConfig.Read("General/windowZoom", &settings.windowZoom);
 }
 
 wxPanel* SettingsDialog::CreateGeneralSettingsPage2(wxWindow* parent)

@@ -3,6 +3,9 @@
 - accesos rapidos: Ctrl+R o Cmd+R
 - Lista de ultimas ROMS
 - drag & drop
+- Cargar por linea de comandos
+- Pasarlo a OpenGL
+- Multi idioma
 - Corregir instalador windows7
 - Poder cambiar los botones del pad en cualquier momento: fichero + interfaz grafica
 - Guardar a disco duro la memoria de los cartuchos que llevan bateria

@@ -19,6 +19,7 @@
 #define __WXSDLFRAME_H__
 
 #include <wx/wx.h>
+#include "wxSettings.h"
 #include "wxSDLScreen.h"
 #include "../CPU.h"
 
@@ -34,6 +35,7 @@ private:
 	wxMenuBar *mb;
 	wxToolBar* toolBar;
     SDLScreen *panel;
+	SettingsDialog * settingsDialog;
 	Video * video;
 	Cartridge * cartridge;
 	
