@@ -19,6 +19,7 @@
 #include <wx/bookctrl.h>
 #include <wx/spinctrl.h>
 #include <wx/config.h>
+#include <wx/fileconf.h>
 #include "wxSettings.h"
 #include "wxIDControls.h"
 #include "gb32.xpm"

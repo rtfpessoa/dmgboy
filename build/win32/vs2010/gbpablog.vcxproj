@@ -19,12 +19,14 @@
     <ClInclude Include="..\..\..\src\GUI\wxSDLApp.h" />
     <ClInclude Include="..\..\..\src\GUI\wxSDLFrame.h" />
     <ClInclude Include="..\..\..\src\GUI\wxSDLScreen.h" />
+    <ClInclude Include="..\..\..\src\GUI\wxSettings.h" />
     <ClInclude Include="..\..\..\src\Instructions.h" />
     <ClInclude Include="..\..\..\src\Log.h" />
     <ClInclude Include="..\..\..\src\MBC.h" />
     <ClInclude Include="..\..\..\src\Memory.h" />
     <ClInclude Include="..\..\..\src\Pad.h" />
     <ClInclude Include="..\..\..\src\Registers.h" />
+    <ClInclude Include="..\..\..\src\Settings.h" />
     <ClInclude Include="..\..\..\src\Video.h" />
   </ItemGroup>
   <ItemGroup>
@@ -34,12 +36,14 @@
     <ClCompile Include="..\..\..\src\GUI\wxSDLApp.cpp" />
     <ClCompile Include="..\..\..\src\GUI\wxSDLFrame.cpp" />
     <ClCompile Include="..\..\..\src\GUI\wxSDLScreen.cpp" />
+    <ClCompile Include="..\..\..\src\GUI\wxSettings.cpp" />
     <ClCompile Include="..\..\..\src\Instructions.cpp" />
     <ClCompile Include="..\..\..\src\Log.cpp" />
     <ClCompile Include="..\..\..\src\MBC.cpp" />
     <ClCompile Include="..\..\..\src\Memory.cpp" />
     <ClCompile Include="..\..\..\src\Pad.cpp" />
     <ClCompile Include="..\..\..\src\Registers.cpp" />
+    <ClCompile Include="..\..\..\src\Settings.cpp" />
     <ClCompile Include="..\..\..\src\Video.cpp" />
   </ItemGroup>
   <ItemGroup>

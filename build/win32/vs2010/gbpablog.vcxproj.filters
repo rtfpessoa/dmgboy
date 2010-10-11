@@ -55,6 +55,12 @@
     <ClInclude Include="..\..\..\src\Registers.h">
       <Filter>HW</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\wxSettings.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Settings.h">
+      <Filter>HW</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\GUI\wxSDLApp.cpp">
@@ -94,6 +100,12 @@
       <Filter>HW</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Video.cpp">
+      <Filter>HW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\wxSettings.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Settings.cpp">
       <Filter>HW</Filter>
     </ClCompile>
   </ItemGroup>
