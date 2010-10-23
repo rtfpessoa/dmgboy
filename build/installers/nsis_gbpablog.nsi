@@ -2,12 +2,13 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "gbpablog"
-!define PRODUCT_VERSION "0.6"
+!define PRODUCT_VERSION "0.7"
 !define PRODUCT_PUBLISHER "Pablo Gasco"
 !define PRODUCT_WEB_SITE "http://code.google.com/p/gbpablog/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\gbpablog.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
-!define PRODUCT_UNINST_ROOT_KEY "HKLM"
+
+!define REG_ROOT_KEY "HKLM"
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -18,11 +19,12 @@
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 
 ; Language Selection Dialog Settings
-!define MUI_LANGDLL_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
+!define MUI_LANGDLL_REGISTRY_ROOT "${REG_ROOT_KEY}"
 !define MUI_LANGDLL_REGISTRY_KEY "${PRODUCT_UNINST_KEY}"
 !define MUI_LANGDLL_REGISTRY_VALUENAME "NSIS:Language"
 
 ; Welcome page
+!define MUI_WELCOMEPAGE_TITLE_3LINES
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 !insertmacro MUI_PAGE_LICENSE "..\..\src\gpl.txt"
@@ -31,11 +33,14 @@
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
+!define MUI_FINISHPAGE_TITLE_3LINES
 !define MUI_FINISHPAGE_RUN "$INSTDIR\gbpablog.exe"
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
+!insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
 
 ; Language files
 !insertmacro MUI_LANGUAGE "Basque"
@@ -53,9 +58,10 @@
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "gbpablog_0.6_win32.exe"
+OutFile "gbpablog_${PRODUCT_VERSION}_win32.exe"
 InstallDir "$PROGRAMFILES\gbpablog"
-InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
+InstallDirRegKey ${REG_ROOT_KEY} "${PRODUCT_DIR_REGKEY}" ""
+RequestExecutionLevel admin
 ShowInstDetails show
 ShowUnInstDetails show
 
@@ -68,6 +74,7 @@ Section "Principal" SEC01
   SetOverwrite ifnewer
   File "..\win32\vs2010\SDL.dll"
   File "..\win32\vs2010\Release\gbpablog.exe"
+  SetShellVarContext all
   CreateDirectory "$SMPROGRAMS\gbpablog"
   CreateShortCut "$SMPROGRAMS\gbpablog\gbpablog.lnk" "$INSTDIR\gbpablog.exe"
   CreateShortCut "$DESKTOP\gbpablog.lnk" "$INSTDIR\gbpablog.exe"
@@ -75,31 +82,25 @@ SectionEnd
 
 Section -AdditionalIcons
   WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
+  SetShellVarContext all
   CreateShortCut "$SMPROGRAMS\gbpablog\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
   CreateShortCut "$SMPROGRAMS\gbpablog\Uninstall.lnk" "$INSTDIR\uninst.exe"
 SectionEnd
 
 Section -Post
+  SetShellVarContext all
   WriteUninstaller "$INSTDIR\uninst.exe"
-  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\gbpablog.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\gbpablog.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
+  WriteRegStr ${REG_ROOT_KEY} "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\gbpablog.exe"
+  WriteRegStr ${REG_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
+  WriteRegStr ${REG_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
+  WriteRegStr ${REG_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\gbpablog.exe"
+  WriteRegStr ${REG_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
+  WriteRegStr ${REG_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
+  WriteRegStr ${REG_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
 SectionEnd
 
-
-Function un.onUninstSuccess
-  HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "La desinstalación de $(^Name) finalizó satisfactoriamente."
-FunctionEnd
-
 Function un.onInit
-!insertmacro MUI_UNGETLANGUAGE
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "¿Está completamente seguro que desea desinstalar $(^Name) junto con todos sus componentes?" IDYES +2
-  Abort
+  !insertmacro MUI_UNGETLANGUAGE
 FunctionEnd
 
 Section Uninstall
@@ -108,6 +109,7 @@ Section Uninstall
   Delete "$INSTDIR\gbpablog.exe"
   Delete "$INSTDIR\SDL.dll"
 
+  SetShellVarContext all
   Delete "$SMPROGRAMS\gbpablog\Uninstall.lnk"
   Delete "$SMPROGRAMS\gbpablog\Website.lnk"
   Delete "$DESKTOP\gbpablog.lnk"
@@ -116,7 +118,7 @@ Section Uninstall
   RMDir "$SMPROGRAMS\gbpablog"
   RMDir "$INSTDIR"
 
-  DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
-  DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
+  DeleteRegKey ${REG_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
+  DeleteRegKey ${REG_ROOT_KEY} "${PRODUCT_DIR_REGKEY}"
   SetAutoClose true
 SectionEnd

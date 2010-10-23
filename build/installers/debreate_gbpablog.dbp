@@ -1,0 +1,59 @@
+[DEBREATE-1.0]
+<<MODE>>0<</MODE>>
+<<CTRL>>
+Package: gbpablog
+Version: 0.7
+Section: games
+Maintainer: Pablo Gasco <pablogasco@gmail.com>
+Homepage: http://code.google.com/p/gbpablog/
+Priority: optional
+Architecture: i386
+Depends: libwxgtk2.8-0 (>=2.8.0), libsdl1.2debian (>=1.2.0)
+Description: Gameboy emulator
+
+<</CTRL>>
+<<FILES>>
+1
+/media/psf/Home/Documents/Programacion/GB/iconos/gbpablog64.png -> gbpablog64.png -> /usr/share/gbpablog/icons/
+/media/psf/Home/Documents/Programacion/GB/iconos/gbpablog48.png -> gbpablog48.png -> /usr/share/gbpablog/icons/
+/media/psf/Home/Documents/Programacion/gbpablog/build/linux/CodeBlocks/gbpablog* -> gbpablog -> /usr/bin
+<</FILES>>
+<<SCRIPTS>>
+<<PREINST>>
+0
+<</PREINST>>
+<<POSTINST>>
+0
+<</POSTINST>>
+<<PRERM>>
+0
+<</PRERM>>
+<<POSTRM>>
+0
+<</POSTRM>>
+<</SCRIPTS>>
+<<CHANGELOG>>
+<<DEST>>DEFAULT<</DEST>>
+
+<</CHANGELOG>>
+<<COPYRIGHT>>
+
+<</COPYRIGHT>>
+<<MENU>>
+1
+Name=gbpablog
+Version=0.7
+Exec=gbpablog
+Comment=Gameboy emulator
+Icon=/usr/share/gbpablog/icons/gbpablog64.png
+Type=Application
+Terminal=false
+StartupNotify=true
+Encoding=UTF-8
+Categories=Game;
+<</MENU>>
+<<BUILD>>
+0
+1
+0
+<</BUILD>>
