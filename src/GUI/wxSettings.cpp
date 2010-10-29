@@ -20,6 +20,8 @@
 #include <wx/spinctrl.h>
 #include <wx/config.h>
 #include <wx/fileconf.h>
+#include <wx/stdpaths.h>
+#include <wx/filename.h>
 #include "wxSettings.h"
 #include "wxIDControls.h"
 #include "gb32.xpm"
@@ -155,8 +157,15 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 
 void SettingsDialog::SaveToFile()
 {
+	wxString configDir = wxStandardPaths::Get().GetUserDataDir();
+	
+	if (!wxFileName::DirExists(configDir))
+		wxFileName::Mkdir(configDir, 0777, wxPATH_MKDIR_FULL);
+	
+	wxFileName configPath(configDir, "config.ini");
+	
 	// Guardar a disco
-	wxFileConfig fileConfig("gbpablog", "pablogasco");
+	wxFileConfig fileConfig("gbpablog", "pablogasco", configPath.GetFullPath());
 	
 	fileConfig.Write("General/greenScale", settings.greenScale);
 	fileConfig.Write("General/windowZoom", settings.windowZoom);
@@ -164,8 +173,10 @@ void SettingsDialog::SaveToFile()
 
 void SettingsDialog::LoadFromFile()
 {
+	wxString configDir = wxStandardPaths::Get().GetUserDataDir();
+	wxFileName configPath(configDir, "config.ini");
 	// Cargar de disco
-	wxFileConfig fileConfig("gbpablog", "pablogasco");
+	wxFileConfig fileConfig("gbpablog", "pablogasco", configPath.GetFullPath());
 	
 	fileConfig.Read("General/greenScale", &settings.greenScale);
 	fileConfig.Read("General/windowZoom", &settings.windowZoom);
