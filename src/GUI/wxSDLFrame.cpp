@@ -19,6 +19,7 @@
 #include <wx/filesys.h>
 #include <wx/fs_arc.h>
 #include "wxSDLFrame.h"
+#include "wxAbout.h"
 #include "wxIDControls.h"
 #include "open.xpm"
 #include "play.xpm"
@@ -33,6 +34,7 @@ BEGIN_EVENT_TABLE(SDLFrame, wxFrame)
 EVT_MENU(wxID_EXIT, SDLFrame::onFileExit)
 EVT_MENU(wxID_OPEN, SDLFrame::onFileOpen)
 EVT_MENU(wxID_PREFERENCES, SDLFrame::onSettings)
+EVT_MENU(wxID_ABOUT, SDLFrame::onAbout)
 EVT_MENU(ID_START, SDLFrame::onPlay)
 EVT_MENU(ID_PAUSE, SDLFrame::onPause)
 EVT_MENU(ID_STOP, SDLFrame::onStop)
@@ -58,7 +60,7 @@ SDLFrame::SDLFrame()
 	settingsDialog->CentreOnScreen();
 	settingsDialog->LoadFromFile();
 	SettingsSetNewValues(settingsDialog->settings);
-	
+
     // create the SDLPanel
     panel = new SDLScreen(this);
 
@@ -69,7 +71,7 @@ SDLFrame::SDLFrame()
 	cartridge = NULL;
 
 	emuState = NotStartedYet;
-	
+
 	SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
 }
 
@@ -129,7 +131,7 @@ void SDLFrame::createToolBar()
 
 	wxBitmap bmpStop(stop_xpm);
 	toolBar->AddTool(ID_STOP, bmpStop, wxT("Stop"));
-	
+
 	toolBar->Realize();
 	SetToolBar(toolBar);
 }
@@ -138,7 +140,7 @@ void SDLFrame::onFileOpen(wxCommandEvent &) {
 	BYTE * buffer = NULL;
 	unsigned long size = 0;
 	bool isZip = false;
-	
+
 	wxFileDialog* OpenDialog = new wxFileDialog(this, wxT("Choose a gameboy rom to open"), wxEmptyString, wxEmptyString,
 												wxT("Gameboy roms (*.gb; *.zip)|*.gb;*.zip"),
 												wxFD_OPEN, wxDefaultPosition);
@@ -147,14 +149,14 @@ void SDLFrame::onFileOpen(wxCommandEvent &) {
 	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 	{
 		wxString fileName = OpenDialog->GetPath();
-		if (fileName.EndsWith(".zip"))
+		if (fileName.EndsWith(wxT(".zip")))
 		{
 			isZip = true;
 			LoadZip(fileName, &buffer, &size);
 			if ((buffer == NULL) || (size == 0))
 				return;
 		}
-		
+
 		cpu->Reset();
 		if (cartridge)
 			delete cartridge;
@@ -165,7 +167,7 @@ void SDLFrame::onFileOpen(wxCommandEvent &) {
 			cartridge = new Cartridge(std::string(fileName.mb_str()));
 		}
 
-		
+
 		cpu->LoadCartridge(cartridge);
 		emuState = Playing;
 	}
@@ -183,7 +185,7 @@ void SDLFrame::LoadZip(wxString fileName, BYTE ** buffer, unsigned long * size)
 {
 	wxFileSystem::AddHandler(new wxArchiveFSHandler);
 	wxFileSystem fs;
-	wxString filter = wxT(fileName+"#zip:*.gb");
+	wxString filter = fileName+wxT("#zip:*.gb");
 	wxString fileInZip;
 	fileInZip = fs.FindFirst(filter, wxFILE);
 	if (!fileInZip.IsEmpty())
@@ -198,13 +200,13 @@ void SDLFrame::LoadZip(wxString fileName, BYTE ** buffer, unsigned long * size)
 			wxDELETE(file);
 		}
 		else {
-			wxMessageBox("The zip seems corrupt", "Error");
+			wxMessageBox(wxT("The zip seems corrupt"), wxT("Error"));
 			return;
 		}
-		
+
 	}
 	else {
-		wxMessageBox("GameBoy rom not found in the file:\n"+fileName, "Error");
+		wxMessageBox(wxT("GameBoy rom not found in the file:\n")+fileName, wxT("Error"));
 		return;
 	}
 }
@@ -234,7 +236,7 @@ void SDLFrame::onSettings(wxCommandEvent &)
 	if (emuState == Playing)
 		emuState = Paused;
 
-	
+
     if (settingsDialog->ShowModal() == wxID_OK)
 	{
 		SettingsSetNewValues(settingsDialog->settings);
@@ -242,8 +244,13 @@ void SDLFrame::onSettings(wxCommandEvent &)
 		panel->ChangeSize();
 		SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
 	}
-	
+
 	emuState = lastState;
+}
+
+void SDLFrame::onAbout(wxCommandEvent &)
+{
+	AboutDialog(this);
 }
 
 void SDLFrame::onPlay(wxCommandEvent &)

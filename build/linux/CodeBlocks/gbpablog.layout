@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
-	<ActiveTarget name="Release" />
+	<ActiveTarget name="Debug" />
 	<File name="../../../src/GUI/gb16.xpm" open="0" top="0" tabpos="0">
 		<Cursor position="439" topLine="0" />
+	</File>
+	<File name="../../../src/GUI/wxAbout.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="2754" topLine="55" />
+	</File>
+	<File name="../../../src/GUI/wxAbout.h" open="1" top="0" tabpos="1">
+		<Cursor position="0" topLine="4" />
 	</File>
 	<File name="../../../src/GUI/wxSDLApp.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="1114" topLine="30" />
 	</File>
-	<File name="../../../src/GUI/wxSDLFrame.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="3698" topLine="125" />
+	<File name="../../../src/GUI/wxSDLFrame.cpp" open="1" top="1" tabpos="4">
+		<Cursor position="941" topLine="21" />
 	</File>
 	<File name="../../../src/GUI/wxSDLScreen.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="2748" topLine="103" />
 	</File>
 	<File name="../../../src/GUI/wxSDLScreen.h" open="0" top="0" tabpos="0">
 		<Cursor position="726" topLine="0" />
+	</File>
+	<File name="../../../src/GUI/wxSettings.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="5476" topLine="164" />
 	</File>
 	<File name="../../../src/Memory.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="711" topLine="15" />

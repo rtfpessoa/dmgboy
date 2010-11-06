@@ -5,6 +5,7 @@
 		<Option title="gbpablog" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
+		<Option virtualFolders="GUI/;HW/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="gbpablog" prefix_auto="1" extension_auto="1" />
@@ -34,39 +35,123 @@
 			<Add option="`wx-config --libs` `sdl-config --libs`" />
 			<Add library="SDL" />
 		</Linker>
-		<Unit filename="../../../src/CPU.cpp" />
-		<Unit filename="../../../src/CPU.h" />
-		<Unit filename="../../../src/Cartridge.cpp" />
-		<Unit filename="../../../src/Cartridge.h" />
-		<Unit filename="../../../src/Def.h" />
-		<Unit filename="../../../src/GBException.cpp" />
-		<Unit filename="../../../src/GBException.h" />
-		<Unit filename="../../../src/GUI/gb16.xpm" />
-		<Unit filename="../../../src/GUI/open.xpm" />
-		<Unit filename="../../../src/GUI/pause.xpm" />
-		<Unit filename="../../../src/GUI/play.xpm" />
-		<Unit filename="../../../src/GUI/stop.xpm" />
-		<Unit filename="../../../src/GUI/wxIDControls.h" />
-		<Unit filename="../../../src/GUI/wxSDLApp.cpp" />
-		<Unit filename="../../../src/GUI/wxSDLApp.h" />
-		<Unit filename="../../../src/GUI/wxSDLFrame.cpp" />
-		<Unit filename="../../../src/GUI/wxSDLFrame.h" />
-		<Unit filename="../../../src/GUI/wxSDLScreen.cpp" />
-		<Unit filename="../../../src/GUI/wxSDLScreen.h" />
-		<Unit filename="../../../src/Instructions.cpp" />
-		<Unit filename="../../../src/Instructions.h" />
-		<Unit filename="../../../src/Log.cpp" />
-		<Unit filename="../../../src/Log.h" />
-		<Unit filename="../../../src/MBC.cpp" />
-		<Unit filename="../../../src/MBC.h" />
-		<Unit filename="../../../src/Memory.cpp" />
-		<Unit filename="../../../src/Memory.h" />
-		<Unit filename="../../../src/Pad.cpp" />
-		<Unit filename="../../../src/Pad.h" />
-		<Unit filename="../../../src/Registers.cpp" />
-		<Unit filename="../../../src/Registers.h" />
-		<Unit filename="../../../src/Video.cpp" />
-		<Unit filename="../../../src/Video.h" />
+		<Unit filename="../../../src/CPU.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/CPU.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Cartridge.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Cartridge.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Def.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/GBException.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/GBException.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/gb16.xpm">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/open.xpm">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/pause.xpm">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/play.xpm">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/stop.xpm">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/wxAbout.cpp">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/wxAbout.h">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/wxIDControls.h">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/wxSDLApp.cpp">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/wxSDLApp.h">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/wxSDLFrame.cpp">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/wxSDLFrame.h">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/wxSDLScreen.cpp">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/wxSDLScreen.h">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/wxSettings.cpp">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/wxSettings.h">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/Instructions.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Instructions.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Log.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Log.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/MBC.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/MBC.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Memory.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Memory.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Pad.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Pad.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Registers.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Registers.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Settings.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Settings.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Video.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Video.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<debugger />
