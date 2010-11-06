@@ -17,10 +17,10 @@
 
 #include <wx/wx.h>
 #include <wx/hyperlink.h>   // hyperlink support
+#include "SDL.h"
 #include "wxAbout.h"
 
 #include "gb64.xpm"          // app icon bitmap
-
 
 const wxString APP_NAME = wxT("gbpablog");
 const wxString APP_VENDOR = wxT("wyoGuide");
@@ -39,20 +39,26 @@ AboutDialog::AboutDialog (wxWindow *parent)
     // sets the application icon
     SetTitle (_("About ..."));
 
+	const SDL_version* sdlVersion = SDL_Linked_Version();
+	wxString stringSDLVersion;
+	stringSDLVersion << (int)sdlVersion->major << wxT(".") << (int)sdlVersion->minor << wxT(".") << (int)sdlVersion->patch;
+
     // about info
     wxGridSizer *aboutinfo = new wxGridSizer (2, 3, 3);
-    aboutinfo->Add (new wxStaticText(this, -1, _("Version: ")));
-    aboutinfo->Add (new wxStaticText(this, -1, APP_VERSION));
-    aboutinfo->Add (new wxStaticText(this, -1, _("Written by: ")));
-    aboutinfo->Add (new wxStaticText(this, -1, APP_MAINT));
-    aboutinfo->Add (new wxStaticText(this, -1, _("Licence type: ")));
-    aboutinfo->Add (new wxStaticText(this, -1, APP_LICENCE));
-    aboutinfo->Add (new wxStaticText(this, -1, _("wxWidgets: ")));
-    aboutinfo->Add (new wxStaticText(this, -1, wxVERSION_STRING));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Version: ")));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_VERSION));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Written by: ")));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_MAINT));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Licence type: ")));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_LICENCE));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("wxWidgets: ")));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxVERSION_STRING));
+	aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("SDL: ")));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, stringSDLVersion));
 
     // about icontitle//info
     wxBoxSizer *aboutpane = new wxBoxSizer (wxHORIZONTAL);
-    aboutpane->Add (new wxStaticBitmap (this, -1, wxBitmap (gb64_xpm)),
+    aboutpane->Add (new wxStaticBitmap (this, wxID_ANY, wxBitmap (gb64_xpm)),
                     0, wxALIGN_CENTER | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 40);
     aboutpane->Add (aboutinfo, 1, wxEXPAND);
     aboutpane->Add (60, 0);
@@ -60,7 +66,7 @@ AboutDialog::AboutDialog (wxWindow *parent)
     // about complete
     wxBoxSizer *totalpane = new wxBoxSizer (wxVERTICAL);
     totalpane->Add (0, 20);
-    wxStaticText *appname = new wxStaticText (this, -1, APP_NAME);
+    wxStaticText *appname = new wxStaticText (this, wxID_ANY, APP_NAME);
     appname->SetFont (wxFont (24, wxDEFAULT, wxNORMAL, wxBOLD));
     totalpane->Add (appname, 0, wxALIGN_CENTER | wxLEFT | wxRIGHT, 40);
     totalpane->Add (0, 10);

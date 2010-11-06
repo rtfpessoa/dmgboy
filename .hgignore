@@ -24,3 +24,4 @@ build/mac/Xcode/gbpablog.xcodeproj/pablo.pbxuser
 build/mac/Xcode/gbpablog.xcodeproj/pablo.perspectivev3
 build/installers/gbpablog*
 build/linux/CodeBlocks/gbpablog
+build/linux/CodeBlocks/gbpablog.layout
