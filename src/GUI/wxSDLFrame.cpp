@@ -149,7 +149,8 @@ void SDLFrame::onFileOpen(wxCommandEvent &) {
 	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 	{
 		wxString fileName = OpenDialog->GetPath();
-		if (fileName.EndsWith(wxT(".zip")))
+		wxString fileLower = fileName.Lower();
+		if (fileLower.EndsWith(wxT(".zip")))
 		{
 			isZip = true;
 			LoadZip(fileName, &buffer, &size);
@@ -185,11 +186,20 @@ void SDLFrame::LoadZip(wxString fileName, BYTE ** buffer, unsigned long * size)
 {
 	wxFileSystem::AddHandler(new wxArchiveFSHandler);
 	wxFileSystem fs;
-	wxString filter = fileName+wxT("#zip:*.gb");
+	wxString filter = fileName+wxT("#zip:*.*");
 	wxString fileInZip;
+	wxString fileLower;
 	fileInZip = fs.FindFirst(filter, wxFILE);
-	if (!fileInZip.IsEmpty())
+	while (!fileInZip.IsEmpty())
 	{
+		fileLower = fileInZip.Lower();
+		if (!fileLower.EndsWith(wxT(".gb")))
+		{
+			fileInZip = fs.FindNext();
+			continue;
+		}
+		
+		// El archivo parece una rom de gameboy
 		wxFSFile * file = fs.OpenFile(fileInZip);
 		if(file)
 		{
@@ -198,6 +208,7 @@ void SDLFrame::LoadZip(wxString fileName, BYTE ** buffer, unsigned long * size)
 			*buffer = new BYTE[*size];
 			stream->Read(*buffer, *size);
 			wxDELETE(file);
+			return;
 		}
 		else {
 			wxMessageBox(wxT("The zip seems corrupt"), wxT("Error"));
@@ -205,10 +216,10 @@ void SDLFrame::LoadZip(wxString fileName, BYTE ** buffer, unsigned long * size)
 		}
 
 	}
-	else {
-		wxMessageBox(wxT("GameBoy rom not found in the file:\n")+fileName, wxT("Error"));
-		return;
-	}
+	
+	// Archivo no encontrado
+	wxMessageBox(wxT("GameBoy rom not found in the file:\n")+fileName, wxT("Error"));
+	return;
 }
 
 void SDLFrame::onFileExit(wxCommandEvent &)

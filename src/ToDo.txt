@@ -1,4 +1,3 @@
-- http://wyoguide.sourceforge.net/guidelines/prefs.html
 - accesos rapidos: Ctrl+R o Cmd+R
 - Lista de ultimas ROMS
 - drag & drop
@@ -19,3 +18,4 @@ Terminado:
 	http://docs.wxwidgets.org/2.8.11/wx_wxarc.html
 - Corregir instalador windows7
 - http://docs.wxwidgets.org/2.8/wx_wxstandardpaths.html
+- http://wyoguide.sourceforge.net/guidelines/prefs.html
