@@ -24,7 +24,7 @@
 #include <wx/filename.h>
 #include "wxSettings.h"
 #include "wxIDControls.h"
-#include "gb32.xpm"
+#include "preferences1.xpm"
 
 
 IMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog)
@@ -39,25 +39,22 @@ SettingsDialog::SettingsDialog(wxWindow* win)
     SetExtraStyle(wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY);
 
     bool useToolBook = true;
-    int resizeBorder = wxRESIZE_BORDER;
 
     if (useToolBook)
     {
-        resizeBorder = 0;
-
         int sheetStyle = wxPROPSHEET_SHRINKTOFIT | wxPROPSHEET_BUTTONTOOLBOOK;
 
         SetSheetStyle(sheetStyle);
         //SetSheetInnerBorder(0);
         //SetSheetOuterBorder(0);
 
-		wxBitmap gb32(gb32_xpm);
+		wxBitmap preferences1(preferences1_xpm);
 
         // create a dummy image list with a few icons
         const wxSize imageSize(32, 32);
 
         m_imageList = new wxImageList(imageSize.GetWidth(), imageSize.GetHeight());
-        m_imageList->Add(gb32);
+        m_imageList->Add(preferences1);
         m_imageList->
 		Add(wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, imageSize));
         m_imageList->
@@ -72,10 +69,6 @@ SettingsDialog::SettingsDialog(wxWindow* win)
 
     wxBookCtrlBase* notebook = GetBookCtrl();
     notebook->SetImageList(m_imageList);
-
-	//wxColour backColour(168, 168, 168);
-	wxColour backColour(255, 255, 255);
-	//notebook->SetBackgroundColour(backColour);
 
     wxPanel* generalSettings = CreateGeneralSettingsPage(notebook);
 	//wxPanel* generalSettings2 = CreateGeneralSettingsPage2(notebook);
@@ -122,6 +115,7 @@ bool SettingsDialog::TransferDataFromWindow()
 wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 {
     wxPanel* panel = new wxPanel(parent, wxID_ANY);
+	
 	wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
 
 	// Paleta de colores (verde o gris)

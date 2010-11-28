@@ -16,8 +16,8 @@
  */
 
 #include <string>
-#include <wx/filesys.h>
-#include <wx/fs_arc.h>
+#include <wx/wfstream.h>
+#include <wx/zipstrm.h>
 #include "wxSDLFrame.h"
 #include "wxAbout.h"
 #include "wxIDControls.h"
@@ -182,43 +182,34 @@ void SDLFrame::onFileOpen(wxCommandEvent &) {
  * Si existe mas de una rom solo carga la primera. Si se ha encontrado, la rom se devuelve en un buffer
  * junto con su tamaño, sino las variables se dejan intactas
  */
-void SDLFrame::LoadZip(wxString fileName, BYTE ** buffer, unsigned long * size)
+void SDLFrame::LoadZip(wxString zipPath, BYTE ** buffer, unsigned long * size)
 {
-	wxFileSystem::AddHandler(new wxArchiveFSHandler);
-	wxFileSystem fs;
-	wxString filter = fileName+wxT("#zip:*.*");
-	wxString fileInZip;
-	wxString fileLower;
-	fileInZip = fs.FindFirst(filter, wxFILE);
-	while (!fileInZip.IsEmpty())
+	wxString fileInZip, fileLower;
+	wxZipEntry* entry;
+	wxFFileInputStream in(zipPath);
+	wxZipInputStream zip(in);
+	while (entry = zip.GetNextEntry())
 	{
+		fileInZip = entry->GetName();
+		
 		fileLower = fileInZip.Lower();
-		if (!fileLower.EndsWith(wxT(".gb")))
+		if (fileLower.EndsWith(wxT(".gb")))
 		{
-			fileInZip = fs.FindNext();
+			*size = zip.GetSize();
+			*buffer = new BYTE[*size];
+			zip.Read(*buffer, *size);
+			delete entry;
+			return;
+		}
+		else
+		{
+			delete entry;
 			continue;
 		}
-		
-		// El archivo parece una rom de gameboy
-		wxFSFile * file = fs.OpenFile(fileInZip);
-		if(file)
-		{
-			wxInputStream * stream = file->GetStream();
-			*size = stream->GetSize();
-			*buffer = new BYTE[*size];
-			stream->Read(*buffer, *size);
-			wxDELETE(file);
-			return;
-		}
-		else {
-			wxMessageBox(wxT("The zip seems corrupt"), wxT("Error"));
-			return;
-		}
-
 	}
 	
 	// Archivo no encontrado
-	wxMessageBox(wxT("GameBoy rom not found in the file:\n")+fileName, wxT("Error"));
+	wxMessageBox(wxT("GameBoy rom not found in the file:\n")+zipPath, wxT("Error"));
 	return;
 }
 

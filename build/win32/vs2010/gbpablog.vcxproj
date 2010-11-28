@@ -15,6 +15,7 @@
     <ClInclude Include="..\..\..\src\CPU.h" />
     <ClInclude Include="..\..\..\src\Def.h" />
     <ClInclude Include="..\..\..\src\GBException.h" />
+    <ClInclude Include="..\..\..\src\GUI\wxAbout.h" />
     <ClInclude Include="..\..\..\src\GUI\wxIDControls.h" />
     <ClInclude Include="..\..\..\src\GUI\wxSDLApp.h" />
     <ClInclude Include="..\..\..\src\GUI\wxSDLFrame.h" />
@@ -33,6 +34,7 @@
     <ClCompile Include="..\..\..\src\Cartridge.cpp" />
     <ClCompile Include="..\..\..\src\CPU.cpp" />
     <ClCompile Include="..\..\..\src\GBException.cpp" />
+    <ClCompile Include="..\..\..\src\GUI\wxAbout.cpp" />
     <ClCompile Include="..\..\..\src\GUI\wxSDLApp.cpp" />
     <ClCompile Include="..\..\..\src\GUI\wxSDLFrame.cpp" />
     <ClCompile Include="..\..\..\src\GUI\wxSDLScreen.cpp" />
