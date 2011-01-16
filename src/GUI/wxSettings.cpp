@@ -24,12 +24,14 @@
 #include <wx/filename.h>
 #include "wxSettings.h"
 #include "wxIDControls.h"
-#include "preferences1.xpm"
+#include "Pad.h"
+#include "Xpm/preferences1.xpm"
 
 
 IMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog)
 
 BEGIN_EVENT_TABLE(SettingsDialog, wxPropertySheetDialog)
+EVT_TEXT(ID_TEXTCTRL_UP, SettingsDialog::redefineKey)
 END_EVENT_TABLE()
 
 SettingsDialog::SettingsDialog(wxWindow* win)
@@ -71,11 +73,11 @@ SettingsDialog::SettingsDialog(wxWindow* win)
     notebook->SetImageList(m_imageList);
 
     wxPanel* generalSettings = CreateGeneralSettingsPage(notebook);
-	//wxPanel* generalSettings2 = CreateGeneralSettingsPage2(notebook);
+	wxPanel* padSettings = CreatePadSettingsPage(notebook);
     //wxPanel* aestheticSettings = CreateAestheticSettingsPage(notebook);
 
 	notebook->AddPage(generalSettings, _("General"), true, 0);
-    //notebook->AddPage(generalSettings2, _("General2"), false, 1);
+    notebook->AddPage(padSettings, _("Pad"), false, 1);
     //notebook->AddPage(aestheticSettings, _("Aesthetics"), false, 2);
 
     LayoutDialog();
@@ -84,6 +86,11 @@ SettingsDialog::SettingsDialog(wxWindow* win)
 SettingsDialog::~SettingsDialog()
 {
     delete m_imageList;
+}
+
+void SettingsDialog::redefineKey(wxCommandEvent &commandEvent)
+{
+	wxMessageBox(wxT("Key pressed"), wxT("Key"));
 }
 
 /*! * Transfer data to the window */
@@ -146,6 +153,50 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 
     panel->SetSizerAndFit(topSizer);
 
+    return panel;
+}
+
+wxPanel* SettingsDialog::CreatePadSettingsPage(wxWindow* parent)
+{
+    wxPanel* panel = new wxPanel(parent, wxID_ANY);
+	
+	wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer * upSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxStaticText * upLabel = new wxStaticText(panel, wxID_ANY, wxT("Up"));
+	wxTextCtrl * upTextCtrl = new wxTextCtrl(panel, ID_TEXTCTRL_UP);
+	
+	upSizer->Add(upLabel, 0, wxGROW|wxALL, 0);
+	upSizer->Add(upTextCtrl, 0, wxGROW|wxALL, 0);
+	
+	wxBoxSizer * downSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxStaticText * downLabel = new wxStaticText(panel, wxID_ANY, wxT("Down"));
+	wxTextCtrl * downTextCtrl = new wxTextCtrl(panel, wxID_ANY);
+	
+	downSizer->Add(downLabel, 0, wxGROW|wxALL, 0);
+	downSizer->Add(downTextCtrl, 0, wxGROW|wxALL, 0);
+	
+	wxBoxSizer * leftSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxStaticText * leftLabel = new wxStaticText(panel, wxID_ANY, wxT("Left"));
+	wxTextCtrl * leftTextCtrl = new wxTextCtrl(panel, wxID_ANY);
+	
+	leftSizer->Add(leftLabel, 0, wxGROW|wxALL, 0);
+	leftSizer->Add(leftTextCtrl, 0, wxGROW|wxALL, 0);
+	
+	wxBoxSizer * rightSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxStaticText * rightLabel = new wxStaticText(panel, wxID_ANY, wxT("Right"));
+	wxTextCtrl * rightTextCtrl = new wxTextCtrl(panel, wxID_ANY);
+	
+	rightSizer->Add(rightLabel, 0, wxGROW|wxALL, 0);
+	rightSizer->Add(rightTextCtrl, 0, wxGROW|wxALL, 0);
+	
+    topSizer->Add(upSizer, 0, wxGROW|wxALL, 0);
+	topSizer->Add(downSizer, 0, wxGROW|wxALL, 0);
+	topSizer->Add(leftSizer, 0, wxGROW|wxALL, 0);
+	topSizer->Add(rightSizer, 0, wxGROW|wxALL, 0);
+	
+    panel->SetSizerAndFit(topSizer);
+	
     return panel;
 }
 

@@ -33,8 +33,11 @@ private:
 	bool TransferDataFromWindow();
 	
 	wxPanel* CreateGeneralSettingsPage(wxWindow* parent);
+	wxPanel* CreatePadSettingsPage(wxWindow* parent);
 	wxPanel* CreateGeneralSettingsPage2(wxWindow* parent);
     wxPanel* CreateAestheticSettingsPage(wxWindow* parent);
+	
+	void redefineKey(wxCommandEvent &commandEvent);
 	
 public:
     SettingsDialog(wxWindow* parent);

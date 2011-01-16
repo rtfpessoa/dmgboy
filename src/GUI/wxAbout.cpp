@@ -19,12 +19,11 @@
 #include <wx/hyperlink.h>   // hyperlink support
 #include "SDL.h"
 #include "wxAbout.h"
-
-#include "gb64.xpm"          // app icon bitmap
+#include "Xpm/gb64.xpm"          // app icon bitmap
 
 const wxString APP_NAME = wxT("gbpablog");
 const wxString APP_VENDOR = wxT("wyoGuide");
-const wxString APP_VERSION = wxT("0.7");
+const wxString APP_VERSION = wxT("0.8");
 const wxString APP_MAINT = wxT("Pablo Gasco");
 const wxString APP_LICENCE = wxT("GPL v3");
 const wxString APP_COPYRIGTH = wxT("(C) 2010 Pablo Gasco");
@@ -59,7 +58,7 @@ AboutDialog::AboutDialog (wxWindow *parent)
     // about icontitle//info
     wxBoxSizer *aboutpane = new wxBoxSizer (wxHORIZONTAL);
     aboutpane->Add (new wxStaticBitmap (this, wxID_ANY, wxBitmap (gb64_xpm)),
-                    0, wxALIGN_CENTER | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 40);
+                    0, wxALIGN_CENTER | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 20);
     aboutpane->Add (aboutinfo, 1, wxEXPAND);
     aboutpane->Add (60, 0);
 

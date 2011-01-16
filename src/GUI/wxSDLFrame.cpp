@@ -21,12 +21,12 @@
 #include "wxSDLFrame.h"
 #include "wxAbout.h"
 #include "wxIDControls.h"
-#include "open.xpm"
-#include "play.xpm"
-#include "pause.xpm"
-#include "stop.xpm"
-#include "gb16.xpm"
 #include "../Settings.h"
+#include "Xpm/open.xpm"
+#include "Xpm/play.xpm"
+#include "Xpm/pause.xpm"
+#include "Xpm/stop.xpm"
+#include "Xpm/gb16.xpm"
 
 IMPLEMENT_CLASS(SDLFrame, wxFrame)
 

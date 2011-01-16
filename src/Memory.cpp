@@ -89,7 +89,7 @@ void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
 				BYTE oldP1;
 				oldP1 = memory[P1];
 				value = (value & 0x30) | (oldP1 & ~0x30);
-				value = updateInput(value);
+				value = PadUpdateInput(value);
 				if ((value != oldP1) && ((value & 0x0F) != 0x0F))
 				{
 					//Debe producir una interrupcion

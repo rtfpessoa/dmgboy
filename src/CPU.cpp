@@ -850,7 +850,7 @@ void CPU::CyclicTasks()
 
 void CPU::UpdatePad()
 {
-	int interrupt = checkKeyboard(&memory[P1]);
+	int interrupt = PadCheckKeyboard(&memory[P1]);
 	if (interrupt)
 		memory[IF] = memory[IF] | 0x10;
 }

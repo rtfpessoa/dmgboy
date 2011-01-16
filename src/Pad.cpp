@@ -21,13 +21,17 @@
 #include "GBException.h"
 using namespace std;
 
-enum e_gbpad { gbRIGHT, gbLEFT, gbUP, gbDOWN, gbA, gbB, gbSELECT, gbSTART };
-
 static wxKeyCode keysUsed[] = { WXK_RIGHT, WXK_LEFT, WXK_UP, WXK_DOWN, (wxKeyCode)'A', (wxKeyCode)'S', (wxKeyCode)'Q', (wxKeyCode)'W' };
 
 static BYTE gbPadState[8];
 
-BYTE updateInput(BYTE valueP1)
+void PadSetKeys(wxKeyCode keys[])
+{
+	for (int i=0; i<8; i++)
+		keysUsed[i] = keys[i];
+}
+
+BYTE PadUpdateInput(BYTE valueP1)
 {
 	if(!BIT5(valueP1))
 		return ((valueP1 & 0x30) |
@@ -43,7 +47,7 @@ BYTE updateInput(BYTE valueP1)
 
 // Devuelve 1 cuando se ha pulsado una tecla
 // 0 en caso contrario
-int checkKeyboard(BYTE * valueP1)
+int PadCheckKeyboard(BYTE * valueP1)
 {
 	
 	int interrupt = 0;
@@ -58,7 +62,7 @@ int checkKeyboard(BYTE * valueP1)
 		gbPadState[i] = wxGetKeyState(keysUsed[i]);
 	}
 	
-	*valueP1 = updateInput(*valueP1);
+	*valueP1 = PadUpdateInput(*valueP1);
 	
 	return 0;
 }

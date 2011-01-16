@@ -25,10 +25,6 @@
 		6E23C73E11D7CD510043AF47 /* Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72F11D7CD510043AF47 /* Registers.cpp */; };
 		6E23C74011D7CD510043AF47 /* Video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C73311D7CD510043AF47 /* Video.cpp */; };
 		6EA1AB79127F0F0E00AC510C /* wxAbout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1AB78127F0F0E00AC510C /* wxAbout.cpp */; };
-		6EF945AC11FC845C000260D3 /* play.xpm in Resources */ = {isa = PBXBuildFile; fileRef = 6EF945AB11FC845C000260D3 /* play.xpm */; };
-		6EF945BE11FC886C000260D3 /* open.xpm in Resources */ = {isa = PBXBuildFile; fileRef = 6EF945BB11FC886C000260D3 /* open.xpm */; };
-		6EF945BF11FC886C000260D3 /* pause.xpm in Resources */ = {isa = PBXBuildFile; fileRef = 6EF945BC11FC886C000260D3 /* pause.xpm */; };
-		6EF945C011FC886C000260D3 /* stop.xpm in Resources */ = {isa = PBXBuildFile; fileRef = 6EF945BD11FC886C000260D3 /* stop.xpm */; };
 		6EFA5276126354F2000E541D /* ToDo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6EFA5275126354F2000E541D /* ToDo.txt */; };
 		6EFEDB441245230600646E83 /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEDB421245230600646E83 /* Settings.cpp */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -76,10 +72,6 @@
 		6E23C73411D7CD510043AF47 /* Video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Video.h; path = ../../../src/Video.h; sourceTree = SOURCE_ROOT; };
 		6EA1AB77127F0F0E00AC510C /* wxAbout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxAbout.h; sourceTree = "<group>"; };
 		6EA1AB78127F0F0E00AC510C /* wxAbout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxAbout.cpp; sourceTree = "<group>"; };
-		6EF945AB11FC845C000260D3 /* play.xpm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = play.xpm; sourceTree = "<group>"; };
-		6EF945BB11FC886C000260D3 /* open.xpm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = open.xpm; sourceTree = "<group>"; };
-		6EF945BC11FC886C000260D3 /* pause.xpm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pause.xpm; sourceTree = "<group>"; };
-		6EF945BD11FC886C000260D3 /* stop.xpm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stop.xpm; sourceTree = "<group>"; };
 		6EFA5275126354F2000E541D /* ToDo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ToDo.txt; path = ../../../src/ToDo.txt; sourceTree = SOURCE_ROOT; };
 		6EFEDB421245230600646E83 /* Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Settings.cpp; path = ../../../src/Settings.cpp; sourceTree = SOURCE_ROOT; };
 		6EFEDB431245230600646E83 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Settings.h; path = ../../../src/Settings.h; sourceTree = SOURCE_ROOT; };
@@ -186,10 +178,6 @@
 				6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */,
 				6E23C6C411D7CA0C0043AF47 /* wxSDLScreen.h */,
 				6E23C6C311D7CA0C0043AF47 /* wxSDLScreen.cpp */,
-				6EF945BB11FC886C000260D3 /* open.xpm */,
-				6EF945AB11FC845C000260D3 /* play.xpm */,
-				6EF945BC11FC886C000260D3 /* pause.xpm */,
-				6EF945BD11FC886C000260D3 /* stop.xpm */,
 				6E2236781233B4C6009D019F /* wxSettings.h */,
 				6E2236791233B4C6009D019F /* wxSettings.cpp */,
 				6EA1AB77127F0F0E00AC510C /* wxAbout.h */,
@@ -281,10 +269,6 @@
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
-				6EF945AC11FC845C000260D3 /* play.xpm in Resources */,
-				6EF945BE11FC886C000260D3 /* open.xpm in Resources */,
-				6EF945BF11FC886C000260D3 /* pause.xpm in Resources */,
-				6EF945C011FC886C000260D3 /* stop.xpm in Resources */,
 				6E205760120589BF00079331 /* gbpablog.icns in Resources */,
 				6EFA5276126354F2000E541D /* ToDo.txt in Resources */,
 			);

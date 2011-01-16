@@ -18,9 +18,13 @@
 #ifndef __PAD_H__
 #define __PAD_H__
 
+#include <wx/wx.h>
 #include "Def.h"
 
-int checkKeyboard(BYTE * valueP1);
-BYTE updateInput(BYTE valueP1);
+enum e_gbpad { gbRIGHT, gbLEFT, gbUP, gbDOWN, gbA, gbB, gbSELECT, gbSTART };
+
+void PadSetKeys(wxKeyCode keys[]);
+int PadCheckKeyboard(BYTE * valueP1);
+BYTE PadUpdateInput(BYTE valueP1);
 
 #endif
