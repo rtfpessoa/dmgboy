@@ -37,7 +37,7 @@ private:
 	wxPanel* CreateGeneralSettingsPage2(wxWindow* parent);
     wxPanel* CreateAestheticSettingsPage(wxWindow* parent);
 	
-	void redefineKey(wxCommandEvent &commandEvent);
+	void redefineKey(wxKeyEvent &keyEvent);
 	
 public:
     SettingsDialog(wxWindow* parent);

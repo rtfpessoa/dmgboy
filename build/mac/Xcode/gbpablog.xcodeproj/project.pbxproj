@@ -25,6 +25,7 @@
 		6E23C73E11D7CD510043AF47 /* Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72F11D7CD510043AF47 /* Registers.cpp */; };
 		6E23C74011D7CD510043AF47 /* Video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C73311D7CD510043AF47 /* Video.cpp */; };
 		6EA1AB79127F0F0E00AC510C /* wxAbout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1AB78127F0F0E00AC510C /* wxAbout.cpp */; };
+		6EDDDE7512EA037200BFB26A /* wxInputTextCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDDE7412EA037200BFB26A /* wxInputTextCtrl.cpp */; };
 		6EFA5276126354F2000E541D /* ToDo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6EFA5275126354F2000E541D /* ToDo.txt */; };
 		6EFEDB441245230600646E83 /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEDB421245230600646E83 /* Settings.cpp */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -72,6 +73,8 @@
 		6E23C73411D7CD510043AF47 /* Video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Video.h; path = ../../../src/Video.h; sourceTree = SOURCE_ROOT; };
 		6EA1AB77127F0F0E00AC510C /* wxAbout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxAbout.h; sourceTree = "<group>"; };
 		6EA1AB78127F0F0E00AC510C /* wxAbout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxAbout.cpp; sourceTree = "<group>"; };
+		6EDDDE7312EA037200BFB26A /* wxInputTextCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxInputTextCtrl.h; sourceTree = "<group>"; };
+		6EDDDE7412EA037200BFB26A /* wxInputTextCtrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxInputTextCtrl.cpp; sourceTree = "<group>"; };
 		6EFA5275126354F2000E541D /* ToDo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ToDo.txt; path = ../../../src/ToDo.txt; sourceTree = SOURCE_ROOT; };
 		6EFEDB421245230600646E83 /* Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Settings.cpp; path = ../../../src/Settings.cpp; sourceTree = SOURCE_ROOT; };
 		6EFEDB431245230600646E83 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Settings.h; path = ../../../src/Settings.h; sourceTree = SOURCE_ROOT; };
@@ -182,6 +185,8 @@
 				6E2236791233B4C6009D019F /* wxSettings.cpp */,
 				6EA1AB77127F0F0E00AC510C /* wxAbout.h */,
 				6EA1AB78127F0F0E00AC510C /* wxAbout.cpp */,
+				6EDDDE7312EA037200BFB26A /* wxInputTextCtrl.h */,
+				6EDDDE7412EA037200BFB26A /* wxInputTextCtrl.cpp */,
 			);
 			name = GUI;
 			path = ../../../src/GUI;
@@ -297,6 +302,7 @@
 				6E22367A1233B4C6009D019F /* wxSettings.cpp in Sources */,
 				6EFEDB441245230600646E83 /* Settings.cpp in Sources */,
 				6EA1AB79127F0F0E00AC510C /* wxAbout.cpp in Sources */,
+				6EDDDE7512EA037200BFB26A /* wxInputTextCtrl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

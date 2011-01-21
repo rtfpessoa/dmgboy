@@ -24,6 +24,7 @@
 #include <wx/filename.h>
 #include "wxSettings.h"
 #include "wxIDControls.h"
+#include "wxInputTextCtrl.h"
 #include "Pad.h"
 #include "Xpm/preferences1.xpm"
 
@@ -31,7 +32,7 @@
 IMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog)
 
 BEGIN_EVENT_TABLE(SettingsDialog, wxPropertySheetDialog)
-EVT_TEXT(ID_TEXTCTRL_UP, SettingsDialog::redefineKey)
+
 END_EVENT_TABLE()
 
 SettingsDialog::SettingsDialog(wxWindow* win)
@@ -86,11 +87,6 @@ SettingsDialog::SettingsDialog(wxWindow* win)
 SettingsDialog::~SettingsDialog()
 {
     delete m_imageList;
-}
-
-void SettingsDialog::redefineKey(wxCommandEvent &commandEvent)
-{
-	wxMessageBox(wxT("Key pressed"), wxT("Key"));
 }
 
 /*! * Transfer data to the window */
@@ -164,28 +160,28 @@ wxPanel* SettingsDialog::CreatePadSettingsPage(wxWindow* parent)
 	
 	wxBoxSizer * upSizer = new wxBoxSizer( wxHORIZONTAL );
 	wxStaticText * upLabel = new wxStaticText(panel, wxID_ANY, wxT("Up"));
-	wxTextCtrl * upTextCtrl = new wxTextCtrl(panel, ID_TEXTCTRL_UP);
+	InputTextCtrl * upTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_UP);
 	
 	upSizer->Add(upLabel, 0, wxGROW|wxALL, 0);
 	upSizer->Add(upTextCtrl, 0, wxGROW|wxALL, 0);
 	
 	wxBoxSizer * downSizer = new wxBoxSizer( wxHORIZONTAL );
 	wxStaticText * downLabel = new wxStaticText(panel, wxID_ANY, wxT("Down"));
-	wxTextCtrl * downTextCtrl = new wxTextCtrl(panel, wxID_ANY);
+	InputTextCtrl * downTextCtrl = new InputTextCtrl(panel, wxID_ANY);
 	
 	downSizer->Add(downLabel, 0, wxGROW|wxALL, 0);
 	downSizer->Add(downTextCtrl, 0, wxGROW|wxALL, 0);
 	
 	wxBoxSizer * leftSizer = new wxBoxSizer( wxHORIZONTAL );
 	wxStaticText * leftLabel = new wxStaticText(panel, wxID_ANY, wxT("Left"));
-	wxTextCtrl * leftTextCtrl = new wxTextCtrl(panel, wxID_ANY);
+	InputTextCtrl * leftTextCtrl = new InputTextCtrl(panel, wxID_ANY);
 	
 	leftSizer->Add(leftLabel, 0, wxGROW|wxALL, 0);
 	leftSizer->Add(leftTextCtrl, 0, wxGROW|wxALL, 0);
 	
 	wxBoxSizer * rightSizer = new wxBoxSizer( wxHORIZONTAL );
 	wxStaticText * rightLabel = new wxStaticText(panel, wxID_ANY, wxT("Right"));
-	wxTextCtrl * rightTextCtrl = new wxTextCtrl(panel, wxID_ANY);
+	InputTextCtrl * rightTextCtrl = new InputTextCtrl(panel, wxID_ANY);
 	
 	rightSizer->Add(rightLabel, 0, wxGROW|wxALL, 0);
 	rightSizer->Add(rightTextCtrl, 0, wxGROW|wxALL, 0);
