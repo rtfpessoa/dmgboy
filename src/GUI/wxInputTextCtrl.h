@@ -18,6 +18,8 @@
 #ifndef __WXINPUTTEXTCTRL_H__
 #define __WXINPUTTEXTCTRL_H__
 
+#define NUM_KEYNAMES 1024
+
 #include <wx/wx.h>
 
 class InputTextCtrl: public wxTextCtrl
@@ -28,6 +30,10 @@ class InputTextCtrl: public wxTextCtrl
 public:
 	InputTextCtrl(wxWindow* parent, wxWindowID id);
 private:
+	static wxString keyNames[NUM_KEYNAMES];
+	static bool keyNamesInitialized;
+	static void InitializeKeyNames();
+	
 	void OnKeyDown(wxKeyEvent& event);
 	
 };
