@@ -117,7 +117,7 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 {
     wxPanel* panel = new wxPanel(parent, wxID_ANY);
 	
-	wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer *vSizer = new wxBoxSizer( wxVERTICAL );
 
 	// Paleta de colores (verde o gris)
 	wxString grayOrGreenChoices[2];
@@ -142,9 +142,13 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
     winZoomSizer->Add(5, 5, 1, wxALL, 0);
     winZoomSizer->Add(choiceWinZoom, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
 
-    topSizer->Add(grayOrGreen, 0, wxGROW|wxALL, 0);
-	topSizer->Add(winZoomSizer, 0, wxGROW|wxALL, 0);
+    vSizer->Add(grayOrGreen, 0, wxGROW|wxBOTTOM, 5);
+	vSizer->Add(winZoomSizer);
 
+	wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
+	
+	topSizer->Add(vSizer, 0, wxALL, 10);
+	
     panel->SetSizerAndFit(topSizer);
 
     return panel;
@@ -154,7 +158,7 @@ wxPanel* SettingsDialog::CreateInputSettingsPage(wxWindow* parent)
 {
     wxPanel* panel = new wxPanel(parent, wxID_ANY);
 	
-	wxGridSizer *grid = new wxGridSizer(2, 3, 0);
+	wxFlexGridSizer *grid = new wxFlexGridSizer(2, 3, 5);
 	
 	wxStaticText * upLabel = new wxStaticText(panel, wxID_ANY, wxT("Up"));
 	InputTextCtrl * upTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_UP);
@@ -197,7 +201,10 @@ wxPanel* SettingsDialog::CreateInputSettingsPage(wxWindow* parent)
 	grid->Add(startLabel);
 	grid->Add(startTextCtrl);
 	
-	panel->SetSizerAndFit(grid);
+	wxBoxSizer * topSizer = new wxBoxSizer(wxVERTICAL);
+	topSizer->Add(grid, 0, wxALL, 10);
+	
+	panel->SetSizerAndFit(topSizer);
 	
     return panel;
 }
