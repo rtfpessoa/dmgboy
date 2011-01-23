@@ -42,11 +42,12 @@ SettingsDialog::SettingsDialog(wxWindow* win)
 	
     bool useToolBook = false;
 
+	int sheetStyle = wxPROPSHEET_SHRINKTOFIT;
+	
     if (useToolBook)
     {
-        int sheetStyle = wxPROPSHEET_SHRINKTOFIT | wxPROPSHEET_BUTTONTOOLBOOK;
+        sheetStyle |= wxPROPSHEET_BUTTONTOOLBOOK;
 
-        SetSheetStyle(sheetStyle);
         //SetSheetInnerBorder(0);
         //SetSheetOuterBorder(0);
 
@@ -60,6 +61,8 @@ SettingsDialog::SettingsDialog(wxWindow* win)
         m_imageList->Add(wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, imageSize));
     }
 	
+	SetSheetStyle(sheetStyle);
+	
 	Create(win, wxID_ANY, _("Preferences"));
 	
 	wxBookCtrlBase* notebook = GetBookCtrl();
@@ -70,12 +73,10 @@ SettingsDialog::SettingsDialog(wxWindow* win)
 	CreateButtons(wxOK | wxCANCEL);
 
     wxPanel* generalSettings = CreateGeneralSettingsPage(notebook);
-	wxPanel* padSettings = CreatePadSettingsPage(notebook);
-    //wxPanel* aestheticSettings = CreateAestheticSettingsPage(notebook);
+	wxPanel* inputSettings = CreateInputSettingsPage(notebook);
 
 	notebook->AddPage(generalSettings, _("General"), true, 0);
-    notebook->AddPage(padSettings, _("Input"), false, 1);
-    //notebook->AddPage(aestheticSettings, _("Aesthetics"), false, 2);
+    notebook->AddPage(inputSettings, _("Input"), false, 1);
 
     LayoutDialog();
 }
@@ -149,48 +150,54 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
     return panel;
 }
 
-wxPanel* SettingsDialog::CreatePadSettingsPage(wxWindow* parent)
+wxPanel* SettingsDialog::CreateInputSettingsPage(wxWindow* parent)
 {
     wxPanel* panel = new wxPanel(parent, wxID_ANY);
 	
-	wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
+	wxGridSizer *grid = new wxGridSizer(2, 3, 0);
 	
-	wxBoxSizer * upSizer = new wxBoxSizer( wxHORIZONTAL );
 	wxStaticText * upLabel = new wxStaticText(panel, wxID_ANY, wxT("Up"));
 	InputTextCtrl * upTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_UP);
 	
-	upSizer->Add(upLabel, 0, wxGROW|wxALL, 0);
-	upSizer->Add(upTextCtrl, 0, wxGROW|wxALL, 0);
-	
-	wxBoxSizer * downSizer = new wxBoxSizer( wxHORIZONTAL );
 	wxStaticText * downLabel = new wxStaticText(panel, wxID_ANY, wxT("Down"));
 	InputTextCtrl * downTextCtrl = new InputTextCtrl(panel, wxID_ANY);
 	
-	downSizer->Add(downLabel, 0, wxGROW|wxALL, 0);
-	downSizer->Add(downTextCtrl, 0, wxGROW|wxALL, 0);
-	
-	wxBoxSizer * leftSizer = new wxBoxSizer( wxHORIZONTAL );
 	wxStaticText * leftLabel = new wxStaticText(panel, wxID_ANY, wxT("Left"));
 	InputTextCtrl * leftTextCtrl = new InputTextCtrl(panel, wxID_ANY);
 	
-	leftSizer->Add(leftLabel, 0, wxGROW|wxALL, 0);
-	leftSizer->Add(leftTextCtrl, 0, wxGROW|wxALL, 0);
-	
-	wxBoxSizer * rightSizer = new wxBoxSizer( wxHORIZONTAL );
 	wxStaticText * rightLabel = new wxStaticText(panel, wxID_ANY, wxT("Right"));
 	InputTextCtrl * rightTextCtrl = new InputTextCtrl(panel, wxID_ANY);
 	
-	rightSizer->Add(rightLabel, 0, wxGROW|wxALL, 0);
-	rightSizer->Add(rightTextCtrl, 0, wxGROW|wxALL, 0);
+	wxStaticText * aLabel = new wxStaticText(panel, wxID_ANY, wxT("A"));
+	InputTextCtrl * aTextCtrl = new InputTextCtrl(panel, wxID_ANY);
 	
-    topSizer->Add(upSizer, 0, wxGROW|wxALL, 0);
-	topSizer->Add(downSizer, 0, wxGROW|wxALL, 0);
-	topSizer->Add(leftSizer, 0, wxGROW|wxALL, 0);
-	topSizer->Add(rightSizer, 0, wxGROW|wxALL, 0);
+	wxStaticText * bLabel = new wxStaticText(panel, wxID_ANY, wxT("B"));
+	InputTextCtrl * bTextCtrl = new InputTextCtrl(panel, wxID_ANY);
 	
-    panel->SetSizerAndFit(topSizer);
+	wxStaticText * selectLabel = new wxStaticText(panel, wxID_ANY, wxT("Select"));
+	InputTextCtrl * selectTextCtrl = new InputTextCtrl(panel, wxID_ANY);
 	
-	upTextCtrl->SetFocus();
+	wxStaticText * startLabel = new wxStaticText(panel, wxID_ANY, wxT("Start"));
+	InputTextCtrl * startTextCtrl = new InputTextCtrl(panel, wxID_ANY);
+	
+	grid->Add(upLabel);
+	grid->Add(upTextCtrl);
+	grid->Add(downLabel);
+	grid->Add(downTextCtrl);
+	grid->Add(leftLabel);
+	grid->Add(leftTextCtrl);
+	grid->Add(rightLabel);
+	grid->Add(rightTextCtrl);
+	grid->Add(aLabel);
+	grid->Add(aTextCtrl);
+	grid->Add(bLabel);
+	grid->Add(bTextCtrl);
+	grid->Add(selectLabel);
+	grid->Add(selectTextCtrl);
+	grid->Add(startLabel);
+	grid->Add(startTextCtrl);
+	
+	panel->SetSizerAndFit(grid);
 	
     return panel;
 }
