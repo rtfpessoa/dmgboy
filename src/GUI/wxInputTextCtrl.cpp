@@ -34,6 +34,7 @@ void InputTextCtrl::InitializeKeyNames()
 		InputTextCtrl::keyNames[i] = wxT("");
 	
 	/* ASCII */
+	/*
 	InputTextCtrl::keyNames['!']		= wxT("!");
 	InputTextCtrl::keyNames['\"']		= wxT("\"");
 	InputTextCtrl::keyNames['#']		= wxT("#");
@@ -49,6 +50,7 @@ void InputTextCtrl::InitializeKeyNames()
 	InputTextCtrl::keyNames['-']		= wxT("-");
 	InputTextCtrl::keyNames['.']		= wxT(".");
 	InputTextCtrl::keyNames['/']		= wxT("/");
+	*/
 	
 	InputTextCtrl::keyNames['0']		= wxT("0");
 	InputTextCtrl::keyNames['1']		= wxT("1");
@@ -61,6 +63,7 @@ void InputTextCtrl::InitializeKeyNames()
 	InputTextCtrl::keyNames['8']		= wxT("8");
 	InputTextCtrl::keyNames['9']		= wxT("9");
 	
+	/*
 	InputTextCtrl::keyNames[':']		= wxT(":");
 	InputTextCtrl::keyNames[';']		= wxT(";");
 	InputTextCtrl::keyNames['<']		= wxT("<");
@@ -68,6 +71,7 @@ void InputTextCtrl::InitializeKeyNames()
 	InputTextCtrl::keyNames['>']		= wxT(">");
 	InputTextCtrl::keyNames['?']		= wxT("?");
 	InputTextCtrl::keyNames['@']		= wxT("@");
+	*/
 	
 	InputTextCtrl::keyNames['A']		= wxT("A");
 	InputTextCtrl::keyNames['B']		= wxT("B");
@@ -96,6 +100,7 @@ void InputTextCtrl::InitializeKeyNames()
 	InputTextCtrl::keyNames['Y']		= wxT("Y");
 	InputTextCtrl::keyNames['Z']		= wxT("Z");
 	
+	/*
 	InputTextCtrl::keyNames['[']		= wxT("[");
 	InputTextCtrl::keyNames['\\']		= wxT("\\");
 	InputTextCtrl::keyNames[']']		= wxT("]");
@@ -107,6 +112,7 @@ void InputTextCtrl::InitializeKeyNames()
 	InputTextCtrl::keyNames['|']		= wxT("|");
 	InputTextCtrl::keyNames['}']		= wxT("}");
 	InputTextCtrl::keyNames['~']		= wxT("~");
+	*/
 	
 	
 	/* NO ASCII */
@@ -219,7 +225,7 @@ void InputTextCtrl::InitializeKeyNames()
 	
 	InputTextCtrl::keyNames[WXK_WINDOWS_LEFT]		= wxT("Windows Left");
 	InputTextCtrl::keyNames[WXK_WINDOWS_RIGHT]		= wxT("Windows Right");
-	InputTextCtrl::keyNames[WXK_WINDOWS_MENU]		= wxT("Applications");
+	InputTextCtrl::keyNames[WXK_WINDOWS_MENU]		= wxT("Application");
 	InputTextCtrl::keyNames[WXK_COMMAND]			= wxT("Command");
 	
 	InputTextCtrl::keyNames[WXK_SPECIAL1]			= wxT("Special 1");
@@ -249,15 +255,29 @@ void InputTextCtrl::InitializeKeyNames()
 InputTextCtrl::InputTextCtrl(wxWindow* parent, wxWindowID id)
 {
 	InputTextCtrl::InitializeKeyNames();
-	Create(parent, id);
+	Create(parent, id, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB );
 }
 
 void InputTextCtrl::OnKeyDown(wxKeyEvent& event)
 {
 	int keyCode = event.GetKeyCode();
 	if (InputTextCtrl::keyNames[keyCode] == wxT(""))
-		this->SetValue(wxString::Format(wxT("Unknown: %i"),keyCode));
+	{
+		if (!keyCode)
+		{
+			this->SetBackgroundColour(*wxRED);
+			this->ChangeValue(wxT("Invalid key"));
+		}
+		else
+		{
+			this->SetBackgroundColour(*wxWHITE);
+			this->ChangeValue(wxString::Format(wxT("Key %i"),keyCode));
+		}
+	}
 	else
-		this->SetValue(InputTextCtrl::keyNames[keyCode]);
+	{
+		this->SetBackgroundColour(*wxWHITE);
+		this->ChangeValue(InputTextCtrl::keyNames[keyCode]);
+	}
 }
 

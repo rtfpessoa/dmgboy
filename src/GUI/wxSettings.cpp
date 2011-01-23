@@ -25,23 +25,22 @@
 #include "wxSettings.h"
 #include "wxIDControls.h"
 #include "wxInputTextCtrl.h"
-#include "Pad.h"
+#include "../Pad.h"
 #include "Xpm/preferences1.xpm"
 
 
 IMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog)
 
 BEGIN_EVENT_TABLE(SettingsDialog, wxPropertySheetDialog)
-
 END_EVENT_TABLE()
 
 SettingsDialog::SettingsDialog(wxWindow* win)
 {
 	settings = SettingsGetCopy();
-
-    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY);
-
-    bool useToolBook = true;
+	
+	m_imageList = NULL;
+	
+    bool useToolBook = false;
 
     if (useToolBook)
     {
@@ -58,27 +57,24 @@ SettingsDialog::SettingsDialog(wxWindow* win)
 
         m_imageList = new wxImageList(imageSize.GetWidth(), imageSize.GetHeight());
         m_imageList->Add(preferences1);
-        m_imageList->
-		Add(wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, imageSize));
-        m_imageList->
-		Add(wxArtProvider::GetIcon(wxART_WARNING, wxART_OTHER, imageSize));
-        m_imageList->
-		Add(wxArtProvider::GetIcon(wxART_ERROR, wxART_OTHER, imageSize));
+        m_imageList->Add(wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, imageSize));
     }
-
-    Create(win, wxID_ANY, _("Preferences"), wxDefaultPosition, wxDefaultSize);
+	
+	Create(win, wxID_ANY, _("Preferences"));
+	
+	wxBookCtrlBase* notebook = GetBookCtrl();
+	
+	if (useToolBook)
+		notebook->SetImageList(m_imageList);
 
 	CreateButtons(wxOK | wxCANCEL);
-
-    wxBookCtrlBase* notebook = GetBookCtrl();
-    notebook->SetImageList(m_imageList);
 
     wxPanel* generalSettings = CreateGeneralSettingsPage(notebook);
 	wxPanel* padSettings = CreatePadSettingsPage(notebook);
     //wxPanel* aestheticSettings = CreateAestheticSettingsPage(notebook);
 
 	notebook->AddPage(generalSettings, _("General"), true, 0);
-    notebook->AddPage(padSettings, _("Pad"), false, 1);
+    notebook->AddPage(padSettings, _("Input"), false, 1);
     //notebook->AddPage(aestheticSettings, _("Aesthetics"), false, 2);
 
     LayoutDialog();
@@ -86,7 +82,8 @@ SettingsDialog::SettingsDialog(wxWindow* win)
 
 SettingsDialog::~SettingsDialog()
 {
-    delete m_imageList;
+	if (m_imageList)
+		delete m_imageList;
 }
 
 /*! * Transfer data to the window */
@@ -192,6 +189,8 @@ wxPanel* SettingsDialog::CreatePadSettingsPage(wxWindow* parent)
 	topSizer->Add(rightSizer, 0, wxGROW|wxALL, 0);
 	
     panel->SetSizerAndFit(topSizer);
+	
+	upTextCtrl->SetFocus();
 	
     return panel;
 }
