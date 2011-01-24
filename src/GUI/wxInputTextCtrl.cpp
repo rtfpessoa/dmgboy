@@ -255,7 +255,7 @@ void InputTextCtrl::InitializeKeyNames()
 InputTextCtrl::InputTextCtrl(wxWindow* parent, wxWindowID id)
 {
 	InputTextCtrl::InitializeKeyNames();
-	Create(parent, id, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB );
+	Create(parent, id, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB );
 }
 
 void InputTextCtrl::OnKeyDown(wxKeyEvent& event)

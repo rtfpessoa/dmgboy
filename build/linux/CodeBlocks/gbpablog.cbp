@@ -56,21 +56,6 @@
 		<Unit filename="../../../src/GBException.h">
 			<Option virtualFolder="HW/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/gb16.xpm">
-			<Option virtualFolder="GUI/" />
-		</Unit>
-		<Unit filename="../../../src/GUI/open.xpm">
-			<Option virtualFolder="GUI/" />
-		</Unit>
-		<Unit filename="../../../src/GUI/pause.xpm">
-			<Option virtualFolder="GUI/" />
-		</Unit>
-		<Unit filename="../../../src/GUI/play.xpm">
-			<Option virtualFolder="GUI/" />
-		</Unit>
-		<Unit filename="../../../src/GUI/stop.xpm">
-			<Option virtualFolder="GUI/" />
-		</Unit>
 		<Unit filename="../../../src/GUI/wxAbout.cpp">
 			<Option virtualFolder="GUI/" />
 		</Unit>
@@ -78,6 +63,12 @@
 			<Option virtualFolder="GUI/" />
 		</Unit>
 		<Unit filename="../../../src/GUI/wxIDControls.h">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/wxInputTextCtrl.cpp">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/wxInputTextCtrl.h">
 			<Option virtualFolder="GUI/" />
 		</Unit>
 		<Unit filename="../../../src/GUI/wxSDLApp.cpp">

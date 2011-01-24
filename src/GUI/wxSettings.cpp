@@ -75,8 +75,8 @@ SettingsDialog::SettingsDialog(wxWindow* win)
     wxPanel* generalSettings = CreateGeneralSettingsPage(notebook);
 	wxPanel* inputSettings = CreateInputSettingsPage(notebook);
 
-	notebook->AddPage(generalSettings, _("General"), true, 0);
-    notebook->AddPage(inputSettings, _("Input"), false, 1);
+	notebook->AddPage(generalSettings, _("General"), true);
+    notebook->AddPage(inputSettings, _("Input"), false);
 
     LayoutDialog();
 }
