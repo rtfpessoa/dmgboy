@@ -22,6 +22,7 @@
 #include "wxAbout.h"
 #include "wxIDControls.h"
 #include "../Settings.h"
+#include "../Pad.h"
 #include "Xpm/open.xpm"
 #include "Xpm/play.xpm"
 #include "Xpm/pause.xpm"
@@ -60,6 +61,7 @@ SDLFrame::SDLFrame()
 	settingsDialog->CentreOnScreen();
 	settingsDialog->LoadFromFile();
 	SettingsSetNewValues(settingsDialog->settings);
+	PadSetKeys(SettingsGetInput());	
 
     // create the SDLPanel
     panel = new SDLScreen(this);
@@ -245,6 +247,7 @@ void SDLFrame::onSettings(wxCommandEvent &)
 		panel->ChangePalette(SettingsGetGreenScale());
 		panel->ChangeSize();
 		SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
+		PadSetKeys(SettingsGetInput());
 	}
 
 	emuState = lastState;

@@ -21,9 +21,9 @@
 #include <wx/wx.h>
 #include "Def.h"
 
-enum e_gbpad { gbRIGHT, gbLEFT, gbUP, gbDOWN, gbA, gbB, gbSELECT, gbSTART };
+enum e_gbpad { gbUP, gbDOWN, gbLEFT, gbRIGHT, gbA, gbB, gbSELECT, gbSTART };
 
-void PadSetKeys(wxKeyCode keys[]);
+void PadSetKeys(int * keys);
 int PadCheckKeyboard(BYTE * valueP1);
 BYTE PadUpdateInput(BYTE valueP1);
 

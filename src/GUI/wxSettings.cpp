@@ -92,9 +92,26 @@ bool SettingsDialog::TransferDataToWindow()
 {
 	wxRadioBox* greenscaleCtrl = (wxRadioBox*) FindWindow(ID_GREENSCALE);
 	wxChoice* winZoomCtrl = (wxChoice*) FindWindow(ID_WINZOOM);
+	InputTextCtrl* upCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_UP);
+	InputTextCtrl* downCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_DOWN);
+	InputTextCtrl* leftCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_LEFT);
+	InputTextCtrl* rightCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_RIGHT);
+	InputTextCtrl* aCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_A);
+	InputTextCtrl* bCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_B);
+	InputTextCtrl* selectCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_SELECT);
+	InputTextCtrl* startCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_START);
 
 	greenscaleCtrl->SetSelection(settings.greenScale);
 	winZoomCtrl->SetSelection(settings.windowZoom - 1);
+	
+	upCtrl->OnChangeKey(	settings.padKeys[0]);
+	downCtrl->OnChangeKey(	settings.padKeys[1]);
+	leftCtrl->OnChangeKey(	settings.padKeys[2]);
+	rightCtrl->OnChangeKey(	settings.padKeys[3]);
+	aCtrl->OnChangeKey(		settings.padKeys[4]);
+	bCtrl->OnChangeKey(		settings.padKeys[5]);
+	selectCtrl->OnChangeKey(settings.padKeys[6]);
+	startCtrl->OnChangeKey(	settings.padKeys[7]);
 
 	return true;
 }
@@ -104,10 +121,27 @@ bool SettingsDialog::TransferDataFromWindow()
 {
 	wxRadioBox* greenscaleCtrl = (wxRadioBox*) FindWindow(ID_GREENSCALE);
 	wxChoice* winZoomCtrl = (wxChoice*) FindWindow(ID_WINZOOM);
+	InputTextCtrl* upCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_UP);
+	InputTextCtrl* downCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_DOWN);
+	InputTextCtrl* leftCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_LEFT);
+	InputTextCtrl* rightCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_RIGHT);
+	InputTextCtrl* aCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_A);
+	InputTextCtrl* bCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_B);
+	InputTextCtrl* selectCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_SELECT);
+	InputTextCtrl* startCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_START);
 
 	settings.greenScale = greenscaleCtrl->GetSelection();
 	settings.windowZoom = winZoomCtrl->GetSelection()+1;
 
+	settings.padKeys[0] = upCtrl->keyCode;
+	settings.padKeys[1] = downCtrl->keyCode;
+	settings.padKeys[2] = leftCtrl->keyCode;
+	settings.padKeys[3] = rightCtrl->keyCode;
+	settings.padKeys[4] = aCtrl->keyCode;
+	settings.padKeys[5] = bCtrl->keyCode;
+	settings.padKeys[6] = selectCtrl->keyCode;
+	settings.padKeys[7] = startCtrl->keyCode;
+	
 	SaveToFile();
 
 	return true;
@@ -164,25 +198,25 @@ wxPanel* SettingsDialog::CreateInputSettingsPage(wxWindow* parent)
 	InputTextCtrl * upTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_UP);
 	
 	wxStaticText * downLabel = new wxStaticText(panel, wxID_ANY, wxT("Down"));
-	InputTextCtrl * downTextCtrl = new InputTextCtrl(panel, wxID_ANY);
+	InputTextCtrl * downTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_DOWN);
 	
 	wxStaticText * leftLabel = new wxStaticText(panel, wxID_ANY, wxT("Left"));
-	InputTextCtrl * leftTextCtrl = new InputTextCtrl(panel, wxID_ANY);
+	InputTextCtrl * leftTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_LEFT);
 	
 	wxStaticText * rightLabel = new wxStaticText(panel, wxID_ANY, wxT("Right"));
-	InputTextCtrl * rightTextCtrl = new InputTextCtrl(panel, wxID_ANY);
+	InputTextCtrl * rightTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_RIGHT);
 	
 	wxStaticText * aLabel = new wxStaticText(panel, wxID_ANY, wxT("A"));
-	InputTextCtrl * aTextCtrl = new InputTextCtrl(panel, wxID_ANY);
+	InputTextCtrl * aTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_A);
 	
 	wxStaticText * bLabel = new wxStaticText(panel, wxID_ANY, wxT("B"));
-	InputTextCtrl * bTextCtrl = new InputTextCtrl(panel, wxID_ANY);
+	InputTextCtrl * bTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_B);
 	
 	wxStaticText * selectLabel = new wxStaticText(panel, wxID_ANY, wxT("Select"));
-	InputTextCtrl * selectTextCtrl = new InputTextCtrl(panel, wxID_ANY);
+	InputTextCtrl * selectTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_SELECT);
 	
 	wxStaticText * startLabel = new wxStaticText(panel, wxID_ANY, wxT("Start"));
-	InputTextCtrl * startTextCtrl = new InputTextCtrl(panel, wxID_ANY);
+	InputTextCtrl * startTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_START);
 	
 	grid->Add(upLabel);
 	grid->Add(upTextCtrl);
@@ -223,6 +257,15 @@ void SettingsDialog::SaveToFile()
 
 	fileConfig.Write(wxT("General/greenScale"), settings.greenScale);
 	fileConfig.Write(wxT("General/windowZoom"), settings.windowZoom);
+	
+	fileConfig.Write(wxT("Input/up"), settings.padKeys[0]);
+	fileConfig.Write(wxT("Input/down"), settings.padKeys[1]);
+	fileConfig.Write(wxT("Input/left"), settings.padKeys[2]);
+	fileConfig.Write(wxT("Input/right"), settings.padKeys[3]);
+	fileConfig.Write(wxT("Input/a"), settings.padKeys[4]);
+	fileConfig.Write(wxT("Input/b"), settings.padKeys[5]);
+	fileConfig.Write(wxT("Input/select"), settings.padKeys[6]);
+	fileConfig.Write(wxT("Input/start"), settings.padKeys[7]);
 }
 
 void SettingsDialog::LoadFromFile()
@@ -234,6 +277,15 @@ void SettingsDialog::LoadFromFile()
 
 	fileConfig.Read(wxT("General/greenScale"), &settings.greenScale);
 	fileConfig.Read(wxT("General/windowZoom"), &settings.windowZoom);
+	
+	fileConfig.Read(wxT("Input/up"), &settings.padKeys[0]);
+	fileConfig.Read(wxT("Input/down"), &settings.padKeys[1]);
+	fileConfig.Read(wxT("Input/left"), &settings.padKeys[2]);
+	fileConfig.Read(wxT("Input/right"), &settings.padKeys[3]);
+	fileConfig.Read(wxT("Input/a"), &settings.padKeys[4]);
+	fileConfig.Read(wxT("Input/b"), &settings.padKeys[5]);
+	fileConfig.Read(wxT("Input/select"), &settings.padKeys[6]);
+	fileConfig.Read(wxT("Input/start"), &settings.padKeys[7]);
 }
 
 wxPanel* SettingsDialog::CreateGeneralSettingsPage2(wxWindow* parent)

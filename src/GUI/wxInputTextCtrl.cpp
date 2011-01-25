@@ -254,6 +254,7 @@ void InputTextCtrl::InitializeKeyNames()
 
 InputTextCtrl::InputTextCtrl(wxWindow* parent, wxWindowID id)
 {
+	keyCode = 0;
 	InputTextCtrl::InitializeKeyNames();
 	Create(parent, id, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB );
 }
@@ -261,6 +262,11 @@ InputTextCtrl::InputTextCtrl(wxWindow* parent, wxWindowID id)
 void InputTextCtrl::OnKeyDown(wxKeyEvent& event)
 {
 	int keyCode = event.GetKeyCode();
+	OnChangeKey(keyCode);
+}
+
+void InputTextCtrl::OnChangeKey(int keyCode)
+{
 	if (InputTextCtrl::keyNames[keyCode] == wxT(""))
 	{
 		if (!keyCode)
@@ -279,5 +285,6 @@ void InputTextCtrl::OnKeyDown(wxKeyEvent& event)
 		this->SetBackgroundColour(*wxWHITE);
 		this->ChangeValue(InputTextCtrl::keyNames[keyCode]);
 	}
+	this->keyCode = keyCode;
 }
 

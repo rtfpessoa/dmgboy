@@ -21,14 +21,14 @@
 #include "GBException.h"
 using namespace std;
 
-static wxKeyCode keysUsed[] = { WXK_RIGHT, WXK_LEFT, WXK_UP, WXK_DOWN, (wxKeyCode)'A', (wxKeyCode)'S', (wxKeyCode)'Q', (wxKeyCode)'W' };
+static wxKeyCode keysUsed[] = { WXK_UP, WXK_DOWN, WXK_LEFT, WXK_RIGHT, (wxKeyCode)'A', (wxKeyCode)'S', (wxKeyCode)'Q', (wxKeyCode)'W' };
 
 static BYTE gbPadState[8];
 
-void PadSetKeys(wxKeyCode keys[])
+void PadSetKeys(int * keys)
 {
 	for (int i=0; i<8; i++)
-		keysUsed[i] = keys[i];
+		keysUsed[i] = (wxKeyCode)keys[i];
 }
 
 BYTE PadUpdateInput(BYTE valueP1)

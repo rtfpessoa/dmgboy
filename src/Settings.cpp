@@ -14,14 +14,25 @@
  You should have received a copy of the GNU General Public License
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Settings.h"
+#include <wx/wx.h>
 
 Settings settings;
 
 Settings::Settings()
 {
-	greenScale = false;
-	windowZoom = 1;
+	greenScale	= false;
+	windowZoom	= 1;
+	
+	padKeys[0]	= WXK_UP;	// Up
+	padKeys[1]	= WXK_DOWN; // Down
+	padKeys[2]	= WXK_LEFT; // Left
+	padKeys[3]	= WXK_RIGHT;// Right
+	padKeys[4]	= 'A';		// A
+	padKeys[5]	= 'S';		// B
+	padKeys[6]	= 'Q';		// Select
+	padKeys[7]	= 'W';		// Start
 }
 
 Settings SettingsGetCopy()
@@ -52,4 +63,17 @@ int SettingsGetWindowZoom()
 void SettingsSetWindowZoom(int windowZoom)
 {
 	settings.windowZoom = windowZoom;
+}
+
+int* SettingsGetInput()
+{
+	return &settings.padKeys[0];
+}
+
+void SettingsSetInput(int* padKeys)
+{
+	for (int i=0; i<8; i++)
+	{
+		settings.padKeys[i] = padKeys[i];
+	}
 }

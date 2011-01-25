@@ -28,7 +28,9 @@ class InputTextCtrl: public wxTextCtrl
 	DECLARE_EVENT_TABLE()
 	
 public:
+	int keyCode;
 	InputTextCtrl(wxWindow* parent, wxWindowID id);
+	void OnChangeKey(int keyCode);
 private:
 	static wxString keyNames[NUM_KEYNAMES];
 	static bool keyNamesInitialized;

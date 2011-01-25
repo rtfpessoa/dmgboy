@@ -23,15 +23,22 @@ class Settings
 public:
 	bool greenScale;
 	int windowZoom;
+	
+	int padKeys[8];
 public:
 	Settings();
 };
 
 Settings SettingsGetCopy();
-void SettingsSetNewValues(Settings newSettings);
+
 bool SettingsGetGreenScale();
+int  SettingsGetWindowZoom();
+int* SettingsGetInput();
+
+void SettingsSetNewValues(Settings newSettings);
+
 void SettingsSetGreenScale(bool greenScale);
-int SettingsGetWindowZoom();
 void SettingsSetWindowZoom(int windowZoom);
+void SettingsSetInput(int* padKeys);
 
 #endif
