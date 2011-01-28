@@ -15,32 +15,15 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __WXIDCONSTROLS_H__
-#define __WXIDCONSTROLS_H__
+#ifndef __ABOUTDIALOG_H__
+#define __ABOUTDIALOG_H__
 
-/*******************************************************************************
- * Global Declarations
- *******************************************************************************/
-
-enum {
-    ID_SDLFRAME = wxID_HIGHEST + 1,
-    ID_SDLPANEL,
-	ID_LOAD,
-	ID_START,
-	ID_PAUSE,
-	ID_STOP,
-	ID_TIMER,
-	ID_SETTINGSFRAME,
-	ID_GREENSCALE,
-	ID_WINZOOM,
-	ID_TEXTCTRL_UP,
-	ID_TEXTCTRL_DOWN,
-	ID_TEXTCTRL_LEFT,
-	ID_TEXTCTRL_RIGHT,
-	ID_TEXTCTRL_A,
-	ID_TEXTCTRL_B,
-	ID_TEXTCTRL_SELECT,
-	ID_TEXTCTRL_START
+class AboutDialog: public wxDialog {
+	
+public:
+    AboutDialog (wxWindow *parent);
+	
 };
+
 
 #endif

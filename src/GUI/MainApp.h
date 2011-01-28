@@ -15,40 +15,40 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __WXSDLAPP_H__
-#define __WXSDLAPP_H__
+#ifndef __MAINAPP_H__
+#define __MAINAPP_H__
 
 #include <wx/wx.h>
-#include "wxSDLFrame.h"
+#include "MainFrame.h"
 #undef main
 
 /*******************************************************************************
- // SDLApp Class
+ // MainApp Class
  *******************************************************************************/
 
-class SDLApp : public wxApp {
-    DECLARE_CLASS(SDLApp)
+class MainApp : public wxApp {
+    DECLARE_CLASS(MainApp)
     
 private:
-    SDLFrame *frame;
+    MainFrame *frame;
     
 public:
     /**
-     * Called to initialize this SDLApp.
+     * Called to initialize this MainApp.
      *
      * @return true if initialization succeeded; false otherwise.
      */
     bool OnInit();
     
     /**
-     * Called to run this SDLApp.
+     * Called to run this MainApp.
      *
      * @return The status code (0 if good, non-0 if bad).
      */
     int OnRun();
     
     /**
-     * Called when this SDLApp is ready to exit.
+     * Called when this MainApp is ready to exit.
      *
      * @return The exit code.
      */

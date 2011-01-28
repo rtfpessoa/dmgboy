@@ -18,9 +18,9 @@
 #include <string>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
-#include "wxSDLFrame.h"
-#include "wxAbout.h"
-#include "wxIDControls.h"
+#include "MainFrame.h"
+#include "AboutDialog.h"
+#include "IDControls.h"
 #include "../Settings.h"
 #include "../Pad.h"
 #include "Xpm/open.xpm"
@@ -29,26 +29,26 @@
 #include "Xpm/stop.xpm"
 #include "Xpm/gb16.xpm"
 
-IMPLEMENT_CLASS(SDLFrame, wxFrame)
+IMPLEMENT_CLASS(MainFrame, wxFrame)
 
-BEGIN_EVENT_TABLE(SDLFrame, wxFrame)
-EVT_MENU(wxID_EXIT, SDLFrame::onFileExit)
-EVT_MENU(wxID_OPEN, SDLFrame::onFileOpen)
-EVT_MENU(wxID_PREFERENCES, SDLFrame::onSettings)
-EVT_MENU(wxID_ABOUT, SDLFrame::onAbout)
-EVT_MENU(ID_START, SDLFrame::onPlay)
-EVT_MENU(ID_PAUSE, SDLFrame::onPause)
-EVT_MENU(ID_STOP, SDLFrame::onStop)
-EVT_UPDATE_UI( ID_START, SDLFrame::onPlayUpdate )
-EVT_UPDATE_UI( ID_PAUSE, SDLFrame::onPauseUpdate )
-EVT_UPDATE_UI( ID_STOP, SDLFrame::onStopUpdate )
-EVT_IDLE(SDLFrame::onIdle)
+BEGIN_EVENT_TABLE(MainFrame, wxFrame)
+EVT_MENU(wxID_EXIT, MainFrame::onFileExit)
+EVT_MENU(wxID_OPEN, MainFrame::onFileOpen)
+EVT_MENU(wxID_PREFERENCES, MainFrame::onSettings)
+EVT_MENU(wxID_ABOUT, MainFrame::onAbout)
+EVT_MENU(ID_START, MainFrame::onPlay)
+EVT_MENU(ID_PAUSE, MainFrame::onPause)
+EVT_MENU(ID_STOP, MainFrame::onStop)
+EVT_UPDATE_UI( ID_START, MainFrame::onPlayUpdate )
+EVT_UPDATE_UI( ID_PAUSE, MainFrame::onPauseUpdate )
+EVT_UPDATE_UI( ID_STOP, MainFrame::onStopUpdate )
+EVT_IDLE(MainFrame::onIdle)
 END_EVENT_TABLE()
 
-SDLFrame::SDLFrame()
+MainFrame::MainFrame()
 {
-    // Create the SDLFrame
-    Create(0, ID_SDLFRAME, wxT("gbpablog"), wxDefaultPosition,
+    // Create the MainFrame
+    Create(0, ID_MAINFRAME, wxT("gbpablog"), wxDefaultPosition,
            wxDefaultSize, wxCAPTION | wxSYSTEM_MENU |
            wxMINIMIZE_BOX | wxCLOSE_BOX);
 
@@ -64,7 +64,7 @@ SDLFrame::SDLFrame()
 	PadSetKeys(SettingsGetInput());	
 
     // create the SDLPanel
-    panel = new SDLScreen(this);
+    panel = new MainPanel(this);
 
 
     video = new Video(panel);
@@ -77,12 +77,12 @@ SDLFrame::SDLFrame()
 	SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
 }
 
-SDLFrame::~SDLFrame()
+MainFrame::~MainFrame()
 {
 	Clean();
 }
 
-void SDLFrame::createMenuBar()
+void MainFrame::createMenuBar()
 {
 	// create the main menubar
     mb = new wxMenuBar();
@@ -116,7 +116,7 @@ void SDLFrame::createMenuBar()
     SetMenuBar(mb);
 }
 
-void SDLFrame::createToolBar()
+void MainFrame::createToolBar()
 {
 
 	toolBar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxNO_BORDER);
@@ -138,7 +138,7 @@ void SDLFrame::createToolBar()
 	SetToolBar(toolBar);
 }
 
-void SDLFrame::onFileOpen(wxCommandEvent &) {
+void MainFrame::onFileOpen(wxCommandEvent &) {
 	BYTE * buffer = NULL;
 	unsigned long size = 0;
 	bool isZip = false;
@@ -184,7 +184,7 @@ void SDLFrame::onFileOpen(wxCommandEvent &) {
  * Si existe mas de una rom solo carga la primera. Si se ha encontrado, la rom se devuelve en un buffer
  * junto con su tamaño, sino las variables se dejan intactas
  */
-void SDLFrame::LoadZip(wxString zipPath, BYTE ** buffer, unsigned long * size)
+void MainFrame::LoadZip(wxString zipPath, BYTE ** buffer, unsigned long * size)
 {
 	wxString fileInZip, fileLower;
 	wxZipEntry* entry;
@@ -215,12 +215,12 @@ void SDLFrame::LoadZip(wxString zipPath, BYTE ** buffer, unsigned long * size)
 	return;
 }
 
-void SDLFrame::onFileExit(wxCommandEvent &)
+void MainFrame::onFileExit(wxCommandEvent &)
 {
 	Close();
 }
 
-void SDLFrame::Clean()
+void MainFrame::Clean()
 {
 	emuState = Stopped;
 	delete cpu;
@@ -234,7 +234,7 @@ void SDLFrame::Clean()
 /*
  * Abre un dialogo de configuracion. Cuando se cierra se encarga de aplicar ciertos cambios a la emulacion
  */
-void SDLFrame::onSettings(wxCommandEvent &)
+void MainFrame::onSettings(wxCommandEvent &)
 {
 	enumEmuStates lastState = emuState;
 	if (emuState == Playing)
@@ -253,17 +253,17 @@ void SDLFrame::onSettings(wxCommandEvent &)
 	emuState = lastState;
 }
 
-void SDLFrame::onAbout(wxCommandEvent &)
+void MainFrame::onAbout(wxCommandEvent &)
 {
 	AboutDialog(this);
 }
 
-void SDLFrame::onPlay(wxCommandEvent &)
+void MainFrame::onPlay(wxCommandEvent &)
 {
 	emuState = Playing;
 }
 
-void SDLFrame::onPause(wxCommandEvent &)
+void MainFrame::onPause(wxCommandEvent &)
 {
 	if (emuState == Playing)
 		emuState = Paused;
@@ -271,14 +271,14 @@ void SDLFrame::onPause(wxCommandEvent &)
 		emuState = Playing;
 }
 
-void SDLFrame::onStop(wxCommandEvent &)
+void MainFrame::onStop(wxCommandEvent &)
 {
 	cpu->Reset();
 	panel->onRefreshScreen();
 	emuState = Stopped;
 }
 
-void SDLFrame::onPlayUpdate(wxUpdateUIEvent& event)
+void MainFrame::onPlayUpdate(wxUpdateUIEvent& event)
 {
 	if ((emuState == NotStartedYet) || (emuState == Playing)){
 		event.Enable(false);
@@ -289,7 +289,7 @@ void SDLFrame::onPlayUpdate(wxUpdateUIEvent& event)
 
 }
 
-void SDLFrame::onPauseUpdate(wxUpdateUIEvent& event)
+void MainFrame::onPauseUpdate(wxUpdateUIEvent& event)
 {
 	if ((emuState == NotStartedYet) || (emuState == Stopped)){
 		event.Enable(false);
@@ -300,7 +300,7 @@ void SDLFrame::onPauseUpdate(wxUpdateUIEvent& event)
 
 }
 
-void SDLFrame::onStopUpdate(wxUpdateUIEvent& event)
+void MainFrame::onStopUpdate(wxUpdateUIEvent& event)
 {
 	if ((emuState == Stopped)||(emuState == NotStartedYet)) {
 		event.Enable(false);
@@ -319,7 +319,7 @@ void SDLFrame::onStopUpdate(wxUpdateUIEvent& event)
  * llamo por ultima vez a esta funcion y el tiempo que ha tardado la emulacion en
  * calcularse.
  */
-void SDLFrame::onIdle(wxIdleEvent &event)
+void MainFrame::onIdle(wxIdleEvent &event)
 {
 	long duration = 16;
 

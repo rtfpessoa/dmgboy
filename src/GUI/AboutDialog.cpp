@@ -18,7 +18,7 @@
 #include <wx/wx.h>
 #include <wx/hyperlink.h>   // hyperlink support
 #include "SDL.h"
-#include "wxAbout.h"
+#include "AboutDialog.h"
 #include "Xpm/gb64.xpm"          // app icon bitmap
 
 const wxString APP_NAME = wxT("gbpablog");

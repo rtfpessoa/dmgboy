@@ -15,28 +15,32 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __WXINPUTTEXTCTRL_H__
-#define __WXINPUTTEXTCTRL_H__
+#ifndef __IDCONSTROLS_H__
+#define __IDCONSTROLS_H__
 
-#define NUM_KEYNAMES 1024
+/*******************************************************************************
+ * Global Declarations
+ *******************************************************************************/
 
-#include <wx/wx.h>
-
-class InputTextCtrl: public wxTextCtrl
-{
-	DECLARE_CLASS(InputTextCtrl)
-	DECLARE_EVENT_TABLE()
-	
-public:
-	int keyCode;
-	InputTextCtrl(wxWindow* parent, wxWindowID id);
-	void OnChangeKey(int keyCode);
-private:
-	static wxString keyNames[NUM_KEYNAMES];
-	static bool keyNamesInitialized;
-	static void InitializeKeyNames();
-	
-	void OnKeyDown(wxKeyEvent& event);
-	
+enum {
+    ID_MAINFRAME = wxID_HIGHEST + 1,
+    ID_MAINPANEL,
+	ID_LOAD,
+	ID_START,
+	ID_PAUSE,
+	ID_STOP,
+	ID_TIMER,
+	ID_SETTINGSFRAME,
+	ID_GREENSCALE,
+	ID_WINZOOM,
+	ID_TEXTCTRL_UP,
+	ID_TEXTCTRL_DOWN,
+	ID_TEXTCTRL_LEFT,
+	ID_TEXTCTRL_RIGHT,
+	ID_TEXTCTRL_A,
+	ID_TEXTCTRL_B,
+	ID_TEXTCTRL_SELECT,
+	ID_TEXTCTRL_START
 };
+
 #endif

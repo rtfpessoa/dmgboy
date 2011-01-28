@@ -15,7 +15,7 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "wxInputTextCtrl.h"
+#include "InputTextCtrl.h"
 
 IMPLEMENT_CLASS(InputTextCtrl, wxTextCtrl)
 BEGIN_EVENT_TABLE(InputTextCtrl, wxTextCtrl)

@@ -9,10 +9,10 @@
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		6E205760120589BF00079331 /* gbpablog.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6E20575F120589BF00079331 /* gbpablog.icns */; };
-		6E22367A1233B4C6009D019F /* wxSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2236791233B4C6009D019F /* wxSettings.cpp */; };
-		6E23C6C511D7CA0C0043AF47 /* wxSDLApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6BF11D7CA0C0043AF47 /* wxSDLApp.cpp */; };
-		6E23C6C611D7CA0C0043AF47 /* wxSDLFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */; };
-		6E23C6C711D7CA0C0043AF47 /* wxSDLScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C311D7CA0C0043AF47 /* wxSDLScreen.cpp */; };
+		6E22367A1233B4C6009D019F /* SettingsDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2236791233B4C6009D019F /* SettingsDialog.cpp */; };
+		6E23C6C511D7CA0C0043AF47 /* MainApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6BF11D7CA0C0043AF47 /* MainApp.cpp */; };
+		6E23C6C611D7CA0C0043AF47 /* MainFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C111D7CA0C0043AF47 /* MainFrame.cpp */; };
+		6E23C6C711D7CA0C0043AF47 /* MainPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C311D7CA0C0043AF47 /* MainPanel.cpp */; };
 		6E23C6DC11D7CB770043AF47 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E23C6DB11D7CB770043AF47 /* SDL.framework */; };
 		6E23C73511D7CD510043AF47 /* Cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C71D11D7CD510043AF47 /* Cartridge.cpp */; };
 		6E23C73611D7CD510043AF47 /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C71F11D7CD510043AF47 /* CPU.cpp */; };
@@ -24,8 +24,8 @@
 		6E23C73D11D7CD510043AF47 /* Pad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72D11D7CD510043AF47 /* Pad.cpp */; };
 		6E23C73E11D7CD510043AF47 /* Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72F11D7CD510043AF47 /* Registers.cpp */; };
 		6E23C74011D7CD510043AF47 /* Video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C73311D7CD510043AF47 /* Video.cpp */; };
-		6EA1AB79127F0F0E00AC510C /* wxAbout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1AB78127F0F0E00AC510C /* wxAbout.cpp */; };
-		6EDDDE7512EA037200BFB26A /* wxInputTextCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDDE7412EA037200BFB26A /* wxInputTextCtrl.cpp */; };
+		6EA1AB79127F0F0E00AC510C /* AboutDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */; };
+		6EDDDE7512EA037200BFB26A /* InputTextCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDDE7412EA037200BFB26A /* InputTextCtrl.cpp */; };
 		6EFA5276126354F2000E541D /* ToDo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6EFA5275126354F2000E541D /* ToDo.txt */; };
 		6EFEDB441245230600646E83 /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEDB421245230600646E83 /* Settings.cpp */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -40,15 +40,15 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		6E20575F120589BF00079331 /* gbpablog.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = gbpablog.icns; sourceTree = "<group>"; };
-		6E2236781233B4C6009D019F /* wxSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSettings.h; sourceTree = "<group>"; };
-		6E2236791233B4C6009D019F /* wxSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxSettings.cpp; sourceTree = "<group>"; };
-		6E23C6BE11D7CA0C0043AF47 /* wxIDControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxIDControls.h; sourceTree = "<group>"; };
-		6E23C6BF11D7CA0C0043AF47 /* wxSDLApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxSDLApp.cpp; sourceTree = "<group>"; };
-		6E23C6C011D7CA0C0043AF47 /* wxSDLApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSDLApp.h; sourceTree = "<group>"; };
-		6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxSDLFrame.cpp; sourceTree = "<group>"; };
-		6E23C6C211D7CA0C0043AF47 /* wxSDLFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSDLFrame.h; sourceTree = "<group>"; };
-		6E23C6C311D7CA0C0043AF47 /* wxSDLScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxSDLScreen.cpp; sourceTree = "<group>"; };
-		6E23C6C411D7CA0C0043AF47 /* wxSDLScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxSDLScreen.h; sourceTree = "<group>"; };
+		6E2236781233B4C6009D019F /* SettingsDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsDialog.h; sourceTree = "<group>"; };
+		6E2236791233B4C6009D019F /* SettingsDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsDialog.cpp; sourceTree = "<group>"; };
+		6E23C6BE11D7CA0C0043AF47 /* IDControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDControls.h; sourceTree = "<group>"; };
+		6E23C6BF11D7CA0C0043AF47 /* MainApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainApp.cpp; sourceTree = "<group>"; };
+		6E23C6C011D7CA0C0043AF47 /* MainApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainApp.h; sourceTree = "<group>"; };
+		6E23C6C111D7CA0C0043AF47 /* MainFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainFrame.cpp; sourceTree = "<group>"; };
+		6E23C6C211D7CA0C0043AF47 /* MainFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainFrame.h; sourceTree = "<group>"; };
+		6E23C6C311D7CA0C0043AF47 /* MainPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainPanel.cpp; sourceTree = "<group>"; };
+		6E23C6C411D7CA0C0043AF47 /* MainPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainPanel.h; sourceTree = "<group>"; };
 		6E23C6DB11D7CB770043AF47 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = Library/Frameworks/SDL.framework; sourceTree = SDKROOT; };
 		6E23C71D11D7CD510043AF47 /* Cartridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Cartridge.cpp; path = ../../../src/Cartridge.cpp; sourceTree = SOURCE_ROOT; };
 		6E23C71E11D7CD510043AF47 /* Cartridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cartridge.h; path = ../../../src/Cartridge.h; sourceTree = SOURCE_ROOT; };
@@ -71,10 +71,10 @@
 		6E23C73011D7CD510043AF47 /* Registers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Registers.h; path = ../../../src/Registers.h; sourceTree = SOURCE_ROOT; };
 		6E23C73311D7CD510043AF47 /* Video.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Video.cpp; path = ../../../src/Video.cpp; sourceTree = SOURCE_ROOT; };
 		6E23C73411D7CD510043AF47 /* Video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Video.h; path = ../../../src/Video.h; sourceTree = SOURCE_ROOT; };
-		6EA1AB77127F0F0E00AC510C /* wxAbout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxAbout.h; sourceTree = "<group>"; };
-		6EA1AB78127F0F0E00AC510C /* wxAbout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxAbout.cpp; sourceTree = "<group>"; };
-		6EDDDE7312EA037200BFB26A /* wxInputTextCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxInputTextCtrl.h; sourceTree = "<group>"; };
-		6EDDDE7412EA037200BFB26A /* wxInputTextCtrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxInputTextCtrl.cpp; sourceTree = "<group>"; };
+		6EA1AB77127F0F0E00AC510C /* AboutDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutDialog.h; sourceTree = "<group>"; };
+		6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AboutDialog.cpp; sourceTree = "<group>"; };
+		6EDDDE7312EA037200BFB26A /* InputTextCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputTextCtrl.h; sourceTree = "<group>"; };
+		6EDDDE7412EA037200BFB26A /* InputTextCtrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputTextCtrl.cpp; sourceTree = "<group>"; };
 		6EFA5275126354F2000E541D /* ToDo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ToDo.txt; path = ../../../src/ToDo.txt; sourceTree = SOURCE_ROOT; };
 		6EFEDB421245230600646E83 /* Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Settings.cpp; path = ../../../src/Settings.cpp; sourceTree = SOURCE_ROOT; };
 		6EFEDB431245230600646E83 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Settings.h; path = ../../../src/Settings.h; sourceTree = SOURCE_ROOT; };
@@ -174,19 +174,19 @@
 		6E23C6BD11D7CA0C0043AF47 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
-				6E23C6BE11D7CA0C0043AF47 /* wxIDControls.h */,
-				6E23C6C011D7CA0C0043AF47 /* wxSDLApp.h */,
-				6E23C6BF11D7CA0C0043AF47 /* wxSDLApp.cpp */,
-				6E23C6C211D7CA0C0043AF47 /* wxSDLFrame.h */,
-				6E23C6C111D7CA0C0043AF47 /* wxSDLFrame.cpp */,
-				6E23C6C411D7CA0C0043AF47 /* wxSDLScreen.h */,
-				6E23C6C311D7CA0C0043AF47 /* wxSDLScreen.cpp */,
-				6E2236781233B4C6009D019F /* wxSettings.h */,
-				6E2236791233B4C6009D019F /* wxSettings.cpp */,
-				6EA1AB77127F0F0E00AC510C /* wxAbout.h */,
-				6EA1AB78127F0F0E00AC510C /* wxAbout.cpp */,
-				6EDDDE7312EA037200BFB26A /* wxInputTextCtrl.h */,
-				6EDDDE7412EA037200BFB26A /* wxInputTextCtrl.cpp */,
+				6E23C6BE11D7CA0C0043AF47 /* IDControls.h */,
+				6E23C6C011D7CA0C0043AF47 /* MainApp.h */,
+				6E23C6BF11D7CA0C0043AF47 /* MainApp.cpp */,
+				6E23C6C211D7CA0C0043AF47 /* MainFrame.h */,
+				6E23C6C111D7CA0C0043AF47 /* MainFrame.cpp */,
+				6E23C6C411D7CA0C0043AF47 /* MainPanel.h */,
+				6E23C6C311D7CA0C0043AF47 /* MainPanel.cpp */,
+				6E2236781233B4C6009D019F /* SettingsDialog.h */,
+				6E2236791233B4C6009D019F /* SettingsDialog.cpp */,
+				6EA1AB77127F0F0E00AC510C /* AboutDialog.h */,
+				6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */,
+				6EDDDE7312EA037200BFB26A /* InputTextCtrl.h */,
+				6EDDDE7412EA037200BFB26A /* InputTextCtrl.cpp */,
 			);
 			name = GUI;
 			path = ../../../src/GUI;
@@ -286,9 +286,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E23C6C511D7CA0C0043AF47 /* wxSDLApp.cpp in Sources */,
-				6E23C6C611D7CA0C0043AF47 /* wxSDLFrame.cpp in Sources */,
-				6E23C6C711D7CA0C0043AF47 /* wxSDLScreen.cpp in Sources */,
+				6E23C6C511D7CA0C0043AF47 /* MainApp.cpp in Sources */,
+				6E23C6C611D7CA0C0043AF47 /* MainFrame.cpp in Sources */,
+				6E23C6C711D7CA0C0043AF47 /* MainPanel.cpp in Sources */,
 				6E23C73511D7CD510043AF47 /* Cartridge.cpp in Sources */,
 				6E23C73611D7CD510043AF47 /* CPU.cpp in Sources */,
 				6E23C73811D7CD510043AF47 /* GBException.cpp in Sources */,
@@ -299,10 +299,10 @@
 				6E23C73D11D7CD510043AF47 /* Pad.cpp in Sources */,
 				6E23C73E11D7CD510043AF47 /* Registers.cpp in Sources */,
 				6E23C74011D7CD510043AF47 /* Video.cpp in Sources */,
-				6E22367A1233B4C6009D019F /* wxSettings.cpp in Sources */,
+				6E22367A1233B4C6009D019F /* SettingsDialog.cpp in Sources */,
 				6EFEDB441245230600646E83 /* Settings.cpp in Sources */,
-				6EA1AB79127F0F0E00AC510C /* wxAbout.cpp in Sources */,
-				6EDDDE7512EA037200BFB26A /* wxInputTextCtrl.cpp in Sources */,
+				6EA1AB79127F0F0E00AC510C /* AboutDialog.cpp in Sources */,
+				6EDDDE7512EA037200BFB26A /* InputTextCtrl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

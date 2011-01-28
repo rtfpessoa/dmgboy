@@ -15,15 +15,28 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __WXABOUT_H__
-#define __WXABOUT_H__
+#ifndef __INPUTTEXTCTRL_H__
+#define __INPUTTEXTCTRL_H__
 
-class AboutDialog: public wxDialog {
+#define NUM_KEYNAMES 1024
+
+#include <wx/wx.h>
+
+class InputTextCtrl: public wxTextCtrl
+{
+	DECLARE_CLASS(InputTextCtrl)
+	DECLARE_EVENT_TABLE()
 	
 public:
-    AboutDialog (wxWindow *parent);
+	int keyCode;
+	InputTextCtrl(wxWindow* parent, wxWindowID id);
+	void OnChangeKey(int keyCode);
+private:
+	static wxString keyNames[NUM_KEYNAMES];
+	static bool keyNamesInitialized;
+	static void InitializeKeyNames();
+	
+	void OnKeyDown(wxKeyEvent& event);
 	
 };
-
-
 #endif

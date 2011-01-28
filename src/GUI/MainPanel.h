@@ -15,19 +15,19 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __WXSDLSCREEN_H__
-#define __WXSDLSCREEN_H__
+#ifndef __MAINPANEL_H__
+#define __MAINPANEL_H__
 
 #include <wx/wx.h>
 #include "SDL.h"
 
 
 /*******************************************************************************
- * SDLPanel Class
+ * MainPanel Class
  *******************************************************************************/
 
-class SDLScreen : public wxPanel {
-    DECLARE_CLASS(SDLScreen)
+class MainPanel : public wxPanel {
+    DECLARE_CLASS(MainPanel)
     DECLARE_EVENT_TABLE()
 
 private:
@@ -46,22 +46,22 @@ private:
     void onEraseBackground(wxEraseEvent &);
     
     /**
-     * Creates the SDL_Surface used by this SDLPanel.
+     * Creates the SDL_Surface used by this MainPanel.
      */
     void CreateScreen();
     
 public:
     /**
-     * Creates a new SDLPanel.
+     * Creates a new MainPanel.
      *
      * @param parent The wxWindow parent.
      */
-    SDLScreen(wxWindow *parent);
+    MainPanel(wxWindow *parent);
     
     /**
-     * Destructor for the SDLPanel.
+     * Destructor for the MainPanel.
      */
-    ~SDLScreen();
+    ~MainPanel();
 	
 	void ChangeSize();
 	

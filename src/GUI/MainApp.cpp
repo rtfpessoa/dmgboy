@@ -16,28 +16,28 @@
  */
 
 #include <iostream>
-#include "wxSDLApp.h"
+#include "MainApp.h"
 #include "../Def.h"
 
 
-IMPLEMENT_CLASS(SDLApp, wxApp)
-IMPLEMENT_APP(SDLApp)
+IMPLEMENT_CLASS(MainApp, wxApp)
+IMPLEMENT_APP(MainApp)
 
-bool SDLApp::OnInit() {
+bool MainApp::OnInit() {
 
-    // create the SDLFrame
-    frame = new SDLFrame;
+    // create the MainFrame
+    frame = new MainFrame;
     frame->Centre();
     frame->Show();
     
-    // Our SDLFrame is the Top Window
+    // Our MainFrame is the Top Window
     SetTopWindow(frame);
 	
     // initialization should always succeed
     return true;
 }
 
-int SDLApp::OnRun() {
+int MainApp::OnRun() {
     // initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "unable to init SDL: " << SDL_GetError() << '\n';
@@ -49,7 +49,7 @@ int SDLApp::OnRun() {
     return wxApp::OnRun();
 }
 
-int SDLApp::OnExit() {
+int MainApp::OnExit() {
     SDL_Quit();
     
     // return the standard exit code

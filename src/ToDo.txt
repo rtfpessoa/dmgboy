@@ -4,13 +4,13 @@
 - Cargar por linea de comandos
 - Pasarlo a OpenGL
 - Multi idioma
-- Poder cambiar los botones del pad en cualquier momento: fichero + interfaz grafica
 - Guardar a disco duro la memoria de los cartuchos que llevan bateria
 - Permitir Savestates en cualquier momento
 - Permitir cargar roms comprimidas en 7z
 - Sonido
 
 Terminado:
+- Poder cambiar los botones del pad en cualquier momento: fichero + interfaz grafica
 - ventana para opciones
 - Hacer la pantalla mas grande (2x, 4x, etc)
 - Cambiar colores visualizacion (escala de verdes)

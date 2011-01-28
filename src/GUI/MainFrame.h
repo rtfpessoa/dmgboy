@@ -15,26 +15,26 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __WXSDLFRAME_H__
-#define __WXSDLFRAME_H__
+#ifndef __MAINFRAME_H__
+#define __MAINFRAME_H__
 
 #include <wx/wx.h>
-#include "wxSettings.h"
-#include "wxSDLScreen.h"
+#include "SettingsDialog.h"
+#include "MainPanel.h"
 #include "../CPU.h"
 
 /*******************************************************************************
- // SDLFrame Class
+ // MainFrame Class
  *******************************************************************************/
 
-class SDLFrame : public wxFrame {
-    DECLARE_CLASS(SDLFrame)
+class MainFrame : public wxFrame {
+    DECLARE_CLASS(MainFrame)
     DECLARE_EVENT_TABLE()
     
 private:
 	wxMenuBar *mb;
 	wxToolBar* toolBar;
-    SDLScreen *panel;
+    MainPanel *panel;
 	SettingsDialog * settingsDialog;
 	Video * video;
 	Cartridge * cartridge;
@@ -70,18 +70,18 @@ public:
 	wxStopWatch swFrame;
 	
     /**
-     * Creates a new SDLFrame.
+     * Creates a new MainFrame.
      */
-    SDLFrame();
-	~SDLFrame();
+    MainFrame();
+	~MainFrame();
 	
     /**
-     * Gets the SDLPanel within this SDLFrame.
+     * Gets the MainPanel within this MainFrame.
      *
-     * @return The SDLPanel.
+     * @return The MainPanel.
      */
 	
-	inline SDLScreen &getPanel() { return *panel; }
+	inline MainPanel &getPanel() { return *panel; }
 };
 
 #endif

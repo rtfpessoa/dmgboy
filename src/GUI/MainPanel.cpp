@@ -17,22 +17,22 @@
 
 #include <wx/dcbuffer.h>
 #include <wx/image.h>
-#include "wxSDLScreen.h"
-#include "wxSDLFrame.h"
-#include "wxIDControls.h"
+#include "MainPanel.h"
+#include "MainFrame.h"
+#include "IDControls.h"
 #include "../Def.h"
 #include "../Settings.h"
 
-inline void SDLScreen::onEraseBackground(wxEraseEvent &) { /* do nothing */ }
+inline void MainPanel::onEraseBackground(wxEraseEvent &) { /* do nothing */ }
 
-IMPLEMENT_CLASS(SDLScreen, wxPanel)
+IMPLEMENT_CLASS(MainPanel, wxPanel)
 
-BEGIN_EVENT_TABLE(SDLScreen, wxPanel)
-EVT_PAINT(SDLScreen::onPaint)
-EVT_ERASE_BACKGROUND(SDLScreen::onEraseBackground)
+BEGIN_EVENT_TABLE(MainPanel, wxPanel)
+EVT_PAINT(MainPanel::onPaint)
+EVT_ERASE_BACKGROUND(MainPanel::onEraseBackground)
 END_EVENT_TABLE()
 
-SDLScreen::SDLScreen(wxWindow *parent) : wxPanel(parent, ID_SDLPANEL), screen(0) {
+MainPanel::MainPanel(wxWindow *parent) : wxPanel(parent, ID_MAINPANEL), screen(0) {
     
 	ChangeSize();
     windowParent = parent;
@@ -40,13 +40,13 @@ SDLScreen::SDLScreen(wxWindow *parent) : wxPanel(parent, ID_SDLPANEL), screen(0)
 	CreateScreen();
 }
 
-SDLScreen::~SDLScreen() {
+MainPanel::~MainPanel() {
     if (screen) {
         SDL_FreeSurface(screen);
     }
 }
 
-void SDLScreen::ChangeSize()
+void MainPanel::ChangeSize()
 {
 	// ensure the size of the wxPanel
 	wxSize size(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
@@ -55,7 +55,7 @@ void SDLScreen::ChangeSize()
     SetMaxSize(size);
 }
 
-void SDLScreen::onPaint(wxPaintEvent &) {
+void MainPanel::onPaint(wxPaintEvent &) {
     // can't draw if the screen doesn't exist yet
     if (!screen) {
         return;
@@ -83,11 +83,9 @@ void SDLScreen::onPaint(wxPaintEvent &) {
     
     // paint the screen
     wxBufferedPaintDC dc(this, bmp);
-	//wxAutoBufferedPaintDC dc(this);
-	//dc.DrawBitmap(bmp, 0, 0, false);
 }
 
-void SDLScreen::onPreDraw()
+void MainPanel::onPreDraw()
 {
 	if ( SDL_MUSTLOCK(screen) )
     {
@@ -98,7 +96,7 @@ void SDLScreen::onPreDraw()
     }
 }
 
-void SDLScreen::onPostDraw()
+void MainPanel::onPostDraw()
 {
 	if ( SDL_MUSTLOCK(screen) )
     {
@@ -106,13 +104,13 @@ void SDLScreen::onPostDraw()
     }
 }
 
-void SDLScreen::onRefreshScreen()
+void MainPanel::onRefreshScreen()
 {
 	// refresh the panel
     Refresh(false);
 }
 
-void SDLScreen::CreateScreen() {
+void MainPanel::CreateScreen() {
     if (!screen) {
         screen = SDL_CreateRGBSurface(SDL_SWSURFACE, GB_SCREEN_W, GB_SCREEN_H, 
                                       24, 0, 0, 0, 0);
@@ -121,7 +119,7 @@ void SDLScreen::CreateScreen() {
     }
 }
 
-void SDLScreen::ChangePalette(bool original)
+void MainPanel::ChangePalette(bool original)
 {
 	if (!screen)
 		return;
@@ -141,13 +139,13 @@ void SDLScreen::ChangePalette(bool original)
 
 }
 
-void SDLScreen::onClear()
+void MainPanel::onClear()
 {
 	SDL_FillRect( screen, NULL, 0 );
 }
 
 //idColor = 0, 1, 2, 3 = negro, gris oscuro, gris claro, blanco
-void SDLScreen::onDrawPixel(int idColor, int x, int y)
+void MainPanel::onDrawPixel(int idColor, int x, int y)
 {
 	Uint32 color = colors[idColor];
 	

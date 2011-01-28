@@ -22,9 +22,9 @@
 #include <wx/fileconf.h>
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
-#include "wxSettings.h"
-#include "wxIDControls.h"
-#include "wxInputTextCtrl.h"
+#include "SettingsDialog.h"
+#include "IDControls.h"
+#include "InputTextCtrl.h"
 #include "../Pad.h"
 #include "Xpm/preferences1.xpm"
 

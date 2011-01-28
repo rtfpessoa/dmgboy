@@ -15,8 +15,8 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __WXSETTINGSFRAME_H__
-#define __WXSETTINGSFRAME_H__
+#ifndef __SETTINGSDIALOG_H__
+#define __SETTINGSDIALOG_H__
 
 #include <wx/wx.h>
 #include <wx/propdlg.h>
