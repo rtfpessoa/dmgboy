@@ -48,7 +48,7 @@ public:
 	void Reset();
 	void SaveLog();
 private:
-	void init(Video *v);
+	void Init(Video *v);
 	void FillInstructionCycles();
 	void FillInstructionCyclesCB();
 	void OpCodeCB(Instructions * inst);
@@ -56,7 +56,6 @@ private:
 	void UpdateStateLCD();
 	void UpdateTimer();
 	void Interruptions(Instructions * inst);
-	void eventsSDL();
 };
 
 #endif

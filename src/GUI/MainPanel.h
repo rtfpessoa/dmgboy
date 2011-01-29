@@ -35,15 +35,8 @@ private:
 	Uint32 colors[4];
     SDL_Surface *screen;
 	
-    /**
-     * Called to paint the panel.
-     */
-    void onPaint(wxPaintEvent &);
-    
-    /**
-     * Called to erase the background.
-     */
-    void onEraseBackground(wxEraseEvent &);
+    void OnPaint(wxPaintEvent &);
+    void OnEraseBackground(wxEraseEvent &);
     
     /**
      * Creates the SDL_Surface used by this MainPanel.
@@ -51,31 +44,16 @@ private:
     void CreateScreen();
     
 public:
-    /**
-     * Creates a new MainPanel.
-     *
-     * @param parent The wxWindow parent.
-     */
     MainPanel(wxWindow *parent);
-    
-    /**
-     * Destructor for the MainPanel.
-     */
     ~MainPanel();
 	
 	void ChangeSize();
-	
 	void ChangePalette(bool original);
-	
-	void onPreDraw();
-	
-	void onPostDraw();
-	
-	void onDrawPixel(int idColor, int x, int y);
-	
-	void onRefreshScreen();
-	
-	void onClear();
+	void OnPreDraw();
+	void OnPostDraw();
+	void OnDrawPixel(int idColor, int x, int y);
+	void OnRefreshScreen();
+	void OnClear();
 };
 
 #endif

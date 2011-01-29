@@ -2,7 +2,7 @@
 - drag & drop
 - Cargar por linea de comandos
 - Pasarlo a OpenGL
-- Multi idioma
+- Multi idioma / unicode
 - Guardar a disco duro la memoria de los cartuchos que llevan bateria
 - Permitir Savestates en cualquier momento
 - Permitir cargar roms comprimidas en 7z

@@ -46,19 +46,19 @@ private:
     /**
      * Called when exit from the file menu is selected.
      */
-    void onFileExit(wxCommandEvent &);
-	void onFileOpen(wxCommandEvent &);
-	void onSettings(wxCommandEvent &);
-	void onAbout(wxCommandEvent &);
-	void onPlay(wxCommandEvent &);
-	void onPause(wxCommandEvent &);
-	void onStop(wxCommandEvent &);
-	void onPlayUpdate(wxUpdateUIEvent& event);
-	void onPauseUpdate(wxUpdateUIEvent& event);
-	void onStopUpdate(wxUpdateUIEvent& event);
-	void onIdle(wxIdleEvent &event);
-	void createMenuBar();
-	void createToolBar();
+    void OnFileExit(wxCommandEvent &);
+	void OnFileOpen(wxCommandEvent &);
+	void OnSettings(wxCommandEvent &);
+	void OnAbout(wxCommandEvent &);
+	void OnPlay(wxCommandEvent &);
+	void OnPause(wxCommandEvent &);
+	void OnStop(wxCommandEvent &);
+	void OnPlayUpdate(wxUpdateUIEvent& event);
+	void OnPauseUpdate(wxUpdateUIEvent& event);
+	void OnStopUpdate(wxUpdateUIEvent& event);
+	void OnIdle(wxIdleEvent &event);
+	void CreateMenuBar();
+	void CreateToolBar();
 	void LoadZip(wxString zipPath, BYTE ** buffer, unsigned long * size);
 	
 	void Clean();
@@ -81,7 +81,7 @@ public:
      * @return The MainPanel.
      */
 	
-	inline MainPanel &getPanel() { return *panel; }
+	inline MainPanel &GetPanel() { return *panel; }
 };
 
 #endif

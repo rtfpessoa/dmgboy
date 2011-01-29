@@ -27,16 +27,16 @@ using namespace std;
 
 CPU::CPU(Video *v)
 {
-	init(v);
+	Init(v);
 }
 
 CPU::CPU(Video *v, Cartridge *c)
 {
-	init(v);
+	Init(v);
 	LoadCartridge(c);
 }
 
-void CPU::init(Video *v)
+void CPU::Init(Video *v)
 {
 	cyclesLCD = 0;
 	this->v = v;

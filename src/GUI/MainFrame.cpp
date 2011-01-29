@@ -32,30 +32,30 @@
 IMPLEMENT_CLASS(MainFrame, wxFrame)
 
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
-EVT_MENU(wxID_EXIT, MainFrame::onFileExit)
-EVT_MENU(wxID_OPEN, MainFrame::onFileOpen)
-EVT_MENU(wxID_PREFERENCES, MainFrame::onSettings)
-EVT_MENU(wxID_ABOUT, MainFrame::onAbout)
-EVT_MENU(ID_START, MainFrame::onPlay)
-EVT_MENU(ID_PAUSE, MainFrame::onPause)
-EVT_MENU(ID_STOP, MainFrame::onStop)
-EVT_UPDATE_UI( ID_START, MainFrame::onPlayUpdate )
-EVT_UPDATE_UI( ID_PAUSE, MainFrame::onPauseUpdate )
-EVT_UPDATE_UI( ID_STOP, MainFrame::onStopUpdate )
-EVT_IDLE(MainFrame::onIdle)
+EVT_MENU(wxID_EXIT, MainFrame::OnFileExit)
+EVT_MENU(wxID_OPEN, MainFrame::OnFileOpen)
+EVT_MENU(wxID_PREFERENCES, MainFrame::OnSettings)
+EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
+EVT_MENU(ID_START, MainFrame::OnPlay)
+EVT_MENU(ID_PAUSE, MainFrame::OnPause)
+EVT_MENU(ID_STOP, MainFrame::OnStop)
+EVT_UPDATE_UI( ID_START, MainFrame::OnPlayUpdate )
+EVT_UPDATE_UI( ID_PAUSE, MainFrame::OnPauseUpdate )
+EVT_UPDATE_UI( ID_STOP, MainFrame::OnStopUpdate )
+EVT_IDLE(MainFrame::OnIdle)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame()
 {
     // Create the MainFrame
-    Create(0, ID_MAINFRAME, wxT("gbpablog"), wxDefaultPosition,
+    this->Create(0, ID_MAINFRAME, wxT("gbpablog"), wxDefaultPosition,
            wxDefaultSize, wxCAPTION | wxSYSTEM_MENU |
            wxMINIMIZE_BOX | wxCLOSE_BOX);
 
-	SetIcon(wxIcon(gb16_xpm));
+	this->SetIcon(wxIcon(gb16_xpm));
 
-    createMenuBar();
-	createToolBar();
+    this->CreateMenuBar();
+	this->CreateToolBar();
 
 	settingsDialog = new SettingsDialog(this);
 	settingsDialog->CentreOnScreen();
@@ -63,7 +63,7 @@ MainFrame::MainFrame()
 	SettingsSetNewValues(settingsDialog->settings);
 	PadSetKeys(SettingsGetInput());	
 
-    // create the SDLPanel
+    // create the MainPanel
     panel = new MainPanel(this);
 
 
@@ -74,15 +74,15 @@ MainFrame::MainFrame()
 
 	emuState = NotStartedYet;
 
-	SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
+	this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
 }
 
 MainFrame::~MainFrame()
 {
-	Clean();
+	this->Clean();
 }
 
-void MainFrame::createMenuBar()
+void MainFrame::CreateMenuBar()
 {
 	// create the main menubar
     mb = new wxMenuBar();
@@ -112,11 +112,11 @@ void MainFrame::createMenuBar()
     // add the help menu to the menu bar
     mb->Append(helpMenu, wxT("&Help"));
 
-    // add the menu bar to the SDLFrame
-    SetMenuBar(mb);
+    // add the menu bar to the MainFrame
+    this->SetMenuBar(mb);
 }
 
-void MainFrame::createToolBar()
+void MainFrame::CreateToolBar()
 {
 
 	toolBar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxNO_BORDER);
@@ -135,22 +135,22 @@ void MainFrame::createToolBar()
 	toolBar->AddTool(ID_STOP, bmpStop, wxT("Stop"));
 
 	toolBar->Realize();
-	SetToolBar(toolBar);
+	this->SetToolBar(toolBar);
 }
 
-void MainFrame::onFileOpen(wxCommandEvent &) {
+void MainFrame::OnFileOpen(wxCommandEvent &) {
 	BYTE * buffer = NULL;
 	unsigned long size = 0;
 	bool isZip = false;
 
-	wxFileDialog* OpenDialog = new wxFileDialog(this, wxT("Choose a gameboy rom to open"), wxEmptyString, wxEmptyString,
+	wxFileDialog* openDialog = new wxFileDialog(this, wxT("Choose a gameboy rom to open"), wxEmptyString, wxEmptyString,
 												wxT("Gameboy roms (*.gb; *.zip)|*.gb;*.zip"),
 												wxFD_OPEN, wxDefaultPosition);
 
 	// Creates a "open file" dialog
-	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+	if (openDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 	{
-		wxString fileName = OpenDialog->GetPath();
+		wxString fileName = openDialog->GetPath();
 		wxString fileLower = fileName.Lower();
 		if (fileLower.EndsWith(wxT(".zip")))
 		{
@@ -176,7 +176,7 @@ void MainFrame::onFileOpen(wxCommandEvent &) {
 	}
 
 	// Clean up after ourselves
-	OpenDialog->Destroy();
+	openDialog->Destroy();
 }
 
 /*
@@ -215,9 +215,9 @@ void MainFrame::LoadZip(wxString zipPath, BYTE ** buffer, unsigned long * size)
 	return;
 }
 
-void MainFrame::onFileExit(wxCommandEvent &)
+void MainFrame::OnFileExit(wxCommandEvent &)
 {
-	Close();
+	this->Close();
 }
 
 void MainFrame::Clean()
@@ -234,7 +234,7 @@ void MainFrame::Clean()
 /*
  * Abre un dialogo de configuracion. Cuando se cierra se encarga de aplicar ciertos cambios a la emulacion
  */
-void MainFrame::onSettings(wxCommandEvent &)
+void MainFrame::OnSettings(wxCommandEvent &)
 {
 	enumEmuStates lastState = emuState;
 	if (emuState == Playing)
@@ -246,24 +246,24 @@ void MainFrame::onSettings(wxCommandEvent &)
 		SettingsSetNewValues(settingsDialog->settings);
 		panel->ChangePalette(SettingsGetGreenScale());
 		panel->ChangeSize();
-		SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
+		this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
 		PadSetKeys(SettingsGetInput());
 	}
 
 	emuState = lastState;
 }
 
-void MainFrame::onAbout(wxCommandEvent &)
+void MainFrame::OnAbout(wxCommandEvent &)
 {
 	AboutDialog(this);
 }
 
-void MainFrame::onPlay(wxCommandEvent &)
+void MainFrame::OnPlay(wxCommandEvent &)
 {
 	emuState = Playing;
 }
 
-void MainFrame::onPause(wxCommandEvent &)
+void MainFrame::OnPause(wxCommandEvent &)
 {
 	if (emuState == Playing)
 		emuState = Paused;
@@ -271,14 +271,14 @@ void MainFrame::onPause(wxCommandEvent &)
 		emuState = Playing;
 }
 
-void MainFrame::onStop(wxCommandEvent &)
+void MainFrame::OnStop(wxCommandEvent &)
 {
 	cpu->Reset();
-	panel->onRefreshScreen();
+	panel->OnRefreshScreen();
 	emuState = Stopped;
 }
 
-void MainFrame::onPlayUpdate(wxUpdateUIEvent& event)
+void MainFrame::OnPlayUpdate(wxUpdateUIEvent& event)
 {
 	if ((emuState == NotStartedYet) || (emuState == Playing)){
 		event.Enable(false);
@@ -289,7 +289,7 @@ void MainFrame::onPlayUpdate(wxUpdateUIEvent& event)
 
 }
 
-void MainFrame::onPauseUpdate(wxUpdateUIEvent& event)
+void MainFrame::OnPauseUpdate(wxUpdateUIEvent& event)
 {
 	if ((emuState == NotStartedYet) || (emuState == Stopped)){
 		event.Enable(false);
@@ -300,7 +300,7 @@ void MainFrame::onPauseUpdate(wxUpdateUIEvent& event)
 
 }
 
-void MainFrame::onStopUpdate(wxUpdateUIEvent& event)
+void MainFrame::OnStopUpdate(wxUpdateUIEvent& event)
 {
 	if ((emuState == Stopped)||(emuState == NotStartedYet)) {
 		event.Enable(false);
@@ -319,7 +319,7 @@ void MainFrame::onStopUpdate(wxUpdateUIEvent& event)
  * llamo por ultima vez a esta funcion y el tiempo que ha tardado la emulacion en
  * calcularse.
  */
-void MainFrame::onIdle(wxIdleEvent &event)
+void MainFrame::OnIdle(wxIdleEvent &event)
 {
 	long duration = 16;
 

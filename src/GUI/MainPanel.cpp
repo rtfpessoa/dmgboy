@@ -23,13 +23,13 @@
 #include "../Def.h"
 #include "../Settings.h"
 
-inline void MainPanel::onEraseBackground(wxEraseEvent &) { /* do nothing */ }
+inline void MainPanel::OnEraseBackground(wxEraseEvent &) { /* do nothing */ }
 
 IMPLEMENT_CLASS(MainPanel, wxPanel)
 
 BEGIN_EVENT_TABLE(MainPanel, wxPanel)
-EVT_PAINT(MainPanel::onPaint)
-EVT_ERASE_BACKGROUND(MainPanel::onEraseBackground)
+EVT_PAINT(MainPanel::OnPaint)
+EVT_ERASE_BACKGROUND(MainPanel::OnEraseBackground)
 END_EVENT_TABLE()
 
 MainPanel::MainPanel(wxWindow *parent) : wxPanel(parent, ID_MAINPANEL), screen(0) {
@@ -55,7 +55,7 @@ void MainPanel::ChangeSize()
     SetMaxSize(size);
 }
 
-void MainPanel::onPaint(wxPaintEvent &) {
+void MainPanel::OnPaint(wxPaintEvent &) {
     // can't draw if the screen doesn't exist yet
     if (!screen) {
         return;
@@ -85,7 +85,7 @@ void MainPanel::onPaint(wxPaintEvent &) {
     wxBufferedPaintDC dc(this, bmp);
 }
 
-void MainPanel::onPreDraw()
+void MainPanel::OnPreDraw()
 {
 	if ( SDL_MUSTLOCK(screen) )
     {
@@ -96,7 +96,7 @@ void MainPanel::onPreDraw()
     }
 }
 
-void MainPanel::onPostDraw()
+void MainPanel::OnPostDraw()
 {
 	if ( SDL_MUSTLOCK(screen) )
     {
@@ -104,7 +104,7 @@ void MainPanel::onPostDraw()
     }
 }
 
-void MainPanel::onRefreshScreen()
+void MainPanel::OnRefreshScreen()
 {
 	// refresh the panel
     Refresh(false);
@@ -139,13 +139,13 @@ void MainPanel::ChangePalette(bool original)
 
 }
 
-void MainPanel::onClear()
+void MainPanel::OnClear()
 {
 	SDL_FillRect( screen, NULL, 0 );
 }
 
 //idColor = 0, 1, 2, 3 = negro, gris oscuro, gris claro, blanco
-void MainPanel::onDrawPixel(int idColor, int x, int y)
+void MainPanel::OnDrawPixel(int idColor, int x, int y)
 {
 	Uint32 color = colors[idColor];
 	

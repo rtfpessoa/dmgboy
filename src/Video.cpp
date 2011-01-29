@@ -44,24 +44,24 @@ void Video::SetMem(Memory *mem)
 
 void Video::UpdateLine(BYTE y)
 {
-	panel->onPreDraw();
+	panel->OnPreDraw();
 
 	OrderOAM(y);
 	UpdateBG(y);
 	UpdateWin(y);
 	UpdateOAM(y);
 
-	panel->onPostDraw();
+	panel->OnPostDraw();
 }
 
 void Video::RefreshScreen()
 {
-	panel->onRefreshScreen();
+	panel->OnRefreshScreen();
 }
 
 void Video::ClearScreen()
 {
-	panel->onClear();
+	panel->OnClear();
 }
 
 void Video::UpdateBG(int y)
@@ -92,7 +92,7 @@ void Video::UpdateBG(int y)
 		//pintamos la linea de blanco
 		if (!BIT7(valueLCDC) || !BIT0(valueLCDC))
 		{
-			panel->onDrawPixel(3, x, y);
+			panel->OnDrawPixel(3, x, y);
 			//DrawPixel(hideScreen, colors[0], x, y);
 			continue;
 		}
@@ -124,7 +124,7 @@ void Video::UpdateBG(int y)
 		indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
 		color = palette[indexColor];
 
-		panel->onDrawPixel(color, x, y);
+		panel->OnDrawPixel(color, x, y);
 		indexColorsBGWnd[x][y] = indexColor;
 	}
 }
@@ -184,7 +184,7 @@ void Video::UpdateWin(int y)
 		indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
 		color = palette[indexColor];
 
-		panel->onDrawPixel(color, x, y);
+		panel->OnDrawPixel(color, x, y);
 		indexColorsBGWnd[x][y] = indexColor;
 	}
 }
@@ -289,7 +289,7 @@ void Video::UpdateOAM(int y)
 					color = palette1[index];
 
 
-				panel->onDrawPixel(color, xSprite + countX, ySprite + countY);
+				panel->OnDrawPixel(color, xSprite + countX, ySprite + countY);
 			}
 
 			countX++;
