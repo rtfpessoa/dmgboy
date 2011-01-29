@@ -97,10 +97,10 @@ void MainFrame::createMenuBar()
 
 	// create the emulation menu
     wxMenu *emulationMenu = new wxMenu;
-	emulationMenu->Append(wxID_PREFERENCES, wxT("&Settings"));
-    emulationMenu->Append(ID_START, wxT("&Start"));
+	emulationMenu->Append(wxID_PREFERENCES, wxT("&Settings\tCtrl+E"));
+    emulationMenu->Append(ID_START, wxT("&Start\tCtrl+S"));
 	emulationMenu->Append(ID_PAUSE, wxT("&Pause\tCtrl+P"));
-	emulationMenu->Append(ID_STOP, wxT("S&top"));
+	emulationMenu->Append(ID_STOP, wxT("S&top\tCtrl+T"));
 
     // add the file menu to the menu bar
     mb->Append(emulationMenu, wxT("&Emulation"));

@@ -1,4 +1,3 @@
-- accesos rapidos: Ctrl+R o Cmd+R
 - Lista de ultimas ROMS
 - drag & drop
 - Cargar por linea de comandos
@@ -10,6 +9,7 @@
 - Sonido
 
 Terminado:
+- accesos rapidos: Ctrl+R o Cmd+R
 - Poder cambiar los botones del pad en cualquier momento: fichero + interfaz grafica
 - ventana para opciones
 - Hacer la pantalla mas grande (2x, 4x, etc)
