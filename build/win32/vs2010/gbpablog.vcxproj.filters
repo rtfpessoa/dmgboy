@@ -10,18 +10,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\GUI\wxSDLScreen.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\GUI\wxIDControls.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\GUI\wxSDLApp.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\GUI\wxSDLFrame.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\Video.h">
       <Filter>HW</Filter>
     </ClInclude>
@@ -55,29 +43,32 @@
     <ClInclude Include="..\..\..\src\Registers.h">
       <Filter>HW</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\GUI\wxSettings.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\Settings.h">
       <Filter>HW</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\GUI\wxAbout.h">
+    <ClInclude Include="..\..\..\src\GUI\AboutDialog.h">
       <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\GUI\wxInputTextCtrl.h">
+    <ClInclude Include="..\..\..\src\GUI\IDControls.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\InputTextCtrl.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\MainApp.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\MainFrame.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\MainPanel.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\SettingsDialog.h">
       <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\GUI\wxSDLApp.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\GUI\wxSDLFrame.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\GUI\wxSDLScreen.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Cartridge.cpp">
       <Filter>HW</Filter>
     </ClCompile>
@@ -108,16 +99,25 @@
     <ClCompile Include="..\..\..\src\Video.cpp">
       <Filter>HW</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\GUI\wxSettings.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Settings.cpp">
       <Filter>HW</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\GUI\wxAbout.cpp">
+    <ClCompile Include="..\..\..\src\GUI\AboutDialog.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\GUI\wxInputTextCtrl.cpp">
+    <ClCompile Include="..\..\..\src\GUI\InputTextCtrl.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\MainApp.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\MainFrame.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\MainPanel.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\SettingsDialog.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>
