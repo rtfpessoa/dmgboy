@@ -18,6 +18,13 @@
 #ifndef __DEF_H__
 #define __DEF_H__
 
+#define APP_NAME		"gbpablog"
+#define APP_VERSION		"0.8"
+#define APP_MAINT		"Pablo Gasco"
+#define APP_LICENCE		"GPL v3"
+#define APP_COPYRIGTH	"(C) 2010 Pablo Gasco"
+#define APP_WEBSITE		"http://code.google.com/p/gbpablog/"
+
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
 

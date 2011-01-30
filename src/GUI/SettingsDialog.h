@@ -28,6 +28,7 @@ class SettingsDialog: public wxPropertySheetDialog
 {
 	DECLARE_CLASS(SettingsDialog)
 	DECLARE_EVENT_TABLE()
+	
 private:
 	bool TransferDataToWindow();
 	bool TransferDataFromWindow();

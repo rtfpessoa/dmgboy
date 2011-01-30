@@ -20,14 +20,7 @@
 #include "SDL.h"
 #include "AboutDialog.h"
 #include "Xpm/gb64.xpm"          // app icon bitmap
-
-const wxString APP_NAME = wxT("gbpablog");
-const wxString APP_VENDOR = wxT("wyoGuide");
-const wxString APP_VERSION = wxT("0.8");
-const wxString APP_MAINT = wxT("Pablo Gasco");
-const wxString APP_LICENCE = wxT("GPL v3");
-const wxString APP_COPYRIGTH = wxT("(C) 2010 Pablo Gasco");
-const wxString APP_WEBSITE = wxT("http://code.google.com/p/gbpablog/");
+#include "../Def.h"
 
 
 AboutDialog::AboutDialog (wxWindow *parent)
@@ -45,11 +38,11 @@ AboutDialog::AboutDialog (wxWindow *parent)
     // about info
     wxGridSizer *aboutinfo = new wxGridSizer (2, 3, 3);
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Version: ")));
-    aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_VERSION));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT(APP_VERSION)));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Written by: ")));
-    aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_MAINT));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT(APP_MAINT)));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Licence type: ")));
-    aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_LICENCE));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT(APP_LICENCE)));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("wxWidgets: ")));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxVERSION_STRING));
 	aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("SDL: ")));
@@ -65,12 +58,12 @@ AboutDialog::AboutDialog (wxWindow *parent)
     // about complete
     wxBoxSizer *totalpane = new wxBoxSizer (wxVERTICAL);
     totalpane->Add (0, 20);
-    wxStaticText *appname = new wxStaticText (this, wxID_ANY, APP_NAME);
+    wxStaticText *appname = new wxStaticText (this, wxID_ANY, wxT(APP_NAME));
     appname->SetFont (wxFont (24, wxDEFAULT, wxNORMAL, wxBOLD));
     totalpane->Add (appname, 0, wxALIGN_CENTER | wxLEFT | wxRIGHT, 40);
     totalpane->Add (0, 10);
     totalpane->Add (aboutpane, 0, wxALIGN_CENTER | wxLEFT | wxRIGHT | wxBOTTOM, 10);
-    wxHyperlinkCtrl *website = new wxHyperlinkCtrl (this, wxID_ANY, APP_WEBSITE, APP_WEBSITE);
+    wxHyperlinkCtrl *website = new wxHyperlinkCtrl (this, wxID_ANY, wxT(APP_WEBSITE), wxT(APP_WEBSITE));
     totalpane->Add (website, 0, wxALIGN_CENTER | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
     wxButton *okButton = new wxButton (this, wxID_OK, _("OK"));
