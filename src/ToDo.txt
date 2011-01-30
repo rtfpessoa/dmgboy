@@ -1,5 +1,4 @@
 - Lista de ultimas ROMS
-- drag & drop
 - Cargar por linea de comandos
 - Pasarlo a OpenGL
 - Multi idioma / unicode
@@ -9,6 +8,7 @@
 - Sonido
 
 Terminado:
+- drag & drop
 - accesos rapidos: Ctrl+R o Cmd+R
 - Poder cambiar los botones del pad en cualquier momento: fichero + interfaz grafica
 - ventana para opciones

@@ -139,9 +139,6 @@ void MainFrame::CreateToolBar()
 }
 
 void MainFrame::OnFileOpen(wxCommandEvent &) {
-	BYTE * buffer = NULL;
-	unsigned long size = 0;
-	bool isZip = false;
 
 	wxFileDialog* openDialog = new wxFileDialog(this, wxT("Choose a gameboy rom to open"), wxEmptyString, wxEmptyString,
 												wxT("Gameboy roms (*.gb; *.zip)|*.gb;*.zip"),
@@ -149,34 +146,53 @@ void MainFrame::OnFileOpen(wxCommandEvent &) {
 
 	// Creates a "open file" dialog
 	if (openDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
-	{
-		wxString fileName = openDialog->GetPath();
-		wxString fileLower = fileName.Lower();
-		if (fileLower.EndsWith(wxT(".zip")))
-		{
-			isZip = true;
-			LoadZip(fileName, &buffer, &size);
-			if ((buffer == NULL) || (size == 0))
-				return;
-		}
-
-		cpu->Reset();
-		if (cartridge)
-			delete cartridge;
-
-		if (isZip) {
-			cartridge = new Cartridge(buffer, size);
-		}else {
-			cartridge = new Cartridge(std::string(fileName.mb_str()));
-		}
-
-
-		cpu->LoadCartridge(cartridge);
-		emuState = Playing;
-	}
+		this->ChangeFile(openDialog->GetPath());
 
 	// Clean up after ourselves
 	openDialog->Destroy();
+}
+
+void MainFrame::ChangeFile(const wxString fileName)
+{
+	BYTE * buffer = NULL;
+	unsigned long size = 0;
+	bool isZip = false;
+	
+	if (!wxFileExists(fileName))
+	{
+		wxMessageBox(wxT("The file:\n")+fileName+wxT("\ndoesn't exist"), wxT("Error"));
+		return;
+	}
+	
+	wxString fileLower = fileName.Lower();
+	if (fileLower.EndsWith(wxT(".zip")))
+	{
+		isZip = true;
+		this->LoadZip(fileName, &buffer, &size);
+		if ((buffer == NULL) || (size == 0))
+			return;
+	}
+	else if (!fileLower.EndsWith(wxT(".gb")))
+	{
+		wxMessageBox(wxT("Only gb and zip files allowed!"), wxT("Error"));
+		return;
+	}
+
+	
+	// Si ha llegado aquí es que es un archivo permitido
+	cpu->Reset();
+	if (cartridge)
+		delete cartridge;
+	
+	if (isZip) {
+		cartridge = new Cartridge(buffer, size);
+	}else {
+		cartridge = new Cartridge(std::string(fileName.mb_str()));
+	}
+	
+	
+	cpu->LoadCartridge(cartridge);
+	emuState = Playing;
 }
 
 /*
@@ -184,7 +200,7 @@ void MainFrame::OnFileOpen(wxCommandEvent &) {
  * Si existe mas de una rom solo carga la primera. Si se ha encontrado, la rom se devuelve en un buffer
  * junto con su tamaño, sino las variables se dejan intactas
  */
-void MainFrame::LoadZip(wxString zipPath, BYTE ** buffer, unsigned long * size)
+void MainFrame::LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * size)
 {
 	wxString fileInZip, fileLower;
 	wxZipEntry* entry;

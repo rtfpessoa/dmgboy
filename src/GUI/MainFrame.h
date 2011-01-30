@@ -59,7 +59,7 @@ private:
 	void OnIdle(wxIdleEvent &event);
 	void CreateMenuBar();
 	void CreateToolBar();
-	void LoadZip(wxString zipPath, BYTE ** buffer, unsigned long * size);
+	void LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * size);
 	
 	void Clean();
     
@@ -80,8 +80,8 @@ public:
      *
      * @return The MainPanel.
      */
-	
 	inline MainPanel &GetPanel() { return *panel; }
+	void ChangeFile(const wxString fileName);
 };
 
 #endif
