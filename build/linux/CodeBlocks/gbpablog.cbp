@@ -56,43 +56,43 @@
 		<Unit filename="../../../src/GBException.h">
 			<Option virtualFolder="HW/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/wxAbout.cpp">
+		<Unit filename="../../../src/GUI/AboutDialog.cpp">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/wxAbout.h">
+		<Unit filename="../../../src/GUI/AboutDialog.h">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/wxIDControls.h">
+		<Unit filename="../../../src/GUI/IDControls.h">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/wxInputTextCtrl.cpp">
+		<Unit filename="../../../src/GUI/InputTextCtrl.cpp">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/wxInputTextCtrl.h">
+		<Unit filename="../../../src/GUI/InputTextCtrl.h">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/wxSDLApp.cpp">
+		<Unit filename="../../../src/GUI/MainApp.cpp">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/wxSDLApp.h">
+		<Unit filename="../../../src/GUI/MainApp.h">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/wxSDLFrame.cpp">
+		<Unit filename="../../../src/GUI/MainFrame.cpp">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/wxSDLFrame.h">
+		<Unit filename="../../../src/GUI/MainFrame.h">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/wxSDLScreen.cpp">
+		<Unit filename="../../../src/GUI/MainPanel.cpp">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/wxSDLScreen.h">
+		<Unit filename="../../../src/GUI/MainPanel.h">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/wxSettings.cpp">
+		<Unit filename="../../../src/GUI/SettingsDialog.cpp">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/wxSettings.h">
+		<Unit filename="../../../src/GUI/SettingsDialog.h">
 			<Option virtualFolder="GUI/" />
 		</Unit>
 		<Unit filename="../../../src/Instructions.cpp">
