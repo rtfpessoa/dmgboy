@@ -46,7 +46,7 @@ EVT_UPDATE_UI( ID_STOP, MainFrame::OnStopUpdate )
 EVT_IDLE(MainFrame::OnIdle)
 END_EVENT_TABLE()
 
-MainFrame::MainFrame()
+MainFrame::MainFrame(wxString fileName)
 {
     // Create the MainFrame
     this->Create(0, ID_MAINFRAME, wxT("gbpablog"), wxDefaultPosition,
@@ -78,6 +78,9 @@ MainFrame::MainFrame()
 	emuState = NotStartedYet;
 
 	this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
+	
+	if (fileName != "")
+		ChangeFile(fileName);
 }
 
 MainFrame::~MainFrame()

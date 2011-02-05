@@ -53,6 +53,8 @@ public:
      * @return The exit code.
      */
     int OnExit();
+	
+	void MacOpenFile(const wxString &fileName);
 };
 
 #endif

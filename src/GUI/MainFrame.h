@@ -72,7 +72,7 @@ public:
     /**
      * Creates a new MainFrame.
      */
-    MainFrame();
+    MainFrame(wxString fileName);
 	~MainFrame();
 	
     /**

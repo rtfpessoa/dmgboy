@@ -22,7 +22,7 @@
 #define APP_VERSION		"0.8"
 #define APP_MAINT		"Pablo Gasco"
 #define APP_LICENCE		"GPL v3"
-#define APP_COPYRIGTH	"(C) 2010 Pablo Gasco"
+#define APP_COPYRIGTH	"(C) 2011 Pablo Gasco"
 #define APP_WEBSITE		"http://code.google.com/p/gbpablog/"
 
 typedef unsigned char BYTE;
