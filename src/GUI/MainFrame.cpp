@@ -28,6 +28,7 @@
 #include "Xpm/pause.xpm"
 #include "Xpm/stop.xpm"
 #include "Xpm/gb16.xpm"
+#include "Xpm/gb32.xpm"
 
 IMPLEMENT_CLASS(MainFrame, wxFrame)
 
@@ -51,8 +52,10 @@ MainFrame::MainFrame()
     this->Create(0, ID_MAINFRAME, wxT("gbpablog"), wxDefaultPosition,
            wxDefaultSize, wxCAPTION | wxSYSTEM_MENU |
            wxMINIMIZE_BOX | wxCLOSE_BOX);
-
-	this->SetIcon(wxIcon(gb16_xpm));
+	
+	wxIconBundle * icons = new wxIconBundle(wxIcon(gb16_xpm));
+	icons->AddIcon(wxIcon(gb32_xpm));
+	this->SetIcons(*icons);
 
     this->CreateMenuBar();
 	this->CreateToolBar();
