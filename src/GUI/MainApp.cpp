@@ -25,17 +25,17 @@
 IMPLEMENT_CLASS(MainApp, wxApp)
 IMPLEMENT_APP(MainApp)
 
-static const wxCmdLineEntryDesc g_cmdLineDesc[] = 
+static const wxCmdLineEntryDesc g_cmdLineDesc[] =
 {
-	{ wxCMD_LINE_SWITCH, wxT("h"), wxT("help"), wxT("displays this help") },
-	{ wxCMD_LINE_SWITCH, wxT("v"), wxT("version"), wxT("print version") },
+	{ wxCMD_LINE_SWITCH, wxT("h"), wxT("help"), wxT("displays this help"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP },
+	{ wxCMD_LINE_SWITCH, wxT("v"), wxT("version"), wxT("print version"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 	{ wxCMD_LINE_PARAM, NULL, NULL, wxT("input file"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
-	{ wxCMD_LINE_NONE }
+	{ wxCMD_LINE_NONE, NULL, NULL, NULL, wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL }
 };
 
 bool MainApp::OnInit() {
 
-	wxString cmdFilename = "";
+	wxString cmdFilename = wxT("");
 	wxCmdLineParser cmdParser(g_cmdLineDesc, argc, argv);
 	int res;
 	{
@@ -49,7 +49,6 @@ bool MainApp::OnInit() {
 	{
 		cmdParser.Usage();
 		return false;
-		
 	}
 	
 	// Check if the user asked for the version
@@ -58,8 +57,10 @@ bool MainApp::OnInit() {
 #ifndef __WXMSW__
 		wxLog::SetActiveTarget(new wxLogStderr);
 #endif
-		
-		wxLogMessage(wxT("%s %s"), APP_NAME, APP_VERSION);
+		wxString msg = wxT("");
+		msg << wxT(APP_NAME) << wxT(" ") << wxT(APP_VERSION);
+
+		wxLogMessage(wxT("%s"), msg.c_str());
 		return false;
 	}
 	
@@ -67,7 +68,7 @@ bool MainApp::OnInit() {
 	if (cmdParser.GetParamCount() > 0)
 	{
 		cmdFilename = cmdParser.GetParam(0);
-		
+
 		// Under Windows when invoking via a document
 		// in Explorer, we are passed the short form.
 		// So normalize and make the long form.
@@ -75,12 +76,12 @@ bool MainApp::OnInit() {
 		fName.Normalize(wxPATH_NORM_LONG|wxPATH_NORM_DOTS|wxPATH_NORM_TILDE|wxPATH_NORM_ABSOLUTE);
 		cmdFilename = fName.GetFullPath();
 	}
-
+	
     // create the MainFrame
     frame = new MainFrame(cmdFilename);
     frame->Centre();
     frame->Show();
-    
+	
     // Our MainFrame is the Top Window
     SetTopWindow(frame);
 	
@@ -92,7 +93,7 @@ int MainApp::OnRun() {
     // initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "unable to init SDL: " << SDL_GetError() << '\n';
-        
+
         return -1;
     }
 	
@@ -102,7 +103,7 @@ int MainApp::OnRun() {
 
 int MainApp::OnExit() {
     SDL_Quit();
-    
+	
     // return the standard exit code
     return wxApp::OnExit();
 }

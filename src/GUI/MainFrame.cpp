@@ -52,7 +52,7 @@ MainFrame::MainFrame(wxString fileName)
     this->Create(0, ID_MAINFRAME, wxT("gbpablog"), wxDefaultPosition,
            wxDefaultSize, wxCAPTION | wxSYSTEM_MENU |
            wxMINIMIZE_BOX | wxCLOSE_BOX);
-	
+
 	wxIconBundle * icons = new wxIconBundle(wxIcon(gb16_xpm));
 	icons->AddIcon(wxIcon(gb32_xpm));
 	this->SetIcons(*icons);
@@ -64,7 +64,7 @@ MainFrame::MainFrame(wxString fileName)
 	settingsDialog->CentreOnScreen();
 	settingsDialog->LoadFromFile();
 	SettingsSetNewValues(settingsDialog->settings);
-	PadSetKeys(SettingsGetInput());	
+	PadSetKeys(SettingsGetInput());
 
     // create the MainPanel
     panel = new MainPanel(this);
@@ -78,8 +78,8 @@ MainFrame::MainFrame(wxString fileName)
 	emuState = NotStartedYet;
 
 	this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
-	
-	if (fileName != "")
+
+	if (fileName != wxT(""))
 		ChangeFile(fileName);
 }
 
@@ -163,13 +163,13 @@ void MainFrame::ChangeFile(const wxString fileName)
 	BYTE * buffer = NULL;
 	unsigned long size = 0;
 	bool isZip = false;
-	
+
 	if (!wxFileExists(fileName))
 	{
 		wxMessageBox(wxT("The file:\n")+fileName+wxT("\ndoesn't exist"), wxT("Error"));
 		return;
 	}
-	
+
 	wxString fileLower = fileName.Lower();
 	if (fileLower.EndsWith(wxT(".zip")))
 	{
@@ -184,19 +184,19 @@ void MainFrame::ChangeFile(const wxString fileName)
 		return;
 	}
 
-	
+
 	// Si ha llegado aquí es que es un archivo permitido
 	cpu->Reset();
 	if (cartridge)
 		delete cartridge;
-	
+
 	if (isZip) {
 		cartridge = new Cartridge(buffer, size);
 	}else {
 		cartridge = new Cartridge(std::string(fileName.mb_str()));
 	}
-	
-	
+
+
 	cpu->LoadCartridge(cartridge);
 	emuState = Playing;
 }
@@ -215,7 +215,7 @@ void MainFrame::LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * 
 	while (entry = zip.GetNextEntry())
 	{
 		fileInZip = entry->GetName();
-		
+
 		fileLower = fileInZip.Lower();
 		if (fileLower.EndsWith(wxT(".gb")))
 		{
@@ -231,7 +231,7 @@ void MainFrame::LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * 
 			continue;
 		}
 	}
-	
+
 	// Archivo no encontrado
 	wxMessageBox(wxT("GameBoy rom not found in the file:\n")+zipPath, wxT("Error"));
 	return;
