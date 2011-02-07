@@ -33,6 +33,7 @@ class MainFrame : public wxFrame {
     
 private:
 	wxMenuBar *mb;
+	wxMenu *recentMenu;
 	wxToolBar* toolBar;
     MainPanel *panel;
 	SettingsDialog * settingsDialog;

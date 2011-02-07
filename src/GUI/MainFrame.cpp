@@ -96,6 +96,12 @@ void MainFrame::CreateMenuBar()
     // create the file menu
     wxMenu *fileMenu = new wxMenu;
 	fileMenu->Append(wxID_OPEN, wxT("&Open\tCtrl+O"));
+	
+	recentMenu = new wxMenu;
+	recentMenu->AppendSeparator();
+	recentMenu->Append(ID_CLEAR_RECENT, wxT("Clear Menu"));
+	fileMenu->AppendSubMenu(recentMenu, wxT("Open Recent"));
+	
 	fileMenu->Append(wxID_EXIT, wxT("E&xit"));
 
     // add the file menu to the menu bar
@@ -199,6 +205,9 @@ void MainFrame::ChangeFile(const wxString fileName)
 
 	cpu->LoadCartridge(cartridge);
 	emuState = Playing;
+	
+	wxString shortName = fileName.substr(fileName.rfind(wxFileName::GetPathSeparator())+1);
+	recentMenu->Insert(0, wxID_ANY, shortName);
 }
 
 /*
