@@ -18,10 +18,18 @@
 #ifndef __MAINFRAME_H__
 #define __MAINFRAME_H__
 
+#define MAX_RECENT_FILES 10
+
 #include <wx/wx.h>
 #include "SettingsDialog.h"
 #include "MainPanel.h"
 #include "../CPU.h"
+
+struct RecentFile
+{
+	wxString shortName;
+	wxString fullName;
+};
 
 /*******************************************************************************
  // MainFrame Class
@@ -40,6 +48,9 @@ private:
 	Video * video;
 	Cartridge * cartridge;
 	
+	RecentFile recentFiles[MAX_RECENT_FILES];
+	int numRecentFiles;
+	
 	enum enumEmuStates { NotStartedYet, Stopped, Paused, Playing };
 	
 	enumEmuStates emuState;
@@ -49,6 +60,8 @@ private:
      */
     void OnFileExit(wxCommandEvent &);
 	void OnFileOpen(wxCommandEvent &);
+	void OnRecent(wxCommandEvent &event);
+	void OnClearRecent(wxCommandEvent &event);
 	void OnSettings(wxCommandEvent &);
 	void OnAbout(wxCommandEvent &);
 	void OnPlay(wxCommandEvent &);
@@ -61,6 +74,7 @@ private:
 	void CreateMenuBar();
 	void CreateToolBar();
 	void LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * size);
+	void UpdateRecentMenu(wxString fileName);
 	
 	void Clean();
     

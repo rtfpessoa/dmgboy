@@ -35,6 +35,8 @@ IMPLEMENT_CLASS(MainFrame, wxFrame)
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 EVT_MENU(wxID_EXIT, MainFrame::OnFileExit)
 EVT_MENU(wxID_OPEN, MainFrame::OnFileOpen)
+EVT_MENU_RANGE(ID_RECENT0, ID_RECENT9, MainFrame::OnRecent)
+EVT_MENU(ID_CLEAR_RECENT, MainFrame::OnClearRecent)
 EVT_MENU(wxID_PREFERENCES, MainFrame::OnSettings)
 EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
 EVT_MENU(ID_START, MainFrame::OnPlay)
@@ -59,6 +61,8 @@ MainFrame::MainFrame(wxString fileName)
 
     this->CreateMenuBar();
 	this->CreateToolBar();
+	
+	numRecentFiles = 0;
 
 	settingsDialog = new SettingsDialog(this);
 	settingsDialog->CentreOnScreen();
@@ -164,6 +168,22 @@ void MainFrame::OnFileOpen(wxCommandEvent &) {
 	openDialog->Destroy();
 }
 
+void MainFrame::OnRecent(wxCommandEvent &event)
+{
+	int idAux = event.GetId();
+	int id = idAux - ID_RECENT0;
+	ChangeFile(recentFiles[id].fullName);
+}
+
+void MainFrame::OnClearRecent(wxCommandEvent &)
+{
+	for (int i=0; i<numRecentFiles; i++)
+	{
+		recentMenu->Delete(ID_RECENT0+i);
+	}
+	numRecentFiles = 0;
+}
+
 void MainFrame::ChangeFile(const wxString fileName)
 {
 	BYTE * buffer = NULL;
@@ -206,8 +226,8 @@ void MainFrame::ChangeFile(const wxString fileName)
 	cpu->LoadCartridge(cartridge);
 	emuState = Playing;
 	
-	wxString shortName = fileName.substr(fileName.rfind(wxFileName::GetPathSeparator())+1);
-	recentMenu->Insert(0, wxID_ANY, shortName);
+	
+	this->UpdateRecentMenu(fileName);
 }
 
 /*
@@ -245,6 +265,60 @@ void MainFrame::LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * 
 	wxMessageBox(wxT("GameBoy rom not found in the file:\n")+zipPath, wxT("Error"));
 	return;
 }
+
+void MainFrame::UpdateRecentMenu(wxString fileName)
+{
+	wxString shortName = fileName.substr(fileName.rfind(wxFileName::GetPathSeparator())+1);
+	int previousIndex = -1;
+	for (int i=0; i<numRecentFiles; i++)
+	{
+		if (recentFiles[i].fullName == fileName)
+		{
+			previousIndex = i;
+			break;
+		}
+	}
+	
+	int startFrom;
+	
+	// Si ya existia de antes y es el primero
+	if (previousIndex == 0)
+	{
+		return;
+	}
+	// Si ya existia de antes y no es el primero
+	else if (previousIndex > 0)
+	{
+		startFrom = previousIndex-1;
+	}
+	// Si no existia pero no hemos llegado al limite
+	else if (numRecentFiles < MAX_RECENT_FILES)
+	{
+		startFrom = numRecentFiles-1;
+		int id = ID_RECENT0 + numRecentFiles;
+		recentMenu->Insert(numRecentFiles, id, wxT(""));
+		numRecentFiles++;
+	}
+	// Si no existia pero hemos llegado al limite
+	else
+	{
+		startFrom = MAX_RECENT_FILES-2;
+	}
+	
+	for (int i=startFrom; i>=0; i--)
+	{
+		recentFiles[i+1].shortName = recentFiles[i].shortName;
+		recentFiles[i+1].fullName = recentFiles[i].fullName;
+	}
+	recentFiles[0].shortName = shortName;
+	recentFiles[0].fullName = fileName;
+	
+	for (int i=0; i<numRecentFiles; i++)
+	{
+		recentMenu->SetLabel(ID_RECENT0+i, recentFiles[i].shortName);
+	}
+}
+
 
 void MainFrame::OnFileExit(wxCommandEvent &)
 {
