@@ -41,7 +41,7 @@ private:
 public:
     SettingsDialog(wxWindow* parent);
     ~SettingsDialog();
-	void SaveToFile();
+	void SaveToFile(bool reloadSettings=false);
 	void LoadFromFile();
 	
 	Settings settings;

@@ -73,8 +73,10 @@ private:
 	void OnIdle(wxIdleEvent &event);
 	void CreateMenuBar();
 	void CreateToolBar();
-	void LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * size);
+	void CreateRecentMenu(std::string * roms);
+	void RecentRomsToSettings();
 	void UpdateRecentMenu(wxString fileName);
+	void LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * size);
 	
 	void Clean();
     

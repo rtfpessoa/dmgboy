@@ -90,6 +90,8 @@ SettingsDialog::~SettingsDialog()
 /*! * Transfer data to the window */
 bool SettingsDialog::TransferDataToWindow()
 {
+	settings = SettingsGetCopy();
+	
 	wxRadioBox* greenscaleCtrl = (wxRadioBox*) FindWindow(ID_GREENSCALE);
 	wxChoice* winZoomCtrl = (wxChoice*) FindWindow(ID_WINZOOM);
 	InputTextCtrl* upCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_UP);
@@ -243,8 +245,11 @@ wxPanel* SettingsDialog::CreateInputSettingsPage(wxWindow* parent)
     return panel;
 }
 
-void SettingsDialog::SaveToFile()
+void SettingsDialog::SaveToFile(bool reloadSettings)
 {
+	if (reloadSettings)
+		settings = SettingsGetCopy();
+		
 	wxString configDir = wxStandardPaths::Get().GetUserDataDir();
 
 	if (!wxFileName::DirExists(configDir))
@@ -266,6 +271,23 @@ void SettingsDialog::SaveToFile()
 	fileConfig.Write(wxT("Input/b"), settings.padKeys[5]);
 	fileConfig.Write(wxT("Input/select"), settings.padKeys[6]);
 	fileConfig.Write(wxT("Input/start"), settings.padKeys[7]);
+	
+	wxString auxString[10];
+	for (int i=0; i<10; i++)
+	{
+		auxString[i] = settings.recentRoms[i].c_str();
+	}
+	
+	fileConfig.Write(wxT("RecentRoms/01"), auxString[0]);
+	fileConfig.Write(wxT("RecentRoms/02"), auxString[1]);
+	fileConfig.Write(wxT("RecentRoms/03"), auxString[2]);
+	fileConfig.Write(wxT("RecentRoms/04"), auxString[3]);
+	fileConfig.Write(wxT("RecentRoms/05"), auxString[4]);
+	fileConfig.Write(wxT("RecentRoms/06"), auxString[5]);
+	fileConfig.Write(wxT("RecentRoms/07"), auxString[6]);
+	fileConfig.Write(wxT("RecentRoms/08"), auxString[7]);
+	fileConfig.Write(wxT("RecentRoms/09"), auxString[8]);
+	fileConfig.Write(wxT("RecentRoms/10"), auxString[9]);
 }
 
 void SettingsDialog::LoadFromFile()
@@ -286,6 +308,23 @@ void SettingsDialog::LoadFromFile()
 	fileConfig.Read(wxT("Input/b"), &settings.padKeys[5]);
 	fileConfig.Read(wxT("Input/select"), &settings.padKeys[6]);
 	fileConfig.Read(wxT("Input/start"), &settings.padKeys[7]);
+	
+	wxString auxString[10];
+	fileConfig.Read(wxT("RecentRoms/01"), &auxString[0]);
+	fileConfig.Read(wxT("RecentRoms/02"), &auxString[1]);
+	fileConfig.Read(wxT("RecentRoms/03"), &auxString[2]);
+	fileConfig.Read(wxT("RecentRoms/04"), &auxString[3]);
+	fileConfig.Read(wxT("RecentRoms/05"), &auxString[4]);
+	fileConfig.Read(wxT("RecentRoms/06"), &auxString[5]);
+	fileConfig.Read(wxT("RecentRoms/07"), &auxString[6]);
+	fileConfig.Read(wxT("RecentRoms/08"), &auxString[7]);
+	fileConfig.Read(wxT("RecentRoms/09"), &auxString[8]);
+	fileConfig.Read(wxT("RecentRoms/10"), &auxString[9]);
+	
+	for (int i=0; i<10; i++)
+	{
+		settings.recentRoms[i] = auxString[i].c_str();
+	}
 }
 
 wxPanel* SettingsDialog::CreateGeneralSettingsPage2(wxWindow* parent)

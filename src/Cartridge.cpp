@@ -19,7 +19,7 @@
 #include <fstream>
 #include <iostream>
 #include "Def.h"
-#include <string.h>
+#include <string>
 #include <iomanip>
 #include "GBException.h"
 

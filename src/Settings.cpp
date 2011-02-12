@@ -18,6 +18,8 @@
 #include "Settings.h"
 #include <wx/wx.h>
 
+using namespace std;
+
 Settings settings;
 
 Settings::Settings()
@@ -70,10 +72,23 @@ int* SettingsGetInput()
 	return &settings.padKeys[0];
 }
 
-void SettingsSetInput(int* padKeys)
+void SettingsSetInput(const int* padKeys)
 {
 	for (int i=0; i<8; i++)
 	{
 		settings.padKeys[i] = padKeys[i];
+	}
+}
+
+string* SettingsGetRecentRoms()
+{
+	return &settings.recentRoms[0];
+}
+
+void SettingsSetRecentRoms(const string* recentRoms)
+{
+	for (int i=0; i<10; i++)
+	{
+		settings.recentRoms[i] = recentRoms[i];
 	}
 }

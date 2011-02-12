@@ -18,6 +18,8 @@
 #ifndef __SETTINGS_H__
 #define __SETTINGS_H__
 
+#include <string>
+
 class Settings
 {
 public:
@@ -25,6 +27,8 @@ public:
 	int windowZoom;
 	
 	int padKeys[8];
+	std::string recentRoms[10];
+	
 public:
 	Settings();
 };
@@ -34,11 +38,13 @@ Settings SettingsGetCopy();
 bool SettingsGetGreenScale();
 int  SettingsGetWindowZoom();
 int* SettingsGetInput();
+std::string* SettingsGetRecentRoms();
 
 void SettingsSetNewValues(Settings newSettings);
 
 void SettingsSetGreenScale(bool greenScale);
 void SettingsSetWindowZoom(int windowZoom);
-void SettingsSetInput(int* padKeys);
+void SettingsSetInput(const int* padKeys);
+void SettingsSetRecentRoms(const std::string* recentRoms);
 
 #endif

@@ -69,6 +69,7 @@ MainFrame::MainFrame(wxString fileName)
 	settingsDialog->LoadFromFile();
 	SettingsSetNewValues(settingsDialog->settings);
 	PadSetKeys(SettingsGetInput());
+	this->CreateRecentMenu(SettingsGetRecentRoms());
 
     // create the MainPanel
     panel = new MainPanel(this);
@@ -182,6 +183,9 @@ void MainFrame::OnClearRecent(wxCommandEvent &)
 		recentMenu->Delete(ID_RECENT0+i);
 	}
 	numRecentFiles = 0;
+	
+	this->RecentRomsToSettings();
+	settingsDialog->SaveToFile(true);
 }
 
 void MainFrame::ChangeFile(const wxString fileName)
@@ -266,6 +270,24 @@ void MainFrame::LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * 
 	return;
 }
 
+void MainFrame::CreateRecentMenu(std::string * roms)
+{
+	for (int i=0; i<MAX_RECENT_FILES; i++)
+	{
+		if (roms[i] == "")
+			break;
+		
+		recentFiles[i].fullName = wxString(roms[i].c_str());
+		recentFiles[i].shortName = recentFiles[i].fullName.substr(recentFiles[i].fullName.rfind(wxFileName::GetPathSeparator())+1);
+		
+		int id = ID_RECENT0 + numRecentFiles;
+		recentMenu->Insert(numRecentFiles, id, recentFiles[i].shortName);
+		
+		numRecentFiles++;
+	}
+	
+}
+
 void MainFrame::UpdateRecentMenu(wxString fileName)
 {
 	wxString shortName = fileName.substr(fileName.rfind(wxFileName::GetPathSeparator())+1);
@@ -317,8 +339,28 @@ void MainFrame::UpdateRecentMenu(wxString fileName)
 	{
 		recentMenu->SetLabel(ID_RECENT0+i, recentFiles[i].shortName);
 	}
+	
+	this->RecentRomsToSettings();
+	settingsDialog->SaveToFile(true);
 }
 
+
+void MainFrame::RecentRomsToSettings()
+{
+	std::string recentRomsSettings[10];
+	
+	for (int i=0; i<numRecentFiles; i++)
+	{
+		recentRomsSettings[i] = recentFiles[i].fullName.c_str();
+	}
+	
+	for(int i=numRecentFiles; i<MAX_RECENT_FILES; i++)
+	{
+		recentRomsSettings[i] = "";
+	}
+	
+	SettingsSetRecentRoms(recentRomsSettings);
+}
 
 void MainFrame::OnFileExit(wxCommandEvent &)
 {
