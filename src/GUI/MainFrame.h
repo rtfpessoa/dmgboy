@@ -41,7 +41,8 @@ class MainFrame : public wxFrame {
     
 private:
 	wxMenuBar *mb;
-	wxMenu *recentMenu;
+	wxMenu *recentMenuFile;
+	wxMenu *recentMenuPopup;
 	wxToolBar* toolBar;
     MainPanel *panel;
 	SettingsDialog * settingsDialog;
@@ -61,6 +62,7 @@ private:
     void OnFileExit(wxCommandEvent &);
 	void OnFileOpen(wxCommandEvent &);
 	void OnRecent(wxCommandEvent &event);
+	void OnRecentItem(wxCommandEvent &event);
 	void OnClearRecent(wxCommandEvent &event);
 	void OnSettings(wxCommandEvent &);
 	void OnAbout(wxCommandEvent &);

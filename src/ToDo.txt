@@ -1,4 +1,3 @@
-- Lista de ultimas ROMS
 - Pasarlo a OpenGL
 - Multi idioma / unicode
 - Guardar a disco duro la memoria de los cartuchos que llevan bateria
@@ -7,6 +6,7 @@
 - Sonido
 
 Terminado:
+- Lista de ultimas ROMS
 - Cargar por linea de comandos
 - drag & drop
 - accesos rapidos: Ctrl+R o Cmd+R

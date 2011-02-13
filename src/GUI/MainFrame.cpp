@@ -27,6 +27,7 @@
 #include "Xpm/play.xpm"
 #include "Xpm/pause.xpm"
 #include "Xpm/stop.xpm"
+#include "Xpm/recent.xpm"
 #include "Xpm/gb16.xpm"
 #include "Xpm/gb32.xpm"
 
@@ -35,7 +36,8 @@ IMPLEMENT_CLASS(MainFrame, wxFrame)
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 EVT_MENU(wxID_EXIT, MainFrame::OnFileExit)
 EVT_MENU(wxID_OPEN, MainFrame::OnFileOpen)
-EVT_MENU_RANGE(ID_RECENT0, ID_RECENT9, MainFrame::OnRecent)
+EVT_MENU(ID_OPEN_RECENT, MainFrame::OnRecent)
+EVT_MENU_RANGE(ID_RECENT0, ID_RECENT9, MainFrame::OnRecentItem)
 EVT_MENU(ID_CLEAR_RECENT, MainFrame::OnClearRecent)
 EVT_MENU(wxID_PREFERENCES, MainFrame::OnSettings)
 EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
@@ -102,10 +104,16 @@ void MainFrame::CreateMenuBar()
     wxMenu *fileMenu = new wxMenu;
 	fileMenu->Append(wxID_OPEN, wxT("&Open\tCtrl+O"));
 	
-	recentMenu = new wxMenu;
-	recentMenu->AppendSeparator();
-	recentMenu->Append(ID_CLEAR_RECENT, wxT("Clear Menu"));
-	fileMenu->AppendSubMenu(recentMenu, wxT("Open Recent"));
+	recentMenuFile = new wxMenu;
+	recentMenuFile->AppendSeparator();
+	recentMenuFile->Append(ID_CLEAR_RECENT, wxT("Clear recent roms"));
+	fileMenu->AppendSubMenu(recentMenuFile, wxT("Open Recent"));
+	
+	// Se crea un wxMenu que se tratará exactamente igual que a recentMenuFile
+	// para poder tener uno en el menuBar y otro como popUp
+	recentMenuPopup = new wxMenu;
+	recentMenuPopup->AppendSeparator();
+	recentMenuPopup->Append(ID_CLEAR_RECENT, wxT("Clear recent roms"));
 	
 	fileMenu->Append(wxID_EXIT, wxT("E&xit"));
 
@@ -139,6 +147,9 @@ void MainFrame::CreateToolBar()
 	toolBar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxNO_BORDER);
 	wxBitmap bmpOpen(open_xpm);
 	toolBar->AddTool(wxID_OPEN, bmpOpen, wxT("Open"));
+	
+	wxBitmap bmpRecent(recent_xpm);
+	toolBar->AddTool(ID_OPEN_RECENT, bmpRecent, wxT("Recent"));
 
 	toolBar->AddSeparator();
 
@@ -155,6 +166,11 @@ void MainFrame::CreateToolBar()
 	this->SetToolBar(toolBar);
 }
 
+void MainFrame::OnRecent(wxCommandEvent &event)
+{
+	this->PopupMenu(recentMenuPopup, 0, 0);
+}
+
 void MainFrame::OnFileOpen(wxCommandEvent &) {
 
 	wxFileDialog* openDialog = new wxFileDialog(this, wxT("Choose a gameboy rom to open"), wxEmptyString, wxEmptyString,
@@ -168,8 +184,8 @@ void MainFrame::OnFileOpen(wxCommandEvent &) {
 	// Clean up after ourselves
 	openDialog->Destroy();
 }
-
-void MainFrame::OnRecent(wxCommandEvent &event)
+ 
+void MainFrame::OnRecentItem(wxCommandEvent &event)
 {
 	int idAux = event.GetId();
 	int id = idAux - ID_RECENT0;
@@ -180,7 +196,8 @@ void MainFrame::OnClearRecent(wxCommandEvent &)
 {
 	for (int i=0; i<numRecentFiles; i++)
 	{
-		recentMenu->Delete(ID_RECENT0+i);
+		recentMenuFile->Delete(ID_RECENT0+i);
+		recentMenuPopup->Delete(ID_RECENT0+i);
 	}
 	numRecentFiles = 0;
 	
@@ -281,7 +298,8 @@ void MainFrame::CreateRecentMenu(std::string * roms)
 		recentFiles[i].shortName = recentFiles[i].fullName.substr(recentFiles[i].fullName.rfind(wxFileName::GetPathSeparator())+1);
 		
 		int id = ID_RECENT0 + numRecentFiles;
-		recentMenu->Insert(numRecentFiles, id, recentFiles[i].shortName);
+		recentMenuFile->Insert(numRecentFiles, id, recentFiles[i].shortName);
+		recentMenuPopup->Insert(numRecentFiles, id, recentFiles[i].shortName);
 		
 		numRecentFiles++;
 	}
@@ -318,7 +336,8 @@ void MainFrame::UpdateRecentMenu(wxString fileName)
 	{
 		startFrom = numRecentFiles-1;
 		int id = ID_RECENT0 + numRecentFiles;
-		recentMenu->Insert(numRecentFiles, id, wxT(""));
+		recentMenuFile->Insert(numRecentFiles, id, wxT(""));
+		recentMenuPopup->Insert(numRecentFiles, id, wxT(""));
 		numRecentFiles++;
 	}
 	// Si no existia pero hemos llegado al limite
@@ -337,7 +356,8 @@ void MainFrame::UpdateRecentMenu(wxString fileName)
 	
 	for (int i=0; i<numRecentFiles; i++)
 	{
-		recentMenu->SetLabel(ID_RECENT0+i, recentFiles[i].shortName);
+		recentMenuFile->SetLabel(ID_RECENT0+i, recentFiles[i].shortName);
+		recentMenuPopup->SetLabel(ID_RECENT0+i, recentFiles[i].shortName);
 	}
 	
 	this->RecentRomsToSettings();
