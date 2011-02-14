@@ -15,12 +15,13 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Cartridge.h"
 #include <fstream>
 #include <iostream>
-#include "Def.h"
 #include <string>
+#include <string.h>
 #include <iomanip>
+#include "Cartridge.h"
+#include "Def.h"
 #include "GBException.h"
 
 using namespace std;

@@ -294,7 +294,7 @@ void MainFrame::CreateRecentMenu(std::string * roms)
 		if (roms[i] == "")
 			break;
 		
-		recentFiles[i].fullName = wxString(roms[i].c_str());
+		recentFiles[i].fullName = wxString(roms[i].c_str(), wxConvUTF8);
 		recentFiles[i].shortName = recentFiles[i].fullName.substr(recentFiles[i].fullName.rfind(wxFileName::GetPathSeparator())+1);
 		
 		int id = ID_RECENT0 + numRecentFiles;
@@ -371,7 +371,7 @@ void MainFrame::RecentRomsToSettings()
 	
 	for (int i=0; i<numRecentFiles; i++)
 	{
-		recentRomsSettings[i] = recentFiles[i].fullName.c_str();
+		recentRomsSettings[i] = recentFiles[i].fullName.mb_str();
 	}
 	
 	for(int i=numRecentFiles; i<MAX_RECENT_FILES; i++)

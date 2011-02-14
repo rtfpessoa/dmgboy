@@ -275,7 +275,7 @@ void SettingsDialog::SaveToFile(bool reloadSettings)
 	wxString auxString[10];
 	for (int i=0; i<10; i++)
 	{
-		auxString[i] = settings.recentRoms[i].c_str();
+		auxString[i] = wxString(settings.recentRoms[i].c_str(), wxConvUTF8);
 	}
 	
 	fileConfig.Write(wxT("RecentRoms/01"), auxString[0]);
@@ -323,7 +323,7 @@ void SettingsDialog::LoadFromFile()
 	
 	for (int i=0; i<10; i++)
 	{
-		settings.recentRoms[i] = auxString[i].c_str();
+		settings.recentRoms[i] = auxString[i].mb_str();
 	}
 }
 
