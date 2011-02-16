@@ -50,8 +50,6 @@ void InitMBC(char * nameROM, BYTE * mem_cartridge, int RomSize)
 	_RAMEnabled = 0;
 	_RAMSize = 0;
 	_memRamMBC = NULL;
-	
-	MBCLoadRam();
 }
 
 void InitMBCNone(char * nameROM, BYTE * mem_cartridge, int ROMSize)
@@ -72,6 +70,8 @@ void InitMBC1(char * nameROM, BYTE * mem_cartridge, int ROMSize, int RamHeaderSi
 
 	if (_RAMSize)
 		_memRamMBC = new BYTE[_RAMSize];
+	
+	MBCLoadRam();
 }
 
 void InitMBC2(char * nameROM, BYTE * mem_cartridge, int ROMSize)
@@ -81,6 +81,8 @@ void InitMBC2(char * nameROM, BYTE * mem_cartridge, int ROMSize)
 	_RAMSize = 512;
 
 	_memRamMBC = new BYTE[_RAMSize];
+	
+	MBCLoadRam();
 }
 
 void InitMBC3(char * nameROM, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
@@ -96,6 +98,8 @@ void InitMBC3(char * nameROM, BYTE * mem_cartridge, int ROMSize, int RamHeaderSi
 
 	if (_RAMSize)
 		_memRamMBC = new BYTE[_RAMSize];
+	
+	MBCLoadRam();
 }
 
 void InitMBC5(char * nameROM, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize)
@@ -125,6 +129,8 @@ void MBC1Write(WORD direction, BYTE value)
 	if (direction < 0x2000)	//Habilitar/Deshabilitar RAM
 	{
 		_RAMEnabled = ((value & 0x0F) == 0x0A);
+		if (!_RAMEnabled)
+			MBCSaveRam();
 	}
 	else if (direction < 0x4000)	//Cambiar ROMBank
 	{
@@ -152,7 +158,6 @@ void MBC1Write(WORD direction, BYTE value)
 	{
 		if (_RAMEnabled)
 			_memRamMBC[direction - 0xA000 + (0x2000*_RAMBank)] = value;
-		//throw GBException("Intenta escribir en RAM de cartucho");
 	}
 }
 
@@ -174,6 +179,9 @@ void MBC2Write(WORD direction, BYTE value)
 	{
 		if (! (direction & 0x10))
 			_RAMEnabled = !_RAMEnabled;
+		
+		if (!_RAMEnabled)
+			MBCSaveRam();
 	}
 	else if (direction < 0x4000)	//Cambiar ROMBank
 	{
@@ -218,6 +226,8 @@ void MBC3Write(WORD direction, BYTE value)
 	if (direction < 0x2000)	//Habilitar/Deshabilitar RAM
 	{
 		_RAMEnabled = ((value & 0x0F) == 0x0A);
+		if (!_RAMEnabled)
+			MBCSaveRam();
 	}
 	else if (direction < 0x4000)	//Cambiar ROMBank
 	{
