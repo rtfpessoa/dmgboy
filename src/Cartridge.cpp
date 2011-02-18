@@ -29,11 +29,11 @@ using namespace std;
 /*
  * Constructor que recibe un fichero, lo carga en memoria y lo procesa
  */
-Cartridge::Cartridge(string path)
+Cartridge::Cartridge(string fileName, string batteriesPath)
 {
 	_memCartridge = NULL;
 	ifstream::pos_type size;
-	ifstream file (path.c_str(), ios::in|ios::binary|ios::ate);
+	ifstream file (fileName.c_str(), ios::in|ios::binary|ios::ate);
 	if (file.is_open())
 	{
 		size = file.tellg();
@@ -43,15 +43,15 @@ Cartridge::Cartridge(string path)
 		file.read ((char *)_memCartridge, size);
 		file.close();
 
-		cout << path << ":\nFile loaded in memory correctly" << endl;
+		cout << fileName << ":\nFile loaded in memory correctly" << endl;
 		
-		CheckCartridge();
+		CheckCartridge(batteriesPath);
 		
 		_isLoaded = true;
 	}
 	else
 	{
-		cerr << path << ": Error trying to open the file" << endl;
+		cerr << fileName << ": Error trying to open the file" << endl;
 		_isLoaded = false;
 	}
 }
@@ -59,12 +59,12 @@ Cartridge::Cartridge(string path)
 /*
  * Constructor que recibe un buffer y su tamaño y lo procesa
  */
-Cartridge::Cartridge(BYTE * cartridgeBuffer, unsigned long size)
+Cartridge::Cartridge(BYTE * cartridgeBuffer, unsigned long size, string batteriesPath)
 {
 	_RomSize = size;
 	_memCartridge = cartridgeBuffer;
 	
-	CheckCartridge();
+	CheckCartridge(batteriesPath);
 	
 	_isLoaded = true;
 }
@@ -79,8 +79,10 @@ Cartridge::~Cartridge(void)
 /*
  * Comprueba el buffer de la rom, extrae el nombre, compara el tamaño e inicializa el MBC
  */
-void Cartridge::CheckCartridge()
+void Cartridge::CheckCartridge(string batteriesPath)
 {
+	MBCPathBatteries(batteriesPath);
+	
 	memcpy(nameROM, &_memCartridge[CART_NAME], 17);
 	nameROM[16] = '\0';
 	cout << "Cartridge name: " << nameROM << endl;
@@ -179,13 +181,3 @@ bool Cartridge::IsLoaded()
 {
 	return _isLoaded;
 }
-
-/*BYTE Cartridge::Read(WORD direction)
-{
-	return ptrRead(direction);
-}*/
-
-/*void Cartridge::Write(WORD direction, BYTE value)
-{
-	ptrWrite(direction, value);
-}*/

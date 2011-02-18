@@ -18,6 +18,7 @@
 #include <string>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
+#include <wx/stdpaths.h>
 #include "MainFrame.h"
 #include "AboutDialog.h"
 #include "IDControls.h"
@@ -237,10 +238,18 @@ void MainFrame::ChangeFile(const wxString fileName)
 	if (cartridge)
 		delete cartridge;
 
+	wxString battsDir = wxStandardPaths::Get().GetUserDataDir() + wxFileName::GetPathSeparator()
+						+ wxT("Batts");
+	
+	if (!wxFileName::DirExists(battsDir))
+		wxFileName::Mkdir(battsDir, 0777, wxPATH_MKDIR_FULL);
+	
+	battsDir += wxFileName::GetPathSeparator();
+	
 	if (isZip) {
-		cartridge = new Cartridge(buffer, size);
+		cartridge = new Cartridge(buffer, size, string(battsDir.mb_str()));
 	}else {
-		cartridge = new Cartridge(std::string(fileName.mb_str()));
+		cartridge = new Cartridge(string(fileName.mb_str()), string(battsDir.mb_str()));
 	}
 
 

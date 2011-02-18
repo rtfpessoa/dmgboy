@@ -33,6 +33,7 @@ static int _RAMSize = 0;	//Bytes
 static int _RAMEnabled = 0;
 
 static char * _ROMName = NULL;
+static string _pathBatteries = "";
 
 void MBCSaveRam();
 void MBCLoadRam();
@@ -314,8 +315,7 @@ BYTE MBC5Read(WORD direction)
 
 void MBCLoadRam()
 {
-	string fileName = _ROMName;
-	fileName += ".BATT";
+	string fileName = _pathBatteries + _ROMName + ".BATT";
 	ifstream file(fileName.c_str(), ios::in|ios::binary);
 	
 	if (file)
@@ -327,8 +327,7 @@ void MBCLoadRam()
 
 void MBCSaveRam()
 {
-	string fileName = _ROMName;
-	fileName += ".BATT";
+	string fileName = _pathBatteries + _ROMName + ".BATT";
 	ofstream file(fileName.c_str(), ios::out|ios::binary);
 	
 	if (file)
@@ -336,4 +335,9 @@ void MBCSaveRam()
 		file.write((char *)_memRamMBC, _RAMSize);
 		file.close();
 	}
+}
+
+void MBCPathBatteries(string path)
+{
+	_pathBatteries = path;
 }

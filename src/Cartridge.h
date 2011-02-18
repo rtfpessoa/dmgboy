@@ -36,12 +36,12 @@ private:
 
 	BYTE (*ptrRead)(WORD);
 	void (*ptrWrite)(WORD, BYTE);
-	void CheckCartridge();
+	void CheckCartridge(std::string batteriesPath="");
 	int CheckRomSize(int numHeaderSize, int fileSize);
 public:
 	char nameROM[17];
-	Cartridge(std::string path);
-	Cartridge(BYTE * cartridgeBuffer, unsigned long size);
+	Cartridge(std::string fileName, std::string batteriesPath="");
+	Cartridge(BYTE * cartridgeBuffer, unsigned long size, std::string batteriesPath="");
 	~Cartridge();
 	void Print(int beg, int end);
 	BYTE *GetData();

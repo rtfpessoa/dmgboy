@@ -18,6 +18,7 @@
 #ifndef __MBC_H__
 #define __MBC_H__
 
+#include <string>
 #include "Def.h"
 
 void InitMBCNone(char * nameROM, BYTE * mem_cartridge, int ROMSize);
@@ -41,5 +42,7 @@ void MBC3Write(WORD direction, BYTE value);
 
 BYTE MBC5Read(WORD direction);
 void MBC5Write(WORD direction, BYTE value);
+
+void MBCPathBatteries(std::string path);
 
 #endif

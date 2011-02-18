@@ -1,11 +1,11 @@
 - Pasarlo a OpenGL
 - Multi idioma / unicode
-- Guardar a disco duro la memoria de los cartuchos que llevan bateria
 - Permitir Savestates en cualquier momento
 - Permitir cargar roms comprimidas en 7z
 - Sonido
 
 Terminado:
+- Guardar a disco duro la memoria de los cartuchos que llevan bateria
 - Lista de ultimas ROMS
 - Cargar por linea de comandos
 - drag & drop
