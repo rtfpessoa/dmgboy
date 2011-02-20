@@ -37,8 +37,8 @@ public:
 	Memory *GetPtrMemory();
 	void ResetMem();
 	void LoadCartridge(Cartridge *c);
-	void MemW(WORD direction, BYTE value, bool checkDirAndValue);
-	void MemW(WORD direction, BYTE value){ MemW(direction, value, true); };
+	void MemW(WORD direction, BYTE value);
+	inline void MemWNoCheck(WORD direction, BYTE value){ memory[direction] = value; };
 	inline BYTE MemR(WORD direction)
 	{
 		if ((direction < 0x8000) || ((direction >=0xA000) && (direction < 0xC000)))

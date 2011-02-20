@@ -76,9 +76,18 @@ void Memory::ResetMem()
     memory[IE]   = 0x00; //IE
 }
 
-void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
+void Memory::MemW(WORD direction, BYTE value)
 {
-	if (checkDirAndValue)
+	if ((direction < 0x8000) || ((direction >= 0xA000)&&(direction < 0xC000)))
+	{
+		c->Write(direction, value);
+		return;
+	}
+	else if ((direction >= 0xC000) && (direction < 0xDE00))//C000-DDFF
+		memory[direction + 0x2000] = value;
+	else if ((direction >= 0xE000) && (direction < 0xFE00))//E000-FDFF
+		memory[direction - 0x2000] = value;
+	else
 	{
 		switch (direction)
 		{
@@ -100,18 +109,7 @@ void Memory::MemW(WORD direction, BYTE value, bool checkDirAndValue)
 			case LY:
 			case DIV: value = 0; break;
 		}
-
-		if ((direction >= 0xC000) && (direction < 0xDE00))//C000-DDFF
-			memory[direction + 0x2000] = value;
-		if ((direction >= 0xE000) && (direction < 0xFE00))//E000-FDFF
-			memory[direction - 0x2000] = value;
-
-		if ((direction < 0x8000) || ((direction >= 0xA000)&&(direction < 0xC000)))
-		{
-			c->Write(direction, value);
-			return;
-		}
-	}//Fin if
+	}
 
 	memory[direction] = value;
 }
@@ -140,5 +138,5 @@ void Memory::DmaTransfer(BYTE direction)
 	BYTE i;
 
 	for (i=0; i<0xA0; i++)
-		MemW(0xFE00 + i, MemR((direction << 8) + i));
+		MemWNoCheck(0xFE00 + i, MemR((direction << 8) + i));
 }

@@ -38,6 +38,7 @@ CPU::CPU(Video *v, Cartridge *c)
 
 void CPU::Init(Video *v)
 {
+	numInstructions = 0;
 	cyclesLCD = 0;
 	this->v = v;
 	v->SetMem(this->GetPtrMemory());
@@ -45,7 +46,7 @@ void CPU::Init(Video *v)
 	FillInstructionCycles();
 	FillInstructionCyclesCB();
 	
-	//this->log = new QueueLog(500000);
+	//this->log = new QueueLog(1000000);
 }
 
 
@@ -72,19 +73,19 @@ void CPU::Run(unsigned long exitCycles)
 
     for(;;)
     {
+		numInstructions++;
 		lastOpCode = OpCode;
 		OpCode = MemR(Get_PC());
         NextOpcode = MemR(Get_PC() + 1);
 		
 		/*stringstream ssOpCode;
-		ssOpCode << numCycles << " - ";
+		ssOpCode << numInstructions << " - ";
 		ssOpCode << "OpCode: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
 		if (OpCode == 0xCB)
 			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
 		ssOpCode << ", ";
 		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");*/
 		
-        //Counter-=Cycles[OpCode];
 		lastCycles = 4;
 		
 		if (!Get_Halt() && !Get_Stop())
