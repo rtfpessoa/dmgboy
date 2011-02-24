@@ -42,6 +42,8 @@ private:
 	WORD pc; //Program Counter
 	WORD sp; //Stack Pointer
 	bool IME;
+	bool pendingIME;
+	bool pendingIMEvalue;
 	bool halt;
 	bool stop;
 public:
@@ -84,7 +86,29 @@ public:
 	inline void Add_SP(int value)   {this->sp += value;};
 
 	inline bool Get_IME()			{return this->IME;}
-	inline void Set_IME(bool value)	{this->IME = value;}
+	inline void Set_IME(bool value, bool immediately=true)
+	{
+		if (immediately)
+		{
+			this->IME = value;
+			this->pendingIME = false;
+		}
+		else
+		{
+			this->pendingIME = true;
+			this->pendingIMEvalue = value;
+		}
+	}
+	
+	inline void Set_PendingIME()
+	{
+		if (this->pendingIME)
+		{
+			this->IME = this->pendingIMEvalue;
+			this->pendingIME = false;
+		}
+	}
+
 
 	inline bool Get_Halt()				{return this->halt;}
 	inline void Set_Halt(bool value)	{this->halt = value;}

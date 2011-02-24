@@ -56,7 +56,8 @@ private:
 	void CyclicTasks();
 	void UpdateStateLCD();
 	void UpdateTimer();
-	void Interruptions(Instructions * inst);
+	void Interrupts(Instructions * inst);
+	void CheckLYC();
 };
 
 #endif

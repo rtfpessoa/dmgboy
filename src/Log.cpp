@@ -89,7 +89,7 @@ void QueueLog::Enqueue(string prefix, Registers * regs, string suffix)
 
 void QueueLog::Save(string path)
 {
-	ofstream file(path.c_str());
+	ofstream file(path.c_str(), ios_base::out);
 	
 	if (file)
 	{

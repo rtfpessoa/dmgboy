@@ -90,7 +90,8 @@ void CPU::Run(unsigned long exitCycles)
 		
 		if (!Get_Halt() && !Get_Stop())
 		{
-			/*ssOpCode << " FF80 = " << hex << (int)memory[0xFF80] << " ";
+			/*ssOpCode << " FF41 = " << hex << (int)memory[0xFF41];
+			ssOpCode << " FFFF = " << hex << (int)memory[0xFFFF];
 			log->Enqueue("", this->GetPtrRegisters(), ssOpCode.str());*/
 		
 			switch(OpCode)
@@ -375,7 +376,7 @@ void CPU::Run(unsigned long exitCycles)
 		actualCycles += lastCycles;
 
         CyclicTasks();
-        Interruptions(&inst);
+        Interrupts(&inst);
 		
 		if (actualCycles > exitCycles)
 			break;
@@ -891,6 +892,7 @@ void CPU::UpdateStateLCD()
 					v->UpdateLine(memory[LY]);
                 }
                 memory[LY] = memory[LY] + 1;
+				CheckLYC();
                 cyclesLCD = 0;
             }
             break;
@@ -911,6 +913,8 @@ void CPU::UpdateStateLCD()
                 else
                     memory[LY] = memory[LY] + 1;
 
+				CheckLYC();
+				
                 cyclesLCD = 0;
             }
             break;
@@ -937,18 +941,21 @@ void CPU::UpdateStateLCD()
             }
             break;
 	}
+}
 
+void CPU::CheckLYC()
+{
 	if (memory[LY] == memory[LYC])
 	{
-		memory[STAT] = memory[STAT] | 0x40;
+		memory[STAT] = memory[STAT] | 0x04;
 		if (BIT6(memory[STAT]))
 			memory[IF] = memory[IF] | 0x02;
 	}
 	else
-		memory[STAT] = memory[STAT] & ~0x40;
+		memory[STAT] = memory[STAT] & ~0x04;
 }
 
-void CPU::Interruptions(Instructions * inst)
+void CPU::Interrupts(Instructions * inst)
 {
 	if (!Get_IME())
 		return;
