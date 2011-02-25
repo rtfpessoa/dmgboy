@@ -66,17 +66,30 @@ void Video::ClearScreen()
 
 void Video::UpdateBG(int y)
 {
-	int x, indexColor, color, xScrolled, yScrolled;
-	BYTE x_tile, y_tile, valueLCDC, valueSCX;
+	int x, indexColor, color, xScrolled, yScrolled, rowMap, tileDataSelect;
+	BYTE xTile, yTile, valueLCDC, valueSCX;
 	int line[2];
 	int palette[4];
-	WORD map_ini, map, dir_tile;
+	WORD mapIni, idTile, dirTile;
+	bool display;
 
 	valueLCDC = mem->memory[LCDC];
 	valueSCX = mem->memory[SCX];
 
+	display = BIT7(valueLCDC) && BIT0(valueLCDC);
+	
+	//Si el LCD o Background desactivado
+	//pintamos la linea de blanco
+	if (!display)
+	{
+		for (x=0; x<GB_SCREEN_W; x++)
+			panel->OnDrawPixel(3, x, y);
+		
+		return;
+	}
+	
 	//Seleccionar el tile map
-	map_ini = BIT3(valueLCDC) ? 0x9C00 : 0x9800;
+	mapIni = BIT3(valueLCDC) ? 0x9C00 : 0x9800;
 
 	GetPalette(palette, BGP);
 
@@ -85,40 +98,35 @@ void Video::UpdateBG(int y)
 		yScrolled += 256;
 	else if (yScrolled > 255)
 		yScrolled -= 256;
-
+	
+	yTile = yScrolled % 8;
+	rowMap = (yScrolled/8 * 32);
+	
+	tileDataSelect = BIT4(valueLCDC);
+	
 	for (x=0; x<GB_SCREEN_W; x++)
 	{
-		//Si el LCD o Background desactivado
-		//pintamos la linea de blanco
-		if (!BIT7(valueLCDC) || !BIT0(valueLCDC))
-		{
-			panel->OnDrawPixel(3, x, y);
-			//DrawPixel(hideScreen, colors[0], x, y);
-			continue;
-		}
-
 		xScrolled = (x + valueSCX);
 		if (xScrolled > 255)
 			xScrolled -= 256;
 
-		map = map_ini + ((yScrolled/8 * 32) + xScrolled/8);
-		if (!BIT4(valueLCDC))	//Seleccionar el tile data
+		idTile = mapIni + (rowMap + xScrolled/8);
+		if (!tileDataSelect)	//Seleccionar el tile data
 		{
 			//0x8800 = 0x9000 - (128 * 16)
-			dir_tile = (WORD)(0x9000 + ((char)mem->memory[map])*16);	//Se multiplica por 16 porque cada tile ocupa 16 bytes
+			dirTile = (WORD)(0x9000 + ((char)mem->memory[idTile])*16);	//Se multiplica por 16 porque cada tile ocupa 16 bytes
 		}
 		else
 		{
-			dir_tile = 0x8000 + mem->memory[map]*16;
+			dirTile = 0x8000 + mem->memory[idTile]*16;
 		}
 
-		y_tile = yScrolled % 8;
-		x_tile = xScrolled % 8;
+		xTile = xScrolled % 8;
 
-		line[0] = mem->memory[dir_tile + (y_tile * 2)];	//y_tile * 2 porque cada linea de 1 tile ocupa 2 bytes
-		line[1] = mem->memory[dir_tile + (y_tile * 2) + 1];
+		line[0] = mem->memory[dirTile + (yTile * 2)];	//y_tile * 2 porque cada linea de 1 tile ocupa 2 bytes
+		line[1] = mem->memory[dirTile + (yTile * 2) + 1];
 
-		int pixX = (BYTE)abs((int)x_tile - 7);
+		int pixX = (BYTE)abs((int)xTile - 7);
 		//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 		//Esto devolvera un numero de color que junto a la paleta de color nos dara el color requerido
 		indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
