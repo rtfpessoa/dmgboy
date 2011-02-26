@@ -2,7 +2,7 @@
 <<MODE>>0<</MODE>>
 <<CTRL>>
 Package: gbpablog
-Version: 0.7
+Version: 0.8
 Section: games
 Maintainer: Pablo Gasco <pablogasco@gmail.com>
 Homepage: http://code.google.com/p/gbpablog/
@@ -14,8 +14,8 @@ Description: Gameboy emulator
 <</CTRL>>
 <<FILES>>
 1
-/media/psf/Home/Documents/Programacion/GB/iconos/gbpablog64.png -> gbpablog64.png -> /usr/share/gbpablog/icons/
-/media/psf/Home/Documents/Programacion/GB/iconos/gbpablog48.png -> gbpablog48.png -> /usr/share/gbpablog/icons/
+/media/psf/Home/Documents/Programacion/GB/iconos/gb64.png -> gb64.png -> /usr/share/gbpablog/icons/
+/media/psf/Home/Documents/Programacion/GB/iconos/gb48.png -> gb48.png -> /usr/share/gbpablog/icons/
 /media/psf/Home/Documents/Programacion/gbpablog/build/linux/CodeBlocks/gbpablog* -> gbpablog -> /usr/bin
 <</FILES>>
 <<SCRIPTS>>
@@ -42,10 +42,10 @@ Description: Gameboy emulator
 <<MENU>>
 1
 Name=gbpablog
-Version=0.7
+Version=1.0
 Exec=gbpablog
 Comment=Gameboy emulator
-Icon=/usr/share/gbpablog/icons/gbpablog64.png
+Icon=/usr/share/gbpablog/icons/gb64.png
 Type=Application
 Terminal=false
 StartupNotify=true
