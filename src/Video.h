@@ -23,6 +23,16 @@
 #include "map"
 #include "GUI/MainPanel.h"
 
+struct VideoPixel
+{
+	int x, y;
+	int rowMap, tileDataSelect;
+	int color, indexColor, xScrolled;
+	int palette[4];
+	WORD mapIni;
+	BYTE yTile;
+};
+
 class Video
 {
 private:
@@ -30,6 +40,7 @@ private:
 	std::multimap<int, int> orderedOAM;	//posicion x, dir. memoria
 	int indexColorsBGWnd[GB_SCREEN_W][GB_SCREEN_H];	//Indice de color en pantalla pintadas por background y window
 	MainPanel * panel;
+	VideoPixel * pixel;
 public:
 	Video(MainPanel * panel);
 	~Video(void);
@@ -43,6 +54,7 @@ private:
 	void UpdateWin(int line);
 	void OrderOAM(int line);
 	void UpdateOAM(int line);
+	inline void GetColor(VideoPixel * p);
 	void GetPalette(int * palette, int dir);
 };
 
