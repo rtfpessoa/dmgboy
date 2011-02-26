@@ -139,9 +139,9 @@ void Video::UpdateBG(int y)
 
 void Video::UpdateWin(int y)
 {
-	int x, wndPosX, color, xIni, indexColor;
-	WORD map_ini, map, dir_tile, wndPosY;
-	BYTE x_tile, y_tile, xScrolled, yScrolled;
+	int x, wndPosX, color, xIni, indexColor, rowMap, tileDataSelect;
+	WORD mapIni, idTile, dirTile, wndPosY;
+	BYTE xTile, yTile, xScrolled, yScrolled;
 	BYTE line[2];
 	int palette[4];
 
@@ -161,32 +161,36 @@ void Video::UpdateWin(int y)
 
 	GetPalette(palette, BGP);
 
-	map_ini = BIT6(mem->memory[LCDC]) ? 0x9C00 : 0x9800;
+	mapIni = BIT6(mem->memory[LCDC]) ? 0x9C00 : 0x9800;
+	
+	yScrolled = y - wndPosY;
+	yTile = yScrolled % 8;
+	rowMap = yScrolled/8 * 32;
+	
+	tileDataSelect = BIT4(mem->memory[LCDC]);
 
 	for (x=xIni; x<GB_SCREEN_W; x++)
 	{
 		xScrolled = x - wndPosX;
-		yScrolled = y - wndPosY;
 
-		map = map_ini + ((yScrolled/8 * 32) + xScrolled/8);
+		idTile = mapIni + (rowMap + xScrolled/8);
 
-		if (!BIT4(mem->memory[LCDC]))	//Seleccionar el tile data
+		if (!tileDataSelect)	//Seleccionar el tile data
 		{
 			//0x8800 = 0x9000 - (128 * 16)
-			dir_tile = (WORD)(0x9000 + ((char)mem->memory[map])*16);	//Se multiplica por 16 porque cada tile ocupa 16 bytes
+			dirTile = (WORD)(0x9000 + ((char)mem->memory[idTile])*16);	//Se multiplica por 16 porque cada tile ocupa 16 bytes
 		}
 		else
 		{
-			dir_tile = 0x8000 + mem->memory[map]*16;
+			dirTile = 0x8000 + mem->memory[idTile]*16;
 		}
 
-		y_tile = yScrolled % 8;
-		x_tile = xScrolled % 8;
+		xTile = xScrolled % 8;
 
-		line[0] = mem->memory[dir_tile + (y_tile * 2)];	//y_tile * 2 porque cada linea de 1 tile ocupa 2 bytes
-		line[1] = mem->memory[dir_tile + (y_tile * 2) + 1];
+		line[0] = mem->memory[dirTile + (yTile * 2)];	//yTile * 2 porque cada linea de 1 tile ocupa 2 bytes
+		line[1] = mem->memory[dirTile + (yTile * 2) + 1];
 
-		BYTE pixX = (BYTE)abs((int)x_tile - 7);
+		BYTE pixX = (BYTE)abs((int)xTile - 7);
 		//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 		//Esto devolvera un numero de color que junto a la paleta de color nos dara el color requerido
 		indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);

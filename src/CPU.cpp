@@ -71,7 +71,7 @@ void CPU::Run(unsigned long exitCycles)
 
 	Instructions inst(this->GetPtrRegisters(), this->GetPtrMemory());
 
-    for(;;)
+    while (actualCycles < exitCycles)
     {
 		numInstructions++;
 		lastOpCode = OpCode;
@@ -377,9 +377,6 @@ void CPU::Run(unsigned long exitCycles)
 
         CyclicTasks();
         Interrupts(&inst);
-		
-		if (actualCycles > exitCycles)
-			break;
 		
 	}//end for
 }
@@ -854,7 +851,7 @@ void CPU::UpdatePad()
 {
 	int interrupt = PadCheckKeyboard(&memory[P1]);
 	if (interrupt)
-		memory[IF] = memory[IF] | 0x10;
+		memory[IF] |= 0x10;
 }
 
 void CPU::UpdateStateLCD()
@@ -873,11 +870,11 @@ void CPU::UpdateStateLCD()
                     //Poner a 01 el flag (bits 0-1) del modo 1.
 					memory[STAT] = (memory[STAT] & ~0x03) | 0x01;
 					//Interrupcion V-Blank
-					memory[IF] = memory[IF] | 0x01;
+					memory[IF] |= 0x01;
 					//Si interrupcion V-Blank habilitada, marcar peticion de interrupcion
 					//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT.
 					if (BIT4(memory[STAT]))
-						memory[IF] = memory[IF] | 0x02;
+						memory[IF] |= 0x02;
 					v->RefreshScreen();
                 }
                 else    //Sino, cambiamos al modo 2
@@ -887,11 +884,11 @@ void CPU::UpdateStateLCD()
 					//Si interrupcion OAM habilitada, marcar peticion de interrupcion
 					//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
 					if (BIT5(memory[STAT]))
-						memory[IF] = memory[IF] | 0x02;
+						memory[IF] |= 0x02;
 
 					v->UpdateLine(memory[LY]);
                 }
-                memory[LY] = memory[LY] + 1;
+                memory[LY]++;
 				CheckLYC();
                 cyclesLCD = 0;
             }
@@ -908,10 +905,10 @@ void CPU::UpdateStateLCD()
 					//Si interrupcion OAM habilitada, marcar peticion de interrupcion
 					//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
 					if (BIT5(memory[STAT]))
-						memory[IF] = memory[IF] | 0x02;
+						memory[IF] |= 0x02;
                 }
                 else
-                    memory[LY] = memory[LY] + 1;
+                    memory[LY]++;
 
 				CheckLYC();
 				
@@ -931,11 +928,11 @@ void CPU::UpdateStateLCD()
             if (cyclesLCD > MAX_LCD_MODE_3)
             {
 				//Poner a 00 el flag (bits 0-1) del modo 0.
-				memory[STAT] = (memory[STAT] & ~0x03) | 0x00;
+				memory[STAT] &= ~0x03;
 				//Si interrupcion H-Blank habilitada, marcar peticion de interrupcion
 				//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
 				if (BIT3(memory[STAT]))
-					memory[IF] = memory[IF] | 0x02;
+					memory[IF] |= 0x02;
 
                 cyclesLCD = 0;
             }
@@ -947,12 +944,12 @@ void CPU::CheckLYC()
 {
 	if (memory[LY] == memory[LYC])
 	{
-		memory[STAT] = memory[STAT] | 0x04;
+		memory[STAT] |= 0x04;
 		if (BIT6(memory[STAT]))
-			memory[IF] = memory[IF] | 0x02;
+			memory[IF] |= 0x02;
 	}
 	else
-		memory[STAT] = memory[STAT] & ~0x04;
+		memory[STAT] &= ~0x04;
 }
 
 void CPU::Interrupts(Instructions * inst)
@@ -1010,7 +1007,7 @@ void CPU::Interrupts(Instructions * inst)
 
 void CPU::UpdateTimer()
 {
-	// Estos serian los valores en kHz que puede tomar TAC:
+	// Estos serian los valores en Hz que puede tomar TAC:
 	// 4096, 262144, 65536, 16384
 	// En overflowTimer se encuentran estos valores en ciclos
 	// maquina
@@ -1023,10 +1020,10 @@ void CPU::UpdateTimer()
 			if (memory[TIMA] == 0xFF)
 			{
 				memory[TIMA] = memory[TMA];
-				memory[IF] = memory[IF] | 0x04;
+				memory[IF] |= 0x04;
 			}
 			else
-				memory[TIMA] = memory[TIMA] + 1;
+				memory[TIMA]++;
 
 			cyclesTimer = 0;
 		}
@@ -1034,7 +1031,7 @@ void CPU::UpdateTimer()
 
 	if (cyclesDIV >= 256)
 	{
-		memory[DIV] = memory[DIV] + 1;
+		memory[DIV]++;
 		cyclesDIV = 0;
 	}
 }
