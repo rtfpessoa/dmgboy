@@ -19,7 +19,7 @@
 #define __DEF_H__
 
 #define APP_NAME		"gbpablog"
-#define APP_VERSION		"0.8"
+#define APP_VERSION		"0.9"
 #define APP_MAINT		"Pablo Gasco"
 #define APP_LICENCE		"GPL v3"
 #define APP_COPYRIGTH	"(C) 2011 Pablo Gasco"
