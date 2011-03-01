@@ -1040,3 +1040,8 @@ void CPU::SaveLog()
 {
 	log->Save("log.txt");
 }
+
+void CPU::SaveState(string filePath)
+{
+	
+}

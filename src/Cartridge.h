@@ -30,7 +30,8 @@
 class Cartridge
 {
 private:
-	unsigned long _RomSize;
+	unsigned long _romSize;
+	std::string _name;
 	bool _isLoaded;
 	BYTE * _memCartridge;
 
@@ -39,16 +40,19 @@ private:
 	void CheckCartridge(std::string batteriesPath="");
 	int CheckRomSize(int numHeaderSize, int fileSize);
 public:
-	char nameROM[17];
 	Cartridge(std::string fileName, std::string batteriesPath="");
 	Cartridge(BYTE * cartridgeBuffer, unsigned long size, std::string batteriesPath="");
 	~Cartridge();
-	void Print(int beg, int end);
+	
 	BYTE *GetData();
 	unsigned int GetSize();
+	std::string GetName();
+	bool IsLoaded();
+
 	inline BYTE Read(WORD direction) { return ptrRead(direction); };
 	inline void Write(WORD direction, BYTE value) { ptrWrite(direction, value); };
-	bool IsLoaded();
+	
+	void Print(int beg, int end);
 };
 
 #endif

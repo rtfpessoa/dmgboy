@@ -21,11 +21,11 @@
 #include <string>
 #include "Def.h"
 
-void InitMBCNone(char * nameROM, BYTE * mem_cartridge, int ROMSize);
-void InitMBC1(char * nameROM, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
-void InitMBC2(char * nameROM, BYTE * mem_cartridge, int ROMSize);
-void InitMBC3(char * nameROM, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
-void InitMBC5(char * nameROM, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
+void InitMBCNone(std::string nameROM, BYTE * mem_cartridge, int ROMSize);
+void InitMBC1(std::string, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
+void InitMBC2(std::string, BYTE * mem_cartridge, int ROMSize);
+void InitMBC3(std::string, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
+void InitMBC5(std::string, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
 void DestroyMBC();
 
 BYTE NoneRead(WORD direction);

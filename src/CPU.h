@@ -48,6 +48,7 @@ public:
 	void UpdatePad();
 	void Reset();
 	void SaveLog();
+	void SaveState(std::string filePath);
 private:
 	void Init(Video *v);
 	void FillInstructionCycles();

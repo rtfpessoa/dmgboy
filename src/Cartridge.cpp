@@ -37,7 +37,7 @@ Cartridge::Cartridge(string fileName, string batteriesPath)
 	if (file.is_open())
 	{
 		size = file.tellg();
-		this->_RomSize = (unsigned long)size;
+		this->_romSize = (unsigned long)size;
 		_memCartridge = new BYTE [size];
 		file.seekg (0, ios::beg);
 		file.read ((char *)_memCartridge, size);
@@ -61,7 +61,7 @@ Cartridge::Cartridge(string fileName, string batteriesPath)
  */
 Cartridge::Cartridge(BYTE * cartridgeBuffer, unsigned long size, string batteriesPath)
 {
-	_RomSize = size;
+	_romSize = size;
 	_memCartridge = cartridgeBuffer;
 	
 	CheckCartridge(batteriesPath);
@@ -83,14 +83,14 @@ void Cartridge::CheckCartridge(string batteriesPath)
 {
 	MBCPathBatteries(batteriesPath);
 	
-	memcpy(nameROM, &_memCartridge[CART_NAME], 17);
-	nameROM[16] = '\0';
-	cout << "Cartridge name: " << nameROM << endl;
+	_name = string((char *)&_memCartridge[CART_NAME], 16);
+	
+	//cout << "Cartridge name: " << nameROM << endl;
 	cout << "ROM Size:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_ROM_SIZE] << endl;
 	cout << "RAM Size:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_RAM_SIZE] << endl;
 	cout << "Cartridge Type:\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_TYPE] << " (";
 	
-	CheckRomSize((int)_memCartridge[CART_ROM_SIZE], _RomSize);
+	CheckRomSize((int)_memCartridge[CART_ROM_SIZE], _romSize);
 	
 	switch(_memCartridge[CART_TYPE])
 	{
@@ -100,7 +100,7 @@ void Cartridge::CheckCartridge(string batteriesPath)
 			cout << "No MBC)" << endl;
 			ptrRead = &NoneRead;
 			ptrWrite = &NoneWrite;
-			InitMBCNone(nameROM, _memCartridge, _RomSize);
+			InitMBCNone(_name, _memCartridge, _romSize);
 			break;
 		case 0x01:						//ROM+MBC1 
 		case 0x02:						//ROM+MBC1+RAM 
@@ -108,14 +108,14 @@ void Cartridge::CheckCartridge(string batteriesPath)
 			cout << "MBC1)" << endl;
 			ptrRead = &MBC1Read;
 			ptrWrite = &MBC1Write;
-			InitMBC1(nameROM, _memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
+			InitMBC1(_name, _memCartridge, _romSize, _memCartridge[CART_RAM_SIZE]);
 			break;
 		case 0x05:						//ROM+MBC2 
 		case 0x06:						//ROM+MBC2+BATTERY
 			cout << "MBC2)" << endl;
 			ptrRead = &MBC2Read;
 			ptrWrite = &MBC2Write;
-			InitMBC2(nameROM, _memCartridge, _RomSize);
+			InitMBC2(_name, _memCartridge, _romSize);
 			break;
 			/*
 			 case 0x0B:						//ROM+MMM01
@@ -129,7 +129,7 @@ void Cartridge::CheckCartridge(string batteriesPath)
 			cout << "MBC3)" << endl;
 			ptrRead = &MBC3Read;
 			ptrWrite = &MBC3Write;
-			InitMBC3(nameROM, _memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
+			InitMBC3(_name, _memCartridge, _romSize, _memCartridge[CART_RAM_SIZE]);
 			break;
 		case 0x19:						//ROM+MBC5
 		case 0x1A:						//ROM+MBC5+RAM
@@ -140,7 +140,7 @@ void Cartridge::CheckCartridge(string batteriesPath)
 			cout << "MBC5)" << endl;
 			ptrRead = &MBC5Read;
 			ptrWrite = &MBC5Write;
-			InitMBC5(nameROM, _memCartridge, _RomSize, _memCartridge[CART_RAM_SIZE]);
+			InitMBC5(_name, _memCartridge, _romSize, _memCartridge[CART_RAM_SIZE]);
 			break;
 			/*case 0x1F:						//Pocket Camera
 			 case 0xFD:						//Bandai TAMA5
@@ -174,7 +174,12 @@ BYTE *Cartridge::GetData()
 
 unsigned int Cartridge::GetSize()
 {
-	return _RomSize;
+	return _romSize;
+}
+
+string Cartridge::GetName()
+{
+	return _name;
 }
 
 bool Cartridge::IsLoaded()

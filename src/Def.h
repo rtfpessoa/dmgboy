@@ -25,6 +25,8 @@
 #define APP_COPYRIGTH	"(C) 2011 Pablo Gasco"
 #define APP_WEBSITE		"http://code.google.com/p/gbpablog/"
 
+#define SAVE_STATE_VERSION	0x01
+
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
 
