@@ -23,6 +23,7 @@
 #include "Cartridge.h"
 #include "Def.h"
 #include "GBException.h"
+#include "MBC.h"
 
 using namespace std;
 
@@ -85,11 +86,6 @@ void Cartridge::CheckCartridge(string batteriesPath)
 	
 	_name = string((char *)&_memCartridge[CART_NAME], 16);
 	
-	//cout << "Cartridge name: " << nameROM << endl;
-	cout << "ROM Size:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_ROM_SIZE] << endl;
-	cout << "RAM Size:\t\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_RAM_SIZE] << endl;
-	cout << "Cartridge Type:\t0x" << setfill('0') << setw(2) << uppercase << hex << (int)_memCartridge[CART_TYPE] << " (";
-	
 	CheckRomSize((int)_memCartridge[CART_ROM_SIZE], _romSize);
 	
 	switch(_memCartridge[CART_TYPE])
@@ -97,7 +93,6 @@ void Cartridge::CheckCartridge(string batteriesPath)
 		case 0x00:						//ROM ONLY
 		case 0x08:						//ROM+RAM
 		case 0x09:						//ROM+RAM+BATTERY
-			cout << "No MBC)" << endl;
 			ptrRead = &NoneRead;
 			ptrWrite = &NoneWrite;
 			InitMBCNone(_name, _memCartridge, _romSize);
@@ -105,14 +100,12 @@ void Cartridge::CheckCartridge(string batteriesPath)
 		case 0x01:						//ROM+MBC1 
 		case 0x02:						//ROM+MBC1+RAM 
 		case 0x03:						//ROM+MBC1+RAM+BATT
-			cout << "MBC1)" << endl;
 			ptrRead = &MBC1Read;
 			ptrWrite = &MBC1Write;
 			InitMBC1(_name, _memCartridge, _romSize, _memCartridge[CART_RAM_SIZE]);
 			break;
 		case 0x05:						//ROM+MBC2 
 		case 0x06:						//ROM+MBC2+BATTERY
-			cout << "MBC2)" << endl;
 			ptrRead = &MBC2Read;
 			ptrWrite = &MBC2Write;
 			InitMBC2(_name, _memCartridge, _romSize);
@@ -126,7 +119,6 @@ void Cartridge::CheckCartridge(string batteriesPath)
 		case 0x11:						//ROM+MBC3
 		case 0x12:						//ROM+MBC3+RAM
 		case 0x13:						//ROM+MBC3+RAM+BATT
-			cout << "MBC3)" << endl;
 			ptrRead = &MBC3Read;
 			ptrWrite = &MBC3Write;
 			InitMBC3(_name, _memCartridge, _romSize, _memCartridge[CART_RAM_SIZE]);
@@ -137,7 +129,6 @@ void Cartridge::CheckCartridge(string batteriesPath)
 		case 0x1C:						//ROM+MBC5+RUMBLE
 		case 0x1D:						//ROM+MBC5+RUMBLE+SRAM
 		case 0x1E:						//ROM+MBC5+RUMBLE+SRAM+BATT
-			cout << "MBC5)" << endl;
 			ptrRead = &MBC5Read;
 			ptrWrite = &MBC5Write;
 			InitMBC5(_name, _memCartridge, _romSize, _memCartridge[CART_RAM_SIZE]);
@@ -185,4 +176,14 @@ string Cartridge::GetName()
 bool Cartridge::IsLoaded()
 {
 	return _isLoaded;
+}
+
+void Cartridge::SaveMBC(ofstream * file)
+{
+	MBCSaveState(file);
+}
+
+void Cartridge::LoadMBC(ifstream * file)
+{
+	MBCLoadState(file);
 }

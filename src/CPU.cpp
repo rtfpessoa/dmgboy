@@ -1059,6 +1059,7 @@ void CPU::SaveState(string saveDirectory, int numSlot)
 		
 		SaveRegs(file);
 		SaveMemory(file);
+		c->SaveMBC(file);
 		
 		file->close();
 	}
@@ -1080,17 +1081,28 @@ void CPU::LoadState(string loadDirectory, int numSlot)
 		int version = 0;
 		file->read((char *)&version, sizeof(int));
 		if (version != SAVE_STATE_VERSION)
+		{
+			file->close();
+			delete file;
+			throw GBException("This filesave is not compatible and can't be loaded");
 			return;
+		}
 		
 		char * buffer = new char[16];
 		file->read(buffer, 16);
 		string cartName = string(buffer, 16);
 		delete[] buffer;
 		if (cartName != c->GetName())
+		{
+			file->close();
+			delete file;
+			throw GBException("This filesave does not correspond to this cartridge and can't be loaded");
 			return;
+		}
 		
 		LoadRegs(file);
 		LoadMemory(file);
+		c->LoadMBC(file);
 		
 		file->close();
 	}

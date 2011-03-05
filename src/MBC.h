@@ -21,11 +21,11 @@
 #include <string>
 #include "Def.h"
 
-void InitMBCNone(std::string nameROM, BYTE * mem_cartridge, int ROMSize);
-void InitMBC1(std::string, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
-void InitMBC2(std::string, BYTE * mem_cartridge, int ROMSize);
-void InitMBC3(std::string, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
-void InitMBC5(std::string, BYTE * mem_cartridge, int ROMSize, int RamHeaderSize);
+void InitMBCNone(std::string nameROM, BYTE * memCartridge, int romSize);
+void InitMBC1(std::string, BYTE * memCartridge, int romSize, int ramHeaderSize);
+void InitMBC2(std::string, BYTE * memCartridge, int romSize);
+void InitMBC3(std::string, BYTE * memCartridge, int romSize, int ramHeaderSize);
+void InitMBC5(std::string, BYTE * memCartridge, int romSize, int ramHeaderSize);
 void DestroyMBC();
 
 BYTE NoneRead(WORD direction);
@@ -44,5 +44,8 @@ BYTE MBC5Read(WORD direction);
 void MBC5Write(WORD direction, BYTE value);
 
 void MBCPathBatteries(std::string path);
+
+void MBCSaveState(std::ofstream * file);
+void MBCLoadState(std::ifstream * file);
 
 #endif

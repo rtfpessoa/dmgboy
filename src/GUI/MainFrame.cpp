@@ -164,6 +164,10 @@ void MainFrame::CreateToolBar()
 
 	wxBitmap bmpStop(stop_xpm);
 	toolBar->AddTool(ID_STOP, bmpStop, wxT("Stop"));
+	
+	toolBar->EnableTool(ID_START, false);
+	toolBar->EnableTool(ID_PAUSE, false);
+	toolBar->EnableTool(ID_STOP, false);
 
 	toolBar->Realize();
 	this->SetToolBar(toolBar);

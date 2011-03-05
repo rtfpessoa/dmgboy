@@ -20,7 +20,6 @@
 
 #include <string>
 #include "Def.h"
-#include "MBC.h"
 
 #define CART_NAME		0x0134
 #define CART_TYPE		0x0147
@@ -53,6 +52,9 @@ public:
 	inline void Write(WORD direction, BYTE value) { ptrWrite(direction, value); };
 	
 	void Print(int beg, int end);
+	
+	void SaveMBC(std::ofstream * file);
+	void LoadMBC(std::ifstream * file);
 };
 
 #endif
