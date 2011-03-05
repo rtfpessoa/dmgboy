@@ -1044,7 +1044,11 @@ void CPU::SaveLog()
 
 void CPU::SaveState(string saveDirectory, int numSlot)
 {
-	//TETRIS-1.sav, ..., TETRIS-0.sav
+	if (c == NULL)
+	{
+		throw GBException("There is not rom loaded. The process can't continue.");
+	}
+	
 	stringstream st;
 	st << saveDirectory << c->GetName().c_str();
 	st << "-" << numSlot << ".sav";
@@ -1070,6 +1074,11 @@ void CPU::SaveState(string saveDirectory, int numSlot)
 
 void CPU::LoadState(string loadDirectory, int numSlot)
 {
+	if (c == NULL)
+	{
+		throw GBException("There is not rom loaded. The process can't continue.");
+	}
+	
 	stringstream st;
 	st << loadDirectory << c->GetName().c_str();
 	st << "-" << numSlot << ".sav";
@@ -1084,8 +1093,7 @@ void CPU::LoadState(string loadDirectory, int numSlot)
 		{
 			file->close();
 			delete file;
-			throw GBException("This filesave is not compatible and can't be loaded");
-			return;
+			throw GBException("This filesave is not compatible and can't be loaded.");
 		}
 		
 		char * buffer = new char[16];
@@ -1096,8 +1104,7 @@ void CPU::LoadState(string loadDirectory, int numSlot)
 		{
 			file->close();
 			delete file;
-			throw GBException("This filesave does not correspond to this cartridge and can't be loaded");
-			return;
+			throw GBException("This filesave does not correspond to this rom and can't be loaded.");
 		}
 		
 		LoadRegs(file);
@@ -1105,8 +1112,14 @@ void CPU::LoadState(string loadDirectory, int numSlot)
 		c->LoadMBC(file);
 		
 		file->close();
-	}
-	
-	if (file)
+		
 		delete file;
+	}
+	else
+	{
+		if (file)
+			delete file;
+		
+		throw GBException("Unable to open the filesave.");
+	}
 }

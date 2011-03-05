@@ -24,6 +24,7 @@
 #include "IDControls.h"
 #include "../Settings.h"
 #include "../Pad.h"
+#include "../GBException.h"
 #include "Xpm/open.xpm"
 #include "Xpm/play.xpm"
 #include "Xpm/pause.xpm"
@@ -42,14 +43,18 @@ EVT_MENU(wxID_OPEN, MainFrame::OnFileOpen)
 EVT_MENU(ID_OPEN_RECENT, MainFrame::OnRecent)
 EVT_MENU_RANGE(ID_RECENT0, ID_RECENT9, MainFrame::OnRecentItem)
 EVT_MENU(ID_CLEAR_RECENT, MainFrame::OnClearRecent)
+EVT_MENU_RANGE(ID_LOADSTATE0, ID_LOADSTATE9, MainFrame::OnLoadState)
+EVT_MENU_RANGE(ID_SAVESTATE0, ID_SAVESTATE9, MainFrame::OnSaveState)
 EVT_MENU(wxID_PREFERENCES, MainFrame::OnSettings)
 EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
 EVT_MENU(ID_START, MainFrame::OnPlay)
 EVT_MENU(ID_PAUSE, MainFrame::OnPause)
 EVT_MENU(ID_STOP, MainFrame::OnStop)
-EVT_UPDATE_UI( ID_START, MainFrame::OnPlayUpdate )
-EVT_UPDATE_UI( ID_PAUSE, MainFrame::OnPauseUpdate )
-EVT_UPDATE_UI( ID_STOP, MainFrame::OnStopUpdate )
+EVT_UPDATE_UI( ID_START, MainFrame::OnPlayUpdateUI )
+EVT_UPDATE_UI( ID_PAUSE, MainFrame::OnPauseUpdateUI )
+EVT_UPDATE_UI( ID_STOP, MainFrame::OnStopUpdateUI )
+EVT_UPDATE_UI_RANGE(ID_LOADSTATE0, ID_LOADSTATE9, MainFrame::OnLoadStateUpdateUI)
+EVT_UPDATE_UI_RANGE(ID_SAVESTATE0, ID_SAVESTATE9, MainFrame::OnSaveStateUpdateUI)
 EVT_IDLE(MainFrame::OnIdle)
 END_EVENT_TABLE()
 
@@ -117,6 +122,22 @@ void MainFrame::CreateMenuBar()
 	recentMenuPopup = new wxMenu;
 	recentMenuPopup->AppendSeparator();
 	recentMenuPopup->Append(ID_CLEAR_RECENT, wxT("Clear recent roms"));
+	
+	wxMenu * loadMenuFile = new wxMenu;
+	wxMenu * saveMenuFile = new wxMenu;
+	wxString slotMenu;
+	for (int i=1; i<11; i++)
+	{
+		int id = i % 10;
+		slotMenu = wxT("");
+		slotMenu << "Slot " << id << "\tCtrl+Alt+" << id;
+		loadMenuFile->Append(ID_LOADSTATE0+id, slotMenu);
+		slotMenu = wxT("");
+		slotMenu << "Slot " << id << "\tCtrl+" << id;
+		saveMenuFile->Append(ID_SAVESTATE0+id, slotMenu);
+	}
+	fileMenu->AppendSubMenu(loadMenuFile, wxT("Load State"));
+	fileMenu->AppendSubMenu(saveMenuFile, wxT("Save State"));
 	
 	fileMenu->Append(wxID_EXIT, wxT("E&xit"));
 
@@ -197,6 +218,46 @@ void MainFrame::OnRecentItem(wxCommandEvent &event)
 	int idAux = event.GetId();
 	int id = idAux - ID_RECENT0;
 	ChangeFile(recentFiles[id].fullName);
+}
+
+void MainFrame::OnLoadState(wxCommandEvent &event)
+{
+	int idAux = event.GetId();
+	int id = idAux - ID_LOADSTATE0;
+	
+	wxString savesDir = wxStandardPaths::Get().GetUserDataDir() + wxFileName::GetPathSeparator()
+	+ wxT("SaveStates") + wxFileName::GetPathSeparator();
+
+	try
+	{
+		cpu->LoadState(string(savesDir.mb_str()), id);
+	}
+	catch(GBException e)
+	{
+		wxMessageBox(e.what(), wxT("Error"), wxICON_WARNING);
+	}
+}
+
+void MainFrame::OnSaveState(wxCommandEvent &event)
+{
+	int idAux = event.GetId();
+	int id = idAux - ID_SAVESTATE0;
+	
+	wxString savesDir = wxStandardPaths::Get().GetUserDataDir() + wxFileName::GetPathSeparator()
+	+ wxT("SaveStates");
+	
+	if (!wxFileName::DirExists(savesDir))
+		wxFileName::Mkdir(savesDir, 0777, wxPATH_MKDIR_FULL);
+	
+	savesDir += wxFileName::GetPathSeparator();
+	try
+	{
+		cpu->SaveState(string(savesDir.mb_str()), id);
+	}
+	catch(GBException e)
+	{
+		wxMessageBox(e.what(), wxT("Error"), wxICON_WARNING);
+	}
 }
 
 void MainFrame::OnClearRecent(wxCommandEvent &)
@@ -460,37 +521,44 @@ void MainFrame::OnStop(wxCommandEvent &)
 	emuState = Stopped;
 }
 
-void MainFrame::OnPlayUpdate(wxUpdateUIEvent& event)
+void MainFrame::OnPlayUpdateUI(wxUpdateUIEvent& event)
 {
-	if ((emuState == NotStartedYet) || (emuState == Playing)){
+	if ((emuState == NotStartedYet) || (emuState == Playing))
 		event.Enable(false);
-	}
-	else {
+	else
 		event.Enable(true);
-	}
-
 }
 
-void MainFrame::OnPauseUpdate(wxUpdateUIEvent& event)
+void MainFrame::OnPauseUpdateUI(wxUpdateUIEvent& event)
 {
-	if ((emuState == NotStartedYet) || (emuState == Stopped)){
+	if ((emuState == NotStartedYet) || (emuState == Stopped))
 		event.Enable(false);
-	}
-	else {
+	else
 		event.Enable(true);
-	}
-
 }
 
-void MainFrame::OnStopUpdate(wxUpdateUIEvent& event)
+void MainFrame::OnStopUpdateUI(wxUpdateUIEvent& event)
 {
-	if ((emuState == Stopped)||(emuState == NotStartedYet)) {
+	if ((emuState == Stopped)||(emuState == NotStartedYet))
 		event.Enable(false);
-	}
-	else {
+	else
 		event.Enable(true);
-	}
+}
 
+void MainFrame::OnLoadStateUpdateUI(wxUpdateUIEvent& event)
+{
+	if ((emuState == Stopped)||(emuState == NotStartedYet))
+		event.Enable(false);
+	else
+		event.Enable(true);
+}
+
+void MainFrame::OnSaveStateUpdateUI(wxUpdateUIEvent& event)
+{
+	if ((emuState == Stopped)||(emuState == NotStartedYet))
+		event.Enable(false);
+	else
+		event.Enable(true);
 }
 
 /**
