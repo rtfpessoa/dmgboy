@@ -15,9 +15,11 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
 #include "Memory.h"
 #include "Cartridge.h"
-#include <string.h>
+
+using namespace std;
 
 Memory::Memory()
 {
@@ -139,4 +141,14 @@ void Memory::DmaTransfer(BYTE direction)
 
 	for (i=0; i<0xA0; i++)
 		MemWNoCheck(0xFE00 + i, MemR((direction << 8) + i));
+}
+
+void Memory::SaveMemory(ofstream * file)
+{
+	file->write((char *)&memory[0x8000], 0x8000);
+}
+
+void Memory::LoadMemory(ifstream * file)
+{
+	file->read((char *)&memory[0x8000], 0x8000);
 }

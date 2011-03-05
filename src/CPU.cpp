@@ -18,6 +18,7 @@
 #include "CPU.h"
 #include "Instructions.h"
 #include <iomanip>
+#include <fstream>
 #include <sstream>
 #include "Registers.h"
 #include "GBException.h"
@@ -1041,7 +1042,59 @@ void CPU::SaveLog()
 	log->Save("log.txt");
 }
 
-void CPU::SaveState(string filePath)
+void CPU::SaveState(string saveDirectory, int numSlot)
 {
+	//TETRIS-1.sav, ..., TETRIS-0.sav
+	stringstream st;
+	st << saveDirectory << c->GetName().c_str();
+	st << "-" << numSlot << ".sav";
+	string fileName = st.str();
+	ofstream * file = new ofstream(fileName.c_str(), ios::out|ios::binary|ios::trunc);
+
+	if (file && file->is_open())
+	{
+		int version = SAVE_STATE_VERSION;
+		file->write((char *)&version, sizeof(int));
+		file->write(c->GetName().c_str(), 16);
+		
+		SaveRegs(file);
+		SaveMemory(file);
+		
+		file->close();
+	}
 	
+	if (file)
+		delete file;
+}
+
+void CPU::LoadState(string loadDirectory, int numSlot)
+{
+	stringstream st;
+	st << loadDirectory << c->GetName().c_str();
+	st << "-" << numSlot << ".sav";
+	string fileName = st.str();
+	ifstream * file = new ifstream(fileName.c_str(), ios::in|ios::binary);
+	
+	if (file && file->is_open())
+	{
+		int version = 0;
+		file->read((char *)&version, sizeof(int));
+		if (version != SAVE_STATE_VERSION)
+			return;
+		
+		char * buffer = new char[16];
+		file->read(buffer, 16);
+		string cartName = string(buffer, 16);
+		delete[] buffer;
+		if (cartName != c->GetName())
+			return;
+		
+		LoadRegs(file);
+		LoadMemory(file);
+		
+		file->close();
+	}
+	
+	if (file)
+		delete file;
 }

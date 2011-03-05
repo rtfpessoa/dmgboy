@@ -15,10 +15,12 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Registers.h"
 #include <sstream>
-#include "GBException.h"
+#include <fstream>
 #include <iomanip>
+#include "Registers.h"
+#include "GBException.h"
+
 using namespace std;
 
 Registers::Registers() {ResetRegs();}
@@ -139,4 +141,35 @@ string Registers::ToString()
 
 	
 	return out.str();
+}
+
+void Registers::SaveRegs(ofstream * file)
+{
+	//file->write((char *)this, sizeof(Registers));
+	file->write((char *)&this->af.doble, sizeof(WORD));
+	file->write((char *)&this->bc.doble, sizeof(WORD));
+	file->write((char *)&this->de.doble, sizeof(WORD));
+	file->write((char *)&this->hl.doble, sizeof(WORD));
+	file->write((char *)&this->pc, sizeof(WORD));
+	file->write((char *)&this->sp, sizeof(WORD));
+	file->write((char *)&this->IME, sizeof(bool));
+	file->write((char *)&this->pendingIME, sizeof(bool));
+	file->write((char *)&this->pendingIMEvalue, sizeof(bool));
+	file->write((char *)&this->halt, sizeof(bool));
+	file->write((char *)&this->stop, sizeof(bool));
+}
+
+void Registers::LoadRegs(ifstream * file)
+{
+	file->read((char *)&this->af.doble, sizeof(WORD));
+	file->read((char *)&this->bc.doble, sizeof(WORD));
+	file->read((char *)&this->de.doble, sizeof(WORD));
+	file->read((char *)&this->hl.doble, sizeof(WORD));
+	file->read((char *)&this->pc, sizeof(WORD));
+	file->read((char *)&this->sp, sizeof(WORD));
+	file->read((char *)&this->IME, sizeof(bool));
+	file->read((char *)&this->pendingIME, sizeof(bool));
+	file->read((char *)&this->pendingIMEvalue, sizeof(bool));
+	file->read((char *)&this->halt, sizeof(bool));
+	file->read((char *)&this->stop, sizeof(bool));
 }

@@ -21,9 +21,9 @@
 #include "Registers.h"
 
 struct ItemLog {
-	string prefix;
+	std::string prefix;
 	Registers * regs;
-	string suffix;
+	std::string suffix;
 	ItemLog * next;
 	ItemLog * prev;
 };

@@ -32,6 +32,8 @@
 #include "Xpm/gb16.xpm"
 #include "Xpm/gb32.xpm"
 
+using namespace std;
+
 IMPLEMENT_CLASS(MainFrame, wxFrame)
 
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)

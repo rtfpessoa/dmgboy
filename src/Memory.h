@@ -18,6 +18,7 @@
 #ifndef __MEMORY_H__
 #define __MEMORY_H__
 
+#include <fstream>
 #include "Cartridge.h"
 #include "Pad.h"
 
@@ -47,6 +48,8 @@ public:
 		}
 		return memory[direction];
 	}
+	void SaveMemory(std::ofstream * file);
+	void LoadMemory(std::ifstream * file);
 };
 
 #endif
