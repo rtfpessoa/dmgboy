@@ -19,6 +19,7 @@
 #include "GBException.h"
 #include <fstream>
 #include <iostream>
+#include <sstream>
 using namespace std;
 
 static BYTE * _memCartridge = NULL;
@@ -135,10 +136,11 @@ void MBC1Write(WORD direction, BYTE value)
 	}
 	else if (direction < 0x4000)	//Cambiar romBank
 	{
-		if ((value & 0x1F)== 0)
+		value &= 0x1F;
+		if (!value)
 			value++;
 
-		_romBank = (_romBank & 0x60) | (value & 0x1F);
+		_romBank = (_romBank & 0x60) | value;
 	}
 	else if (direction < 0x6000)	//Cambiar romBank o ramBank dependiendo del modo
 	{
@@ -188,11 +190,12 @@ void MBC2Write(WORD direction, BYTE value)
 	{
 		if (!(direction & 0x100))
 			return;
-
-		if ((value & 0x0F)== 0)
+		
+		value &= 0x0F;
+		if (!value)
 			value++;
 
-		_romBank = value & 0x0F;
+		_romBank = value;
 	}
 	else if (direction < 0x6000)
 	{
@@ -315,8 +318,9 @@ BYTE MBC5Read(WORD direction)
 
 void MBCLoadRam()
 {
-	string fileName = _pathBatteries + _romName + ".BATT";
-	ifstream file(fileName.c_str(), ios::in|ios::binary);
+	stringstream fileName;
+	fileName << _pathBatteries.c_str() << _romName.c_str() << ".BATT";
+	ifstream file(fileName.str().c_str(), ios::in|ios::binary);
 	
 	if (file)
 	{
@@ -327,12 +331,16 @@ void MBCLoadRam()
 
 void MBCSaveRam()
 {
-	string fileName = _pathBatteries + _romName + ".BATT";
-	ofstream file(fileName.c_str(), ios::out|ios::trunc|ios::binary);
+	if (_ramSize == 0)
+		return;
+	
+	stringstream fileName;
+	fileName << _pathBatteries.c_str() << _romName.c_str() << ".BATT";
+	ofstream file(fileName.str().c_str(), ios::out|ios::trunc|ios::binary);
 	
 	if (file)
 	{
-		file.write((char *)_memRamMBC, _romSize);
+		file.write((char *)_memRamMBC, _ramSize);
 		file.close();
 	}
 }
