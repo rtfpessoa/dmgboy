@@ -1,10 +1,11 @@
 - Pasarlo a OpenGL
 - Multi idioma / unicode
-- Permitir Savestates en cualquier momento
 - Permitir cargar roms comprimidas en 7z
 - Sonido
+- Mejorar la precision de los frames por segundo 16.742 en vez de 17
 
 Terminado:
+- Permitir Savestates en cualquier momento
 - Guardar a disco duro la memoria de los cartuchos que llevan bateria
 - Lista de ultimas ROMS
 - Cargar por linea de comandos

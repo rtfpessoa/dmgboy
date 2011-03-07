@@ -62,7 +62,7 @@ void CPU::Reset()
 	v->ClearScreen();
 }
 
-void CPU::Run(unsigned long exitCycles)
+void CPU::ExecuteOneFrame()
 {
 	if (!this->c)
 		return;
@@ -71,8 +71,10 @@ void CPU::Run(unsigned long exitCycles)
 	BYTE OpCode = 0, NextOpcode = 0, lastOpCode = 0;
 
 	Instructions inst(this->GetPtrRegisters(), this->GetPtrMemory());
+	
+	frameCompleted = false;
 
-    while (actualCycles < exitCycles)
+    while (!frameCompleted)
     {
 		numInstructions++;
 		lastOpCode = OpCode;
@@ -877,6 +879,7 @@ void CPU::UpdateStateLCD()
 					if (BIT4(memory[STAT]))
 						memory[IF] |= 0x02;
 					v->RefreshScreen();
+					frameCompleted = true;
                 }
                 else    //Sino, cambiamos al modo 2
                 {

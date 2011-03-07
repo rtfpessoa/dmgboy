@@ -571,7 +571,7 @@ void MainFrame::OnSaveStateUpdateUI(wxUpdateUIEvent& event)
  */
 void MainFrame::OnIdle(wxIdleEvent &event)
 {
-	long duration = 16;
+	long duration = 17;
 
 	long lastDuration = swFrame.Time();
 	swFrame.Start();
@@ -588,7 +588,7 @@ void MainFrame::OnIdle(wxIdleEvent &event)
 		cpu->UpdatePad();
 
 		// Valor obtenido comparandolo con otros emuladores
-		cpu->Run(113000);
+		cpu->ExecuteOneFrame();
 
 		delay += swExecution.Time();
 	}

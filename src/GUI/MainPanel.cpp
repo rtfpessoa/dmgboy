@@ -172,12 +172,6 @@ bool DnDFile::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames)
 {
 	MainFrame * frame = (MainFrame *)parent;
 	frame->ChangeFile(filenames[0]);
-	/*
-	size_t nFiles = filenames.GetCount();
-	for ( size_t n = 0; n < nFiles; n++ )
-	{
-		wxMessageBox(filenames[n], wxT("Drag & Drop"));
-	}
-	*/
+
 	return true;
 }

@@ -39,12 +39,13 @@ private:
 	QueueLog *log;
 	BYTE instructionCycles[0xFF];
 	BYTE instructionCyclesCB[0xFF];
+	bool frameCompleted;
 public:
 	CPU(Video *v);
 	CPU(Video *v, Cartridge *c);
 	~CPU();
 	
-	void Run(unsigned long exitCycles);
+	void ExecuteOneFrame();
 	void UpdatePad();
 	void Reset();
 	void SaveLog();
