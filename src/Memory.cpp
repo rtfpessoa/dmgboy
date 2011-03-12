@@ -99,7 +99,7 @@ void Memory::MemW(WORD direction, BYTE value)
 			case P1:
 				BYTE oldP1;
 				oldP1 = memory[P1];
-				value = (value & 0x30) | (oldP1 & ~0x30);
+				value = (value & 0xF0) | (oldP1 & ~0xF0);
 				value = PadUpdateInput(value);
 				if ((value != oldP1) && ((value & 0x0F) != 0x0F))
 				{
@@ -115,25 +115,6 @@ void Memory::MemW(WORD direction, BYTE value)
 
 	memory[direction] = value;
 }
-
-/*BYTE Memory::MemR(WORD direction)
-{
-	//switch (direction)
-	//{
-		//case DMA: cout << "R DMA\n"; break;
-		//case TIMA: cout << "R TIMA\n"; break;
-		//case TMA: cout << "R TMA\n"; break;
-		//case DIV: cout << "R DIV\n"; break;
-		//case TAC: cout << "R TAC\n"; break;
-		//case BGP: cout << "R BGP\n"; break;
-		//case P1: cout << "R P1: 0x" << setfill('0') << setw(2) << uppercase << hex << (int)memory[direction] << endl; break;
-	//}
-	if ((direction < 0x8000) || ((direction >=0xA000) && (direction < 0xC000)))
-	{
-		return c->Read(direction);
-	}
-	return memory[direction];
-}*/
 
 void Memory::DmaTransfer(BYTE direction)
 {

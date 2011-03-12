@@ -67,7 +67,7 @@ void CPU::ExecuteOneFrame()
 	if (!this->c)
 		return;
 	
-	unsigned long actualCycles = 0;
+	actualCycles = 0;
 	BYTE OpCode = 0, NextOpcode = 0, lastOpCode = 0;
 
 	Instructions inst(this->GetPtrRegisters(), this->GetPtrMemory());
@@ -861,12 +861,21 @@ void CPU::UpdateStateLCD()
 {
 	BYTE mode;
 
+	if (!BIT7(memory[LCDC]))
+	{
+		memory[STAT] = (memory[STAT] & ~0x03) | 0x01;
+		memory[LY] == 0;
+		if (actualCycles >= 70224)
+			frameCompleted = true;
+		return;
+	}
+	
     mode = BITS01(memory[STAT]);
 
     switch (mode)
     {
         case (0):	//Durante H-Blank
-            if (cyclesLCD > MAX_LCD_MODE_0)
+            if (cyclesLCD >= MAX_LCD_MODE_0)
             {
                 if (memory[LY] == 144) //Si estamos en la linea 144, cambiamos al modo 1 (V-Blank)
                 {
@@ -879,7 +888,6 @@ void CPU::UpdateStateLCD()
 					if (BIT4(memory[STAT]))
 						memory[IF] |= 0x02;
 					v->RefreshScreen();
-					frameCompleted = true;
                 }
                 else    //Sino, cambiamos al modo 2
                 {
@@ -898,7 +906,7 @@ void CPU::UpdateStateLCD()
             }
             break;
         case (1):	//Durante V-Blank
-            if (cyclesLCD > MAX_LCD_MODE_1)
+            if (cyclesLCD >= MAX_LCD_MODE_1)
             {
                 //Si hemos llegado al final
                 if (memory[LY] == 153)
@@ -910,6 +918,8 @@ void CPU::UpdateStateLCD()
 					//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
 					if (BIT5(memory[STAT]))
 						memory[IF] |= 0x02;
+					
+					frameCompleted = true;
                 }
                 else
                     memory[LY]++;
@@ -920,7 +930,7 @@ void CPU::UpdateStateLCD()
             }
             break;
         case (2):	//Cuando OAM se esta usando
-            if (cyclesLCD > MAX_LCD_MODE_2)
+            if (cyclesLCD >= MAX_LCD_MODE_2)
             {
 				//Poner a 11 el flag (bits 0-1) del modo 3.
 				memory[STAT] = (memory[STAT] & ~0x03) | 0x03;
@@ -929,7 +939,7 @@ void CPU::UpdateStateLCD()
             }
             break;
         case (3):	//Cuando OAM y memoria de video se estan usando (Se esta pasando informacion al LCD)
-            if (cyclesLCD > MAX_LCD_MODE_3)
+            if (cyclesLCD >= MAX_LCD_MODE_3)
             {
 				//Poner a 00 el flag (bits 0-1) del modo 0.
 				memory[STAT] &= ~0x03;

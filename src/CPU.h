@@ -29,7 +29,8 @@
 class CPU: public Registers, public Memory
 {
 private:
-	unsigned long numInstructions; 
+	unsigned long numInstructions;
+	unsigned long actualCycles;
 	BYTE lastCycles;
 	WORD cyclesLCD;
 	WORD cyclesTimer;
