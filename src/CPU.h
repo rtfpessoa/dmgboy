@@ -57,7 +57,6 @@ private:
 	void FillInstructionCycles();
 	void FillInstructionCyclesCB();
 	void OpCodeCB(Instructions * inst);
-	void CyclicTasks();
 	void UpdateStateLCD();
 	void UpdateTimer();
 	void Interrupts(Instructions * inst);

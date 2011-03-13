@@ -130,10 +130,10 @@ void MainFrame::CreateMenuBar()
 	{
 		int id = i % 10;
 		slotMenu = wxT("");
-		slotMenu << "Slot " << id << "\tCtrl+Alt+" << id;
+		slotMenu << wxT("Slot ") << id << wxT("\tCtrl+Alt+") << id;
 		loadMenuFile->Append(ID_LOADSTATE0+id, slotMenu);
 		slotMenu = wxT("");
-		slotMenu << "Slot " << id << "\tCtrl+" << id;
+		slotMenu << wxT("Slot ") << id << wxT("\tCtrl+") << id;
 		saveMenuFile->Append(ID_SAVESTATE0+id, slotMenu);
 	}
 	fileMenu->AppendSubMenu(loadMenuFile, wxT("Load State"));
@@ -234,7 +234,7 @@ void MainFrame::OnLoadState(wxCommandEvent &event)
 	}
 	catch(GBException e)
 	{
-		wxMessageBox(e.what(), wxT("Error"), wxICON_WARNING);
+		wxMessageBox(wxString(e.what(), wxConvUTF8), wxT("Error"), wxICON_WARNING);
 	}
 }
 
@@ -256,7 +256,7 @@ void MainFrame::OnSaveState(wxCommandEvent &event)
 	}
 	catch(GBException e)
 	{
-		wxMessageBox(e.what(), wxT("Error"), wxICON_WARNING);
+		wxMessageBox(wxString(e.what(), wxConvUTF8), wxT("Error"), wxICON_WARNING);
 	}
 }
 

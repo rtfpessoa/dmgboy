@@ -378,7 +378,8 @@ void CPU::ExecuteOneFrame()
 		cyclesPad += lastCycles;
 		actualCycles += lastCycles;
 
-        CyclicTasks();
+        UpdateStateLCD();
+		UpdateTimer();
         Interrupts(&inst);
 		
 	}//end for
@@ -841,13 +842,6 @@ void CPU::FillInstructionCyclesCB()
 	instructionCyclesCB[0xEE] = 16;
 	instructionCyclesCB[0xF6] = 16;
 	instructionCyclesCB[0xFE] = 16;
-}
-
-
-void CPU::CyclicTasks()
-{
-	UpdateStateLCD();
-	UpdateTimer();
 }
 
 void CPU::UpdatePad()
