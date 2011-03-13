@@ -66,7 +66,6 @@ void Memory::ResetMem()
     memory[NR51] = 0xF3; //NR51
     memory[NR52] = 0xF1; //NR52
     memory[LCDC] = 0x91; //LCDC
-    memory[STAT] = 0x02; //LCD_STAT
     memory[SCY]  = 0x00; //SCY
     memory[SCX]  = 0x00; //SCX
     memory[LYC]  = 0x00; //LYC
@@ -76,6 +75,8 @@ void Memory::ResetMem()
     memory[WY]   = 0x00; //WY
     memory[WX]   = 0x00; //WX
     memory[IE]   = 0x00; //IE
+	
+	memory[STAT] = 0x02; //LCD_STAT
 }
 
 void Memory::MemW(WORD direction, BYTE value)

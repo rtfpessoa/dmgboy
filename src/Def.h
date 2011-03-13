@@ -33,10 +33,10 @@ typedef unsigned short WORD;
 #define GB_SCREEN_W 160
 #define GB_SCREEN_H 144
 
-#define MAX_LCD_MODE_0 201    //201-207
+#define MAX_LCD_MODE_0 204    //201-207
 #define MAX_LCD_MODE_1 456    //456 * 10 = 4560
-#define MAX_LCD_MODE_2 77     //77-83
-#define MAX_LCD_MODE_3 169    //169-175
+#define MAX_LCD_MODE_2 80     //77-83
+#define MAX_LCD_MODE_3 172    //169-175
 
 #define BIT0(value)	((value) & 0x01)
 #define BIT1(value)	((value) & 0x02)

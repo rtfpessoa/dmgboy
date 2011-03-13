@@ -375,7 +375,7 @@ void CPU::ExecuteOneFrame()
 		cyclesLCD += lastCycles;
 		cyclesTimer += lastCycles;
 		cyclesDIV += lastCycles;
-		cyclesPad += lastCycles;
+		//cyclesPad += lastCycles;
 		actualCycles += lastCycles;
 
         UpdateStateLCD();
@@ -853,64 +853,58 @@ void CPU::UpdatePad()
 
 void CPU::UpdateStateLCD()
 {
-	BYTE mode;
-
-	if (!BIT7(memory[LCDC]))
-	{
-		memory[STAT] = (memory[STAT] & ~0x03) | 0x01;
-		memory[LY] == 0;
-		if (actualCycles >= 70224)
-			frameCompleted = true;
-		return;
-	}
+	BYTE screenOn = BIT7(memory[LCDC]);
 	
-    mode = BITS01(memory[STAT]);
+    BYTE mode = BITS01(memory[STAT]);
 
     switch (mode)
     {
-        case (0):	//Durante H-Blank
+        case (0):	// Durante H-Blank
             if (cyclesLCD >= MAX_LCD_MODE_0)
             {
-                if (memory[LY] == 144) //Si estamos en la linea 144, cambiamos al modo 1 (V-Blank)
+                if (memory[LY] == 144) // Si estamos en la linea 144, cambiamos al modo 1 (V-Blank)
                 {
-                    //Poner a 01 el flag (bits 0-1) del modo 1.
+                    // Poner a 01 el flag (bits 0-1) del modo 1.
 					memory[STAT] = (memory[STAT] & ~0x03) | 0x01;
-					//Interrupcion V-Blank
-					memory[IF] |= 0x01;
-					//Si interrupcion V-Blank habilitada, marcar peticion de interrupcion
-					//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT.
-					if (BIT4(memory[STAT]))
-						memory[IF] |= 0x02;
+					if (screenOn)
+					{
+						// Interrupcion V-Blank
+						memory[IF] |= 0x01;
+						// Si interrupcion V-Blank habilitada, marcar peticion de interrupcion
+						// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT.
+						if (BIT4(memory[STAT]))
+							memory[IF] |= 0x02;
+					}
 					v->RefreshScreen();
                 }
-                else    //Sino, cambiamos al modo 2
+                else // Sino, cambiamos al modo 2
                 {
-                    //Poner a 10 el flag (bits 0-1) del modo 2.
+                    // Poner a 10 el flag (bits 0-1) del modo 2.
 					memory[STAT] = (memory[STAT] & ~0x03) | 0x02;
-					//Si interrupcion OAM habilitada, marcar peticion de interrupcion
-					//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
-					if (BIT5(memory[STAT]))
+					// Si interrupcion OAM habilitada, marcar peticion de interrupcion
+					// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
+					if (BIT5(memory[STAT]) && screenOn)
 						memory[IF] |= 0x02;
 
 					v->UpdateLine(memory[LY]);
                 }
                 memory[LY]++;
 				CheckLYC();
-                cyclesLCD = 0;
+                cyclesLCD -= MAX_LCD_MODE_0;
             }
             break;
-        case (1):	//Durante V-Blank
+        case (1):	// Durante V-Blank
             if (cyclesLCD >= MAX_LCD_MODE_1)
             {
-                //Si hemos llegado al final
+                // Si hemos llegado al final
                 if (memory[LY] == 153)
                 {
                     memory[LY] = 0;
-                    //Poner a 10 el flag (bits 0-1) del modo 2.
+                    // Poner a 10 el flag (bits 0-1) del modo 2.
 					memory[STAT] = (memory[STAT] & ~0x03) | 0x02;
-					//Si interrupcion OAM habilitada, marcar peticion de interrupcion
-					//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
-					if (BIT5(memory[STAT]))
+					// Si interrupcion OAM habilitada, marcar peticion de interrupcion
+					// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
+					if (BIT5(memory[STAT]) && screenOn)
 						memory[IF] |= 0x02;
 					
 					frameCompleted = true;
@@ -920,29 +914,29 @@ void CPU::UpdateStateLCD()
 
 				CheckLYC();
 				
-                cyclesLCD = 0;
+                cyclesLCD -= MAX_LCD_MODE_1;
             }
             break;
-        case (2):	//Cuando OAM se esta usando
+        case (2):	// Cuando OAM se esta usando
             if (cyclesLCD >= MAX_LCD_MODE_2)
             {
-				//Poner a 11 el flag (bits 0-1) del modo 3.
+				// Poner a 11 el flag (bits 0-1) del modo 3.
 				memory[STAT] = (memory[STAT] & ~0x03) | 0x03;
 
-                cyclesLCD = 0;
+                cyclesLCD -= MAX_LCD_MODE_2;
             }
             break;
-        case (3):	//Cuando OAM y memoria de video se estan usando (Se esta pasando informacion al LCD)
+        case (3):	// Cuando OAM y memoria de video se estan usando (Se esta pasando informacion al LCD)
             if (cyclesLCD >= MAX_LCD_MODE_3)
             {
-				//Poner a 00 el flag (bits 0-1) del modo 0.
+				// Poner a 00 el flag (bits 0-1) del modo 0.
 				memory[STAT] &= ~0x03;
-				//Si interrupcion H-Blank habilitada, marcar peticion de interrupcion
-				//en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
-				if (BIT3(memory[STAT]))
+				// Si interrupcion H-Blank habilitada, marcar peticion de interrupcion
+				// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
+				if (BIT3(memory[STAT]) && screenOn)
 					memory[IF] |= 0x02;
 
-                cyclesLCD = 0;
+                cyclesLCD -= MAX_LCD_MODE_3;
             }
             break;
 	}
@@ -1036,6 +1030,8 @@ void CPU::UpdateTimer()
 			cyclesTimer = 0;
 		}
 	}
+	else
+		cyclesTimer = 0;
 
 	if (cyclesDIV >= 256)
 	{

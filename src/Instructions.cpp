@@ -210,7 +210,7 @@ void Instructions::JR()
 
 	address = _8bitsInmValue;
 
-	//El "2 +" es porque antes de saltar ha tenido que ver cuales eran los dos opcodes de la instrucción
+	//El "2 +" es porque antes de saltar ha tenido que ver cuales eran los dos opcodes de la instruccion
 	//y tiene importancia al ser un salto relativo con respecto al actual PC.
     reg->Add_PC(2 + address);
 }
@@ -388,7 +388,7 @@ void Instructions::ADD_HL_n(e_registers place)
 }
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//Revisado hasta aquí
+//Revisado hasta aqui
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 //Quitar esta funcion y dejar la generica teniendo encuenta la long. de la instruccion
@@ -954,10 +954,10 @@ void Instructions::HALT()
 	if (reg->Get_IME())
 	{
 		reg->Set_Halt(true);
-		reg->Add_PC(1);
 	}
-	else	//Si no están habilitadas las interrupciones se evita el siguiente opcode
-		reg->Add_PC(2);
+	
+	reg->Add_PC(1);
+
 }
 
 void Instructions::STOP()
