@@ -959,51 +959,38 @@ void CPU::Interrupts(Instructions * inst)
 	if (!Get_IME())
 		return;
 
-	BYTE valueIE, valueIF;
+	BYTE interrupts = memory[IE] & memory[IF];
+	if (!interrupts)
+		return;
+	
+	Set_IME(false);
+	Set_Halt(false);
+	inst->PUSH_PC();
 
-	valueIE = memory[IE];
-	valueIF = memory[IF];
-
-	if (BIT0(valueIE) && BIT0(valueIF))	//V-Blank
+	if (BIT0(interrupts))	//V-Blank
 	{
-		Set_IME(false);
-		Set_Halt(false);
-		Add_PC(-1);
-		inst->RST_n(0x40);
-		memory[IF] = valueIF & ~0x01;
+		Set_PC(0x40);
+		memory[IF] &= ~0x01;
 	}
-	else if (BIT1(valueIE) && BIT1(valueIF))	//LCD-Stat
+	else if (BIT1(interrupts))	//LCD-Stat
 	{
-		Set_IME(false);
-		Set_Halt(false);
-		Add_PC(-1);
-		inst->RST_n(0x48);
-		memory[IF] = valueIF & ~0x02;
+		Set_PC(0x48);
+		memory[IF] &= ~0x02;
 	}
-	else if (BIT2(valueIE) && BIT2(valueIF))	//Timer
+	else if (BIT2(interrupts))	//Timer
 	{
-		Set_IME(false);
-		Set_Halt(false);
-		Add_PC(-1);
-		inst->RST_n(0x50);
-		memory[IF] = valueIF & ~0x04;
+		Set_PC(0x50);
+		memory[IF] &= ~0x04;
 	}
-	else if(BIT3(valueIE) && BIT3(valueIF))	//Serial
+	else if(BIT3(interrupts))	//Serial
 	{
-		Set_IME(false);
-		Set_Halt(false);
-		Add_PC(-1);
-		inst->RST_n(0x58);
-		memory[IF] = valueIF & ~0x08;
+		Set_PC(0x58);
+		memory[IF] &= ~0x08;
 	}
-	else if (BIT4(valueIE) && BIT4(valueIF))	//Joypad
+	else if (BIT4(interrupts))	//Joypad
 	{
-		Set_IME(false);
-		Set_Halt(false);
-		Set_Stop(false);
-		Add_PC(-1);
-		inst->RST_n(0x60);
-		memory[IF] = valueIF & ~0x10;
+		Set_PC(0x60);
+		memory[IF] &= ~0x10;
 	}
 }
 

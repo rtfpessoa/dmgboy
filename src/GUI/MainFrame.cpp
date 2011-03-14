@@ -587,7 +587,6 @@ void MainFrame::OnIdle(wxIdleEvent &event)
 
 		cpu->UpdatePad();
 
-		// Valor obtenido comparandolo con otros emuladores
 		cpu->ExecuteOneFrame();
 
 		delay += swExecution.Time();

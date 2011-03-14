@@ -27,7 +27,6 @@ private:
 	Registers *reg;
 	Memory *mem;
 
-	void PUSH_PC();
 public:
 	Instructions(Registers *reg, Memory *mem);
 	~Instructions(void);
@@ -76,6 +75,7 @@ public:
     void OR_n(e_registers place);
 	void POP_nn(e_registers place);
     void PUSH_nn(e_registers place);
+	void PUSH_PC();
 	void RES_b_r(BYTE bit, e_registers place);
 	void RET();
 	void RETI();
