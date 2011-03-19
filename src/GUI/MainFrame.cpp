@@ -84,9 +84,9 @@ MainFrame::MainFrame(wxString fileName)
     // create the MainPanel
     panel = new MainPanel(this);
 
-
+	sound = new Sound();
     video = new Video(panel);
-	cpu = new CPU(video);
+	cpu = new CPU(video, sound);
 
 	cartridge = NULL;
 
@@ -468,6 +468,7 @@ void MainFrame::Clean()
 	emuState = Stopped;
 	delete cpu;
 	delete video;
+	delete sound;
 	if (cartridge)
 		delete cartridge;
 	if (settingsDialog)
@@ -571,7 +572,7 @@ void MainFrame::OnSaveStateUpdateUI(wxUpdateUIEvent& event)
  */
 void MainFrame::OnIdle(wxIdleEvent &event)
 {
-	long duration = 17;
+	long duration = 15;
 
 	long lastDuration = swFrame.Time();
 	swFrame.Start();
@@ -584,8 +585,6 @@ void MainFrame::OnIdle(wxIdleEvent &event)
     if (emuState == Playing)
 	{
 		swExecution.Start();
-
-		cpu->UpdatePad();
 
 		cpu->ExecuteOneFrame();
 

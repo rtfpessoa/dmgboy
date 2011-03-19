@@ -21,9 +21,10 @@
 
 using namespace std;
 
-Memory::Memory()
+Memory::Memory(Sound * s)
 {
 	this->c = NULL;
+	this->s = s;
 	ResetMem();
 }
 
@@ -47,24 +48,29 @@ void Memory::ResetMem()
 	memory[TIMA] = 0x00; //TIMA
     memory[TMA]  = 0x00; //TMA
     memory[TAC]  = 0x00; //TAC
-    memory[NR10] = 0x80; //NR10
-    memory[NR11] = 0xBF; //NR11
-    memory[NR12] = 0xF3; //NR12
-    memory[NR14] = 0xBF; //NR14
-    memory[NR21] = 0x3F; //NR21
-    memory[NR22] = 0x00; //NR22
-    memory[NR24] = 0xBF; //NR24
-    memory[NR30] = 0x7F; //NR30
-    memory[NR31] = 0xFF; //NR31
-    memory[NR32] = 0x9F; //NR32
-    memory[NR33] = 0xBF; //NR33
-    memory[NR41] = 0xFF; //NR41
-    memory[NR42] = 0x00; //NR42
-    memory[NR43] = 0x00; //NR43
-    memory[NR30] = 0xBF; //NR30
-    memory[NR50] = 0x77; //NR50
-    memory[NR51] = 0xF3; //NR51
-    memory[NR52] = 0xF1; //NR52
+	
+	if (s)
+	{
+		s->WriteRegister(NR10, 0x80); //NR10
+		s->WriteRegister(NR11, 0xBF); //NR11
+		s->WriteRegister(NR12, 0xF3); //NR12
+		s->WriteRegister(NR14, 0xBF); //NR14
+		s->WriteRegister(NR21, 0x3F); //NR21
+		s->WriteRegister(NR22, 0x00); //NR22
+		s->WriteRegister(NR24, 0xBF); //NR24
+		s->WriteRegister(NR30, 0x7F); //NR30
+		s->WriteRegister(NR31, 0xFF); //NR31
+		s->WriteRegister(NR32, 0x9F); //NR32
+		s->WriteRegister(NR33, 0xBF); //NR33
+		s->WriteRegister(NR41, 0xFF); //NR41
+		s->WriteRegister(NR42, 0x00); //NR42
+		s->WriteRegister(NR43, 0x00); //NR43
+		s->WriteRegister(NR30, 0xBF); //NR30
+		s->WriteRegister(NR50, 0x77); //NR50
+		s->WriteRegister(NR51, 0xF3); //NR51
+		s->WriteRegister(NR52, 0xF1); //NR52
+	}
+	
     memory[LCDC] = 0x91; //LCDC
     memory[SCY]  = 0x00; //SCY
     memory[SCX]  = 0x00; //SCX
@@ -90,6 +96,11 @@ void Memory::MemW(WORD direction, BYTE value)
 		memory[direction + 0x2000] = value;
 	else if ((direction >= 0xE000) && (direction < 0xFE00))//E000-FDFF
 		memory[direction - 0x2000] = value;
+	else if ((direction >= 0xFF10) && (direction <= 0xFF3F))
+	{
+		if(s)
+			s->WriteRegister(direction, value);
+	}
 	else
 	{
 		switch (direction)

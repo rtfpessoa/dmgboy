@@ -22,6 +22,7 @@
 #include "Instructions.h"
 #include "Memory.h"
 #include "Video.h"
+#include "Sound.h"
 #include "Pad.h"
 #include "Cartridge.h"
 #include "Log.h"
@@ -42,8 +43,8 @@ private:
 	BYTE instructionCyclesCB[0xFF];
 	bool frameCompleted;
 public:
-	CPU(Video *v);
-	CPU(Video *v, Cartridge *c);
+	CPU(Video *v, Sound * s);
+	CPU(Video *v, Cartridge *c, Sound * s);
 	~CPU();
 	
 	void ExecuteOneFrame();
@@ -61,6 +62,7 @@ private:
 	void UpdateTimer();
 	void Interrupts(Instructions * inst);
 	void CheckLYC();
+	void OnEndFrame();
 };
 
 #endif

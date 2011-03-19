@@ -24,6 +24,19 @@
 		6E23C73D11D7CD510043AF47 /* Pad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72D11D7CD510043AF47 /* Pad.cpp */; };
 		6E23C73E11D7CD510043AF47 /* Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72F11D7CD510043AF47 /* Registers.cpp */; };
 		6E23C74011D7CD510043AF47 /* Video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C73311D7CD510043AF47 /* Video.cpp */; };
+		6E2C36471334CB3900BE7D7B /* Basic_Gb_Apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C362A1334CB3900BE7D7B /* Basic_Gb_Apu.cpp */; };
+		6E2C36481334CB3900BE7D7B /* changes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6E2C36301334CB3900BE7D7B /* changes.txt */; };
+		6E2C364B1334CB3900BE7D7B /* Blip_Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C36361334CB3900BE7D7B /* Blip_Buffer.cpp */; };
+		6E2C364C1334CB3900BE7D7B /* Gb_Apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C36391334CB3900BE7D7B /* Gb_Apu.cpp */; };
+		6E2C364D1334CB3900BE7D7B /* Gb_Oscs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C363B1334CB3900BE7D7B /* Gb_Oscs.cpp */; };
+		6E2C364E1334CB3900BE7D7B /* Multi_Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C363D1334CB3900BE7D7B /* Multi_Buffer.cpp */; };
+		6E2C364F1334CB3900BE7D7B /* LGPL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6E2C363F1334CB3900BE7D7B /* LGPL.txt */; };
+		6E2C36501334CB3900BE7D7B /* notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6E2C36401334CB3900BE7D7B /* notes.txt */; };
+		6E2C36511334CB3900BE7D7B /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6E2C36411334CB3900BE7D7B /* readme.txt */; };
+		6E2C36521334CB3900BE7D7B /* Sound_Queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C36421334CB3900BE7D7B /* Sound_Queue.cpp */; };
+		6E2C36531334CB3900BE7D7B /* usage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6E2C36441334CB3900BE7D7B /* usage.txt */; };
+		6E2C36541334CB3900BE7D7B /* Wave_Writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C36451334CB3900BE7D7B /* Wave_Writer.cpp */; };
+		6E2C365F1334FF7100BE7D7B /* Sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C365E1334FF7100BE7D7B /* Sound.cpp */; };
 		6EA1AB79127F0F0E00AC510C /* AboutDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */; };
 		6EDDDE7512EA037200BFB26A /* InputTextCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDDE7412EA037200BFB26A /* InputTextCtrl.cpp */; };
 		6EFA5276126354F2000E541D /* ToDo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6EFA5275126354F2000E541D /* ToDo.txt */; };
@@ -71,6 +84,33 @@
 		6E23C73011D7CD510043AF47 /* Registers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Registers.h; path = ../../../src/Registers.h; sourceTree = SOURCE_ROOT; };
 		6E23C73311D7CD510043AF47 /* Video.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Video.cpp; path = ../../../src/Video.cpp; sourceTree = SOURCE_ROOT; };
 		6E23C73411D7CD510043AF47 /* Video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Video.h; path = ../../../src/Video.h; sourceTree = SOURCE_ROOT; };
+		6E2C362A1334CB3900BE7D7B /* Basic_Gb_Apu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Basic_Gb_Apu.cpp; path = "../../../src/Gb_Snd_Emu-0.1.4/Basic_Gb_Apu.cpp"; sourceTree = SOURCE_ROOT; };
+		6E2C362B1334CB3900BE7D7B /* Basic_Gb_Apu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Basic_Gb_Apu.h; path = "../../../src/Gb_Snd_Emu-0.1.4/Basic_Gb_Apu.h"; sourceTree = SOURCE_ROOT; };
+		6E2C362D1334CB3900BE7D7B /* config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
+		6E2C362E1334CB3900BE7D7B /* cstdint.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cstdint.hpp; sourceTree = "<group>"; };
+		6E2C362F1334CB3900BE7D7B /* static_assert.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = static_assert.hpp; sourceTree = "<group>"; };
+		6E2C36301334CB3900BE7D7B /* changes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = changes.txt; path = "../../../src/Gb_Snd_Emu-0.1.4/changes.txt"; sourceTree = SOURCE_ROOT; };
+		6E2C36341334CB3900BE7D7B /* blargg_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blargg_common.h; sourceTree = "<group>"; };
+		6E2C36351334CB3900BE7D7B /* blargg_source.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blargg_source.h; sourceTree = "<group>"; };
+		6E2C36361334CB3900BE7D7B /* Blip_Buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Blip_Buffer.cpp; sourceTree = "<group>"; };
+		6E2C36371334CB3900BE7D7B /* Blip_Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blip_Buffer.h; sourceTree = "<group>"; };
+		6E2C36381334CB3900BE7D7B /* Blip_Synth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blip_Synth.h; sourceTree = "<group>"; };
+		6E2C36391334CB3900BE7D7B /* Gb_Apu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gb_Apu.cpp; sourceTree = "<group>"; };
+		6E2C363A1334CB3900BE7D7B /* Gb_Apu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gb_Apu.h; sourceTree = "<group>"; };
+		6E2C363B1334CB3900BE7D7B /* Gb_Oscs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gb_Oscs.cpp; sourceTree = "<group>"; };
+		6E2C363C1334CB3900BE7D7B /* Gb_Oscs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gb_Oscs.h; sourceTree = "<group>"; };
+		6E2C363D1334CB3900BE7D7B /* Multi_Buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Multi_Buffer.cpp; sourceTree = "<group>"; };
+		6E2C363E1334CB3900BE7D7B /* Multi_Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Multi_Buffer.h; sourceTree = "<group>"; };
+		6E2C363F1334CB3900BE7D7B /* LGPL.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LGPL.txt; path = "../../../src/Gb_Snd_Emu-0.1.4/LGPL.txt"; sourceTree = SOURCE_ROOT; };
+		6E2C36401334CB3900BE7D7B /* notes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = notes.txt; path = "../../../src/Gb_Snd_Emu-0.1.4/notes.txt"; sourceTree = SOURCE_ROOT; };
+		6E2C36411334CB3900BE7D7B /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = readme.txt; path = "../../../src/Gb_Snd_Emu-0.1.4/readme.txt"; sourceTree = SOURCE_ROOT; };
+		6E2C36421334CB3900BE7D7B /* Sound_Queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sound_Queue.cpp; path = "../../../src/Gb_Snd_Emu-0.1.4/Sound_Queue.cpp"; sourceTree = SOURCE_ROOT; };
+		6E2C36431334CB3900BE7D7B /* Sound_Queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sound_Queue.h; path = "../../../src/Gb_Snd_Emu-0.1.4/Sound_Queue.h"; sourceTree = SOURCE_ROOT; };
+		6E2C36441334CB3900BE7D7B /* usage.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = usage.txt; path = "../../../src/Gb_Snd_Emu-0.1.4/usage.txt"; sourceTree = SOURCE_ROOT; };
+		6E2C36451334CB3900BE7D7B /* Wave_Writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Wave_Writer.cpp; path = "../../../src/Gb_Snd_Emu-0.1.4/Wave_Writer.cpp"; sourceTree = SOURCE_ROOT; };
+		6E2C36461334CB3900BE7D7B /* Wave_Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wave_Writer.h; path = "../../../src/Gb_Snd_Emu-0.1.4/Wave_Writer.h"; sourceTree = SOURCE_ROOT; };
+		6E2C365D1334FF7100BE7D7B /* Sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sound.h; path = ../../../src/Sound.h; sourceTree = SOURCE_ROOT; };
+		6E2C365E1334FF7100BE7D7B /* Sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sound.cpp; path = ../../../src/Sound.cpp; sourceTree = SOURCE_ROOT; };
 		6EA1AB77127F0F0E00AC510C /* AboutDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutDialog.h; sourceTree = "<group>"; };
 		6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AboutDialog.cpp; sourceTree = "<group>"; };
 		6EDDDE7312EA037200BFB26A /* InputTextCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputTextCtrl.h; sourceTree = "<group>"; };
@@ -134,6 +174,7 @@
 				6EFA5275126354F2000E541D /* ToDo.txt */,
 				6E23C6BD11D7CA0C0043AF47 /* GUI */,
 				6E23C71411D7CD090043AF47 /* HW */,
+				6E2C36231334CA9B00BE7D7B /* Gb_Sound_Emu */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -218,9 +259,61 @@
 				6E23C73411D7CD510043AF47 /* Video.h */,
 				6EFEDB421245230600646E83 /* Settings.cpp */,
 				6EFEDB431245230600646E83 /* Settings.h */,
+				6E2C365D1334FF7100BE7D7B /* Sound.h */,
+				6E2C365E1334FF7100BE7D7B /* Sound.cpp */,
 			);
 			name = HW;
 			sourceTree = "<group>";
+		};
+		6E2C36231334CA9B00BE7D7B /* Gb_Sound_Emu */ = {
+			isa = PBXGroup;
+			children = (
+				6E2C362A1334CB3900BE7D7B /* Basic_Gb_Apu.cpp */,
+				6E2C362B1334CB3900BE7D7B /* Basic_Gb_Apu.h */,
+				6E2C362C1334CB3900BE7D7B /* boost */,
+				6E2C36301334CB3900BE7D7B /* changes.txt */,
+				6E2C36331334CB3900BE7D7B /* gb_apu */,
+				6E2C363F1334CB3900BE7D7B /* LGPL.txt */,
+				6E2C36401334CB3900BE7D7B /* notes.txt */,
+				6E2C36411334CB3900BE7D7B /* readme.txt */,
+				6E2C36421334CB3900BE7D7B /* Sound_Queue.cpp */,
+				6E2C36431334CB3900BE7D7B /* Sound_Queue.h */,
+				6E2C36441334CB3900BE7D7B /* usage.txt */,
+				6E2C36451334CB3900BE7D7B /* Wave_Writer.cpp */,
+				6E2C36461334CB3900BE7D7B /* Wave_Writer.h */,
+			);
+			name = Gb_Sound_Emu;
+			sourceTree = "<group>";
+		};
+		6E2C362C1334CB3900BE7D7B /* boost */ = {
+			isa = PBXGroup;
+			children = (
+				6E2C362D1334CB3900BE7D7B /* config.hpp */,
+				6E2C362E1334CB3900BE7D7B /* cstdint.hpp */,
+				6E2C362F1334CB3900BE7D7B /* static_assert.hpp */,
+			);
+			name = boost;
+			path = "../../../src/Gb_Snd_Emu-0.1.4/boost";
+			sourceTree = SOURCE_ROOT;
+		};
+		6E2C36331334CB3900BE7D7B /* gb_apu */ = {
+			isa = PBXGroup;
+			children = (
+				6E2C36341334CB3900BE7D7B /* blargg_common.h */,
+				6E2C36351334CB3900BE7D7B /* blargg_source.h */,
+				6E2C36361334CB3900BE7D7B /* Blip_Buffer.cpp */,
+				6E2C36371334CB3900BE7D7B /* Blip_Buffer.h */,
+				6E2C36381334CB3900BE7D7B /* Blip_Synth.h */,
+				6E2C36391334CB3900BE7D7B /* Gb_Apu.cpp */,
+				6E2C363A1334CB3900BE7D7B /* Gb_Apu.h */,
+				6E2C363B1334CB3900BE7D7B /* Gb_Oscs.cpp */,
+				6E2C363C1334CB3900BE7D7B /* Gb_Oscs.h */,
+				6E2C363D1334CB3900BE7D7B /* Multi_Buffer.cpp */,
+				6E2C363E1334CB3900BE7D7B /* Multi_Buffer.h */,
+			);
+			name = gb_apu;
+			path = "../../../src/Gb_Snd_Emu-0.1.4/gb_apu";
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -276,6 +369,11 @@
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
 				6E205760120589BF00079331 /* gbpablog.icns in Resources */,
 				6EFA5276126354F2000E541D /* ToDo.txt in Resources */,
+				6E2C36481334CB3900BE7D7B /* changes.txt in Resources */,
+				6E2C364F1334CB3900BE7D7B /* LGPL.txt in Resources */,
+				6E2C36501334CB3900BE7D7B /* notes.txt in Resources */,
+				6E2C36511334CB3900BE7D7B /* readme.txt in Resources */,
+				6E2C36531334CB3900BE7D7B /* usage.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +401,14 @@
 				6EFEDB441245230600646E83 /* Settings.cpp in Sources */,
 				6EA1AB79127F0F0E00AC510C /* AboutDialog.cpp in Sources */,
 				6EDDDE7512EA037200BFB26A /* InputTextCtrl.cpp in Sources */,
+				6E2C36471334CB3900BE7D7B /* Basic_Gb_Apu.cpp in Sources */,
+				6E2C364B1334CB3900BE7D7B /* Blip_Buffer.cpp in Sources */,
+				6E2C364C1334CB3900BE7D7B /* Gb_Apu.cpp in Sources */,
+				6E2C364D1334CB3900BE7D7B /* Gb_Oscs.cpp in Sources */,
+				6E2C364E1334CB3900BE7D7B /* Multi_Buffer.cpp in Sources */,
+				6E2C36521334CB3900BE7D7B /* Sound_Queue.cpp in Sources */,
+				6E2C36541334CB3900BE7D7B /* Wave_Writer.cpp in Sources */,
+				6E2C365F1334FF7100BE7D7B /* Sound.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,7 +447,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = /Library/Frameworks/SDL.framework/Versions/A/Headers;
+				HEADER_SEARCH_PATHS = (
+					"/Users/pablo/Documents/Programacion/gbpablog/src/Gb_Snd_Emu-0.1.4",
+					/Library/Frameworks/SDL.framework/Versions/A/Headers,
+				);
 				INFOPLIST_FILE = "gbpablog-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_CFLAGS = (
@@ -404,7 +513,10 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = /Library/Frameworks/SDL.framework/Versions/A/Headers;
+				HEADER_SEARCH_PATHS = (
+					"/Users/pablo/Documents/Programacion/gbpablog/src/Gb_Snd_Emu-0.1.4",
+					/Library/Frameworks/SDL.framework/Versions/A/Headers,
+				);
 				INFOPLIST_FILE = "gbpablog-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				ONLY_ACTIVE_ARCH = YES;

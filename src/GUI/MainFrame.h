@@ -47,6 +47,7 @@ private:
     MainPanel *panel;
 	SettingsDialog * settingsDialog;
 	Video * video;
+	Sound * sound;
 	Cartridge * cartridge;
 	
 	RecentFile recentFiles[MAX_RECENT_FILES];

@@ -26,12 +26,12 @@
 
 using namespace std;
 
-CPU::CPU(Video *v)
+CPU::CPU(Video *v, Sound * s): Memory(s)
 {
 	Init(v);
 }
 
-CPU::CPU(Video *v, Cartridge *c)
+CPU::CPU(Video *v, Cartridge *c, Sound * s): Memory(s)
 {
 	Init(v);
 	LoadCartridge(c);
@@ -73,6 +73,8 @@ void CPU::ExecuteOneFrame()
 	Instructions inst(this->GetPtrRegisters(), this->GetPtrMemory());
 	
 	frameCompleted = false;
+	
+	UpdatePad();
 
     while (!frameCompleted)
     {
@@ -875,7 +877,6 @@ void CPU::UpdateStateLCD()
 						if (BIT4(memory[STAT]))
 							memory[IF] |= 0x02;
 					}
-					v->RefreshScreen();
                 }
                 else // Sino, cambiamos al modo 2
                 {
@@ -907,7 +908,7 @@ void CPU::UpdateStateLCD()
 					if (BIT5(memory[STAT]) && screenOn)
 						memory[IF] |= 0x02;
 					
-					frameCompleted = true;
+					OnEndFrame();
                 }
                 else
                     memory[LY]++;
@@ -1025,6 +1026,14 @@ void CPU::UpdateTimer()
 		memory[DIV]++;
 		cyclesDIV = 0;
 	}
+}
+
+void CPU::OnEndFrame()
+{
+	v->RefreshScreen();
+	if (s)
+		s->EndFrame();
+	frameCompleted = true;
 }
 
 void CPU::SaveLog()

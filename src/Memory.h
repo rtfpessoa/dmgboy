@@ -20,6 +20,7 @@
 
 #include <fstream>
 #include "Cartridge.h"
+#include "Sound.h"
 #include "Pad.h"
 
 #define SIZE_MEM 65536
@@ -28,12 +29,13 @@ class Memory
 {
 protected:
 	Cartridge *c;
+	Sound * s;
 private:
 	void DmaTransfer(BYTE direction);
 public:
 	BYTE memory[SIZE_MEM];
 public:
-	Memory();
+	Memory(Sound * s);
 	~Memory();
 	Memory *GetPtrMemory();
 	void ResetMem();
@@ -45,6 +47,13 @@ public:
 		if ((direction < 0x8000) || ((direction >=0xA000) && (direction < 0xC000)))
 		{
 			return c->Read(direction);
+		}
+		else if ((direction >= 0xFF10) && (direction <= 0xFF3F))
+		{
+			if(s)
+				return s->ReadRegister(direction);
+			else
+				return 0;
 		}
 		return memory[direction];
 	}
