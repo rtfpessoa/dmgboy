@@ -18,6 +18,10 @@
 #ifndef __SOUND_H__
 #define __SOUND_H__
 
+#include "SDL.h"
+// Definir la siguiente linea para que en Visual Studio no haya conflicto
+// entre SDL y GB_Snd_Emu al definir tipos basicos
+#define BLARGG_COMPILER_HAS_NAMESPACE 1
 #include "Basic_Gb_Apu.h"
 #include "Sound_Queue.h"
 #include "Def.h"

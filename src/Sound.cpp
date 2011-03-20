@@ -16,7 +16,6 @@
  */
 
 #include <stdlib.h>
-#include "SDL.h"
 #include "Sound.h"
 
 static void handle_error( const char* str )

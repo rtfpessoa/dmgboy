@@ -15,6 +15,19 @@
     <ClInclude Include="..\..\..\src\CPU.h" />
     <ClInclude Include="..\..\..\src\Def.h" />
     <ClInclude Include="..\..\..\src\GBException.h" />
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Basic_Gb_Apu.h" />
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\boost\config.hpp" />
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\boost\cstdint.hpp" />
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\boost\static_assert.hpp" />
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\blargg_common.h" />
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\blargg_source.h" />
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.h" />
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Synth.h" />
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.h" />
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.h" />
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Multi_Buffer.h" />
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Sound_Queue.h" />
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Wave_Writer.h" />
     <ClInclude Include="..\..\..\src\GUI\AboutDialog.h" />
     <ClInclude Include="..\..\..\src\GUI\IDControls.h" />
     <ClInclude Include="..\..\..\src\GUI\InputTextCtrl.h" />
@@ -29,12 +42,20 @@
     <ClInclude Include="..\..\..\src\Pad.h" />
     <ClInclude Include="..\..\..\src\Registers.h" />
     <ClInclude Include="..\..\..\src\Settings.h" />
+    <ClInclude Include="..\..\..\src\Sound.h" />
     <ClInclude Include="..\..\..\src\Video.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Cartridge.cpp" />
     <ClCompile Include="..\..\..\src\CPU.cpp" />
     <ClCompile Include="..\..\..\src\GBException.cpp" />
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Basic_Gb_Apu.cpp" />
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.cpp" />
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.cpp" />
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp" />
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Multi_Buffer.cpp" />
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Sound_Queue.cpp" />
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Wave_Writer.cpp" />
     <ClCompile Include="..\..\..\src\GUI\AboutDialog.cpp" />
     <ClCompile Include="..\..\..\src\GUI\InputTextCtrl.cpp" />
     <ClCompile Include="..\..\..\src\GUI\MainApp.cpp" />
@@ -48,6 +69,7 @@
     <ClCompile Include="..\..\..\src\Pad.cpp" />
     <ClCompile Include="..\..\..\src\Registers.cpp" />
     <ClCompile Include="..\..\..\src\Settings.cpp" />
+    <ClCompile Include="..\..\..\src\Sound.cpp" />
     <ClCompile Include="..\..\..\src\Video.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -107,7 +129,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc;..\..\..\src\Gb_Snd_Emu-0.1.4</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>
@@ -132,7 +154,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc;..\..\..\src\Gb_Snd_Emu-0.1.4</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>

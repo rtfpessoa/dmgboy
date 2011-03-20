@@ -8,6 +8,9 @@
       <UniqueIdentifier>{8f6ade8e-23a1-4242-af58-42389df0e459}</UniqueIdentifier>
       <Extensions>*.cpp</Extensions>
     </Filter>
+    <Filter Include="GB_Snd_Emu">
+      <UniqueIdentifier>{ba321609-3103-4f49-be70-0c05dc898da3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\Video.h">
@@ -67,6 +70,48 @@
     <ClInclude Include="..\..\..\src\GUI\SettingsDialog.h">
       <Filter>GUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Wave_Writer.h">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Basic_Gb_Apu.h">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\blargg_common.h">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\blargg_source.h">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.h">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Synth.h">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\boost\config.hpp">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\boost\cstdint.hpp">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.h">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.h">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Multi_Buffer.h">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Sound_Queue.h">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\boost\static_assert.hpp">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Sound.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Cartridge.cpp">
@@ -118,6 +163,30 @@
       <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\GUI\SettingsDialog.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Basic_Gb_Apu.cpp">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Blip_Buffer.cpp">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Apu.cpp">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Gb_Oscs.cpp">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Multi_Buffer.cpp">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Sound_Queue.cpp">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Wave_Writer.cpp">
+      <Filter>GB_Snd_Emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Sound.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>
