@@ -5,7 +5,7 @@
 		<Option title="gbpablog" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="GUI/;HW/;" />
+		<Option virtualFolders="Gb_Snd_Emu/;HW/;GUI/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="gbpablog" prefix_auto="1" extension_auto="1" />
@@ -30,6 +30,7 @@
 		<Compiler>
 			<Add option="`wx-config --cxxflags` `sdl-config --cflags`" />
 			<Add directory="/usr/include/SDL" />
+			<Add directory="../../../src/Gb_Snd_Emu-0.1.4" />
 		</Compiler>
 		<Linker>
 			<Add option="`wx-config --libs` `sdl-config --libs`" />
@@ -95,6 +96,66 @@
 		<Unit filename="../../../src/GUI/SettingsDialog.h">
 			<Option virtualFolder="GUI/" />
 		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/Basic_Gb_Apu.cpp">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/Basic_Gb_Apu.h">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/Sound_Queue.cpp">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/Sound_Queue.h">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/Wave_Writer.cpp">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/Wave_Writer.h">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/boost/config.hpp">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/boost/cstdint.hpp">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/boost/static_assert.hpp">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/gb_apu/Blip_Buffer.cpp">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/gb_apu/Blip_Buffer.h">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/gb_apu/Blip_Synth.h">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/gb_apu/Gb_Apu.cpp">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/gb_apu/Gb_Apu.h">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/gb_apu/Gb_Oscs.cpp">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/gb_apu/Gb_Oscs.h">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/gb_apu/Multi_Buffer.cpp">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/gb_apu/Multi_Buffer.h">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/gb_apu/blargg_common.h">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
+		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/gb_apu/blargg_source.h">
+			<Option virtualFolder="Gb_Snd_Emu/" />
+		</Unit>
 		<Unit filename="../../../src/Instructions.cpp">
 			<Option virtualFolder="HW/" />
 		</Unit>
@@ -135,6 +196,12 @@
 			<Option virtualFolder="HW/" />
 		</Unit>
 		<Unit filename="../../../src/Settings.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Sound.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/Sound.h">
 			<Option virtualFolder="HW/" />
 		</Unit>
 		<Unit filename="../../../src/Video.cpp">
