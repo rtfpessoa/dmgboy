@@ -31,12 +31,20 @@ class Sound
 private:
 	Basic_Gb_Apu apu;
 	Sound_Queue sound;
+	bool initialized;
+	bool soundOn;
+	long sampleRate;
+	
+	int HandleError( const char* str );
 public:
 	Sound();
 	~Sound();
 	
-	inline void WriteRegister(WORD dir, BYTE value){ apu.write_register( dir, value ); }
-	inline BYTE ReadRegister(WORD dir){ return apu.read_register( dir ); }
+	int ChangeSampleRate(long newSampleRate);
+	int Start();
+	int Stop();
+	inline void WriteRegister(WORD dir, BYTE value) { apu.write_register( dir, value ); }
+	inline BYTE ReadRegister(WORD dir) { return apu.read_register( dir ); }
 	void EndFrame();
 };
 

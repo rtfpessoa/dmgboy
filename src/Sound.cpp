@@ -15,33 +15,49 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
+#include <iostream>
 #include "Sound.h"
 
-static void handle_error( const char* str )
+using namespace std;
+
+enum SoundError { ERROR, NO_ERROR };
+
+int Sound::HandleError( const char* str )
 {
 	if ( str )
 	{
-		fprintf( stderr, "Error: %s\n", str );
-		exit( EXIT_FAILURE );
+		cerr << "Error: " << str << endl;
+		return ERROR;
 	}
+	else
+		return NO_ERROR;
 }
 
 Sound::Sound()
 {
-	long const sample_rate = 44100;
+	soundOn = false;
+	initialized = true;
+	sampleRate = 44100;//22050;
 	
 	if ( SDL_Init( SDL_INIT_AUDIO ) < 0 )
-		//return EXIT_FAILURE;
+	{
+		initialized = false;
 		return;
+	}
+	
 	atexit( SDL_Quit );
 	
-	// Set sample rate and check for out of memory error
-	handle_error( apu.set_sample_rate( sample_rate ) );
+	if (ChangeSampleRate(sampleRate) == ERROR)
+	{
+		initialized = false;
+		return;
+	}
 	
-	// Generate a few seconds of sound and play using SDL
-	
-	handle_error( sound.start( sample_rate, 2 ) );
+	if (Start() == ERROR)
+	{
+		initialized = false;
+		return;
+	}
 }
 
 Sound::~Sound()
@@ -49,8 +65,64 @@ Sound::~Sound()
 
 }
 
+int Sound::ChangeSampleRate(long newSampleRate)
+{
+	if (!initialized)
+		return NO_ERROR;
+	
+	sampleRate = newSampleRate;
+	bool soundWasOn = soundOn;
+	
+	if (soundWasOn)
+		Stop();
+	
+	// Set sample rate and check for out of memory error
+	if (HandleError( apu.set_sample_rate(sampleRate) ) == ERROR)
+		return ERROR;
+	
+	if (soundWasOn)
+	{
+		if (Start() == ERROR)
+			return ERROR;
+	}
+	
+	return NO_ERROR;
+}
+
+int Sound::Start()
+{
+	if (!initialized)
+		return NO_ERROR;
+	
+	if (!soundOn)
+	{
+		// Generate a few seconds of sound and play using SDL
+		if (HandleError( sound.start(sampleRate, 2) ) == ERROR)
+			return ERROR;
+	}
+	soundOn = true;
+	
+	return NO_ERROR;
+}
+
+int Sound::Stop()
+{
+	if (!initialized)
+		return NO_ERROR;
+	
+	if (soundOn)
+		sound.stop();
+	
+	soundOn = false;
+	
+	return NO_ERROR;
+}
+
 void Sound::EndFrame()
 {
+	if (!initialized)
+		return;
+	
 	apu.end_frame();
 	
 	int const buf_size = 2048;
