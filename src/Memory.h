@@ -52,8 +52,6 @@ public:
 		{
 			if(s)
 				return s->ReadRegister(direction);
-			else
-				return 0;
 		}
 		return memory[direction];
 	}

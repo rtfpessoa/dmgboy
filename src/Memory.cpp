@@ -144,4 +144,10 @@ void Memory::SaveMemory(ofstream * file)
 void Memory::LoadMemory(ifstream * file)
 {
 	file->read((char *)&memory[0x8000], 0x8000);
+	if (s)
+	{
+		for (int dir=0xFF10; dir<0xFF40; dir++)
+			s->WriteRegister(dir, memory[dir]);
+	}
+	
 }
