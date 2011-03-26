@@ -60,6 +60,11 @@ void CPU::Reset()
 	ResetRegs();
 	ResetMem();
 	v->ClearScreen();
+	if (s)
+	{
+		s->Stop();
+		s->Start();
+	}
 }
 
 void CPU::ExecuteOneFrame()
