@@ -44,6 +44,7 @@ private:
 	wxMenu *recentMenuFile;
 	wxMenu *recentMenuPopup;
 	wxToolBar* toolBar;
+	wxTimer * timerExecution;
     MainPanel *panel;
 	SettingsDialog * settingsDialog;
 	Video * video;
@@ -77,7 +78,8 @@ private:
 	void OnStopUpdateUI(wxUpdateUIEvent& event);
 	void OnLoadStateUpdateUI(wxUpdateUIEvent& event);
 	void OnSaveStateUpdateUI(wxUpdateUIEvent& event);
-	void OnIdle(wxIdleEvent &event);
+	//void OnIdle(wxIdleEvent &event);
+	void OnTimer(wxTimerEvent &event);
 	void CreateMenuBar();
 	void CreateToolBar();
 	void CreateRecentMenu(std::string * roms);
@@ -89,9 +91,6 @@ private:
     
 public:
 	CPU * cpu;
-	
-	wxStopWatch swExecution;
-	wxStopWatch swFrame;
 	
     /**
      * Creates a new MainFrame.

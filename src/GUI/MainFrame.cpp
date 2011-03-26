@@ -55,7 +55,7 @@ EVT_UPDATE_UI( ID_PAUSE, MainFrame::OnPauseUpdateUI )
 EVT_UPDATE_UI( ID_STOP, MainFrame::OnStopUpdateUI )
 EVT_UPDATE_UI_RANGE(ID_LOADSTATE0, ID_LOADSTATE9, MainFrame::OnLoadStateUpdateUI)
 EVT_UPDATE_UI_RANGE(ID_SAVESTATE0, ID_SAVESTATE9, MainFrame::OnSaveStateUpdateUI)
-EVT_IDLE(MainFrame::OnIdle)
+EVT_TIMER(ID_TIMER, MainFrame::OnTimer)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(wxString fileName)
@@ -96,6 +96,11 @@ MainFrame::MainFrame(wxString fileName)
 
 	if (fileName != wxT(""))
 		ChangeFile(fileName);
+	
+	timerExecution = new wxTimer(this, ID_TIMER);
+	timerExecution->Start(16);
+	
+	//ShowFullScreen(true, wxFULLSCREEN_ALL);
 }
 
 MainFrame::~MainFrame()
@@ -466,6 +471,7 @@ void MainFrame::OnFileExit(wxCommandEvent &)
 void MainFrame::Clean()
 {
 	emuState = Stopped;
+	timerExecution->Stop();
 	delete cpu;
 	delete video;
 	delete sound;
@@ -562,38 +568,8 @@ void MainFrame::OnSaveStateUpdateUI(wxUpdateUIEvent& event)
 		event.Enable(true);
 }
 
-/**
- * Esta funcion se encarga de dar la orden de hacer aproximadamente los calculos
- * de la emulacion de un frame, pero lo hara cuando la interfaz haya terminado de
- * procesar todos los eventos. Se quiere que pinte los frames cada 16.6 milisegundos
- * (60 frames por segundo). Para ello se tiene en cuenta el tiempo que hace que se
- * llamo por ultima vez a esta funcion y el tiempo que ha tardado la emulacion en
- * calcularse.
- */
-void MainFrame::OnIdle(wxIdleEvent &event)
+void MainFrame::OnTimer(wxTimerEvent &event)
 {
-	long duration = 15;
-
-	long lastDuration = swFrame.Time();
-	swFrame.Start();
-
-	long delay = 0;
-
-	if (lastDuration > duration)
-		delay = lastDuration - duration;
-
-    if (emuState == Playing)
-	{
-		swExecution.Start();
-
+	if (emuState == Playing)
 		cpu->ExecuteOneFrame();
-
-		delay += swExecution.Time();
-	}
-
-	if (delay > duration)
-		delay = duration;
-
-	event.RequestMore(true);
-    wxMilliSleep(duration-delay);
 }
