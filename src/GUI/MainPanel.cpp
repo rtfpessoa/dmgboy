@@ -34,6 +34,7 @@ END_EVENT_TABLE()
 
 MainPanel::MainPanel(wxWindow *parent) : wxPanel(parent, ID_MAINPANEL), screen(0) {
     
+	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 	ChangeSize();
     windowParent = parent;
 	
@@ -84,7 +85,9 @@ void MainPanel::OnPaint(wxPaintEvent &) {
     }
     
     // paint the screen
-    wxBufferedPaintDC dc(this, bmp);
+    wxAutoBufferedPaintDC dc(this);
+	dc.DrawBitmap(bmp, 0, 0);
+	// dc.DrawText(wxString("Pokemon"), 0, 0);
 }
 
 void MainPanel::OnPreDraw()
