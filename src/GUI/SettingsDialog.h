@@ -34,9 +34,8 @@ private:
 	bool TransferDataFromWindow();
 	
 	wxPanel* CreateGeneralSettingsPage(wxWindow* parent);
+	wxPanel* CreateSoundSettingsPage(wxWindow* parent);
 	wxPanel* CreateInputSettingsPage(wxWindow* parent);
-	wxPanel* CreateGeneralSettingsPage2(wxWindow* parent);
-    wxPanel* CreateAestheticSettingsPage(wxWindow* parent);
 	
 public:
     SettingsDialog(wxWindow* parent);
