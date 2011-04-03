@@ -36,7 +36,7 @@ AboutDialog::AboutDialog (wxWindow *parent)
 	stringSDLVersion << (int)sdlVersion->major << wxT(".") << (int)sdlVersion->minor << wxT(".") << (int)sdlVersion->patch;
 
     // about info
-    wxGridSizer *aboutinfo = new wxGridSizer (2, 3, 3);
+    wxFlexGridSizer *aboutinfo = new wxFlexGridSizer (2, 3, 3);
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Version: ")));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT(APP_VERSION)));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Written by: ")));
@@ -47,24 +47,34 @@ AboutDialog::AboutDialog (wxWindow *parent)
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxVERSION_STRING));
 	aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("SDL: ")));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, stringSDLVersion));
+	aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Thanks to: ")));
+	aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Authors of Pan Docs")));
+	aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT("")));
+	aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT("bcrew1375 (Miracle GB)")));
+	aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT("")));
+	aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT("AntonioND (GiiBii)")));
+	aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT("")));
+	aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT("Shay Green (Gb_Snd_Emu)")));
 
     // about icontitle//info
     wxBoxSizer *aboutpane = new wxBoxSizer (wxHORIZONTAL);
     aboutpane->Add (new wxStaticBitmap (this, wxID_ANY, wxBitmap (gb64_xpm)),
-                    0, wxALIGN_CENTER | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 20);
-    aboutpane->Add (aboutinfo, 1, wxEXPAND);
-    aboutpane->Add (60, 0);
+                    0, wxRIGHT, 10);
+    aboutpane->Add (aboutinfo, 0, wxEXPAND);
+    //aboutpane->Add (60, 0);
 
     // about complete
     wxBoxSizer *totalpane = new wxBoxSizer (wxVERTICAL);
     totalpane->Add (0, 20);
     wxStaticText *appname = new wxStaticText (this, wxID_ANY, wxT(APP_NAME));
     appname->SetFont (wxFont (24, wxDEFAULT, wxNORMAL, wxBOLD));
-    totalpane->Add (appname, 0, wxALIGN_CENTER | wxLEFT | wxRIGHT, 40);
+    totalpane->Add (appname, 0, wxALIGN_CENTER);
     totalpane->Add (0, 10);
-    totalpane->Add (aboutpane, 0, wxALIGN_CENTER | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+    totalpane->Add (aboutpane, 0, wxALIGN_CENTER | wxRIGHT | wxLEFT, 20);
+	totalpane->Add (0, 10);
     wxHyperlinkCtrl *website = new wxHyperlinkCtrl (this, wxID_ANY, wxT(APP_WEBSITE), wxT(APP_WEBSITE));
-    totalpane->Add (website, 0, wxALIGN_CENTER | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+    totalpane->Add (website, 0, wxALIGN_CENTER);
+	totalpane->Add (0, 10);
 
     wxButton *okButton = new wxButton (this, wxID_OK, _("OK"));
     okButton->SetDefault();

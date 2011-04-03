@@ -156,8 +156,6 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
     wxPanel* panel = new wxPanel(parent, wxID_ANY);
 
 	wxStaticText * grayGreenLabel = new wxStaticText(panel, wxID_ANY, wxT("Color palette:"));
-	wxBoxSizer * grayGreenSizer = new wxBoxSizer(wxVERTICAL);
-	grayGreenSizer->Add(grayGreenLabel, 0, wxUP, 7);
 	wxString grayGreenChoices[2];
     grayGreenChoices[0] = wxT("Grayscale");
     grayGreenChoices[1] = wxT("Greenscale");
@@ -172,7 +170,7 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 	winZoomChoice->Append(wxT("4x"));
 
 	wxFlexGridSizer *grid = new wxFlexGridSizer(2, 3, 5);
-	grid->Add(grayGreenSizer);
+	grid->Add(grayGreenLabel, 0, wxUP, 7);
 	grid->Add(grayGreenRadioBox);
 	grid->Add(winZoomLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
 	grid->Add(winZoomChoice);
@@ -194,19 +192,19 @@ wxPanel* SettingsDialog::CreateSoundSettingsPage(wxWindow* parent)
 	enabledCheckBox->SetValue(true);
 	
 	wxStaticText * sampleRateLabel = new wxStaticText(panel, wxID_ANY, wxT("Sample Rate:"));
-    wxChoice* choiceSampleRate = new wxChoice(panel, wxID_ANY);
-	choiceSampleRate->Append(wxT("22050 Hz"));
-	choiceSampleRate->Append(wxT("32000 Hz"));
-	choiceSampleRate->Append(wxT("44100 Hz"));
-	choiceSampleRate->Append(wxT("48000 Hz"));
-	choiceSampleRate->SetSelection(0);
+    wxChoice* sampleRateChoice = new wxChoice(panel, wxID_ANY);
+	sampleRateChoice->Append(wxT("22050 Hz"));
+	sampleRateChoice->Append(wxT("32000 Hz"));
+	sampleRateChoice->Append(wxT("44100 Hz"));
+	sampleRateChoice->Append(wxT("48000 Hz"));
+	sampleRateChoice->SetSelection(0);
 	
 	wxFlexGridSizer *grid = new wxFlexGridSizer(2, 3, 5);
 	
 	grid->Add(enabledLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
 	grid->Add(enabledCheckBox);
 	grid->Add(sampleRateLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
-	grid->Add(choiceSampleRate);
+	grid->Add(sampleRateChoice);
 	
 	wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
 	topSizer->Add(grid, 0, wxALL, 10);
@@ -263,11 +261,10 @@ wxPanel* SettingsDialog::CreateInputSettingsPage(wxWindow* parent)
 	grid->Add(startLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
 	grid->Add(startTextCtrl);
 	
-	wxBoxSizer * widthSizer = new wxBoxSizer(wxVERTICAL);
-	widthSizer->Add(grid, 0, wxRIGHT|wxLEFT, 20);
-	
 	wxBoxSizer * topSizer = new wxBoxSizer(wxVERTICAL);
-	topSizer->Add(widthSizer, 0, wxALL, 10);
+	topSizer->Add(0, 10);
+	topSizer->Add(grid, 0, wxRIGHT|wxLEFT, 30);
+	topSizer->Add(0, 10);
 	
 	panel->SetSizerAndFit(topSizer);
 	
