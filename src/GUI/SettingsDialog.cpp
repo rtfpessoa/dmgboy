@@ -94,19 +94,31 @@ bool SettingsDialog::TransferDataToWindow()
 {
 	settings = SettingsGetCopy();
 	
-	wxRadioBox* greenscaleCtrl = (wxRadioBox*) FindWindow(ID_GREENSCALE);
-	wxChoice* winZoomCtrl = (wxChoice*) FindWindow(ID_WINZOOM);
-	InputTextCtrl* upCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_UP);
-	InputTextCtrl* downCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_DOWN);
-	InputTextCtrl* leftCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_LEFT);
-	InputTextCtrl* rightCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_RIGHT);
-	InputTextCtrl* aCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_A);
-	InputTextCtrl* bCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_B);
-	InputTextCtrl* selectCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_SELECT);
-	InputTextCtrl* startCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_START);
+	wxRadioBox* greenscaleCtrl = (wxRadioBox*)	  FindWindow(ID_GREENSCALE);
+	wxChoice* winZoomCtrl =		 (wxChoice*)	  FindWindow(ID_WINZOOM);
+	wxCheckBox* soundEnabledCtrl = (wxCheckBox*)	  FindWindow(ID_SOUND_ENABLED);
+	wxChoice* soundSRCtrl =		 (wxChoice*)	  FindWindow(ID_SOUND_SR);
+	InputTextCtrl* upCtrl =		 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_UP);
+	InputTextCtrl* downCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_DOWN);
+	InputTextCtrl* leftCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_LEFT);
+	InputTextCtrl* rightCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_RIGHT);
+	InputTextCtrl* aCtrl =		 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_A);
+	InputTextCtrl* bCtrl =		 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_B);
+	InputTextCtrl* selectCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_SELECT);
+	InputTextCtrl* startCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_START);
 
 	greenscaleCtrl->SetSelection(settings.greenScale);
 	winZoomCtrl->SetSelection(settings.windowZoom - 1);
+	
+	soundEnabledCtrl->SetValue(settings.soundEnabled);
+	int sampleRates[] = { 22050, 32000, 44100, 48000 };
+	int idSampleRate = 2;
+	for (int i=0; i<4; i++)
+	{
+		if (settings.soundSampleRate == sampleRates[i])
+			idSampleRate = i;
+	}
+	soundSRCtrl->SetSelection(idSampleRate);
 	
 	upCtrl->OnChangeKey(	settings.padKeys[0]);
 	downCtrl->OnChangeKey(	settings.padKeys[1]);
@@ -123,19 +135,25 @@ bool SettingsDialog::TransferDataToWindow()
 /*! * Transfer data from the window */
 bool SettingsDialog::TransferDataFromWindow()
 {
-	wxRadioBox* greenscaleCtrl = (wxRadioBox*) FindWindow(ID_GREENSCALE);
-	wxChoice* winZoomCtrl = (wxChoice*) FindWindow(ID_WINZOOM);
-	InputTextCtrl* upCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_UP);
-	InputTextCtrl* downCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_DOWN);
-	InputTextCtrl* leftCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_LEFT);
-	InputTextCtrl* rightCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_RIGHT);
-	InputTextCtrl* aCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_A);
-	InputTextCtrl* bCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_B);
-	InputTextCtrl* selectCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_SELECT);
-	InputTextCtrl* startCtrl = (InputTextCtrl*) FindWindow(ID_TEXTCTRL_START);
+	wxRadioBox* greenscaleCtrl = (wxRadioBox*)	  FindWindow(ID_GREENSCALE);
+	wxChoice* winZoomCtrl =		 (wxChoice*)	  FindWindow(ID_WINZOOM);
+	wxCheckBox* soundEnabledCtrl = (wxCheckBox*)  FindWindow(ID_SOUND_ENABLED);
+	wxChoice* soundSRCtrl =		 (wxChoice*)	  FindWindow(ID_SOUND_SR);
+	InputTextCtrl* upCtrl =		 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_UP);
+	InputTextCtrl* downCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_DOWN);
+	InputTextCtrl* leftCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_LEFT);
+	InputTextCtrl* rightCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_RIGHT);
+	InputTextCtrl* aCtrl =		 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_A);
+	InputTextCtrl* bCtrl =		 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_B);
+	InputTextCtrl* selectCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_SELECT);
+	InputTextCtrl* startCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_START);
 
 	settings.greenScale = greenscaleCtrl->GetSelection();
 	settings.windowZoom = winZoomCtrl->GetSelection()+1;
+	settings.soundEnabled = soundEnabledCtrl->GetValue();
+	int sampleRates[] = { 22050, 32000, 44100, 48000 };
+	int idSampleRate = soundSRCtrl->GetSelection();
+	settings.soundSampleRate = sampleRates[idSampleRate];
 
 	settings.padKeys[0] = upCtrl->keyCode;
 	settings.padKeys[1] = downCtrl->keyCode;
@@ -185,14 +203,14 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 
 wxPanel* SettingsDialog::CreateSoundSettingsPage(wxWindow* parent)
 {
-    wxPanel* panel = new wxPanel(parent, wxID_ANY);
+	wxPanel* panel = new wxPanel(parent, wxID_ANY);
 	
 	wxStaticText * enabledLabel = new wxStaticText(panel, wxID_ANY, wxT("Enabled:"));
-	wxCheckBox * enabledCheckBox = new wxCheckBox(panel, wxID_ANY, wxT(""));
+	wxCheckBox * enabledCheckBox = new wxCheckBox(panel, ID_SOUND_ENABLED, wxT(""));
 	enabledCheckBox->SetValue(true);
 	
 	wxStaticText * sampleRateLabel = new wxStaticText(panel, wxID_ANY, wxT("Sample Rate:"));
-    wxChoice* sampleRateChoice = new wxChoice(panel, wxID_ANY);
+    wxChoice* sampleRateChoice = new wxChoice(panel, ID_SOUND_SR);
 	sampleRateChoice->Append(wxT("22050 Hz"));
 	sampleRateChoice->Append(wxT("32000 Hz"));
 	sampleRateChoice->Append(wxT("44100 Hz"));
@@ -200,7 +218,6 @@ wxPanel* SettingsDialog::CreateSoundSettingsPage(wxWindow* parent)
 	sampleRateChoice->SetSelection(0);
 	
 	wxFlexGridSizer *grid = new wxFlexGridSizer(2, 3, 5);
-	
 	grid->Add(enabledLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
 	grid->Add(enabledCheckBox);
 	grid->Add(sampleRateLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
@@ -217,7 +234,6 @@ wxPanel* SettingsDialog::CreateSoundSettingsPage(wxWindow* parent)
 wxPanel* SettingsDialog::CreateInputSettingsPage(wxWindow* parent)
 {
 	wxPanel* panel = new wxPanel(parent, wxID_ANY);
-	
 	
     wxStaticText * upLabel = new wxStaticText(panel, wxID_ANY, wxT("Up:"));
 	InputTextCtrl * upTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_UP);
@@ -289,6 +305,9 @@ void SettingsDialog::SaveToFile(bool reloadSettings)
 	fileConfig.Write(wxT("General/greenScale"), settings.greenScale);
 	fileConfig.Write(wxT("General/windowZoom"), settings.windowZoom);
 	
+	fileConfig.Write(wxT("Sound/enabled"), settings.soundEnabled);
+	fileConfig.Write(wxT("Sound/sampleRate"), settings.soundSampleRate);
+	
 	fileConfig.Write(wxT("Input/up"), settings.padKeys[0]);
 	fileConfig.Write(wxT("Input/down"), settings.padKeys[1]);
 	fileConfig.Write(wxT("Input/left"), settings.padKeys[2]);
@@ -326,14 +345,17 @@ void SettingsDialog::LoadFromFile()
 	fileConfig.Read(wxT("General/greenScale"), &settings.greenScale);
 	fileConfig.Read(wxT("General/windowZoom"), &settings.windowZoom);
 	
-	fileConfig.Read(wxT("Input/up"), &settings.padKeys[0]);
-	fileConfig.Read(wxT("Input/down"), &settings.padKeys[1]);
-	fileConfig.Read(wxT("Input/left"), &settings.padKeys[2]);
-	fileConfig.Read(wxT("Input/right"), &settings.padKeys[3]);
-	fileConfig.Read(wxT("Input/a"), &settings.padKeys[4]);
-	fileConfig.Read(wxT("Input/b"), &settings.padKeys[5]);
+	fileConfig.Read(wxT("Sound/enabled"),	 &settings.soundEnabled);
+	fileConfig.Read(wxT("Sound/sampleRate"), &settings.soundSampleRate);
+	
+	fileConfig.Read(wxT("Input/up"),	 &settings.padKeys[0]);
+	fileConfig.Read(wxT("Input/down"),	 &settings.padKeys[1]);
+	fileConfig.Read(wxT("Input/left"),	 &settings.padKeys[2]);
+	fileConfig.Read(wxT("Input/right"),  &settings.padKeys[3]);
+	fileConfig.Read(wxT("Input/a"),		 &settings.padKeys[4]);
+	fileConfig.Read(wxT("Input/b"),		 &settings.padKeys[5]);
 	fileConfig.Read(wxT("Input/select"), &settings.padKeys[6]);
-	fileConfig.Read(wxT("Input/start"), &settings.padKeys[7]);
+	fileConfig.Read(wxT("Input/start"),  &settings.padKeys[7]);
 	
 	wxString auxString[10];
 	fileConfig.Read(wxT("RecentRoms/01"), &auxString[0]);

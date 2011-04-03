@@ -43,8 +43,9 @@ public:
 	int ChangeSampleRate(long newSampleRate);
 	int Start();
 	int Stop();
-	inline void WriteRegister(WORD dir, BYTE value) { apu.write_register( dir, value ); }
-	inline BYTE ReadRegister(WORD dir) { return apu.read_register( dir ); }
+	void SetState(bool enabled);
+	inline void WriteRegister(WORD dir, BYTE value) { if (soundOn) apu.write_register( dir, value ); }
+	inline BYTE ReadRegister(WORD dir) { return soundOn ? apu.read_register( dir ) : 0; }
 	void EndFrame();
 };
 

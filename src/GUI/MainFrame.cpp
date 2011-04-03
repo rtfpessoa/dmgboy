@@ -93,6 +93,8 @@ MainFrame::MainFrame(wxString fileName)
 	emuState = NotStartedYet;
 
 	this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
+	sound->ChangeSampleRate(SettingsGetSoundSampleRate());
+	sound->SetState(SettingsGetSoundEnabled());
 
 	if (fileName != wxT(""))
 		ChangeFile(fileName);
@@ -498,6 +500,8 @@ void MainFrame::OnSettings(wxCommandEvent &)
 		panel->ChangeSize();
 		this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
 		PadSetKeys(SettingsGetInput());
+		sound->ChangeSampleRate(SettingsGetSoundSampleRate());
+		sound->SetState(SettingsGetSoundEnabled());
 	}
 
 	emuState = lastState;

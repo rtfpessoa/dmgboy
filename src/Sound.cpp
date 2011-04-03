@@ -118,9 +118,17 @@ int Sound::Stop()
 	return NO_ERROR;
 }
 
+void Sound::SetState(bool enabled)
+{
+	if (enabled)
+		Start();
+	else
+		Stop();
+}
+
 void Sound::EndFrame()
 {
-	if (!initialized)
+	if ((!initialized) || (!soundOn))
 		return;
 	
 	apu.end_frame();

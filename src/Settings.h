@@ -24,9 +24,11 @@ class Settings
 {
 public:
 	bool greenScale;
-	int windowZoom;
+	int  windowZoom;
+	bool soundEnabled;
+	int  soundSampleRate;
 	
-	int padKeys[8];
+	int  padKeys[8];
 	std::string recentRoms[10];
 	
 public:
@@ -37,6 +39,8 @@ Settings SettingsGetCopy();
 
 bool SettingsGetGreenScale();
 int  SettingsGetWindowZoom();
+bool SettingsGetSoundEnabled();
+int  SettingsGetSoundSampleRate();
 int* SettingsGetInput();
 std::string* SettingsGetRecentRoms();
 
@@ -44,6 +48,8 @@ void SettingsSetNewValues(Settings newSettings);
 
 void SettingsSetGreenScale(bool greenScale);
 void SettingsSetWindowZoom(int windowZoom);
+void SettingsSetSoundEnabled(bool enabled);
+void SettingsSetSoundSampleRate(int sampleRate);
 void SettingsSetInput(const int* padKeys);
 void SettingsSetRecentRoms(const std::string* recentRoms);
 

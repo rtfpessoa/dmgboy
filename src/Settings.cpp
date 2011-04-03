@@ -27,6 +27,9 @@ Settings::Settings()
 	greenScale	= false;
 	windowZoom	= 1;
 	
+	soundEnabled	= true;
+	soundSampleRate = 44100;
+	
 	padKeys[0]	= WXK_UP;	// Up
 	padKeys[1]	= WXK_DOWN; // Down
 	padKeys[2]	= WXK_LEFT; // Left
@@ -65,6 +68,26 @@ int SettingsGetWindowZoom()
 void SettingsSetWindowZoom(int windowZoom)
 {
 	settings.windowZoom = windowZoom;
+}
+
+bool SettingsGetSoundEnabled()
+{
+	return settings.soundEnabled;
+}
+
+void SettingsSetSoundEnabled(bool enabled)
+{
+	settings.soundEnabled = enabled;
+}
+
+int SettingsGetSoundSampleRate()
+{
+	return settings.soundSampleRate;
+}
+
+void SettingsSetSoundSampleRate(int sampleRate)
+{
+	settings.soundSampleRate = sampleRate;
 }
 
 int* SettingsGetInput()
