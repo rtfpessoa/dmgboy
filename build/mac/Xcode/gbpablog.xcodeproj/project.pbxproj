@@ -25,25 +25,33 @@
 		6E23C73E11D7CD510043AF47 /* Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72F11D7CD510043AF47 /* Registers.cpp */; };
 		6E23C74011D7CD510043AF47 /* Video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C73311D7CD510043AF47 /* Video.cpp */; };
 		6E2C36471334CB3900BE7D7B /* Basic_Gb_Apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C362A1334CB3900BE7D7B /* Basic_Gb_Apu.cpp */; };
-		6E2C36481334CB3900BE7D7B /* changes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6E2C36301334CB3900BE7D7B /* changes.txt */; };
 		6E2C364B1334CB3900BE7D7B /* Blip_Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C36361334CB3900BE7D7B /* Blip_Buffer.cpp */; };
 		6E2C364C1334CB3900BE7D7B /* Gb_Apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C36391334CB3900BE7D7B /* Gb_Apu.cpp */; };
 		6E2C364D1334CB3900BE7D7B /* Gb_Oscs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C363B1334CB3900BE7D7B /* Gb_Oscs.cpp */; };
 		6E2C364E1334CB3900BE7D7B /* Multi_Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C363D1334CB3900BE7D7B /* Multi_Buffer.cpp */; };
-		6E2C364F1334CB3900BE7D7B /* LGPL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6E2C363F1334CB3900BE7D7B /* LGPL.txt */; };
-		6E2C36501334CB3900BE7D7B /* notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6E2C36401334CB3900BE7D7B /* notes.txt */; };
-		6E2C36511334CB3900BE7D7B /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6E2C36411334CB3900BE7D7B /* readme.txt */; };
 		6E2C36521334CB3900BE7D7B /* Sound_Queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C36421334CB3900BE7D7B /* Sound_Queue.cpp */; };
-		6E2C36531334CB3900BE7D7B /* usage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6E2C36441334CB3900BE7D7B /* usage.txt */; };
 		6E2C36541334CB3900BE7D7B /* Wave_Writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C36451334CB3900BE7D7B /* Wave_Writer.cpp */; };
 		6E2C365F1334FF7100BE7D7B /* Sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C365E1334FF7100BE7D7B /* Sound.cpp */; };
+		6E974A5A134F586C00ECC09C /* SDL.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6E23C6DB11D7CB770043AF47 /* SDL.framework */; };
 		6EA1AB79127F0F0E00AC510C /* AboutDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */; };
 		6EDDDE7512EA037200BFB26A /* InputTextCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDDE7412EA037200BFB26A /* InputTextCtrl.cpp */; };
-		6EFA5276126354F2000E541D /* ToDo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6EFA5275126354F2000E541D /* ToDo.txt */; };
 		6EFEDB441245230600646E83 /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEDB421245230600646E83 /* Settings.cpp */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6E974A4A134F562900ECC09C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6E974A5A134F586C00ECC09C /* SDL.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -325,6 +333,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				6E974A4A134F562900ECC09C /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -368,12 +377,6 @@
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
 				6E205760120589BF00079331 /* gbpablog.icns in Resources */,
-				6EFA5276126354F2000E541D /* ToDo.txt in Resources */,
-				6E2C36481334CB3900BE7D7B /* changes.txt in Resources */,
-				6E2C364F1334CB3900BE7D7B /* LGPL.txt in Resources */,
-				6E2C36501334CB3900BE7D7B /* notes.txt in Resources */,
-				6E2C36511334CB3900BE7D7B /* readme.txt in Resources */,
-				6E2C36531334CB3900BE7D7B /* usage.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
