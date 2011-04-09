@@ -15,27 +15,20 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Video.h"
 #include <iostream>
-#include "GUI/MainPanel.h"
+#include "Video.h"
 
 using namespace std;
 
-Video::Video(MainPanel * panel)
+Video::Video(IGBScreenDraw * screen)
 {
 	this->pixel = new VideoPixel();
-	this->panel = panel;
-	//onVideoInit(SCREEN_W, SCREEN_H);
+	this->screen = screen;
 }
 
 Video::~Video(void)
 {
 	
-}
-
-void Video::Close()
-{
-	//onVideoClose();
 }
 
 void Video::SetMem(Memory *mem)
@@ -45,24 +38,24 @@ void Video::SetMem(Memory *mem)
 
 void Video::UpdateLine(BYTE y)
 {
-	panel->OnPreDraw();
+	screen->OnPreDraw();
 
 	OrderOAM(y);
 	UpdateBG(y);
 	UpdateWin(y);
 	UpdateOAM(y);
 
-	panel->OnPostDraw();
+	screen->OnPostDraw();
 }
 
 void Video::RefreshScreen()
 {
-	panel->OnRefreshScreen();
+	screen->OnRefreshScreen();
 }
 
 void Video::ClearScreen()
 {
-	panel->OnClear();
+	screen->OnClear();
 }
 
 void Video::UpdateBG(int y)
@@ -81,7 +74,7 @@ void Video::UpdateBG(int y)
 	if (!display)
 	{
 		for (x=0; x<GB_SCREEN_W; x++)
-			panel->OnDrawPixel(3, x, y);
+			screen->OnDrawPixel(3, x, y);
 		
 		return;
 	}
@@ -111,7 +104,7 @@ void Video::UpdateBG(int y)
 
 		GetColor(pixel);
 
-		panel->OnDrawPixel(pixel->color, x, y);
+		screen->OnDrawPixel(pixel->color, x, y);
 		indexColorsBGWnd[x][y] = pixel->indexColor;
 	}
 }
@@ -154,7 +147,7 @@ void Video::UpdateWin(int y)
 
 		GetColor(pixel);
 
-		panel->OnDrawPixel(pixel->color, x, y);
+		screen->OnDrawPixel(pixel->color, x, y);
 		indexColorsBGWnd[x][y] = pixel->indexColor;
 	}
 }
@@ -288,7 +281,7 @@ void Video::UpdateOAM(int y)
 					color = palette1[index];
 
 
-				panel->OnDrawPixel(color, xSprite + countX, ySprite + countY);
+				screen->OnDrawPixel(color, xSprite + countX, ySprite + countY);
 			}
 
 			countX++;

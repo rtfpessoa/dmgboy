@@ -1,7 +1,6 @@
 - Pasarlo a OpenGL
 - Multi idioma / unicode
 - Permitir cargar roms comprimidas en 7z
-- Mejorar la precision de los frames por segundo 16.742 en vez de 17
 
 Terminado:
 - Sonido

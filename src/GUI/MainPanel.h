@@ -21,13 +21,14 @@
 #include <wx/wx.h>
 #include <wx/dnd.h>
 #include "SDL.h"
+#include "../IGBScreenDraw.h"
 
 
 /*******************************************************************************
  * MainPanel Class
  *******************************************************************************/
 
-class MainPanel : public wxPanel {
+class MainPanel : public wxPanel, public IGBScreenDraw {
     DECLARE_CLASS(MainPanel)
     DECLARE_EVENT_TABLE()
 
