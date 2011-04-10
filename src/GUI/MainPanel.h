@@ -21,20 +21,21 @@
 #include <wx/wx.h>
 #include <wx/dnd.h>
 #include "SDL.h"
-#include "../IGBScreenDraw.h"
+#include "../IGBScreenDrawable.h"
+#include "../Def.h"
 
 
 /*******************************************************************************
  * MainPanel Class
  *******************************************************************************/
 
-class MainPanel : public wxPanel, public IGBScreenDraw {
+class MainPanel : public wxPanel, public IGBScreenDrawable {
     DECLARE_CLASS(MainPanel)
     DECLARE_EVENT_TABLE()
 
 private:
-	Uint32 colors[4];
-    SDL_Surface *screen;
+	int selPalette;
+    BYTE * imgBuf;
 	
     void OnPaint(wxPaintEvent &);
     void OnEraseBackground(wxEraseEvent &);

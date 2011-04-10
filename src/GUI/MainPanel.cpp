@@ -32,138 +32,138 @@ EVT_PAINT(MainPanel::OnPaint)
 EVT_ERASE_BACKGROUND(MainPanel::OnEraseBackground)
 END_EVENT_TABLE()
 
-MainPanel::MainPanel(wxWindow *parent) : wxPanel(parent, ID_MAINPANEL), screen(0) {
+BYTE palettes[][4][3] =		{
+								{
+									{ 16,  57,  16},
+									{ 49,  99,  49},
+									{140, 173,  16},
+									{156, 189,  16}
+								},
+								{
+									{  0,   0,   0},
+									{ 85,  85,  85},
+									{170, 170, 170},
+									{255, 255, 255}
+								}
+							};
+
+
+MainPanel::MainPanel(wxWindow *parent) : wxPanel(parent, ID_MAINPANEL) {
     
+	imgBuf = NULL;
 	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-	ChangeSize();
     windowParent = parent;
 	
 	CreateScreen();
+	ChangeSize();
 	
 	this->SetDropTarget(new DnDFile(parent));
 }
 
 MainPanel::~MainPanel() {
-    if (screen) {
-        SDL_FreeSurface(screen);
-    }
+    delete[] imgBuf;
+}
+
+void MainPanel::CreateScreen() {
+	imgBuf = new BYTE[GB_SCREEN_W*GB_SCREEN_H*3];
+	OnClear();
+	ChangePalette(SettingsGetGreenScale());
 }
 
 void MainPanel::ChangeSize()
 {
-	// ensure the size of the wxPanel
-	wxSize size(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
+	int zoom = SettingsGetWindowZoom();
     
+	wxSize size(GB_SCREEN_W*zoom, GB_SCREEN_H*zoom);
     SetMinSize(size);
     SetMaxSize(size);
 }
 
 void MainPanel::OnPaint(wxPaintEvent &) {
-    // can't draw if the screen doesn't exist yet
-    if (!screen) {
-        return;
-    }
     
-    // lock the surface if necessary
-    if (SDL_MUSTLOCK(screen)) {
-        if (SDL_LockSurface(screen) < 0) {
-            return;
-        }
-    }
-    
-    // create a bitmap from our pixel data
-	wxImage img = wxImage(screen->w, screen->h, static_cast<unsigned char *>(screen->pixels), true);
+	wxImage img = wxImage(GB_SCREEN_W, GB_SCREEN_H, imgBuf, true);
 	
 	int winZoom = SettingsGetWindowZoom();
 	if (winZoom > 1)
 		img.Rescale(GB_SCREEN_W*winZoom, GB_SCREEN_H*winZoom, wxIMAGE_QUALITY_NORMAL);
     wxBitmap bmp(img);
     
-    // unlock the screen
-    if (SDL_MUSTLOCK(screen)) {
-        SDL_UnlockSurface(screen);
-    }
-    
     // paint the screen
     wxAutoBufferedPaintDC dc(this);
 	dc.DrawBitmap(bmp, 0, 0);
+		
 	// dc.DrawText(wxString("Pokemon"), 0, 0);
 }
 
 void MainPanel::OnPreDraw()
 {
-	if ( SDL_MUSTLOCK(screen) )
-    {
-        if ( SDL_LockSurface(screen) < 0 )
-            return;
-    }
+	
 }
 
 void MainPanel::OnPostDraw()
 {
-	if ( SDL_MUSTLOCK(screen) )
-        SDL_UnlockSurface(screen);
+	
 }
 
 void MainPanel::OnRefreshScreen()
 {
 	// refresh the panel
     Refresh(false);
-}
-
-void MainPanel::CreateScreen() {
-    if (!screen) {
-        screen = SDL_CreateRGBSurface(SDL_SWSURFACE, GB_SCREEN_W, GB_SCREEN_H, 
-                                      24, 0, 0, 0, 0);
-		
-		ChangePalette(SettingsGetGreenScale());
-    }
+	Update();
 }
 
 void MainPanel::ChangePalette(bool original)
 {
-	if (!screen)
-		return;
-	
 	if (original)
-	{
-		colors[0] = SDL_MapRGB(screen->format,  16,  57, 16);
-		colors[1] = SDL_MapRGB(screen->format,  49,  99, 49);
-		colors[2] = SDL_MapRGB(screen->format, 140, 173, 16);
-		colors[3] = SDL_MapRGB(screen->format, 156, 189, 16);
-	}
-	else {
-		//Inicializar un array con los 4 colores posibles (negro, gris oscuro, gris claro, blanco)
-		for (int i=0; i<4; i++)
-			colors[i] = SDL_MapRGB(screen->format, i*85, i*85, i*85);
-	}
-
+		selPalette = 0;
+	else
+		selPalette = 1;
 }
 
 void MainPanel::OnClear()
 {
-	SDL_FillRect( screen, NULL, 0 );
+	int size = GB_SCREEN_W*GB_SCREEN_H*3;
+	memset(imgBuf, 0, size);
 }
 
-//idColor = 0, 1, 2, 3 = negro, gris oscuro, gris claro, blanco
 void MainPanel::OnDrawPixel(int idColor, int x, int y)
 {
-	Uint32 color = colors[idColor];
+	/*
+	int zoom = SettingsGetWindowZoom();
 	
-	wxUint8 *pixels = static_cast<wxUint8 *>(screen->pixels) + 
-	(y * screen->pitch) +
-	(x * screen->format->BytesPerPixel);
+	void * ptrPalette = &palettes[selPalette][idColor][0];
+	unsigned long offsetBuf = 0;
+	int sizeLine = GB_SCREEN_W * 3 * zoom;
+	int offsetX = x * 3 * zoom;
+	int offsetY = 0;
 	
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	pixels[0] = color & 0xFF;
-	pixels[1] = (color >> 8) & 0xFF;
-	pixels[2] = (color >> 16) & 0xFF;
-#else
-	pixels[0] = (color >> 16) & 0xFF;
-	pixels[1] = (color >> 8) & 0xFF;
-	pixels[2] = color & 0xFF;
-#endif
+	int i, j;
 	
+	for (i=0; i<zoom; i++)
+	{
+		offsetY = (y * zoom + i) * sizeLine;
+		offsetBuf = offsetY + offsetX;
+		
+		for (j=0; j<zoom; j++)
+		{
+			memcpy(&imgBuf[offsetBuf], ptrPalette, 3);
+			offsetBuf += 3;
+		}
+	}
+	 */
+
+	BYTE colorR = palettes[selPalette][idColor][0];
+	BYTE colorG = palettes[selPalette][idColor][1];
+	BYTE colorB = palettes[selPalette][idColor][2];
+	
+	int sizeLine = GB_SCREEN_W * 3;
+	int offsetX = x * 3;
+	int offsetY = y * sizeLine;
+	int offsetBuf = offsetY + offsetX;
+	
+	imgBuf[offsetBuf + 0] = colorR;
+	imgBuf[offsetBuf + 1] = colorG;
+	imgBuf[offsetBuf + 2] = colorB;
 }
 
 DnDFile::DnDFile(wxWindow * parent)

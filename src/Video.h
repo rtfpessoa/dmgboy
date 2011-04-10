@@ -21,7 +21,7 @@
 #include "map"
 #include "Def.h"
 #include "Memory.h"
-#include "IGBScreenDraw.h"
+#include "IGBScreenDrawable.h"
 
 struct VideoPixel
 {
@@ -39,10 +39,10 @@ private:
 	Memory *mem;
 	std::multimap<int, int> orderedOAM;	//posicion x, dir. memoria
 	int indexColorsBGWnd[GB_SCREEN_W][GB_SCREEN_H];	//Indice de color en pantalla pintadas por background y window
-	IGBScreenDraw * screen;
+	IGBScreenDrawable * screen;
 	VideoPixel * pixel;
 public:
-	Video(IGBScreenDraw * screen);
+	Video(IGBScreenDrawable * screen);
 	~Video(void);
 	void SetMem(Memory *mem);
 	void RefreshScreen();

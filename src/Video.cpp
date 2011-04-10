@@ -20,7 +20,7 @@
 
 using namespace std;
 
-Video::Video(IGBScreenDraw * screen)
+Video::Video(IGBScreenDrawable * screen)
 {
 	this->pixel = new VideoPixel();
 	this->screen = screen;

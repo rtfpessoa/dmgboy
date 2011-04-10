@@ -15,10 +15,10 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __IGBSCREENDRAW_H__
-#define __IGBSCREENDRAW_H__
+#ifndef __IGBSCREENDRAWABLE_H__
+#define __IGBSCREENDRAWABLE_H__
 
-class IGBScreenDraw
+class IGBScreenDrawable
 {
 public:
 	virtual void OnPreDraw() = 0;

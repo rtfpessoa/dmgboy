@@ -119,7 +119,7 @@
 		6E2C36461334CB3900BE7D7B /* Wave_Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wave_Writer.h; path = "../../../src/Gb_Snd_Emu-0.1.4/Wave_Writer.h"; sourceTree = SOURCE_ROOT; };
 		6E2C365D1334FF7100BE7D7B /* Sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sound.h; path = ../../../src/Sound.h; sourceTree = SOURCE_ROOT; };
 		6E2C365E1334FF7100BE7D7B /* Sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sound.cpp; path = ../../../src/Sound.cpp; sourceTree = SOURCE_ROOT; };
-		6E974A6413508F1A00ECC09C /* IGBScreenDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IGBScreenDraw.h; path = ../../../src/IGBScreenDraw.h; sourceTree = SOURCE_ROOT; };
+		6E974A6413508F1A00ECC09C /* IGBScreenDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IGBScreenDrawable.h; path = ../../../src/IGBScreenDrawable.h; sourceTree = SOURCE_ROOT; };
 		6EA1AB77127F0F0E00AC510C /* AboutDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutDialog.h; sourceTree = "<group>"; };
 		6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AboutDialog.cpp; sourceTree = "<group>"; };
 		6EDDDE7312EA037200BFB26A /* InputTextCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputTextCtrl.h; sourceTree = "<group>"; };
@@ -252,7 +252,7 @@
 				6E23C72111D7CD510043AF47 /* Def.h */,
 				6E23C72311D7CD510043AF47 /* GBException.cpp */,
 				6E23C72411D7CD510043AF47 /* GBException.h */,
-				6E974A6413508F1A00ECC09C /* IGBScreenDraw.h */,
+				6E974A6413508F1A00ECC09C /* IGBScreenDrawable.h */,
 				6E23C72511D7CD510043AF47 /* Instructions.cpp */,
 				6E23C72611D7CD510043AF47 /* Instructions.h */,
 				6E23C72711D7CD510043AF47 /* Log.cpp */,
