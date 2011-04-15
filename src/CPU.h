@@ -36,7 +36,8 @@ private:
 	WORD cyclesLCD;
 	WORD cyclesTimer;
 	WORD cyclesDIV;
-	int cyclesPad;
+	WORD cyclesSerial;
+	int bitSerial;
 	Video *v;
 	QueueLog *log;
 	BYTE instructionCycles[0xFF];
@@ -60,6 +61,7 @@ private:
 	void OpCodeCB(Instructions * inst);
 	void UpdateStateLCD();
 	void UpdateTimer();
+	void UpdateSerial();
 	void Interrupts(Instructions * inst);
 	void CheckLYC();
 	void OnEndFrame();

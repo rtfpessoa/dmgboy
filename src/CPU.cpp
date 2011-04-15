@@ -41,6 +41,7 @@ void CPU::Init(Video *v)
 {
 	numInstructions = 0;
 	cyclesLCD = 0;
+	bitSerial = -1;
 	this->v = v;
 	v->SetMem(this->GetPtrMemory());
 	
@@ -80,6 +81,8 @@ void CPU::ExecuteOneFrame()
 	frameCompleted = false;
 	
 	UpdatePad();
+	
+	//log->Enqueue("\n\nStartFrame", NULL, "");
 
     while (!frameCompleted)
     {
@@ -88,13 +91,15 @@ void CPU::ExecuteOneFrame()
 		OpCode = MemR(Get_PC());
         NextOpcode = MemR(Get_PC() + 1);
 		
-		/*stringstream ssOpCode;
+		/*
+		stringstream ssOpCode;
 		ssOpCode << numInstructions << " - ";
 		ssOpCode << "OpCode: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
 		if (OpCode == 0xCB)
 			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
 		ssOpCode << ", ";
-		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");*/
+		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
+		 */
 		
 		lastCycles = 4;
 		
@@ -379,14 +384,15 @@ void CPU::ExecuteOneFrame()
 				lastCycles = instructionCycles[OpCode];
 		}
 
-		cyclesLCD += lastCycles;
-		cyclesTimer += lastCycles;
-		cyclesDIV += lastCycles;
-		//cyclesPad += lastCycles;
+		cyclesLCD	 += lastCycles;
+		cyclesTimer  += lastCycles;
+		cyclesDIV	 += lastCycles;
 		actualCycles += lastCycles;
+		cyclesSerial += lastCycles;
 
         UpdateStateLCD();
 		UpdateTimer();
+		UpdateSerial();
         Interrupts(&inst);
 		
 	}//end for
@@ -948,7 +954,7 @@ void CPU::UpdateStateLCD()
 	}
 }
 
-void CPU::CheckLYC()
+inline void CPU::CheckLYC()
 {
 	if (memory[LY] == memory[LYC])
 	{
@@ -958,6 +964,36 @@ void CPU::CheckLYC()
 	}
 	else
 		memory[STAT] &= ~0x04;
+}
+
+inline void CPU::UpdateSerial()
+{
+	if (BIT7(memory[SC]) && BIT0(memory[SC]))
+	{
+		if (bitSerial < 0)
+		{
+			bitSerial = 0;
+			cyclesSerial = 0;
+			return;
+		}
+		
+		if (cyclesSerial >= 512)
+		{
+			if (bitSerial > 7)
+			{
+				memory[SC] &= 0x7F;
+				memory[IF] |= 0x08;
+				bitSerial = -1;
+				return;
+			}
+			
+			memory[SB] = memory[SB] << 1;
+			memory[SB] |= 0x01;
+			
+			cyclesSerial -= 512;
+			bitSerial++;
+		}
+	}
 }
 
 void CPU::Interrupts(Instructions * inst)
