@@ -61,7 +61,7 @@ void CPU::Reset()
 	ResetRegs();
 	ResetMem();
 	v->ClearScreen();
-	if (s)
+	if (s && (s->GetEnabled()))
 	{
 		s->Stop();
 		s->Start();

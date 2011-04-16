@@ -35,7 +35,7 @@ int Sound::HandleError( const char* str )
 
 Sound::Sound()
 {
-	soundOn = false;
+	enabled = false;
 	initialized = true;
 	sampleRate = 44100;//22050;
 	
@@ -71,16 +71,16 @@ int Sound::ChangeSampleRate(long newSampleRate)
 		return NO_ERROR;
 	
 	sampleRate = newSampleRate;
-	bool soundWasOn = soundOn;
+	bool wasEnabled = enabled;
 	
-	if (soundWasOn)
+	if (wasEnabled)
 		Stop();
 	
 	// Set sample rate and check for out of memory error
 	if (HandleError( apu.set_sample_rate(sampleRate) ) == ERROR)
 		return ERROR;
 	
-	if (soundWasOn)
+	if (wasEnabled)
 	{
 		if (Start() == ERROR)
 			return ERROR;
@@ -94,13 +94,13 @@ int Sound::Start()
 	if (!initialized)
 		return NO_ERROR;
 	
-	if (!soundOn)
+	if (!enabled)
 	{
 		// Generate a few seconds of sound and play using SDL
 		if (HandleError( sound.start(sampleRate, 2) ) == ERROR)
 			return ERROR;
 	}
-	soundOn = true;
+	enabled = true;
 	
 	return NO_ERROR;
 }
@@ -110,15 +110,20 @@ int Sound::Stop()
 	if (!initialized)
 		return NO_ERROR;
 	
-	if (soundOn)
+	if (enabled)
 		sound.stop();
 	
-	soundOn = false;
+	enabled = false;
 	
 	return NO_ERROR;
 }
 
-void Sound::SetState(bool enabled)
+bool Sound::GetEnabled()
+{
+	return enabled;
+}
+
+void Sound::SetEnabled(bool enabled)
 {
 	if (enabled)
 		Start();
@@ -128,7 +133,7 @@ void Sound::SetState(bool enabled)
 
 void Sound::EndFrame()
 {
-	if ((!initialized) || (!soundOn))
+	if ((!initialized) || (!enabled))
 		return;
 	
 	apu.end_frame();

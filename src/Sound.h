@@ -32,7 +32,7 @@ private:
 	Basic_Gb_Apu apu;
 	Sound_Queue sound;
 	bool initialized;
-	bool soundOn;
+	bool enabled;
 	long sampleRate;
 	
 	int HandleError( const char* str );
@@ -43,9 +43,10 @@ public:
 	int ChangeSampleRate(long newSampleRate);
 	int Start();
 	int Stop();
-	void SetState(bool enabled);
-	inline void WriteRegister(WORD dir, BYTE value) { if (soundOn) apu.write_register( dir, value ); }
-	inline BYTE ReadRegister(WORD dir) { return soundOn ? apu.read_register( dir ) : 0; }
+	bool GetEnabled();
+	void SetEnabled(bool enabled);
+	inline void WriteRegister(WORD dir, BYTE value) { if (enabled) apu.write_register( dir, value ); }
+	inline BYTE ReadRegister(WORD dir) { return enabled ? apu.read_register( dir ) : 0; }
 	void EndFrame();
 };
 
