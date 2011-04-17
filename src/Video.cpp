@@ -154,7 +154,7 @@ void Video::UpdateWin(int y)
 
 inline void Video::GetColor(VideoPixel * p)
 {
-	BYTE xTile, line[2];
+	int xTile, line[2];
 	WORD idTile, dirTile;
 	
 	idTile = p->mapIni + (p->rowMap + p->xScrolled/8);
@@ -169,12 +169,13 @@ inline void Video::GetColor(VideoPixel * p)
 		dirTile = 0x8000 + mem->memory[idTile]*16;
 	}
 	
+	int dirLineTile = dirTile + (p->yTile * 2);
+	
+	line[0] = mem->memory[dirLineTile];	//yTile * 2 porque cada linea de 1 tile ocupa 2 bytes
+	line[1] = mem->memory[dirLineTile + 1];
+	
 	xTile = p->xScrolled % 8;
-	
-	line[0] = mem->memory[dirTile + (p->yTile * 2)];	//yTile * 2 porque cada linea de 1 tile ocupa 2 bytes
-	line[1] = mem->memory[dirTile + (p->yTile * 2) + 1];
-	
-	BYTE pixX = (BYTE)abs((int)xTile - 7);
+	int pixX = (BYTE)abs((int)xTile - 7);
 	//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 	//Esto devolvera un numero de color que junto a la paleta de color nos dara el color requerido
 	p->indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
