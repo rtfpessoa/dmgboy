@@ -20,6 +20,7 @@
 #include <string>
 #include <string.h>
 #include <iomanip>
+#include <assert.h>
 #include "Cartridge.h"
 #include "Def.h"
 #include "GBException.h"
@@ -149,6 +150,7 @@ int Cartridge::CheckRomSize(int numHeaderSize, int fileSize)
 	int headerSize = 32768 << (numHeaderSize & 0x0F);
 	if (numHeaderSize & 0xF0)
 		headerSize += (32768 << ((numHeaderSize & 0xF0) >> 0x04));
+	assert(headerSize == fileSize);
 	if (headerSize != fileSize)
 	{
 		cout << "The header does not match with the file size" << endl;
