@@ -15,11 +15,11 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "MBC.h"
-#include "GBException.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include "MBC.h"
+#include "GBException.h"
 using namespace std;
 
 static BYTE * _memCartridge = NULL;
@@ -28,6 +28,7 @@ static int _memMode = 0;
 
 static int _romBank = 1;
 static int _romSize = 0;	//Bytes
+static int _numRomBanks = 2;
 
 static int _ramBank = 0;
 static int _ramSize = 0;	//Bytes
@@ -47,6 +48,7 @@ void InitMBC(string romName, BYTE * memCartridge, int romSize)
 
 	_romBank = 1;
 	_romSize = romSize;
+	_numRomBanks = romSize / 0x4000;
 
 	_ramBank = 0;
 	_ramEnabled = 0;
@@ -141,12 +143,14 @@ void MBC1Write(WORD direction, BYTE value)
 			value++;
 
 		_romBank = (_romBank & 0x60) | value;
+		_romBank &= _numRomBanks-1;
 	}
 	else if (direction < 0x6000)	//Cambiar romBank o ramBank dependiendo del modo
 	{
 		if (!_memMode)	//Modo 16/8 (Seleccionar romBank)
 		{
 			_romBank = ((value & 0x03) << 5) | (_romBank & 0x1F);
+			_romBank &= _numRomBanks-1;
 		}
 		else			//Modo 4/32 (Seleccionar ramBank)
 		{
@@ -284,10 +288,12 @@ void MBC5Write(WORD direction, BYTE value)
 	else if (direction < 0x3000)	//Cambiar romBank
 	{
 		_romBank = (_romBank & 0x100) | value;
+		_romBank &= _numRomBanks-1;
 	}
 	else if (direction < 0x4000)	//Cambiar romBank
 	{
 		_romBank = ((value & 0x01) << 8) | (_romBank & 0xFF);
+		_romBank &= _numRomBanks-1;
 	}
 	else if (direction < 0x6000)	//Cambiar ramBank o RTC
 	{
