@@ -41,13 +41,30 @@ void Memory::LoadCartridge(Cartridge *c)
 
 void Memory::ResetMem()
 {
-	/*for (WORD i=0; i<(SIZE_MEM - 1); i++ )
-		memory[i] = 0x00;*/
 	memset(&memory, 0x00, SIZE_MEM);
 
 	memory[TIMA] = 0x00; //TIMA
     memory[TMA]  = 0x00; //TMA
     memory[TAC]  = 0x00; //TAC
+	
+	memory[NR10]  = 0x80; //NR10
+	memory[NR11]  = 0xBF; //NR11
+	memory[NR12]  = 0xF3; //NR12
+	memory[NR14]  = 0xBF; //NR14
+	memory[NR21]  = 0x3F; //NR21
+	memory[NR22]  = 0x00; //NR22
+	memory[NR24]  = 0xBF; //NR24
+	memory[NR30]  = 0x7F; //NR30
+	memory[NR31]  = 0xFF; //NR31
+	memory[NR32]  = 0x9F; //NR32
+	memory[NR33]  = 0xBF; //NR33
+	memory[NR41]  = 0xFF; //NR41
+	memory[NR42]  = 0x00; //NR42
+	memory[NR43]  = 0x00; //NR43
+	memory[NR30]  = 0xBF; //NR30
+	memory[NR50]  = 0x77; //NR50
+	memory[NR51]  = 0xF3; //NR51
+	memory[NR52]  = 0xF1; //NR52
 	
 	if (s)
 	{

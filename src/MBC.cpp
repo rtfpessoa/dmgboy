@@ -23,7 +23,9 @@
 using namespace std;
 
 static BYTE * _memCartridge = NULL;
+static BYTE * _ptrCartridge = NULL;
 static BYTE * _memRamMBC = NULL;
+static BYTE * _ptrRamMBC = NULL;
 static int _memMode = 0;
 
 static int _romBank = 1;
@@ -44,6 +46,7 @@ void InitMBC(string romName, BYTE * memCartridge, int romSize)
 {
 	_romName = romName;
 	_memCartridge = memCartridge;
+	_ptrCartridge = memCartridge;
 	_memMode = 0;
 
 	_romBank = 1;
@@ -74,6 +77,7 @@ void InitMBC1(string romName, BYTE * memCartridge, int romSize, int ramHeaderSiz
 
 	if (_ramSize)
 		_memRamMBC = new BYTE[_ramSize];
+	_ptrRamMBC = _memRamMBC;
 	
 	MBCLoadRam();
 }
@@ -85,6 +89,7 @@ void InitMBC2(string romName, BYTE * memCartridge, int romSize)
 	_ramSize = 512;
 
 	_memRamMBC = new BYTE[_ramSize];
+	_ptrRamMBC = _memRamMBC;
 	
 	MBCLoadRam();
 }
@@ -102,6 +107,7 @@ void InitMBC3(string romName, BYTE * memCartridge, int romSize, int ramHeaderSiz
 
 	if (_ramSize)
 		_memRamMBC = new BYTE[_ramSize];
+	_ptrRamMBC = _memRamMBC;
 	
 	MBCLoadRam();
 }
@@ -115,209 +121,257 @@ void DestroyMBC()
 {
 	if (_memRamMBC)
 		delete [] _memRamMBC;
+	_memRamMBC = NULL;
+	_ptrRamMBC = NULL;
 }
 
-BYTE NoneRead(WORD direction)
+BYTE NoneRead(WORD address)
 {
-	return _memCartridge[direction];
+	return _memCartridge[address];
 }
 
-void NoneWrite(WORD direction, BYTE value)
+void NoneWrite(WORD address, BYTE value)
 {
 	//No hacer nada
 	return;
 }
 
-void MBC1Write(WORD direction, BYTE value)
+void MBC1Write(WORD address, BYTE value)
 {
-	if (direction < 0x2000)	//Habilitar/Deshabilitar RAM
-	{
-		_ramEnabled = ((value & 0x0F) == 0x0A);
-		if (!_ramEnabled)
-			MBCSaveRam();
-	}
-	else if (direction < 0x4000)	//Cambiar romBank
-	{
-		value &= 0x1F;
-		if (!value)
-			value++;
-
-		_romBank = (_romBank & 0x60) | value;
-		_romBank &= _numRomBanks-1;
-	}
-	else if (direction < 0x6000)	//Cambiar romBank o ramBank dependiendo del modo
-	{
-		if (!_memMode)	//Modo 16/8 (Seleccionar romBank)
-		{
-			_romBank = ((value & 0x03) << 5) | (_romBank & 0x1F);
+	WORD msAddr = address >> 12;
+	
+	switch (msAddr) {
+		case 0x0:
+		case 0x1:
+			//Habilitar/Deshabilitar RAM
+			int lastRamEnabled;
+			lastRamEnabled = _ramEnabled;
+			_ramEnabled = ((value & 0x0F) == 0x0A);
+			if ((lastRamEnabled) && (!_ramEnabled))
+				MBCSaveRam();
+			break;
+		case 0x2:
+		case 0x3:
+			//Cambiar romBank
+			value &= 0x1F;
+			if (!value)
+				value++;
+			
+			_romBank = (_romBank & 0x60) | value;
 			_romBank &= _numRomBanks-1;
-		}
-		else			//Modo 4/32 (Seleccionar ramBank)
-		{
-			_ramBank = value & 0x03;
-		}
-	}
-	else if (direction < 0x8000)	//Seleccionar modo
-	{
-		_memMode = value & 0x01;
-	}
-	else if ((direction >=0xA000) && (direction < 0xC000))	//Intenta escribir en RAM
-	{
-		if (_ramEnabled)
-			_memRamMBC[direction - 0xA000 + (0x2000*_ramBank)] = value;
+			_ptrCartridge = _memCartridge + _romBank * 0x4000;
+			break;
+		case 0x4:
+		case 0x5:
+			//Cambiar romBank o ramBank dependiendo del modo
+			if (!_memMode)	//Modo 16/8 (Seleccionar romBank)
+			{
+				_romBank = ((value & 0x03) << 5) | (_romBank & 0x1F);
+				_romBank &= _numRomBanks-1;
+				_ptrCartridge = _memCartridge + _romBank * 0x4000;
+			}
+			else			//Modo 4/32 (Seleccionar ramBank)
+			{
+				_ramBank = value & 0x03;
+				_ptrRamMBC = _memRamMBC + _ramBank * 0x2000;
+			}
+			break;
+		case 0x6:
+		case 0x7:
+			//Seleccionar modo
+			_memMode = value & 0x01;
+			break;
+		case 0xA:
+		case 0xB:
+			//Intenta escribir en RAM
+			if (_ramEnabled)
+				_ptrRamMBC[address - 0xA000] = value;
+			break;
+		default:
+			break;
 	}
 }
 
-BYTE MBC1Read(WORD direction)
+BYTE MBC1Read(WORD address)
 {
-	if (direction < 0x4000)
-		return _memCartridge[direction];
-	else if (direction < 0x8000)
-		return _memCartridge[(direction - 0x4000) + (0x4000*_romBank)];
-	else if ((direction >=0xA000) && (direction < 0xC000) && _ramEnabled)
-		return _memRamMBC[direction - 0xA000 + (0x2000*_ramBank)];
+	if (address < 0x4000)
+		return _memCartridge[address];
+	else if (address < 0x8000)
+		return _ptrCartridge[address - 0x4000];
+	else if ((address >=0xA000) && (address < 0xC000) && _ramEnabled)
+		return _ptrRamMBC[address - 0xA000];
 
 	return 0;
 }
 
-void MBC2Write(WORD direction, BYTE value)
+void MBC2Write(WORD address, BYTE value)
 {
-	if (direction < 0x2000)	//Habilitar/Deshabilitar RAM
-	{
-		if (! (direction & 0x10))
-			_ramEnabled = !_ramEnabled;
-		
-		if (!_ramEnabled)
-			MBCSaveRam();
-	}
-	else if (direction < 0x4000)	//Cambiar romBank
-	{
-		if (!(direction & 0x100))
-			return;
-		
-		value &= 0x0F;
-		if (!value)
-			value++;
+	WORD msAddr = address >> 12;
 
-		_romBank = value;
-	}
-	else if (direction < 0x6000)
-	{
-		return;
-	}
-	else if (direction < 0x8000)	//Seleccionar modo
-	{
-		return;
-	}
-	else if ((direction >=0xA000) && (direction < 0xA200))	//Intenta escribir en RAM
-	{
-		if (_ramEnabled)
-			_memRamMBC[direction - 0xA000] = value & 0x0F;
-		//throw GBException("Intenta escribir en RAM de cartucho");
+	switch (msAddr) {
+		case 0x0:
+		case 0x1:
+			//Habilitar/Deshabilitar RAM
+			int lastRamEnabled;
+			lastRamEnabled = _ramEnabled;
+			if (! (address & 0x10))
+				_ramEnabled = !_ramEnabled;
+			
+			if ((lastRamEnabled) && (!_ramEnabled))
+				MBCSaveRam();
+			break;
+		case 0x2:
+		case 0x3:
+			//Cambiar romBank
+			if (!(address & 0x100))
+				return;
+			
+			value &= 0x0F;
+			if (!value)
+				value++;
+			
+			_romBank = value;
+			_ptrCartridge = _memCartridge + _romBank * 0x4000;
+			break;
+		case 0xA:
+			//Intenta escribir en RAM
+			if ((address < 0xA200) && (_ramEnabled))
+				_memRamMBC[address - 0xA000] = value & 0x0F;
+			break;
+		default:
+			break;
 	}
 }
 
-BYTE MBC2Read(WORD direction)
+BYTE MBC2Read(WORD address)
 {
-	if (direction < 0x4000)
-		return _memCartridge[direction];
-	else if (direction < 0x8000)
-		return _memCartridge[(direction - 0x4000) + (0x4000*_romBank)];
-	else if ((direction >=0xA000) && (direction < 0xC000) && (_ramEnabled))
-		return _memRamMBC[direction - 0xA000];
+	if (address < 0x4000)
+		return _memCartridge[address];
+	else if (address < 0x8000)
+		return _ptrCartridge[address - 0x4000];
+	else if ((address >=0xA000) && (address < 0xC000) && (_ramEnabled))
+		return _memRamMBC[address - 0xA000];
 
 	return 0;
 }
 
-void MBC3Write(WORD direction, BYTE value)
+void MBC3Write(WORD address, BYTE value)
 {
-	if (direction < 0x2000)	//Habilitar/Deshabilitar RAM
-	{
-		_ramEnabled = ((value & 0x0F) == 0x0A);
-		if (!_ramEnabled)
-			MBCSaveRam();
-	}
-	else if (direction < 0x4000)	//Cambiar romBank
-	{
-		value = value ? value : 1;
-
-		_romBank = value & 0x7F;
-	}
-	else if (direction < 0x6000)	//Cambiar ramBank o RTC
-	{
-		if (value < 4)			//(Seleccionar ramBank)
-		{
-			_ramBank = value;
-		}
-		else if ((value >= 0x08) && (value <=0x0C))	//Seleccionar RTC
-		{
-			//throw GBException("RTC no implementado");
-		}
-	}
-	else if (direction < 0x8000)	
-	{
-		//throw GBException("RTC no implementado");
-	}
-	else if ((direction >=0xA000) && (direction < 0xC000))	//Intenta escribir en RAM
-	{
-		if (_ramEnabled)
-			_memRamMBC[direction - 0xA000 + (0x2000*_ramBank)] = value;
+	
+	WORD msAddr = address >> 12;
+	
+	switch (msAddr) {
+		case 0x0:
+		case 0x1:
+			//Habilitar/Deshabilitar RAM
+			int lastRamEnabled;
+			lastRamEnabled = _ramEnabled;
+			_ramEnabled = ((value & 0x0F) == 0x0A);
+			if ((lastRamEnabled) && (!_ramEnabled))
+				MBCSaveRam();
+			break;
+		case 0x2:
+		case 0x3:
+			//Cambiar romBank
+			value = value ? value : 1;
+			
+			_romBank = value & 0x7F;
+			_ptrCartridge = _memCartridge + _romBank * 0x4000;
+			break;
+		case 0x4:
+		case 0x5:
+			//Cambiar ramBank o RTC
+			if (value < 4)			//(Seleccionar ramBank)
+			{
+				_ramBank = value;
+				_ptrRamMBC = _memRamMBC + _ramBank * 0x2000;
+				_memMode = 0;
+			}
+			else if ((value >= 0x08) && (value <=0x0C))	//Seleccionar RTC
+			{
+				_memMode = 1;
+				//throw GBException("RTC no implementado");
+			}
+			break;
+		case 0x6:
+		case 0x7:
+			//RTC
+			break;
+		case 0xA:
+		case 0xB:
+			//Intenta escribir en RAM
+			if (_ramEnabled && (_memMode == 0))
+				_ptrRamMBC[address - 0xA000] = value;
+		default:
+			break;
 	}
 }
 
-BYTE MBC3Read(WORD direction)
+BYTE MBC3Read(WORD address)
 {
-	if (direction < 0x4000)
-		return _memCartridge[direction];
-	else if (direction < 0x8000)
-		return _memCartridge[(direction - 0x4000) + (0x4000*_romBank)];
-	else if ((direction >=0xA000) && (direction < 0xC000) && (_ramEnabled))
-		return _memRamMBC[direction - 0xA000 + (0x2000*_ramBank)];
+	if (address < 0x4000)
+		return _memCartridge[address];
+	else if (address < 0x8000)
+		return _ptrCartridge[address - 0x4000];
+	else if ((address >=0xA000) && (address < 0xC000))
+	{
+		if ((_memMode == 0) && (_ramEnabled))
+			return _ptrRamMBC[address - 0xA000];
+	}
 
 	return 0;
 }
 
-void MBC5Write(WORD direction, BYTE value)
+void MBC5Write(WORD address, BYTE value)
 {
-	if (direction < 0x2000)	//Habilitar/Deshabilitar RAM
-	{
-		_ramEnabled = ((value & 0x0F) == 0x0A);
-		if (!_ramEnabled)
-			MBCSaveRam();
-	}
-	else if (direction < 0x3000)	//Cambiar romBank
-	{
-		_romBank = (_romBank & 0x100) | value;
-		_romBank &= _numRomBanks-1;
-	}
-	else if (direction < 0x4000)	//Cambiar romBank
-	{
-		_romBank = ((value & 0x01) << 8) | (_romBank & 0xFF);
-		_romBank &= _numRomBanks-1;
-	}
-	else if (direction < 0x6000)	//Cambiar ramBank o RTC
-	{
-		_ramBank = value & 0x0F;
-	}
-	else if (direction < 0x8000)	
-	{
-		//throw GBException("Zona no conocida");
-	}
-	else if ((direction >=0xA000) && (direction < 0xC000))	//Intenta escribir en RAM
-	{
-		if (_ramEnabled)
-			_memRamMBC[direction - 0xA000 + (0x2000*_ramBank)] = value;
+	WORD msAddr = address >> 12;
+	
+	switch (msAddr) {
+		case 0x0:
+		case 0x1:
+			//Habilitar/Deshabilitar RAM
+			int lastRamEnabled;
+			lastRamEnabled = _ramEnabled;
+			_ramEnabled = ((value & 0x0F) == 0x0A);
+			if ((lastRamEnabled) && (!_ramEnabled))
+				MBCSaveRam();
+			break;
+		case 0x2:
+			//Cambiar romBank
+			_romBank = (_romBank & 0x100) | value;
+			_romBank &= _numRomBanks-1;
+			_ptrCartridge = _memCartridge + _romBank * 0x4000;
+			break;
+		case 0x3:
+			//Cambiar romBank
+			_romBank = ((value & 0x01) << 8) | (_romBank & 0xFF);
+			_romBank &= _numRomBanks-1;
+			_ptrCartridge = _memCartridge + _romBank * 0x4000;
+			break;
+		case 0x4:
+		case 0x5:
+			//Cambiar ramBank
+			_ramBank = value & 0x0F;
+			_ptrRamMBC = _memRamMBC + _ramBank * 0x2000;
+			break;
+		case 0xA:
+		case 0xB:
+			//Intenta escribir en RAM
+			if (_ramEnabled)
+				_ptrRamMBC[address - 0xA000] = value;
+		default:
+			break;
 	}
 }
 
-BYTE MBC5Read(WORD direction)
+BYTE MBC5Read(WORD address)
 {
-	if (direction < 0x4000)
-		return _memCartridge[direction];
-	else if (direction < 0x8000)
-		return _memCartridge[(direction - 0x4000) + (0x4000*_romBank)];
-	else if ((direction >=0xA000) && (direction < 0xC000) && (_ramEnabled))
-		return _memRamMBC[direction - 0xA000 + (0x2000*_ramBank)];
+	if (address < 0x4000)
+		return _memCartridge[address];
+	else if (address < 0x8000)
+		return _ptrCartridge[address - 0x4000];
+	else if ((address >=0xA000) && (address < 0xC000) && (_ramEnabled))
+		return _ptrRamMBC[address - 0xA000];
 
 	return 0;
 }
@@ -376,6 +430,8 @@ void MBCLoadState(ifstream * file)
 	file->read((char *)&_ramSize, sizeof(int));
 	file->read((char *)&_ramEnabled, sizeof(int));
 	file->read((char *)_memRamMBC, _ramSize);
+	_ptrCartridge = _memCartridge + _romBank * 0x4000;
+	_ptrRamMBC = _memRamMBC + _ramBank * 0x2000;
 }
 
 /*

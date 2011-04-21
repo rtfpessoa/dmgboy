@@ -28,20 +28,20 @@ void InitMBC3(std::string, BYTE * memCartridge, int romSize, int ramHeaderSize);
 void InitMBC5(std::string, BYTE * memCartridge, int romSize, int ramHeaderSize);
 void DestroyMBC();
 
-BYTE NoneRead(WORD direction);
-void NoneWrite(WORD direction, BYTE value);
+BYTE NoneRead(WORD address);
+void NoneWrite(WORD address, BYTE value);
 
-BYTE MBC1Read(WORD direction);
-void MBC1Write(WORD direction, BYTE value);
+BYTE MBC1Read(WORD address);
+void MBC1Write(WORD address, BYTE value);
 
-BYTE MBC2Read(WORD direction);
-void MBC2Write(WORD direction, BYTE value);
+BYTE MBC2Read(WORD address);
+void MBC2Write(WORD address, BYTE value);
 
-BYTE MBC3Read(WORD direction);
-void MBC3Write(WORD direction, BYTE value);
+BYTE MBC3Read(WORD address);
+void MBC3Write(WORD address, BYTE value);
 
-BYTE MBC5Read(WORD direction);
-void MBC5Write(WORD direction, BYTE value);
+BYTE MBC5Read(WORD address);
+void MBC5Write(WORD address, BYTE value);
 
 void MBCPathBatteries(std::string path);
 
