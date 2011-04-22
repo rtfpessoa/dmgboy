@@ -875,6 +875,10 @@ void CPU::UpdateStateLCD()
         case (0):	// Durante H-Blank
             if (cyclesLCD >= MAX_LCD_MODE_0)
             {
+				memory[LY]++;
+				CheckLYC();
+                cyclesLCD -= MAX_LCD_MODE_0;
+				
                 if (memory[LY] == 144) // Si estamos en la linea 144, cambiamos al modo 1 (V-Blank)
                 {
                     // Poner a 01 el flag (bits 0-1) del modo 1.
@@ -897,17 +901,17 @@ void CPU::UpdateStateLCD()
 					// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
 					if (BIT5(memory[STAT]) && screenOn)
 						memory[IF] |= 0x02;
-
-					v->UpdateLine(memory[LY]);
                 }
-                memory[LY]++;
-				CheckLYC();
-                cyclesLCD -= MAX_LCD_MODE_0;
+				
+				v->UpdateLine(memory[LY]-1);
             }
             break;
         case (1):	// Durante V-Blank
             if (cyclesLCD >= MAX_LCD_MODE_1)
             {
+				CheckLYC();
+                cyclesLCD -= MAX_LCD_MODE_1;
+				
                 // Si hemos llegado al final
                 if (memory[LY] == 153)
                 {
@@ -923,32 +927,28 @@ void CPU::UpdateStateLCD()
                 }
                 else
                     memory[LY]++;
-
-				CheckLYC();
-				
-                cyclesLCD -= MAX_LCD_MODE_1;
             }
             break;
         case (2):	// Cuando OAM se esta usando
             if (cyclesLCD >= MAX_LCD_MODE_2)
             {
+				cyclesLCD -= MAX_LCD_MODE_2;
+				
 				// Poner a 11 el flag (bits 0-1) del modo 3.
 				memory[STAT] = (memory[STAT] & ~0x03) | 0x03;
-
-                cyclesLCD -= MAX_LCD_MODE_2;
             }
             break;
         case (3):	// Cuando OAM y memoria de video se estan usando (Se esta pasando informacion al LCD)
             if (cyclesLCD >= MAX_LCD_MODE_3)
             {
+				cyclesLCD -= MAX_LCD_MODE_3;
+				
 				// Poner a 00 el flag (bits 0-1) del modo 0.
 				memory[STAT] &= ~0x03;
 				// Si interrupcion H-Blank habilitada, marcar peticion de interrupcion
 				// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
 				if (BIT3(memory[STAT]) && screenOn)
 					memory[IF] |= 0x02;
-
-                cyclesLCD -= MAX_LCD_MODE_3;
             }
             break;
 	}

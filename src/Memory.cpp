@@ -102,25 +102,25 @@ void Memory::ResetMem()
 	memory[STAT] = 0x02; //LCD_STAT
 }
 
-void Memory::MemW(WORD direction, BYTE value)
+void Memory::MemW(WORD address, BYTE value)
 {
-	if ((direction < 0x8000) || ((direction >= 0xA000)&&(direction < 0xC000)))
+	if ((address < 0x8000) || ((address >= 0xA000)&&(address < 0xC000)))
 	{
-		c->Write(direction, value);
+		c->Write(address, value);
 		return;
 	}
-	else if ((direction >= 0xC000) && (direction < 0xDE00))//C000-DDFF
-		memory[direction + 0x2000] = value;
-	else if ((direction >= 0xE000) && (direction < 0xFE00))//E000-FDFF
-		memory[direction - 0x2000] = value;
-	else if ((direction >= 0xFF10) && (direction <= 0xFF3F))
+	else if ((address >= 0xC000) && (address < 0xDE00))//C000-DDFF
+		memory[address + 0x2000] = value;
+	else if ((address >= 0xE000) && (address < 0xFE00))//E000-FDFF
+		memory[address - 0x2000] = value;
+	else if ((address >= 0xFF10) && (address <= 0xFF3F))
 	{
 		if(s)
-			s->WriteRegister(direction, value);
+			s->WriteRegister(address, value);
 	}
 	else
 	{
-		switch (direction)
+		switch (address)
 		{
 			case DMA:
 				DmaTransfer(value);
@@ -142,15 +142,15 @@ void Memory::MemW(WORD direction, BYTE value)
 		}
 	}
 
-	memory[direction] = value;
+	memory[address] = value;
 }
 
-void Memory::DmaTransfer(BYTE direction)
+void Memory::DmaTransfer(BYTE address)
 {
 	BYTE i;
 
 	for (i=0; i<0xA0; i++)
-		MemWNoCheck(0xFE00 + i, MemR((direction << 8) + i));
+		MemWNoCheck(0xFE00 + i, MemR((address << 8) + i));
 }
 
 void Memory::SaveMemory(ofstream * file)

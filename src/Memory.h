@@ -41,19 +41,19 @@ public:
 	void ResetMem();
 	void LoadCartridge(Cartridge *c);
 	void MemW(WORD direction, BYTE value);
-	inline void MemWNoCheck(WORD direction, BYTE value){ memory[direction] = value; };
-	inline BYTE MemR(WORD direction)
+	inline void MemWNoCheck(WORD address, BYTE value){ memory[address] = value; };
+	inline BYTE MemR(WORD address)
 	{
-		if ((direction < 0x8000) || ((direction >=0xA000) && (direction < 0xC000)))
+		if ((address < 0x8000) || ((address >=0xA000) && (address < 0xC000)))
 		{
-			return c->Read(direction);
+			return c->Read(address);
 		}
-		else if ((direction >= 0xFF10) && (direction <= 0xFF3F))
+		else if ((address >= 0xFF10) && (address <= 0xFF3F))
 		{
 			if(s)
-				return s->ReadRegister(direction);
+				return s->ReadRegister(address);
 		}
-		return memory[direction];
+		return memory[address];
 	}
 	void SaveMemory(std::ofstream * file);
 	void LoadMemory(std::ifstream * file);
