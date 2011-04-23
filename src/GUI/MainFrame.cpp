@@ -208,13 +208,19 @@ void MainFrame::OnRecent(wxCommandEvent &event)
 
 void MainFrame::OnFileOpen(wxCommandEvent &) {
 
+	enumEmuStates copyState = emuState;
+	emuState = Paused;
+	
 	wxFileDialog* openDialog = new wxFileDialog(this, wxT("Choose a gameboy rom to open"), wxEmptyString, wxEmptyString,
 												wxT("Gameboy roms (*.gb; *.zip)|*.gb;*.zip"),
 												wxFD_OPEN, wxDefaultPosition);
 
+	
 	// Creates a "open file" dialog
 	if (openDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 		this->ChangeFile(openDialog->GetPath());
+	else
+		emuState = copyState;
 
 	// Clean up after ourselves
 	openDialog->Destroy();
