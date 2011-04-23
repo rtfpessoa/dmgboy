@@ -883,15 +883,7 @@ void CPU::UpdateStateLCD()
                 {
                     // Poner a 01 el flag (bits 0-1) del modo 1.
 					memory[STAT] = (memory[STAT] & ~0x03) | 0x01;
-					if (screenOn)
-					{
-						// Interrupcion V-Blank
-						memory[IF] |= 0x01;
-						// Si interrupcion V-Blank habilitada, marcar peticion de interrupcion
-						// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT.
-						if (BIT4(memory[STAT]))
-							memory[IF] |= 0x02;
-					}
+					VBlankIntPending = true;
                 }
                 else // Sino, cambiamos al modo 2
                 {
@@ -907,6 +899,24 @@ void CPU::UpdateStateLCD()
             }
             break;
         case (1):	// Durante V-Blank
+			// Se retrasa la interrupcion VBlank 24 ciclos.
+			// (Algunos juegos con VBlank activado en IE, hacen la comprobacion
+			// SCY == 144. Sin este retraso, antes de la interrupcion SCY = 143 y
+			// despues SCY > 144. Con lo que nunca se cumple la condicion)
+			if ((VBlankIntPending) && (cyclesLCD >= 24))
+			{
+				if (screenOn)
+				{
+					// Interrupcion V-Blank
+					memory[IF] |= 0x01;
+					// Si interrupcion V-Blank habilitada, marcar peticion de interrupcion
+					// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT.
+					if (BIT4(memory[STAT]))
+						memory[IF] |= 0x02;
+				}
+				VBlankIntPending = false;
+			}
+			
             if (cyclesLCD >= MAX_LCD_MODE_1)
             {
 				CheckLYC();

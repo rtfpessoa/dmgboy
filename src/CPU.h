@@ -43,6 +43,7 @@ private:
 	BYTE instructionCycles[0xFF];
 	BYTE instructionCyclesCB[0xFF];
 	bool frameCompleted;
+	bool VBlankIntPending;
 public:
 	CPU(Video *v, Sound * s);
 	CPU(Video *v, Cartridge *c, Sound * s);
