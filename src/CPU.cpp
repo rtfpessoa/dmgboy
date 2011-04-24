@@ -922,8 +922,7 @@ void CPU::UpdateStateLCD()
 			
             if (cyclesLCD >= MAX_LCD_MODE_1)
             {
-				CheckLYC();
-                cyclesLCD -= MAX_LCD_MODE_1;
+				cyclesLCD -= MAX_LCD_MODE_1;
 				
                 // Si hemos llegado al final
                 if (memory[LY] == 153)
@@ -940,6 +939,8 @@ void CPU::UpdateStateLCD()
                 }
                 else
                     memory[LY]++;
+				
+				CheckLYC();
             }
             break;
         case (2):	// Cuando OAM se esta usando
