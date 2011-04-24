@@ -39,7 +39,9 @@ private:
 	WORD cyclesSerial;
 	int bitSerial;
 	Video *v;
+#ifdef MAKEGBLOG
 	QueueLog *log;
+#endif
 	BYTE instructionCycles[0xFF];
 	BYTE instructionCyclesCB[0xFF];
 	bool frameCompleted;
@@ -52,7 +54,9 @@ public:
 	void ExecuteOneFrame();
 	void UpdatePad();
 	void Reset();
+#ifdef MAKEGBLOG
 	void SaveLog();
+#endif
 	void SaveState(std::string saveDirectory, int numSlot);
 	void LoadState(std::string loadDirectory, int numSlot);
 private:

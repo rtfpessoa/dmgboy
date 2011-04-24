@@ -533,6 +533,9 @@ void MainFrame::OnPause(wxCommandEvent &)
 
 void MainFrame::OnStop(wxCommandEvent &)
 {
+#ifdef MAKEGBLOG
+	cpu->SaveLog();
+#endif
 	cpu->Reset();
 	panel->OnRefreshScreen();
 	emuState = Stopped;

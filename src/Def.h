@@ -18,6 +18,8 @@
 #ifndef __DEF_H__
 #define __DEF_H__
 
+//#define MAKEGBLOG
+
 #define APP_NAME		"gbpablog"
 #define APP_VERSION		"0.9"
 #define APP_MAINT		"Pablo Gasco"

@@ -22,7 +22,10 @@
 #include <sstream>
 #include "Registers.h"
 #include "GBException.h"
-#include "Log.h"
+
+#ifdef MAKEGBLOG
+	#include "Log.h"
+#endif
 
 using namespace std;
 
@@ -48,7 +51,9 @@ void CPU::Init(Video *v)
 	FillInstructionCycles();
 	FillInstructionCyclesCB();
 	
-	//this->log = new QueueLog(1000000);
+#ifdef MAKEGBLOG
+	this->log = new QueueLog(1000000);
+#endif
 }
 
 
@@ -81,8 +86,10 @@ void CPU::ExecuteOneFrame()
 	frameCompleted = false;
 	
 	UpdatePad();
-	
-	//log->Enqueue("\n\nStartFrame", NULL, "");
+
+#ifdef MAKEGBLOG
+	log->Enqueue("\n\nStartFrame", NULL, "");
+#endif
 
     while (!frameCompleted)
     {
@@ -91,7 +98,7 @@ void CPU::ExecuteOneFrame()
 		OpCode = MemR(Get_PC());
         NextOpcode = MemR(Get_PC() + 1);
 		
-		/*
+#ifdef MAKEGBLOG
 		stringstream ssOpCode;
 		ssOpCode << numInstructions << " - ";
 		ssOpCode << "OpCode: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
@@ -99,16 +106,12 @@ void CPU::ExecuteOneFrame()
 			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
 		ssOpCode << ", ";
 		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
-		 */
+#endif
 		
 		lastCycles = 4;
 		
 		if (!Get_Halt() && !Get_Stop())
 		{
-			/*ssOpCode << " FF41 = " << hex << (int)memory[0xFF41];
-			ssOpCode << " FFFF = " << hex << (int)memory[0xFFFF];
-			log->Enqueue("", this->GetPtrRegisters(), ssOpCode.str());*/
-		
 			switch(OpCode)
 			{
 				case (0x00): inst.NOP(); break;
@@ -1087,10 +1090,14 @@ void CPU::OnEndFrame()
 	frameCompleted = true;
 }
 
+#ifdef MAKEGBLOG
+
 void CPU::SaveLog()
 {
 	log->Save("log.txt");
 }
+
+#endif
 
 void CPU::SaveState(string saveDirectory, int numSlot)
 {
