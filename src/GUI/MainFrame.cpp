@@ -100,7 +100,7 @@ MainFrame::MainFrame(wxString fileName)
 		ChangeFile(fileName);
 	
 	timerExecution = new wxTimer(this, ID_TIMER);
-	timerExecution->Start(16);
+	timerExecution->Start(15);
 	
 	//ShowFullScreen(true, wxFULLSCREEN_ALL);
 }

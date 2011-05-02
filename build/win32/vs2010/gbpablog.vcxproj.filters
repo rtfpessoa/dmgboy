@@ -110,7 +110,7 @@
       <Filter>GB_Snd_Emu</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\Sound.h">
-      <Filter>GUI</Filter>
+      <Filter>HW</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -187,7 +187,7 @@
       <Filter>GB_Snd_Emu</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Sound.cpp">
-      <Filter>GUI</Filter>
+      <Filter>HW</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

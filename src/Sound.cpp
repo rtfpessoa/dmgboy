@@ -138,10 +138,10 @@ void Sound::EndFrame()
 	
 	apu.end_frame();
 	
-	int const buf_size = 2048;
+	int const buf_size = 4096;
 	static blip_sample_t buf [buf_size];
 	
-	if ( apu.samples_avail() >= buf_size )
+	while ( apu.samples_avail() >= buf_size )
 	{
 		// Play whatever samples are available
 		long count = apu.read_samples( buf, buf_size );

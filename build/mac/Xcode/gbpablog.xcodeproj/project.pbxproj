@@ -518,6 +518,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
 				HEADER_SEARCH_PATHS = (
 					"/Users/pablo/Documents/Programacion/gbpablog/src/Gb_Snd_Emu-0.1.4",
 					/Library/Frameworks/SDL.framework/Versions/A/Headers,
