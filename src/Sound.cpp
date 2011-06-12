@@ -58,6 +58,9 @@ Sound::Sound()
 		initialized = false;
 		return;
 	}
+	
+	//char name[32];
+	//printf("Using audio driver: %s\n", SDL_AudioDriverName(name, 32));
 }
 
 Sound::~Sound()
