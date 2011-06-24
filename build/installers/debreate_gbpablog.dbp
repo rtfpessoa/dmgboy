@@ -2,7 +2,7 @@
 <<MODE>>0<</MODE>>
 <<CTRL>>
 Package: gbpablog
-Version: 0.9
+Version: 1.0
 Section: games
 Maintainer: Pablo Gasco <pablogasco@gmail.com>
 Homepage: http://code.google.com/p/gbpablog/
@@ -83,5 +83,5 @@ Categories=Game;
 <<BUILD>>
 0
 1
-0
+1
 <</BUILD>>

@@ -21,7 +21,7 @@
 //#define MAKEGBLOG
 
 #define APP_NAME		"gbpablog"
-#define APP_VERSION		"0.9"
+#define APP_VERSION		"1.0"
 #define APP_MAINT		"Pablo Gasco"
 #define APP_LICENCE		"GPL v3"
 #define APP_COPYRIGTH	"(C) 2011 Pablo Gasco"
