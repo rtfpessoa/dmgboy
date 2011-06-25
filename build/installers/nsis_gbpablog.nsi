@@ -74,6 +74,13 @@ Function .onInit
 FunctionEnd
 
 Section "Principal" SEC01
+  DetailPrint "Installing VS2010 Redistributable"
+  SetOutPath "$TEMP"
+  File ..\win32\vs2010\VS2010_vcredist_x86.exe
+  ExecWait "$TEMP\VS2010_vcredist_x86.exe /q"
+  DetailPrint "Cleaning up VS2010 Redistributable"
+  Delete $TEMP\VS2010_vcredist_x86.exe
+  
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   File "..\win32\vs2010\SDL.dll"

@@ -25,3 +25,4 @@ build/mac/Xcode/gbpablog.xcodeproj/pablo.perspectivev3
 build/installers/gbpablog*
 build/linux/CodeBlocks/gbpablog
 build/linux/CodeBlocks/gbpablog.layout
+build/win32/vs2010/VS2010_vcredist_x86\.exe
