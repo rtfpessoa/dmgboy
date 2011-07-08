@@ -32,7 +32,7 @@ EVT_PAINT(MainPanel::OnPaint)
 EVT_ERASE_BACKGROUND(MainPanel::OnEraseBackground)
 END_EVENT_TABLE()
 
-BYTE palettes[][4][3] =		{
+static BYTE palettes[][4][3] =		{
 								{
 									{ 16,  57,  16},
 									{ 49,  99,  49},

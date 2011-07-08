@@ -22,7 +22,7 @@
 
 #include <wx/wx.h>
 #include "SettingsDialog.h"
-#include "MainPanel.h"
+#include "GLPanel.h"
 #include "../CPU.h"
 
 struct RecentFile
@@ -45,7 +45,7 @@ private:
 	wxMenu *recentMenuPopup;
 	wxToolBar* toolBar;
 	wxTimer * timerExecution;
-    MainPanel *panel;
+    GLPanel *panel;
 	SettingsDialog * settingsDialog;
 	Video * video;
 	Sound * sound;
@@ -103,7 +103,7 @@ public:
      *
      * @return The MainPanel.
      */
-	inline MainPanel &GetPanel() { return *panel; }
+	inline GLPanel &GetPanel() { return *panel; }
 	void ChangeFile(const wxString fileName);
 };
 

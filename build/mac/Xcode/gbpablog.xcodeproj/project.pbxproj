@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		6E0823A613C2429700C42CE0 /* GLPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E0823A413C2429700C42CE0 /* GLPanel.cpp */; };
 		6E205760120589BF00079331 /* gbpablog.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6E20575F120589BF00079331 /* gbpablog.icns */; };
 		6E22367A1233B4C6009D019F /* SettingsDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2236791233B4C6009D019F /* SettingsDialog.cpp */; };
 		6E23C6C511D7CA0C0043AF47 /* MainApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6BF11D7CA0C0043AF47 /* MainApp.cpp */; };
@@ -60,6 +61,8 @@
 		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		6E0823A413C2429700C42CE0 /* GLPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLPanel.cpp; sourceTree = "<group>"; };
+		6E0823A513C2429700C42CE0 /* GLPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLPanel.h; sourceTree = "<group>"; };
 		6E20575F120589BF00079331 /* gbpablog.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = gbpablog.icns; sourceTree = "<group>"; };
 		6E2236781233B4C6009D019F /* SettingsDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsDialog.h; sourceTree = "<group>"; };
 		6E2236791233B4C6009D019F /* SettingsDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsDialog.cpp; sourceTree = "<group>"; };
@@ -231,6 +234,8 @@
 				6E23C6C111D7CA0C0043AF47 /* MainFrame.cpp */,
 				6E23C6C411D7CA0C0043AF47 /* MainPanel.h */,
 				6E23C6C311D7CA0C0043AF47 /* MainPanel.cpp */,
+				6E0823A513C2429700C42CE0 /* GLPanel.h */,
+				6E0823A413C2429700C42CE0 /* GLPanel.cpp */,
 				6E2236781233B4C6009D019F /* SettingsDialog.h */,
 				6E2236791233B4C6009D019F /* SettingsDialog.cpp */,
 				6EA1AB77127F0F0E00AC510C /* AboutDialog.h */,
@@ -414,6 +419,7 @@
 				6E2C36521334CB3900BE7D7B /* Sound_Queue.cpp in Sources */,
 				6E2C36541334CB3900BE7D7B /* Wave_Writer.cpp in Sources */,
 				6E2C365F1334FF7100BE7D7B /* Sound.cpp in Sources */,
+				6E0823A613C2429700C42CE0 /* GLPanel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,7 +465,7 @@
 				INFOPLIST_FILE = "gbpablog-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_CFLAGS = (
-					"-I$(WXWIN)/osx-build/lib/wx/include/mac-ansi-release-static-2.8",
+					"-I$(WXWIN)/build-release/lib/wx/include/mac-ansi-release-static-2.8",
 					"-I$(WXWIN)/include",
 					"-I$(WXWIN)/contrib/include",
 					"-D_FILE_OFFSET_BITS=64",
@@ -467,7 +473,7 @@
 					"-D__WXMAC__",
 				);
 				OTHER_LDFLAGS = (
-					"-L$(WXWIN)/osx-build/lib",
+					"-L$(WXWIN)/build-release/lib",
 					"-arch",
 					i386,
 					"-framework",
@@ -484,19 +490,20 @@
 					OpenGL,
 					"-framework",
 					AGL,
-					"$(WXWIN)/osx-build/lib/libwx_mac_richtext-2.8.a",
-					"$(WXWIN)/osx-build/lib/libwx_mac_aui-2.8.a",
-					"$(WXWIN)/osx-build/lib/libwx_mac_xrc-2.8.a",
-					"$(WXWIN)/osx-build/lib/libwx_mac_qa-2.8.a",
-					"$(WXWIN)/osx-build/lib/libwx_mac_html-2.8.a",
-					"$(WXWIN)/osx-build/lib/libwx_mac_adv-2.8.a",
-					"$(WXWIN)/osx-build/lib/libwx_mac_core-2.8.a",
-					"$(WXWIN)/osx-build/lib/libwx_base_carbon_xml-2.8.a",
-					"$(WXWIN)/osx-build/lib/libwx_base_carbon_net-2.8.a",
-					"$(WXWIN)/osx-build/lib/libwx_base_carbon-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_richtext-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_aui-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_xrc-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_qa-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_html-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_adv-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_core-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_base_carbon_xml-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_base_carbon_net-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_base_carbon-2.8.a",
 					"-framework",
 					WebKit,
 					"-lexpat",
+					"-lwx_mac_gl-2.8",
 					"-lwxtiff-2.8",
 					"-lwxjpeg-2.8",
 					"-lwxpng-2.8",
@@ -565,6 +572,7 @@
 					"-framework",
 					WebKit,
 					"-lexpat",
+					"-lwx_mac_gl-2.8",
 					"-lwxtiff-2.8",
 					"-lwxjpeg-2.8",
 					"-lwxpng-2.8",

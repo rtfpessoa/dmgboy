@@ -32,6 +32,7 @@
 #include "Xpm/recent.xpm"
 #include "Xpm/gb16.xpm"
 #include "Xpm/gb32.xpm"
+#include "GLPanel.h"
 
 using namespace std;
 
@@ -82,7 +83,8 @@ MainFrame::MainFrame(wxString fileName)
 	this->CreateRecentMenu(SettingsGetRecentRoms());
 
     // create the MainPanel
-    panel = new MainPanel(this);
+    //panel = new MainPanel(this);
+	panel = new GLPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 
 	sound = new Sound();
     video = new Video(panel);
