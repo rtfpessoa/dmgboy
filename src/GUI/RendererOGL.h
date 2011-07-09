@@ -15,51 +15,38 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GLPANEL_H__
-#define __GLPANEL_H__
+#ifndef __RENDEREROGL_H__
+#define __RENDEREROGL_H__
 
 
 /*******************************************************************************
- * GLPanel Class
+ * RendererOGL Class
  *******************************************************************************/
 
 #include "wx/glcanvas.h"
-#include "../IGBScreenDrawable.h"
+#include "RendererBase.h"
 #include "Def.h"
 
 #if wxUSE_GLCANVAS
 
-class GLPanel: public wxGLCanvas, public IGBScreenDrawable {
-	DECLARE_CLASS(GLPanel)
+class RendererOGL: public wxGLCanvas, public RendererBase {
+	DECLARE_CLASS(RendererOGL)
 	DECLARE_EVENT_TABLE()
 	
 private:
-    bool   initialized;
-	int selPalette;
-    BYTE * imgBuf;
+    bool initialized;
 	wxWindow * windowParent;
     GLuint m_gllist;
 	
 public:
-    GLPanel( wxWindow *parent, wxWindowID id = wxID_ANY,
+    RendererOGL( wxWindow *parent, wxWindowID id = wxID_ANY,
 				 const wxPoint& pos = wxDefaultPosition,
 				 const wxSize& size = wxDefaultSize,
-				 long style = 0, const wxString& name = _T("GLPanel") );
+				 long style = 0, const wxString& name = _T("OGLRenderer") );
 	
-    GLPanel();
-	
-	void CreateScreen();
-    void OnPaint(wxPaintEvent& event);
+	void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
-	
-	void ChangeSize();
-	void ChangePalette(bool original);
-	void OnPreDraw();
-	void OnPostDraw();
-	void OnDrawPixel(int idColor, int x, int y);
-	void OnRefreshScreen();
-	void OnClear();
 	
     void Render();
     void InitGL();

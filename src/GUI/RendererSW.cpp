@@ -17,19 +17,19 @@
 
 #include <wx/dcbuffer.h>
 #include <wx/image.h>
-#include "MainPanel.h"
+#include "RendererSW.h"
 #include "MainFrame.h"
 #include "IDControls.h"
 #include "../Def.h"
 #include "../Settings.h"
 
-inline void MainPanel::OnEraseBackground(wxEraseEvent &) { /* do nothing */ }
+inline void RendererSW::OnEraseBackground(wxEraseEvent &) { /* do nothing */ }
 
-IMPLEMENT_CLASS(MainPanel, wxPanel)
+IMPLEMENT_CLASS(RendererSW, wxPanel)
 
-BEGIN_EVENT_TABLE(MainPanel, wxPanel)
-EVT_PAINT(MainPanel::OnPaint)
-EVT_ERASE_BACKGROUND(MainPanel::OnEraseBackground)
+BEGIN_EVENT_TABLE(RendererSW, wxPanel)
+EVT_PAINT(RendererSW::OnPaint)
+EVT_ERASE_BACKGROUND(RendererSW::OnEraseBackground)
 END_EVENT_TABLE()
 
 static BYTE palettes[][4][3] =		{
@@ -48,7 +48,7 @@ static BYTE palettes[][4][3] =		{
 							};
 
 
-MainPanel::MainPanel(wxWindow *parent) : wxPanel(parent, ID_MAINPANEL) {
+RendererSW::RendererSW(wxWindow *parent) : wxPanel(parent, ID_MAINPANEL) {
     
 	imgBuf = NULL;
 	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
@@ -60,17 +60,17 @@ MainPanel::MainPanel(wxWindow *parent) : wxPanel(parent, ID_MAINPANEL) {
 	this->SetDropTarget(new DnDFile(parent));
 }
 
-MainPanel::~MainPanel() {
+RendererSW::~RendererSW() {
     delete[] imgBuf;
 }
 
-void MainPanel::CreateScreen() {
+void RendererSW::CreateScreen() {
 	imgBuf = new BYTE[GB_SCREEN_W*GB_SCREEN_H*3];
 	OnClear();
 	ChangePalette(SettingsGetGreenScale());
 }
 
-void MainPanel::ChangeSize()
+void RendererSW::ChangeSize()
 {
 	int zoom = SettingsGetWindowZoom();
     
@@ -79,7 +79,7 @@ void MainPanel::ChangeSize()
     SetMaxSize(size);
 }
 
-void MainPanel::OnPaint(wxPaintEvent &) {
+void RendererSW::OnPaint(wxPaintEvent &) {
     
 	wxImage img = wxImage(GB_SCREEN_W, GB_SCREEN_H, imgBuf, true);
 	
@@ -95,24 +95,24 @@ void MainPanel::OnPaint(wxPaintEvent &) {
 	// dc.DrawText(wxString("Pokemon"), 0, 0);
 }
 
-void MainPanel::OnPreDraw()
+void RendererSW::OnPreDraw()
 {
 	
 }
 
-void MainPanel::OnPostDraw()
+void RendererSW::OnPostDraw()
 {
 	
 }
 
-void MainPanel::OnRefreshScreen()
+void RendererSW::OnRefreshScreen()
 {
 	// refresh the panel
     Refresh(false);
 	Update();
 }
 
-void MainPanel::ChangePalette(bool original)
+void RendererSW::ChangePalette(bool original)
 {
 	if (original)
 		selPalette = 0;
@@ -120,13 +120,13 @@ void MainPanel::ChangePalette(bool original)
 		selPalette = 1;
 }
 
-void MainPanel::OnClear()
+void RendererSW::OnClear()
 {
 	int size = GB_SCREEN_W*GB_SCREEN_H*3;
 	memset(imgBuf, 0, size);
 }
 
-void MainPanel::OnDrawPixel(int idColor, int x, int y)
+void RendererSW::OnDrawPixel(int idColor, int x, int y)
 {
 	/*
 	int zoom = SettingsGetWindowZoom();

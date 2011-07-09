@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
-		6E0823A613C2429700C42CE0 /* GLPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E0823A413C2429700C42CE0 /* GLPanel.cpp */; };
+		6E0823A613C2429700C42CE0 /* RendererOGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E0823A413C2429700C42CE0 /* RendererOGL.cpp */; };
 		6E205760120589BF00079331 /* gbpablog.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6E20575F120589BF00079331 /* gbpablog.icns */; };
 		6E22367A1233B4C6009D019F /* SettingsDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2236791233B4C6009D019F /* SettingsDialog.cpp */; };
 		6E23C6C511D7CA0C0043AF47 /* MainApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6BF11D7CA0C0043AF47 /* MainApp.cpp */; };
 		6E23C6C611D7CA0C0043AF47 /* MainFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C111D7CA0C0043AF47 /* MainFrame.cpp */; };
-		6E23C6C711D7CA0C0043AF47 /* MainPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C311D7CA0C0043AF47 /* MainPanel.cpp */; };
+		6E23C6C711D7CA0C0043AF47 /* RendererSW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6C311D7CA0C0043AF47 /* RendererSW.cpp */; };
 		6E23C6DC11D7CB770043AF47 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E23C6DB11D7CB770043AF47 /* SDL.framework */; };
 		6E23C73511D7CD510043AF47 /* Cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C71D11D7CD510043AF47 /* Cartridge.cpp */; };
 		6E23C73611D7CD510043AF47 /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C71F11D7CD510043AF47 /* CPU.cpp */; };
@@ -34,6 +34,7 @@
 		6E2C36541334CB3900BE7D7B /* Wave_Writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C36451334CB3900BE7D7B /* Wave_Writer.cpp */; };
 		6E2C365F1334FF7100BE7D7B /* Sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C365E1334FF7100BE7D7B /* Sound.cpp */; };
 		6E974A5A134F586C00ECC09C /* SDL.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6E23C6DB11D7CB770043AF47 /* SDL.framework */; };
+		6E97934413C8CBCE0078E8EC /* RendererBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E97934213C8CBCE0078E8EC /* RendererBase.cpp */; };
 		6EA1AB79127F0F0E00AC510C /* AboutDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */; };
 		6EDDDE7512EA037200BFB26A /* InputTextCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDDE7412EA037200BFB26A /* InputTextCtrl.cpp */; };
 		6EFEDB441245230600646E83 /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEDB421245230600646E83 /* Settings.cpp */; };
@@ -61,8 +62,8 @@
 		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		6E0823A413C2429700C42CE0 /* GLPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLPanel.cpp; sourceTree = "<group>"; };
-		6E0823A513C2429700C42CE0 /* GLPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLPanel.h; sourceTree = "<group>"; };
+		6E0823A413C2429700C42CE0 /* RendererOGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RendererOGL.cpp; sourceTree = "<group>"; };
+		6E0823A513C2429700C42CE0 /* RendererOGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RendererOGL.h; sourceTree = "<group>"; };
 		6E20575F120589BF00079331 /* gbpablog.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = gbpablog.icns; sourceTree = "<group>"; };
 		6E2236781233B4C6009D019F /* SettingsDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsDialog.h; sourceTree = "<group>"; };
 		6E2236791233B4C6009D019F /* SettingsDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsDialog.cpp; sourceTree = "<group>"; };
@@ -71,8 +72,8 @@
 		6E23C6C011D7CA0C0043AF47 /* MainApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainApp.h; sourceTree = "<group>"; };
 		6E23C6C111D7CA0C0043AF47 /* MainFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainFrame.cpp; sourceTree = "<group>"; };
 		6E23C6C211D7CA0C0043AF47 /* MainFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainFrame.h; sourceTree = "<group>"; };
-		6E23C6C311D7CA0C0043AF47 /* MainPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainPanel.cpp; sourceTree = "<group>"; };
-		6E23C6C411D7CA0C0043AF47 /* MainPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainPanel.h; sourceTree = "<group>"; };
+		6E23C6C311D7CA0C0043AF47 /* RendererSW.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RendererSW.cpp; sourceTree = "<group>"; };
+		6E23C6C411D7CA0C0043AF47 /* RendererSW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RendererSW.h; sourceTree = "<group>"; };
 		6E23C6DB11D7CB770043AF47 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = Library/Frameworks/SDL.framework; sourceTree = SDKROOT; };
 		6E23C71D11D7CD510043AF47 /* Cartridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Cartridge.cpp; path = ../../../src/Cartridge.cpp; sourceTree = SOURCE_ROOT; };
 		6E23C71E11D7CD510043AF47 /* Cartridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cartridge.h; path = ../../../src/Cartridge.h; sourceTree = SOURCE_ROOT; };
@@ -123,6 +124,8 @@
 		6E2C365D1334FF7100BE7D7B /* Sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sound.h; path = ../../../src/Sound.h; sourceTree = SOURCE_ROOT; };
 		6E2C365E1334FF7100BE7D7B /* Sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sound.cpp; path = ../../../src/Sound.cpp; sourceTree = SOURCE_ROOT; };
 		6E974A6413508F1A00ECC09C /* IGBScreenDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IGBScreenDrawable.h; path = ../../../src/IGBScreenDrawable.h; sourceTree = SOURCE_ROOT; };
+		6E97934213C8CBCE0078E8EC /* RendererBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RendererBase.cpp; sourceTree = "<group>"; };
+		6E97934313C8CBCE0078E8EC /* RendererBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RendererBase.h; sourceTree = "<group>"; };
 		6EA1AB77127F0F0E00AC510C /* AboutDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutDialog.h; sourceTree = "<group>"; };
 		6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AboutDialog.cpp; sourceTree = "<group>"; };
 		6EDDDE7312EA037200BFB26A /* InputTextCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputTextCtrl.h; sourceTree = "<group>"; };
@@ -232,10 +235,12 @@
 				6E23C6BF11D7CA0C0043AF47 /* MainApp.cpp */,
 				6E23C6C211D7CA0C0043AF47 /* MainFrame.h */,
 				6E23C6C111D7CA0C0043AF47 /* MainFrame.cpp */,
-				6E23C6C411D7CA0C0043AF47 /* MainPanel.h */,
-				6E23C6C311D7CA0C0043AF47 /* MainPanel.cpp */,
-				6E0823A513C2429700C42CE0 /* GLPanel.h */,
-				6E0823A413C2429700C42CE0 /* GLPanel.cpp */,
+				6E97934313C8CBCE0078E8EC /* RendererBase.h */,
+				6E97934213C8CBCE0078E8EC /* RendererBase.cpp */,
+				6E23C6C411D7CA0C0043AF47 /* RendererSW.h */,
+				6E23C6C311D7CA0C0043AF47 /* RendererSW.cpp */,
+				6E0823A513C2429700C42CE0 /* RendererOGL.h */,
+				6E0823A413C2429700C42CE0 /* RendererOGL.cpp */,
 				6E2236781233B4C6009D019F /* SettingsDialog.h */,
 				6E2236791233B4C6009D019F /* SettingsDialog.cpp */,
 				6EA1AB77127F0F0E00AC510C /* AboutDialog.h */,
@@ -396,7 +401,7 @@
 			files = (
 				6E23C6C511D7CA0C0043AF47 /* MainApp.cpp in Sources */,
 				6E23C6C611D7CA0C0043AF47 /* MainFrame.cpp in Sources */,
-				6E23C6C711D7CA0C0043AF47 /* MainPanel.cpp in Sources */,
+				6E23C6C711D7CA0C0043AF47 /* RendererSW.cpp in Sources */,
 				6E23C73511D7CD510043AF47 /* Cartridge.cpp in Sources */,
 				6E23C73611D7CD510043AF47 /* CPU.cpp in Sources */,
 				6E23C73811D7CD510043AF47 /* GBException.cpp in Sources */,
@@ -419,7 +424,8 @@
 				6E2C36521334CB3900BE7D7B /* Sound_Queue.cpp in Sources */,
 				6E2C36541334CB3900BE7D7B /* Wave_Writer.cpp in Sources */,
 				6E2C365F1334FF7100BE7D7B /* Sound.cpp in Sources */,
-				6E0823A613C2429700C42CE0 /* GLPanel.cpp in Sources */,
+				6E0823A613C2429700C42CE0 /* RendererOGL.cpp in Sources */,
+				6E97934413C8CBCE0078E8EC /* RendererBase.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,58 +15,40 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __MAINPANEL_H__
-#define __MAINPANEL_H__
+#ifndef __BASERENDERER_H__
+#define __BASERENDERER_H__
 
 #include <wx/wx.h>
 #include <wx/dnd.h>
-#include "SDL.h"
+#include "Def.h"
 #include "../IGBScreenDrawable.h"
-#include "../Def.h"
 
 
 /*******************************************************************************
- * MainPanel Class
+ * RendererBase Class
  *******************************************************************************/
 
-class MainPanel : public wxPanel, public IGBScreenDrawable {
-    DECLARE_CLASS(MainPanel)
-    DECLARE_EVENT_TABLE()
-
+class RendererBase: public IGBScreenDrawable {
 private:
-	int selPalette;
-    BYTE * imgBuf;
+	wxWindow * renderer;
+	int  selPalette;
 	
-    void OnPaint(wxPaintEvent &);
-    void OnEraseBackground(wxEraseEvent &);
-    
-    /**
-     * Creates the SDL_Surface used by this MainPanel.
-     */
-    void CreateScreen();
-    
+protected:
+	BYTE * imgBuf;
+	
 public:
-	wxWindow * windowParent;
+	RendererBase(wxWindow * renderer);
+	//void SetRenderer(wxWindow * renderer);
 	
-    MainPanel(wxWindow *parent);
-    ~MainPanel();
-	
+	void CreateScreen();
 	void ChangeSize();
 	void ChangePalette(bool original);
+	
+	void OnClear();
+	void OnRefreshScreen();
 	void OnPreDraw();
 	void OnPostDraw();
 	void OnDrawPixel(int idColor, int x, int y);
-	void OnRefreshScreen();
-	void OnClear();
-};
-
-// A drop target that adds filenames to a list box
-class DnDFile : public wxFileDropTarget {
-public:
-	DnDFile(wxWindow *parent);
-	virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);
-private:
-	wxWindow *parent;
 };
 
 #endif
