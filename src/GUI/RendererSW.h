@@ -19,54 +19,23 @@
 #define __RENDERERSW_H__
 
 #include <wx/wx.h>
-#include <wx/dnd.h>
-#include "SDL.h"
-#include "../IGBScreenDrawable.h"
-#include "../Def.h"
-
+#include "RendererBase.h"
 
 /*******************************************************************************
  * RendererSW Class
  *******************************************************************************/
 
-class RendererSW : public wxPanel, public IGBScreenDrawable {
+class RendererSW : public wxPanel, public RendererBase {
     DECLARE_CLASS(RendererSW)
     DECLARE_EVENT_TABLE()
 
 private:
-	int selPalette;
-    BYTE * imgBuf;
-	
-    void OnPaint(wxPaintEvent &);
+	void OnPaint(wxPaintEvent &);
     void OnEraseBackground(wxEraseEvent &);
     
-    /**
-     * Creates the SDL_Surface used by this MainPanel.
-     */
-    void CreateScreen();
-    
 public:
-	wxWindow * windowParent;
-	
-    RendererSW(wxWindow *parent);
+	RendererSW(wxWindow *parent);
     ~RendererSW();
-	
-	void ChangeSize();
-	void ChangePalette(bool original);
-	void OnPreDraw();
-	void OnPostDraw();
-	void OnDrawPixel(int idColor, int x, int y);
-	void OnRefreshScreen();
-	void OnClear();
-};
-
-// A drop target that adds filenames to a list box
-class DnDFile : public wxFileDropTarget {
-public:
-	DnDFile(wxWindow *parent);
-	virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);
-private:
-	wxWindow *parent;
 };
 
 #endif

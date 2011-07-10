@@ -17,11 +17,10 @@
 
 #include <wx/dcbuffer.h>
 #include <wx/image.h>
-#include "RendererSW.h"
-#include "MainFrame.h"
 #include "IDControls.h"
 #include "../Def.h"
 #include "../Settings.h"
+#include "RendererSW.h"
 
 inline void RendererSW::OnEraseBackground(wxEraseEvent &) { /* do nothing */ }
 
@@ -32,51 +31,14 @@ EVT_PAINT(RendererSW::OnPaint)
 EVT_ERASE_BACKGROUND(RendererSW::OnEraseBackground)
 END_EVENT_TABLE()
 
-static BYTE palettes[][4][3] =		{
-								{
-									{ 16,  57,  16},
-									{ 49,  99,  49},
-									{140, 173,  16},
-									{156, 189,  16}
-								},
-								{
-									{  0,   0,   0},
-									{ 85,  85,  85},
-									{170, 170, 170},
-									{255, 255, 255}
-								}
-							};
-
-
-RendererSW::RendererSW(wxWindow *parent) : wxPanel(parent, ID_MAINPANEL) {
-    
-	imgBuf = NULL;
+RendererSW::RendererSW(wxWindow *parent):
+	wxPanel(parent, ID_MAINPANEL), RendererBase(this, parent)
+{    
 	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-    windowParent = parent;
-	
-	CreateScreen();
-	ChangeSize();
-	
-	this->SetDropTarget(new DnDFile(parent));
 }
 
 RendererSW::~RendererSW() {
-    delete[] imgBuf;
-}
-
-void RendererSW::CreateScreen() {
-	imgBuf = new BYTE[GB_SCREEN_W*GB_SCREEN_H*3];
-	OnClear();
-	ChangePalette(SettingsGetGreenScale());
-}
-
-void RendererSW::ChangeSize()
-{
-	int zoom = SettingsGetWindowZoom();
     
-	wxSize size(GB_SCREEN_W*zoom, GB_SCREEN_H*zoom);
-    SetMinSize(size);
-    SetMaxSize(size);
 }
 
 void RendererSW::OnPaint(wxPaintEvent &) {
@@ -95,86 +57,3 @@ void RendererSW::OnPaint(wxPaintEvent &) {
 	// dc.DrawText(wxString("Pokemon"), 0, 0);
 }
 
-void RendererSW::OnPreDraw()
-{
-	
-}
-
-void RendererSW::OnPostDraw()
-{
-	
-}
-
-void RendererSW::OnRefreshScreen()
-{
-	// refresh the panel
-    Refresh(false);
-	Update();
-}
-
-void RendererSW::ChangePalette(bool original)
-{
-	if (original)
-		selPalette = 0;
-	else
-		selPalette = 1;
-}
-
-void RendererSW::OnClear()
-{
-	int size = GB_SCREEN_W*GB_SCREEN_H*3;
-	memset(imgBuf, 0, size);
-}
-
-void RendererSW::OnDrawPixel(int idColor, int x, int y)
-{
-	/*
-	int zoom = SettingsGetWindowZoom();
-	
-	void * ptrPalette = &palettes[selPalette][idColor][0];
-	unsigned long offsetBuf = 0;
-	int sizeLine = GB_SCREEN_W * 3 * zoom;
-	int offsetX = x * 3 * zoom;
-	int offsetY = 0;
-	
-	int i, j;
-	
-	for (i=0; i<zoom; i++)
-	{
-		offsetY = (y * zoom + i) * sizeLine;
-		offsetBuf = offsetY + offsetX;
-		
-		for (j=0; j<zoom; j++)
-		{
-			memcpy(&imgBuf[offsetBuf], ptrPalette, 3);
-			offsetBuf += 3;
-		}
-	}
-	 */
-
-	BYTE colorR = palettes[selPalette][idColor][0];
-	BYTE colorG = palettes[selPalette][idColor][1];
-	BYTE colorB = palettes[selPalette][idColor][2];
-	
-	int sizeLine = GB_SCREEN_W * 3;
-	int offsetX = x * 3;
-	int offsetY = y * sizeLine;
-	int offsetBuf = offsetY + offsetX;
-	
-	imgBuf[offsetBuf + 0] = colorR;
-	imgBuf[offsetBuf + 1] = colorG;
-	imgBuf[offsetBuf + 2] = colorB;
-}
-
-DnDFile::DnDFile(wxWindow * parent)
-{
-	this->parent = parent;
-}
-
-bool DnDFile::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames)
-{
-	MainFrame * frame = (MainFrame *)parent;
-	frame->ChangeFile(filenames[0]);
-
-	return true;
-}

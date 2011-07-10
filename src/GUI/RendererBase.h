@@ -37,8 +37,8 @@ protected:
 	BYTE * imgBuf;
 	
 public:
-	RendererBase(wxWindow * renderer);
-	//void SetRenderer(wxWindow * renderer);
+	RendererBase(wxWindow * renderer, wxWindow * parent);
+	~RendererBase();
 	
 	void CreateScreen();
 	void ChangeSize();
@@ -49,6 +49,15 @@ public:
 	void OnPreDraw();
 	void OnPostDraw();
 	void OnDrawPixel(int idColor, int x, int y);
+};
+
+// A drop target that adds filenames to a list box
+class DnDFile : public wxFileDropTarget {
+public:
+	DnDFile(wxWindow *parent);
+	virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);
+private:
+	wxWindow *parent;
 };
 
 #endif

@@ -22,7 +22,7 @@
 
 #include <wx/wx.h>
 #include "SettingsDialog.h"
-#include "RendererOGL.h"
+#include "RendererBase.h"
 #include "../CPU.h"
 
 struct RecentFile
@@ -45,7 +45,7 @@ private:
 	wxMenu *recentMenuPopup;
 	wxToolBar* toolBar;
 	wxTimer * timerExecution;
-    RendererOGL *panel;
+    RendererBase *renderer;
 	SettingsDialog * settingsDialog;
 	Video * video;
 	Sound * sound;
@@ -98,12 +98,6 @@ public:
     MainFrame(wxString fileName);
 	~MainFrame();
 	
-    /**
-     * Gets the MainPanel within this MainFrame.
-     *
-     * @return The MainPanel.
-     */
-	inline RendererOGL &GetPanel() { return *panel; }
 	void ChangeFile(const wxString fileName);
 };
 

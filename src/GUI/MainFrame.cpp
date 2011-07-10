@@ -33,6 +33,7 @@
 #include "Xpm/gb16.xpm"
 #include "Xpm/gb32.xpm"
 #include "RendererOGL.h"
+#include "RendererSW.h"
 
 using namespace std;
 
@@ -82,12 +83,12 @@ MainFrame::MainFrame(wxString fileName)
 	PadSetKeys(SettingsGetInput());
 	this->CreateRecentMenu(SettingsGetRecentRoms());
 
-    // create the MainPanel
-    //panel = new MainPanel(this);
-	panel = new RendererOGL(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+    // create the Renderer
+    //renderer = new RendererSW(this);
+	renderer = new RendererOGL(this);
 
 	sound = new Sound();
-    video = new Video(panel);
+    video = new Video(renderer);
 	cpu = new CPU(video, sound);
 
 	cartridge = NULL;
@@ -504,8 +505,8 @@ void MainFrame::OnSettings(wxCommandEvent &)
     if (settingsDialog->ShowModal() == wxID_OK)
 	{
 		SettingsSetNewValues(settingsDialog->settings);
-		panel->ChangePalette(SettingsGetGreenScale());
-		panel->ChangeSize();
+		renderer->ChangePalette(SettingsGetGreenScale());
+		renderer->ChangeSize();
 		this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
 		PadSetKeys(SettingsGetInput());
 		sound->ChangeSampleRate(SettingsGetSoundSampleRate());
@@ -539,7 +540,7 @@ void MainFrame::OnStop(wxCommandEvent &)
 	cpu->SaveLog();
 #endif
 	cpu->Reset();
-	panel->OnRefreshScreen();
+	renderer->OnRefreshScreen();
 	emuState = Stopped;
 }
 

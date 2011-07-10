@@ -38,6 +38,8 @@ private:
 	wxWindow * windowParent;
     GLuint m_gllist;
 	
+	void InitGL();
+	
 public:
     RendererOGL( wxWindow *parent, wxWindowID id = wxID_ANY,
 				 const wxPoint& pos = wxDefaultPosition,
@@ -49,7 +51,6 @@ public:
     void OnEraseBackground(wxEraseEvent& event);
 	
     void Render();
-    void InitGL();
 };
 
 #endif // #if wxUSE_GLCANVAS

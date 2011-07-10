@@ -17,6 +17,7 @@
 
 #include "../Def.h"
 #include "../Settings.h"
+#include "MainFrame.h"
 #include "RendererBase.h"
 
 static BYTE palettes[][4][3] =
@@ -35,12 +36,19 @@ static BYTE palettes[][4][3] =
 	}
 };
 
-RendererBase::RendererBase(wxWindow * renderer)
+RendererBase::RendererBase(wxWindow * renderer, wxWindow * parent)
 {
 	this->renderer = renderer;
 	imgBuf = NULL;
 	CreateScreen();
 	ChangeSize();
+	
+	renderer->SetDropTarget(new DnDFile(parent));
+}
+
+RendererBase::~RendererBase()
+{
+	delete[] imgBuf;
 }
 
 void RendererBase::CreateScreen() {
@@ -103,4 +111,17 @@ void RendererBase::OnDrawPixel(int idColor, int x, int y)
 	imgBuf[offsetBuf + 0] = colorR;
 	imgBuf[offsetBuf + 1] = colorG;
 	imgBuf[offsetBuf + 2] = colorB;
+}
+
+DnDFile::DnDFile(wxWindow * parent)
+{
+	this->parent = parent;
+}
+
+bool DnDFile::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames)
+{
+	MainFrame * frame = (MainFrame *)parent;
+	frame->ChangeFile(filenames[0]);
+	
+	return true;
 }

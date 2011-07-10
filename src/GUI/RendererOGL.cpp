@@ -40,7 +40,7 @@ END_EVENT_TABLE()
 RendererOGL::RendererOGL(wxWindow *parent, wxWindowID id,
 						   const wxPoint& pos, const wxSize& size, long style, const wxString& name)
 : wxGLCanvas(parent, (wxGLCanvas*) NULL, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name ),
-  RendererBase(this)
+  RendererBase(this, parent)
 {
     initialized = false;
     m_gllist = 0;
