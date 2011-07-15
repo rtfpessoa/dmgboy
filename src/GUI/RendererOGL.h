@@ -37,6 +37,7 @@ private:
     bool initialized;
 	wxWindow * windowParent;
     GLuint m_gllist;
+	float fov;
 	
 	void InitGL();
 	
