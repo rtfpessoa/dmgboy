@@ -33,8 +33,10 @@
 			<Add directory="../../../src/Gb_Snd_Emu-0.1.4" />
 		</Compiler>
 		<Linker>
-			<Add option="`wx-config --libs` `sdl-config --libs`" />
+			<Add option="`wx-config --libs --gl-libs` `sdl-config --libs`" />
 			<Add library="SDL" />
+			<Add library="GL" />
+			<Add library="GLU" />
 		</Linker>
 		<Unit filename="../../../src/CPU.cpp">
 			<Option virtualFolder="HW/" />
@@ -84,10 +86,22 @@
 		<Unit filename="../../../src/GUI/MainFrame.h">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/MainPanel.cpp">
+		<Unit filename="../../../src/GUI/RendererBase.cpp">
 			<Option virtualFolder="GUI/" />
 		</Unit>
-		<Unit filename="../../../src/GUI/MainPanel.h">
+		<Unit filename="../../../src/GUI/RendererBase.h">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/RendererOGL.cpp">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/RendererOGL.h">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/RendererSW.cpp">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/RendererSW.h">
 			<Option virtualFolder="GUI/" />
 		</Unit>
 		<Unit filename="../../../src/GUI/SettingsDialog.cpp">
