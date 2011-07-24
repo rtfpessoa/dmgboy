@@ -32,9 +32,10 @@ EVT_ERASE_BACKGROUND(RendererSW::OnEraseBackground)
 END_EVENT_TABLE()
 
 RendererSW::RendererSW(wxWindow *parent):
-	wxPanel(parent, ID_MAINPANEL), RendererBase(this, parent)
-{    
+	wxPanel(parent, ID_MAINPANEL)
+{
 	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+	SetRenderer(parent, this);
 }
 
 RendererSW::~RendererSW() {

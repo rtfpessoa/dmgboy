@@ -36,19 +36,23 @@ static BYTE palettes[][4][3] =
 	}
 };
 
-RendererBase::RendererBase(wxWindow * renderer, wxWindow * parent)
+RendererBase::RendererBase()
 {
-	this->renderer = renderer;
 	imgBuf = NULL;
+	renderer = NULL;
 	CreateScreen();
 	ChangeSize();
-	
-	renderer->SetDropTarget(new DnDFile(parent));
 }
 
 RendererBase::~RendererBase()
 {
 	delete[] imgBuf;
+}
+
+void RendererBase::SetRenderer(wxWindow * parent, wxWindow *renderer)
+{
+	this->renderer = renderer;
+	renderer->SetDropTarget(new DnDFile(parent));
 }
 
 void RendererBase::CreateScreen() {
@@ -68,10 +72,13 @@ void RendererBase::ChangePalette(bool original)
 void RendererBase::ChangeSize()
 {
 	int zoom = SettingsGetWindowZoom();
-    
+	
 	wxSize size(GB_SCREEN_W*zoom, GB_SCREEN_H*zoom);
-    renderer->SetMinSize(size);
-    renderer->SetMaxSize(size);
+	if (renderer)
+	{
+		renderer->SetMinSize(size);
+		renderer->SetMaxSize(size);
+	}
 }
 
 void RendererBase::OnClear()
@@ -83,18 +90,21 @@ void RendererBase::OnClear()
 void RendererBase::OnRefreshScreen()
 {
 	// refresh the panel
-    renderer->Refresh(false);
-	renderer->Update();
+	if (renderer)
+	{
+		renderer->Refresh(false);
+		renderer->Update();
+	}
 }
 
 void RendererBase::OnPreDraw()
 {
-	
+
 }
 
 void RendererBase::OnPostDraw()
 {
-	
+
 }
 
 void RendererBase::OnDrawPixel(int idColor, int x, int y)

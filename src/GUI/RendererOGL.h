@@ -25,7 +25,6 @@
 
 #include "wx/glcanvas.h"
 #include "RendererBase.h"
-#include "Def.h"
 
 #if wxUSE_GLCANVAS
 

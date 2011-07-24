@@ -29,7 +29,7 @@
 
 #include "RendererOGL.h"
 #include "../Settings.h"
-#include "Def.h"
+#include "../Def.h"
 
 #define PI 3.141592653589793f
 
@@ -49,8 +49,7 @@ END_EVENT_TABLE()
 
 RendererOGL::RendererOGL(wxWindow *parent, wxWindowID id,
 						   const wxPoint& pos, const wxSize& size, long style, const wxString& name)
-: wxGLCanvas(parent, (wxGLCanvas*) NULL, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name),
-  RendererBase(this, parent)
+: wxGLCanvas(parent, (wxGLCanvas*) NULL, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name)
 {
     initialized = false;
     m_gllist = 0;
@@ -58,6 +57,7 @@ RendererOGL::RendererOGL(wxWindow *parent, wxWindowID id,
 	
 	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
     windowParent = parent;
+	SetRenderer(parent, this);
 }
 
 void RendererOGL::Render()

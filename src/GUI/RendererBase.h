@@ -20,7 +20,7 @@
 
 #include <wx/wx.h>
 #include <wx/dnd.h>
-#include "Def.h"
+#include "../Def.h"
 #include "../IGBScreenDrawable.h"
 
 
@@ -40,6 +40,7 @@ public:
 	RendererBase(wxWindow * renderer, wxWindow * parent);
 	~RendererBase();
 	
+	void SetRenderer(wxWindow * parent, wxWindow *renderer);
 	void CreateScreen();
 	void ChangeSize();
 	void ChangePalette(bool original);
