@@ -37,7 +37,7 @@ protected:
 	BYTE * imgBuf;
 	
 public:
-	RendererBase(wxWindow * renderer, wxWindow * parent);
+	RendererBase();
 	~RendererBase();
 	
 	void SetRenderer(wxWindow * parent, wxWindow *renderer);
