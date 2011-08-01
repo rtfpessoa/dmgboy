@@ -18,7 +18,9 @@
 #include <iostream>
 #include <wx/cmdline.h>
 #include <wx/filename.h>
+#include <SDL.h>
 #include "MainApp.h"
+#include "MainFrame.h"
 #include "../Def.h"
 
 

@@ -16,6 +16,8 @@
  */
 
 #include <iostream>
+#include "Memory.h"
+#include "IGBScreenDrawable.h"
 #include "Video.h"
 
 using namespace std;

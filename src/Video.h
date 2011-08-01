@@ -20,8 +20,9 @@
 
 #include "map"
 #include "Def.h"
-#include "Memory.h"
-#include "IGBScreenDrawable.h"
+
+class Memory;
+class IGBScreenDrawable;
 
 struct VideoPixel
 {

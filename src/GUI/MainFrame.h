@@ -21,9 +21,14 @@
 #define MAX_RECENT_FILES 10
 
 #include <wx/wx.h>
-#include "SettingsDialog.h"
-#include "RendererBase.h"
-#include "../CPU.h"
+#include "../Def.h"
+
+class RendererBase;
+class SettingsDialog;
+class CPU;
+class Video;
+class Sound;
+class Cartridge;
 
 struct RecentFile
 {

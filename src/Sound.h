@@ -18,19 +18,16 @@
 #ifndef __SOUND_H__
 #define __SOUND_H__
 
-#include "SDL.h"
-// Definir la siguiente linea para que en Visual Studio no haya conflicto
-// entre SDL y GB_Snd_Emu al definir tipos basicos
-#define BLARGG_COMPILER_HAS_NAMESPACE 1
-#include "Basic_Gb_Apu.h"
-#include "Sound_Queue.h"
 #include "Def.h"
+
+class Basic_Gb_Apu;
+class Sound_Queue;
 
 class Sound
 {
 private:
-	Basic_Gb_Apu apu;
-	Sound_Queue sound;
+	Basic_Gb_Apu * apu;
+	Sound_Queue * sound;
 	bool initialized;
 	bool enabled;
 	long sampleRate;
@@ -45,8 +42,8 @@ public:
 	int Stop();
 	bool GetEnabled();
 	void SetEnabled(bool enabled);
-	inline void WriteRegister(WORD dir, BYTE value) { if (enabled) apu.write_register( dir, value ); }
-	inline BYTE ReadRegister(WORD dir) { return enabled ? apu.read_register( dir ) : 0; }
+	void WriteRegister(WORD dir, BYTE value);
+	BYTE ReadRegister(WORD dir);
 	void EndFrame();
 };
 

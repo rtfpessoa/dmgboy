@@ -19,13 +19,12 @@
 #define __CPU_H__
 
 #include "Registers.h"
-#include "Instructions.h"
 #include "Memory.h"
-#include "Video.h"
-#include "Sound.h"
-#include "Pad.h"
-#include "Cartridge.h"
-#include "Log.h"
+
+class QueueLog;
+class Video;
+class Instructions;
+class Cartridge;
 
 class CPU: public Registers, public Memory
 {
@@ -42,8 +41,8 @@ private:
 #ifdef MAKEGBLOG
 	QueueLog *log;
 #endif
-	BYTE instructionCycles[0xFF];
-	BYTE instructionCyclesCB[0xFF];
+	BYTE instructionCycles[0x100];
+	BYTE instructionCyclesCB[0x100];
 	bool frameCompleted;
 	bool VBlankIntPending;
 public:

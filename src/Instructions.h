@@ -18,8 +18,8 @@
 #ifndef __INSTRUCCIONES_H__
 #define __INSTRUCCIONES_H__
 
-#include "Registers.h"
-#include "Memory.h"
+class Registers;
+class Memory;
 
 class Instructions
 {

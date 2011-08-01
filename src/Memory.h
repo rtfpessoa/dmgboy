@@ -21,7 +21,6 @@
 #include <fstream>
 #include "Cartridge.h"
 #include "Sound.h"
-#include "Pad.h"
 
 #define SIZE_MEM 65536
 

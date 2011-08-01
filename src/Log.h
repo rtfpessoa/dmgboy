@@ -18,7 +18,7 @@
 #ifndef __LOGQUEUE_H__
 #define __LOGQUEUE_H__
 
-#include "Registers.h"
+class Registers;
 
 struct ItemLog {
 	std::string prefix;

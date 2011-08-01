@@ -20,7 +20,6 @@
 
 #include <wx/wx.h>
 #include <wx/propdlg.h>
-#include <wx/generic/propdlg.h>
 #include <wx/imaglist.h>
 #include "../Settings.h"
 

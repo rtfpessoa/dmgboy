@@ -18,7 +18,6 @@
 #ifndef __PAD_H__
 #define __PAD_H__
 
-#include <wx/wx.h>
 #include "Def.h"
 
 enum e_gbpad { gbUP, gbDOWN, gbLEFT, gbRIGHT, gbA, gbB, gbSELECT, gbSTART };

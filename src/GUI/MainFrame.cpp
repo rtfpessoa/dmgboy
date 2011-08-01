@@ -21,9 +21,13 @@
 #include <wx/stdpaths.h>
 #include "MainFrame.h"
 #include "AboutDialog.h"
+#include "SettingsDialog.h"
 #include "IDControls.h"
 #include "../Settings.h"
 #include "../Pad.h"
+#include "../Sound.h"
+#include "../Video.h"
+#include "../CPU.h"
 #include "../GBException.h"
 #include "Xpm/open.xpm"
 #include "Xpm/play.xpm"
@@ -354,7 +358,7 @@ void MainFrame::LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * 
 	wxZipEntry* entry;
 	wxFFileInputStream in(zipPath);
 	wxZipInputStream zip(in);
-	while (entry = zip.GetNextEntry())
+	while ((entry = zip.GetNextEntry()))
 	{
 		fileInZip = entry->GetName();
 

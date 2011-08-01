@@ -21,6 +21,8 @@
 #include <fstream>
 #include <sstream>
 #include "Registers.h"
+#include "Video.h"
+#include "Pad.h"
 #include "GBException.h"
 
 #ifdef MAKEGBLOG

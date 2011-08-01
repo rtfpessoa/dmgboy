@@ -18,8 +18,8 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include "MBC.h"
 #include "GBException.h"
+#include "MBC.h"
 using namespace std;
 
 static BYTE * _memCartridge = NULL;

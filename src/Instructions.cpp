@@ -15,10 +15,12 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Instructions.h"
 #include <iostream>
 #include <assert.h>
 #include "GBException.h"
+#include "Registers.h"
+#include "Memory.h"
+#include "Instructions.h"
 
 using namespace std;
 

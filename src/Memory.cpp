@@ -16,8 +16,10 @@
  */
 
 #include <string.h>
-#include "Memory.h"
 #include "Cartridge.h"
+#include "Sound.h"
+#include "Pad.h"
+#include "Memory.h"
 
 using namespace std;
 

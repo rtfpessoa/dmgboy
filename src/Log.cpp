@@ -15,9 +15,10 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Log.h"
 #include <fstream>
 #include <string>
+#include "Registers.h"
+#include "Log.h"
 using namespace std;
 
 QueueLog::QueueLog(int maxItems)
