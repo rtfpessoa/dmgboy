@@ -64,9 +64,6 @@
     <ClInclude Include="..\..\..\src\GUI\MainFrame.h">
       <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\GUI\MainPanel.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\GUI\SettingsDialog.h">
       <Filter>GUI</Filter>
     </ClInclude>
@@ -111,6 +108,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\Sound.h">
       <Filter>HW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\RendererSW.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\RendererBase.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\RendererOGL.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -159,9 +165,6 @@
     <ClCompile Include="..\..\..\src\GUI\MainFrame.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\GUI\MainPanel.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\GUI\SettingsDialog.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
@@ -188,6 +191,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\Sound.cpp">
       <Filter>HW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\RendererBase.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\RendererOGL.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\RendererSW.cpp">
+      <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
