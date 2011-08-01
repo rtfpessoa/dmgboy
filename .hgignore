@@ -1,5 +1,12 @@
 syntax: glob
 
+glob:.DS_Store
+build/mac/Xcode/gbpablog\.xcodeproj/xcuserdata/*
+build/mac/Xcode/gbpablog\.xcodeproj/project\.xcworkspace/xcuserdata/*
+build/mac/Xcode/gbpablog.xcodeproj/pablo.pbxuser
+build/mac/Xcode/gbpablog.xcodeproj/pablo.perspectivev3
+glob:*Xcode/build/*
+
 */debug/*
 */Debug/*
 */release/*
@@ -8,23 +15,11 @@ syntax: glob
 *.user
 *.suo
 *.depend
-glob:build/linux/CodeBlocks/GB++
-glob:*/CodeAnalyst/*
-glob:build/win32/CodeBlocks/GB++.exe
-glob:.DS_Store
-glob:*Xcode/build/*
-glob:build/mac/Xcode/GB++.xcodeproj/*.mode1v3
-glob:build/mac/Xcode/GB++.xcodeproj/*.pbxuser
-glob:build/mac/Xcode/GB++.xcodeproj/*.perspectivev3
-glob:build/win32/CodeBlocks/GB++.layout
-glob:*.backup
-glob:*/log.txt
-build/SCons/.sconsign.dblite
-build/mac/Xcode/gbpablog.xcodeproj/pablo.pbxuser
-build/mac/Xcode/gbpablog.xcodeproj/pablo.perspectivev3
-build/installers/gbpablog*
+build/win32/vs2010/VS2010_vcredist_x86\.exe
+
 build/linux/CodeBlocks/gbpablog
 build/linux/CodeBlocks/gbpablog.layout
-build/win32/vs2010/VS2010_vcredist_x86\.exe
-build/mac/Xcode/gbpablog\.xcodeproj/xcuserdata/*
-build/mac/Xcode/gbpablog\.xcodeproj/project\.xcworkspace/xcuserdata/*
+
+glob:*.backup
+glob:*/log.txt
+build/installers/gbpablog*
