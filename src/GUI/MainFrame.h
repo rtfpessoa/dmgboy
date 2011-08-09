@@ -50,6 +50,7 @@ private:
 	wxMenu *recentMenuPopup;
 	wxToolBar* toolBar;
 	wxTimer * timerExecution;
+    bool fullScreen;
     RendererBase *renderer;
 	SettingsDialog * settingsDialog;
 	Video * video;
@@ -74,6 +75,7 @@ private:
 	void OnLoadState(wxCommandEvent &event);
 	void OnSaveState(wxCommandEvent &event);
 	void OnSettings(wxCommandEvent &);
+    void OnFullScreen(wxCommandEvent &);
 	void OnAbout(wxCommandEvent &);
 	void OnPlay(wxCommandEvent &);
 	void OnPause(wxCommandEvent &);

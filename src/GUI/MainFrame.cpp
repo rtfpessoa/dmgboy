@@ -56,6 +56,7 @@ EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
 EVT_MENU(ID_START, MainFrame::OnPlay)
 EVT_MENU(ID_PAUSE, MainFrame::OnPause)
 EVT_MENU(ID_STOP, MainFrame::OnStop)
+EVT_MENU(ID_FULLSCREEN, MainFrame::OnFullScreen)
 EVT_UPDATE_UI( ID_START, MainFrame::OnPlayUpdateUI )
 EVT_UPDATE_UI( ID_PAUSE, MainFrame::OnPauseUpdateUI )
 EVT_UPDATE_UI( ID_STOP, MainFrame::OnStopUpdateUI )
@@ -98,6 +99,8 @@ MainFrame::MainFrame(wxString fileName)
 	cartridge = NULL;
 
 	emuState = NotStartedYet;
+    
+    fullScreen = false;
 
 	this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
 	sound->ChangeSampleRate(SettingsGetSoundSampleRate());
@@ -108,8 +111,6 @@ MainFrame::MainFrame(wxString fileName)
 	
 	timerExecution = new wxTimer(this, ID_TIMER);
 	timerExecution->Start(15);
-	
-	//ShowFullScreen(true, wxFULLSCREEN_ALL);
 }
 
 MainFrame::~MainFrame()
@@ -164,6 +165,7 @@ void MainFrame::CreateMenuBar()
     emulationMenu->Append(ID_START, wxT("&Start\tCtrl+S"));
 	emulationMenu->Append(ID_PAUSE, wxT("&Pause\tCtrl+P"));
 	emulationMenu->Append(ID_STOP, wxT("S&top\tCtrl+T"));
+    emulationMenu->Append(ID_FULLSCREEN, wxT("&FullScreen\tCtrl+F"));
 
     // add the file menu to the menu bar
     mb->Append(emulationMenu, wxT("&Emulation"));
@@ -518,6 +520,12 @@ void MainFrame::OnSettings(wxCommandEvent &)
 	}
 
 	emuState = lastState;
+}
+
+void MainFrame::OnFullScreen(wxCommandEvent &)
+{
+    fullScreen = !fullScreen;
+    ShowFullScreen(fullScreen);
 }
 
 void MainFrame::OnAbout(wxCommandEvent &)
