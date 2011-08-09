@@ -20,6 +20,8 @@
 #include "IGBScreenDrawable.h"
 #include "Video.h"
 
+#define ABS(x) ((x) < 0 ? -(x) : (x))
+
 using namespace std;
 
 Video::Video(IGBScreenDrawable * screen)
@@ -177,7 +179,7 @@ inline void Video::GetColor(VideoPixel * p)
 	line[1] = mem->memory[dirLineTile + 1];
 	
 	xTile = p->xScrolled % 8;
-	int pixX = (BYTE)abs((int)xTile - 7);
+	int pixX = (BYTE)ABS((int)xTile - 7);
 	//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 	//Esto devolvera un numero de color que junto a la paleta de color nos dara el color requerido
 	p->indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
@@ -249,7 +251,7 @@ void Video::UpdateOAM(int y)
 		yTile = y - ySprite;
 		countY = yTile;
 		if (yFlip)
-			yTile = abs(yTile - (mode16 ? 15 : 7));
+			yTile = ABS(yTile - (mode16 ? 15 : 7));
 
 		if (xSprite>0)
 		{
@@ -259,17 +261,17 @@ void Video::UpdateOAM(int y)
 		else
 		{
 			xBeg = 0;
-			countX = abs(xSprite);
+			countX = ABS(xSprite);
 		}
 
 		for (x=xBeg; ((x<xSprite+8) && (x<GB_SCREEN_W)); x++)
 		{
-			xTile = xFlip ? abs(countX - 7) : countX;
+			xTile = xFlip ? ABS(countX - 7) : countX;
 
 			line[0] = mem->memory[dirTile + (yTile * 2)];	//yTile * 2 porque cada linea de 1 tile ocupa 2 bytes
 			line[1] = mem->memory[dirTile + (yTile * 2) + 1];
 
-			int pixX = abs((int)xTile - 7);
+			int pixX = ABS((int)xTile - 7);
 			//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 			//Esto devolvera un numero de color que junto a la paleta de color nos dara el color requerido
 			BYTE index = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
@@ -296,8 +298,8 @@ void Video::GetPalette(int * palette, int dir)
 {
 	BYTE paletteData = mem->memory[dir];
 
-	palette[0] = abs((int)(BITS01(paletteData) - 3));
-	palette[1] = abs((int)((BITS23(paletteData) >> 2) - 3));
-	palette[2] = abs((int)((BITS45(paletteData) >> 4) - 3));
-	palette[3] = abs((int)((BITS67(paletteData) >> 6) - 3));
+	palette[0] = ABS((int)(BITS01(paletteData) - 3));
+	palette[1] = ABS((int)((BITS23(paletteData) >> 2) - 3));
+	palette[2] = ABS((int)((BITS45(paletteData) >> 4) - 3));
+	palette[3] = ABS((int)((BITS67(paletteData) >> 6) - 3));
 }
