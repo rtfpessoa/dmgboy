@@ -85,6 +85,7 @@ private:
 	void OnStopUpdateUI(wxUpdateUIEvent& event);
 	void OnLoadStateUpdateUI(wxUpdateUIEvent& event);
 	void OnSaveStateUpdateUI(wxUpdateUIEvent& event);
+    void OnDoubleClick(wxMouseEvent &event);
 	//void OnIdle(wxIdleEvent &event);
 	void OnTimer(wxTimerEvent &event);
 	void CreateMenuBar();
@@ -93,6 +94,7 @@ private:
 	void RecentRomsToSettings();
 	void UpdateRecentMenu(wxString fileName);
 	void LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * size);
+    void ToggleFullScreen();
 	
 	void Clean();
     

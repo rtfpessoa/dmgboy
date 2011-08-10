@@ -43,9 +43,15 @@ BEGIN_EVENT_TABLE(RendererOGL, wxGLCanvas)
 EVT_SIZE(RendererOGL::OnSize)
 EVT_PAINT(RendererOGL::OnPaint)
 EVT_ERASE_BACKGROUND(RendererOGL::OnEraseBackground)
+EVT_LEFT_DCLICK(RendererOGL::OnDoubleClick)
 END_EVENT_TABLE()
 
 //int attribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
+
+void RendererOGL::OnDoubleClick(wxMouseEvent &event)
+{
+    this->windowParent->ProcessEvent(event);
+}
 
 RendererOGL::RendererOGL(wxWindow *parent, wxWindowID id,
 						   const wxPoint& pos, const wxSize& size, long style, const wxString& name)

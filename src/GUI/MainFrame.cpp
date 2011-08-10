@@ -63,6 +63,7 @@ EVT_UPDATE_UI( ID_STOP, MainFrame::OnStopUpdateUI )
 EVT_UPDATE_UI_RANGE(ID_LOADSTATE0, ID_LOADSTATE9, MainFrame::OnLoadStateUpdateUI)
 EVT_UPDATE_UI_RANGE(ID_SAVESTATE0, ID_SAVESTATE9, MainFrame::OnSaveStateUpdateUI)
 EVT_TIMER(ID_TIMER, MainFrame::OnTimer)
+EVT_LEFT_DCLICK(MainFrame::OnDoubleClick)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(wxString fileName)
@@ -524,8 +525,7 @@ void MainFrame::OnSettings(wxCommandEvent &)
 
 void MainFrame::OnFullScreen(wxCommandEvent &)
 {
-    fullScreen = !fullScreen;
-    ShowFullScreen(fullScreen);
+    ToggleFullScreen();
 }
 
 void MainFrame::OnAbout(wxCommandEvent &)
@@ -600,4 +600,16 @@ void MainFrame::OnTimer(wxTimerEvent &event)
 {
 	if (emuState == Playing)
 		cpu->ExecuteOneFrame();
+}
+
+void MainFrame::OnDoubleClick(wxMouseEvent &event)
+{
+    ToggleFullScreen();
+    event.Skip();
+}
+
+void MainFrame::ToggleFullScreen()
+{
+    fullScreen = !fullScreen;
+    ShowFullScreen(fullScreen);
 }
