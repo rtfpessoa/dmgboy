@@ -76,8 +76,7 @@ void RendererBase::ChangeSize()
 	wxSize size(GB_SCREEN_W*zoom, GB_SCREEN_H*zoom);
 	if (renderer)
 	{
-		renderer->SetMinSize(size);
-		renderer->SetMaxSize(size);
+		renderer->SetClientSize(size);
 	}
 }
 

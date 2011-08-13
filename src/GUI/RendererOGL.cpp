@@ -48,11 +48,6 @@ END_EVENT_TABLE()
 
 //int attribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
 
-void RendererOGL::OnDoubleClick(wxMouseEvent &event)
-{
-    this->windowParent->ProcessEvent(event);
-}
-
 RendererOGL::RendererOGL(wxWindow *parent, wxWindowID id,
 						   const wxPoint& pos, const wxSize& size, long style, const wxString& name)
 : wxGLCanvas(parent, (wxGLCanvas*) NULL, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name)
@@ -163,12 +158,14 @@ void RendererOGL::OnSize(wxSizeEvent& event)
     wxGLCanvas::OnSize(event);
 	
     // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
-    int w, h;
-    GetClientSize(&w, &h);
+    int winW, winH, w, x;
+    GetClientSize(&winW, &winH);
     if (GetContext())
     {
         SetCurrent();
-        glViewport(0, 0, (GLint) w, (GLint) h);
+        w = winH * GB_SCREEN_W / GB_SCREEN_H;
+        x = (winW - w) / 2;
+        glViewport(x, 0, (GLint) w, (GLint) winH);
     }
 }
 
@@ -196,4 +193,9 @@ void RendererOGL::InitGL()
 	//glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);		// Set The Texture Generation Mode For T To Sphere Mapping
 	
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GB_SCREEN_W, GB_SCREEN_H, 0, GL_RGB, GL_UNSIGNED_BYTE, imgBuf);
+}
+
+void RendererOGL::OnDoubleClick(wxMouseEvent &event)
+{
+    this->windowParent->ProcessEvent(event);
 }

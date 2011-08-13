@@ -513,8 +513,11 @@ void MainFrame::OnSettings(wxCommandEvent &)
 	{
 		SettingsSetNewValues(settingsDialog->settings);
 		renderer->ChangePalette(SettingsGetGreenScale());
-		renderer->ChangeSize();
-		this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
+        if (!fullScreen)
+        {
+            renderer->ChangeSize();
+            this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
+        }
 		PadSetKeys(SettingsGetInput());
 		sound->ChangeSampleRate(SettingsGetSoundSampleRate());
 		sound->SetEnabled(SettingsGetSoundEnabled());
@@ -612,4 +615,10 @@ void MainFrame::ToggleFullScreen()
 {
     fullScreen = !fullScreen;
     ShowFullScreen(fullScreen);
+    
+    if (!fullScreen)
+    {
+        renderer->ChangeSize();
+        this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
+    }
 }
