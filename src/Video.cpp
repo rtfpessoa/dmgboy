@@ -27,12 +27,17 @@ using namespace std;
 Video::Video(IGBScreenDrawable * screen)
 {
 	this->pixel = new VideoPixel();
-	this->screen = screen;
+	SetScreen(screen);
 }
 
 Video::~Video(void)
 {
 	
+}
+
+void Video::SetScreen(IGBScreenDrawable * screen)
+{
+    this->screen = screen;
 }
 
 void Video::SetMem(Memory *mem)
@@ -42,24 +47,28 @@ void Video::SetMem(Memory *mem)
 
 void Video::UpdateLine(BYTE y)
 {
-	screen->OnPreDraw();
+    if (screen)
+        screen->OnPreDraw();
 
 	OrderOAM(y);
 	UpdateBG(y);
 	UpdateWin(y);
 	UpdateOAM(y);
 
-	screen->OnPostDraw();
+    if (screen)
+        screen->OnPostDraw();
 }
 
 void Video::RefreshScreen()
 {
-	screen->OnRefreshScreen();
+    if (screen)
+        screen->OnRefreshScreen();
 }
 
 void Video::ClearScreen()
 {
-	screen->OnClear();
+    if (screen)
+        screen->OnClear();
 }
 
 void Video::UpdateBG(int y)
@@ -75,7 +84,7 @@ void Video::UpdateBG(int y)
 	
 	//Si el LCD o Background desactivado
 	//pintamos la linea de blanco
-	if (!display)
+	if (!display && screen)
 	{
 		for (x=0; x<GB_SCREEN_W; x++)
 			screen->OnDrawPixel(3, x, y);
@@ -108,7 +117,8 @@ void Video::UpdateBG(int y)
 
 		GetColor(pixel);
 
-		screen->OnDrawPixel(pixel->color, x, y);
+        if (screen)
+            screen->OnDrawPixel(pixel->color, x, y);
 		indexColorsBGWnd[x][y] = pixel->indexColor;
 	}
 }
@@ -151,7 +161,8 @@ void Video::UpdateWin(int y)
 
 		GetColor(pixel);
 
-		screen->OnDrawPixel(pixel->color, x, y);
+        if (screen)
+            screen->OnDrawPixel(pixel->color, x, y);
 		indexColorsBGWnd[x][y] = pixel->indexColor;
 	}
 }
@@ -285,8 +296,8 @@ void Video::UpdateOAM(int y)
 				else
 					color = palette1[index];
 
-
-				screen->OnDrawPixel(color, xSprite + countX, ySprite + countY);
+                if (screen)
+                    screen->OnDrawPixel(color, xSprite + countX, ySprite + countY);
 			}
 
 			countX++;

@@ -45,6 +45,7 @@ private:
 public:
 	Video(IGBScreenDrawable * screen);
 	~Video(void);
+    void SetScreen(IGBScreenDrawable * screen);
 	void SetMem(Memory *mem);
 	void RefreshScreen();
 	void ClearScreen();
