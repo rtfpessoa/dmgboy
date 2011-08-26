@@ -26,7 +26,6 @@
 #include "IDControls.h"
 #include "InputTextCtrl.h"
 #include "../Pad.h"
-#include "Xpm/preferences1.xpm"
 
 
 IMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog)
@@ -37,46 +36,20 @@ END_EVENT_TABLE()
 SettingsDialog::SettingsDialog(wxWindow* win)
 {
 	settings = SettingsGetCopy();
-	
-	m_imageList = NULL;
-	
-    bool useToolBook = false;
 
-	int sheetStyle = wxPROPSHEET_SHRINKTOFIT;
-	
-    if (useToolBook)
-    {
-        sheetStyle |= wxPROPSHEET_BUTTONTOOLBOOK;
-
-        //SetSheetInnerBorder(0);
-        //SetSheetOuterBorder(0);
-
-		wxBitmap preferences1(preferences1_xpm);
-
-        // create a dummy image list with a few icons
-        const wxSize imageSize(32, 32);
-
-        m_imageList = new wxImageList(imageSize.GetWidth(), imageSize.GetHeight());
-        m_imageList->Add(preferences1);
-        m_imageList->Add(wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, imageSize));
-    }
-	
-	SetSheetStyle(sheetStyle);
+	SetSheetStyle(wxPROPSHEET_SHRINKTOFIT);
 	
 	Create(win, wxID_ANY, _("Preferences"));
 	
 	wxBookCtrlBase* notebook = GetBookCtrl();
-	
-	if (useToolBook)
-		notebook->SetImageList(m_imageList);
 
 	CreateButtons(wxOK | wxCANCEL);
 
-    wxPanel* generalSettings = CreateGeneralSettingsPage(notebook);
+    wxPanel* videoSettings = CreateVideoSettingsPage(notebook);
 	wxPanel* soundSettings = CreateSoundSettingsPage(notebook);
 	wxPanel* inputSettings = CreateInputSettingsPage(notebook);
 
-	notebook->AddPage(generalSettings, _("General"), true);
+	notebook->AddPage(videoSettings, _("Video"), true);
 	notebook->AddPage(soundSettings, _("Sound"), false);
     notebook->AddPage(inputSettings, _("Input"), false);
 
@@ -85,8 +58,7 @@ SettingsDialog::SettingsDialog(wxWindow* win)
 
 SettingsDialog::~SettingsDialog()
 {
-	if (m_imageList)
-		delete m_imageList;
+    
 }
 
 /*! * Transfer data to the window */
@@ -94,9 +66,10 @@ bool SettingsDialog::TransferDataToWindow()
 {
 	settings = SettingsGetCopy();
 	
+    wxRadioBox* renderCtrl =     (wxRadioBox*)	  FindWindow(ID_RENDERMETHOD);
 	wxRadioBox* greenscaleCtrl = (wxRadioBox*)	  FindWindow(ID_GREENSCALE);
 	wxChoice* winZoomCtrl =		 (wxChoice*)	  FindWindow(ID_WINZOOM);
-	wxCheckBox* soundEnabledCtrl = (wxCheckBox*)	  FindWindow(ID_SOUND_ENABLED);
+	wxCheckBox* soundEnabledCtrl = (wxCheckBox*)  FindWindow(ID_SOUND_ENABLED);
 	wxChoice* soundSRCtrl =		 (wxChoice*)	  FindWindow(ID_SOUND_SR);
 	InputTextCtrl* upCtrl =		 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_UP);
 	InputTextCtrl* downCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_DOWN);
@@ -107,6 +80,7 @@ bool SettingsDialog::TransferDataToWindow()
 	InputTextCtrl* selectCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_SELECT);
 	InputTextCtrl* startCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_START);
 
+    renderCtrl->SetSelection(settings.renderMethod);
 	greenscaleCtrl->SetSelection(settings.greenScale);
 	winZoomCtrl->SetSelection(settings.windowZoom - 1);
 	
@@ -135,6 +109,7 @@ bool SettingsDialog::TransferDataToWindow()
 /*! * Transfer data from the window */
 bool SettingsDialog::TransferDataFromWindow()
 {
+    wxRadioBox* renderCtrl =     (wxRadioBox*)	  FindWindow(ID_RENDERMETHOD);
 	wxRadioBox* greenscaleCtrl = (wxRadioBox*)	  FindWindow(ID_GREENSCALE);
 	wxChoice* winZoomCtrl =		 (wxChoice*)	  FindWindow(ID_WINZOOM);
 	wxCheckBox* soundEnabledCtrl = (wxCheckBox*)  FindWindow(ID_SOUND_ENABLED);
@@ -148,6 +123,7 @@ bool SettingsDialog::TransferDataFromWindow()
 	InputTextCtrl* selectCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_SELECT);
 	InputTextCtrl* startCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_START);
 
+    settings.renderMethod = renderCtrl->GetSelection();
 	settings.greenScale = greenscaleCtrl->GetSelection();
 	settings.windowZoom = winZoomCtrl->GetSelection()+1;
 	settings.soundEnabled = soundEnabledCtrl->GetValue();
@@ -169,9 +145,16 @@ bool SettingsDialog::TransferDataFromWindow()
 	return true;
 }
 
-wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
+wxPanel* SettingsDialog::CreateVideoSettingsPage(wxWindow* parent)
 {
     wxPanel* panel = new wxPanel(parent, wxID_ANY);
+
+    wxStaticText * renderLabel = new wxStaticText(panel, wxID_ANY, wxT("Render method:"));
+	wxString renderChoices[2];
+    renderChoices[0] = wxT("Software (Slower)");
+    renderChoices[1] = wxT("OpenGL (Faster)");
+    wxRadioBox* renderRadioBox = new wxRadioBox(panel, ID_RENDERMETHOD, wxT(""),
+                                                   wxDefaultPosition, wxDefaultSize, 2, renderChoices, 1, wxRA_SPECIFY_COLS);
 
 	wxStaticText * grayGreenLabel = new wxStaticText(panel, wxID_ANY, wxT("Color palette:"));
 	wxString grayGreenChoices[2];
@@ -188,6 +171,8 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 	winZoomChoice->Append(wxT("4x"));
 
 	wxFlexGridSizer *grid = new wxFlexGridSizer(2, 3, 5);
+    grid->Add(renderLabel, 0, wxUP, 7);
+    grid->Add(renderRadioBox);
 	grid->Add(grayGreenLabel, 0, wxUP, 7);
 	grid->Add(grayGreenRadioBox);
 	grid->Add(winZoomLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
@@ -302,6 +287,7 @@ void SettingsDialog::SaveToFile(bool reloadSettings)
 	// Guardar a disco
 	wxFileConfig fileConfig(wxT("gbpablog"), wxT("pablogasco"), configPath.GetFullPath());
 
+    fileConfig.Write(wxT("General/renderMethod"), settings.renderMethod);
 	fileConfig.Write(wxT("General/greenScale"), settings.greenScale);
 	fileConfig.Write(wxT("General/windowZoom"), settings.windowZoom);
 	
@@ -342,6 +328,7 @@ void SettingsDialog::LoadFromFile()
 	// Cargar de disco
 	wxFileConfig fileConfig(wxT("gbpablog"), wxT("pablogasco"), configPath.GetFullPath());
 
+    fileConfig.Read(wxT("General/renderMethod"), &settings.renderMethod);
 	fileConfig.Read(wxT("General/greenScale"), &settings.greenScale);
 	fileConfig.Read(wxT("General/windowZoom"), &settings.windowZoom);
 	

@@ -89,23 +89,19 @@ MainFrame::MainFrame(wxString fileName)
 	PadSetKeys(SettingsGetInput());
 	this->CreateRecentMenu(SettingsGetRecentRoms());
 
-    // create the Renderer
-    //renderer = new RendererSW(this);
-	renderer = new RendererOGL(this);
-
 	sound = new Sound();
-    video = new Video(renderer);
+    sound->ChangeSampleRate(SettingsGetSoundSampleRate());
+	sound->SetEnabled(SettingsGetSoundEnabled());
+    video = new Video(NULL);
 	cpu = new CPU(video, sound);
+    
+    fullScreen = false;
+    renderer = NULL;
+    ChangeRenderer();
 
 	cartridge = NULL;
 
 	emuState = NotStartedYet;
-    
-    fullScreen = false;
-
-	this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
-	sound->ChangeSampleRate(SettingsGetSoundSampleRate());
-	sound->SetEnabled(SettingsGetSoundEnabled());
 
 	if (fileName != wxT(""))
 		ChangeFile(fileName);
@@ -512,10 +508,18 @@ void MainFrame::OnSettings(wxCommandEvent &)
     if (settingsDialog->ShowModal() == wxID_OK)
 	{
 		SettingsSetNewValues(settingsDialog->settings);
-		renderer->ChangePalette(SettingsGetGreenScale());
+        if (SettingsGetRenderMethod() != typeRenderer)
+        {
+            ChangeRenderer();    
+        }
+        
+        if (renderer)
+            renderer->ChangePalette(SettingsGetGreenScale());
+        
         if (!fullScreen)
         {
-            renderer->ChangeSize();
+            if (renderer)
+                renderer->ChangeSize();
             this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
         }
 		PadSetKeys(SettingsGetInput());
@@ -524,6 +528,31 @@ void MainFrame::OnSettings(wxCommandEvent &)
 	}
 
 	emuState = lastState;
+}
+
+void MainFrame::ChangeRenderer()
+{
+    typeRenderer = SettingsGetRenderMethod();
+    
+    if (renderer)
+    {
+        ((wxWindow *)renderer->GetWinRenderer())->Destroy();
+    }
+    
+    if (typeRenderer == 0)
+    {
+        renderer = new RendererSW(this);
+    }
+    else
+    {
+        renderer = new RendererOGL(this);
+    }
+    
+    // Redimensionar el frame para que el dibujado se realize correctamente
+    this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom()+1, GB_SCREEN_H*SettingsGetWindowZoom()+1);
+    this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
+    
+    video->SetScreen(renderer);
 }
 
 void MainFrame::OnFullScreen(wxCommandEvent &)
@@ -538,7 +567,7 @@ void MainFrame::OnAbout(wxCommandEvent &)
 
 void MainFrame::OnPlay(wxCommandEvent &)
 {
-	emuState = Playing;
+    emuState = Playing;
 }
 
 void MainFrame::OnPause(wxCommandEvent &)
@@ -555,7 +584,8 @@ void MainFrame::OnStop(wxCommandEvent &)
 	cpu->SaveLog();
 #endif
 	cpu->Reset();
-	renderer->OnRefreshScreen();
+    if (renderer)
+        renderer->OnRefreshScreen();
 	emuState = Stopped;
 }
 

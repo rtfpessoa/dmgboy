@@ -24,9 +24,9 @@ Settings settings;
 
 Settings::Settings()
 {
-	greenScale	= false;
-	windowZoom	= 1;
-	
+    renderMethod = 0;
+	greenScale	 = false;
+	windowZoom	 = 1;
 	soundEnabled	= true;
 	soundSampleRate = 44100;
 	
@@ -48,6 +48,16 @@ Settings SettingsGetCopy()
 void SettingsSetNewValues(Settings newSettings)
 {
 	settings = newSettings;
+}
+
+int SettingsGetRenderMethod()
+{
+	return settings.renderMethod;
+}
+
+void SettingsSetGreenScale(int renderMethod)
+{
+	settings.renderMethod = renderMethod;
 }
 
 bool SettingsGetGreenScale()

@@ -28,23 +28,29 @@
 
 #if wxUSE_GLCANVAS
 
-class RendererOGL: public wxGLCanvas, public RendererBase {
+class RendererOGL: public RendererBase, public wxGLCanvas {
 	DECLARE_CLASS(RendererOGL)
 	DECLARE_EVENT_TABLE()
 	
 private:
     bool initialized;
 	wxWindow * windowParent;
+#ifdef __WXGTK__
+    wxGLContext * glContext;
+#endif
     GLuint m_gllist;
 	float fov;
 	
 	void InitGL();
+    void SetGLContext();
 	
 public:
     RendererOGL( wxWindow *parent, wxWindowID id = wxID_ANY,
 				 const wxPoint& pos = wxDefaultPosition,
 				 const wxSize& size = wxDefaultSize,
 				 long style = 0, const wxString& name = _T("OGLRenderer") );
+    
+    ~RendererOGL();
 	
 	void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);

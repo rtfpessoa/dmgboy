@@ -34,8 +34,8 @@ END_EVENT_TABLE()
 RendererSW::RendererSW(wxWindow *parent):
 	wxPanel(parent, ID_MAINPANEL)
 {
-	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-	SetRenderer(parent, this);
+    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+	SetWinRenderer(parent, this);
 }
 
 RendererSW::~RendererSW() {

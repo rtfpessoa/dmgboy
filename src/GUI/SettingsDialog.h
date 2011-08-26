@@ -32,7 +32,7 @@ private:
 	bool TransferDataToWindow();
 	bool TransferDataFromWindow();
 	
-	wxPanel* CreateGeneralSettingsPage(wxWindow* parent);
+	wxPanel* CreateVideoSettingsPage(wxWindow* parent);
 	wxPanel* CreateSoundSettingsPage(wxWindow* parent);
 	wxPanel* CreateInputSettingsPage(wxWindow* parent);
 	
@@ -43,9 +43,6 @@ public:
 	void LoadFromFile();
 	
 	Settings settings;
-	
-protected:
-	wxImageList*    m_imageList;
 };
 
 

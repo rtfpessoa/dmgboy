@@ -30,7 +30,7 @@
 
 class RendererBase: public IGBScreenDrawable {
 private:
-	wxWindow * renderer;
+	wxWindow * winRenderer;
 	int  selPalette;
 	
 protected:
@@ -40,7 +40,8 @@ public:
 	RendererBase();
 	~RendererBase();
 	
-	void SetRenderer(wxWindow * parent, wxWindow *renderer);
+    wxWindow * GetWinRenderer();
+	void SetWinRenderer(wxWindow * parent, wxWindow *renderer);
 	void CreateScreen();
 	void ChangeSize();
 	void ChangePalette(bool original);

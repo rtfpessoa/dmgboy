@@ -52,6 +52,7 @@ private:
 	wxTimer * timerExecution;
     bool fullScreen;
     RendererBase *renderer;
+    int typeRenderer;
 	SettingsDialog * settingsDialog;
 	Video * video;
 	Sound * sound;
@@ -95,6 +96,7 @@ private:
 	void UpdateRecentMenu(wxString fileName);
 	void LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * size);
     void ToggleFullScreen();
+    void ChangeRenderer();
 	
 	void Clean();
     

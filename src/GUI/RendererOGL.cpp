@@ -46,29 +46,45 @@ EVT_ERASE_BACKGROUND(RendererOGL::OnEraseBackground)
 EVT_LEFT_DCLICK(RendererOGL::OnDoubleClick)
 END_EVENT_TABLE()
 
-//int attribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
+int attribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
 
 RendererOGL::RendererOGL(wxWindow *parent, wxWindowID id,
 						   const wxPoint& pos, const wxSize& size, long style, const wxString& name)
+#ifdef __WXGTK__
+: wxGLCanvas(parent, -1, attribList, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE)
+#else
 : wxGLCanvas(parent, (wxGLCanvas*) NULL, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name)
+#endif
 {
     initialized = false;
+    windowParent = parent;
     m_gllist = 0;
 	fov = 50.0;
-	
-	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-    windowParent = parent;
-	SetRenderer(parent, this);
+#ifdef __WXGTK__
+    glContext = NULL;
+#endif
+
+	SetWinRenderer(parent, this);
+    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 }
+
+RendererOGL::~RendererOGL()
+{
+#ifdef __WXGTK__
+    delete glContext;
+#endif
+}
+
 
 void RendererOGL::Render()
 {
+    if(!IsShown())
+        return;
+	
     wxPaintDC dc(this);
-	
-    if (!GetContext()) return;
-
-	
-    SetCurrent();
+    
+    SetGLContext();
+    
     // Init OpenGL once, but after SetCurrent
     if (!initialized)
     {
@@ -160,13 +176,12 @@ void RendererOGL::OnSize(wxSizeEvent& event)
     // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
     int winW, winH, w, x;
     GetClientSize(&winW, &winH);
-    if (GetContext())
-    {
-        SetCurrent();
-        w = winH * GB_SCREEN_W / GB_SCREEN_H;
-        x = (winW - w) / 2;
-        glViewport(x, 0, (GLint) w, (GLint) winH);
-    }
+    
+    SetGLContext();
+
+    w = winH * GB_SCREEN_W / GB_SCREEN_H;
+    x = (winW - w) / 2;
+    glViewport(x, 0, (GLint) w, (GLint) winH);
 }
 
 void RendererOGL::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
@@ -176,8 +191,7 @@ void RendererOGL::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 
 void RendererOGL::InitGL()
 {
-    SetCurrent();
-	
+    
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_LIGHTING);
     //glEnable(GL_LIGHT0);
@@ -193,6 +207,21 @@ void RendererOGL::InitGL()
 	//glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);		// Set The Texture Generation Mode For T To Sphere Mapping
 	
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GB_SCREEN_W, GB_SCREEN_H, 0, GL_RGB, GL_UNSIGNED_BYTE, imgBuf);
+}
+
+void RendererOGL::SetGLContext()
+{
+    
+#ifdef __WXGTK__
+    if (!glContext)
+        glContext = new wxGLContext(this, NULL);
+    SetCurrent(*glContext);
+#else
+    if (!GetContext())
+        return;
+    else
+        SetCurrent();
+#endif
 }
 
 void RendererOGL::OnDoubleClick(wxMouseEvent &event)

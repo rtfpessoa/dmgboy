@@ -23,6 +23,7 @@
 class Settings
 {
 public:
+    int  renderMethod;
 	bool greenScale;
 	int  windowZoom;
 	bool soundEnabled;
@@ -37,6 +38,7 @@ public:
 
 Settings SettingsGetCopy();
 
+int  SettingsGetRenderMethod();
 bool SettingsGetGreenScale();
 int  SettingsGetWindowZoom();
 bool SettingsGetSoundEnabled();
@@ -46,6 +48,7 @@ std::string* SettingsGetRecentRoms();
 
 void SettingsSetNewValues(Settings newSettings);
 
+void SettingsSetGreenScale(int renderMethod);
 void SettingsSetGreenScale(bool greenScale);
 void SettingsSetWindowZoom(int windowZoom);
 void SettingsSetSoundEnabled(bool enabled);
