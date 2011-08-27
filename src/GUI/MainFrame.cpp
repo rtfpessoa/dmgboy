@@ -644,7 +644,7 @@ void MainFrame::OnDoubleClick(wxMouseEvent &event)
 void MainFrame::ToggleFullScreen()
 {
     fullScreen = !fullScreen;
-    ShowFullScreen(fullScreen);
+    ShowFullScreen(fullScreen, wxFULLSCREEN_ALL);
     
     if (!fullScreen)
     {

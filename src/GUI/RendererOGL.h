@@ -28,7 +28,7 @@
 
 #if wxUSE_GLCANVAS
 
-class RendererOGL: public RendererBase, public wxGLCanvas {
+class RendererOGL: public wxGLCanvas, public RendererBase {
 	DECLARE_CLASS(RendererOGL)
 	DECLARE_EVENT_TABLE()
 	
@@ -52,10 +52,10 @@ public:
     
     ~RendererOGL();
 	
-	void OnPaint(wxPaintEvent& event);
-    void OnSize(wxSizeEvent& event);
-    void OnEraseBackground(wxEraseEvent& event);
-    void OnDoubleClick(wxMouseEvent& event);
+	void OnPaint(wxPaintEvent&);
+    void OnSize(wxSizeEvent&);
+    void OnEraseBackground(wxEraseEvent&);
+    void OnDoubleClick(wxMouseEvent&);
 	
     void Render();
 };

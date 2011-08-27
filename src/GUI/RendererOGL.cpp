@@ -52,6 +52,8 @@ RendererOGL::RendererOGL(wxWindow *parent, wxWindowID id,
 						   const wxPoint& pos, const wxSize& size, long style, const wxString& name)
 #ifdef __WXGTK__
 : wxGLCanvas(parent, -1, attribList, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE)
+#elif __WXMSW__
+: wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE)
 #else
 : wxGLCanvas(parent, (wxGLCanvas*) NULL, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name)
 #endif
@@ -81,9 +83,9 @@ void RendererOGL::Render()
     if(!IsShown())
         return;
 	
-    wxPaintDC dc(this);
-    
     SetGLContext();
+    
+    wxPaintDC dc(this);
     
     // Init OpenGL once, but after SetCurrent
     if (!initialized)
@@ -92,6 +94,14 @@ void RendererOGL::Render()
         initialized = true;
     }
 	
+    // set GL viewport
+    int winW, winH, w, x;
+    GetClientSize(&winW, &winH);
+    
+    w = winH * GB_SCREEN_W / GB_SCREEN_H;
+    x = (winW - w) / 2;
+    glViewport(x, 0, (GLint) w, (GLint) winH);
+    
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     //glFrustum(-0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 3.0f);
@@ -163,28 +173,17 @@ void RendererOGL::Render()
     SwapBuffers();
 }
 
-void RendererOGL::OnPaint( wxPaintEvent& WXUNUSED(event) )
+void RendererOGL::OnPaint( wxPaintEvent& event)
 {
     Render();
 }
 
 void RendererOGL::OnSize(wxSizeEvent& event)
 {
-    // this is also necessary to update the context on some platforms
-    wxGLCanvas::OnSize(event);
-	
-    // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
-    int winW, winH, w, x;
-    GetClientSize(&winW, &winH);
-    
-    SetGLContext();
-
-    w = winH * GB_SCREEN_W / GB_SCREEN_H;
-    x = (winW - w) / 2;
-    glViewport(x, 0, (GLint) w, (GLint) winH);
+	    Refresh();
 }
 
-void RendererOGL::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
+void RendererOGL::OnEraseBackground(wxEraseEvent& event)
 {
 	// Do nothing, to avoid flashing.
 }
