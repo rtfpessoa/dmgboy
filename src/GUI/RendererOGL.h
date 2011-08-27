@@ -35,7 +35,7 @@ class RendererOGL: public wxGLCanvas, public RendererBase {
 private:
     bool initialized;
 	wxWindow * windowParent;
-#ifdef __WXGTK__
+#ifndef __WXMAC__
     wxGLContext * glContext;
 #endif
     GLuint m_gllist;

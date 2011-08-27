@@ -50,10 +50,10 @@ int attribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
 
 RendererOGL::RendererOGL(wxWindow *parent, wxWindowID id,
 						   const wxPoint& pos, const wxSize& size, long style, const wxString& name)
-#ifdef __WXGTK__
-: wxGLCanvas(parent, -1, attribList, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE)
-#elif __WXMSW__
-: wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE)
+// Debido a una incoherencia en el API de wxWidgets hay que realizar dos codigos distintos, uno para
+// mac y otro para linux y windows
+#ifndef __WXMAC__
+: wxGLCanvas(parent, wxID_ANY, attribList, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE)
 #else
 : wxGLCanvas(parent, (wxGLCanvas*) NULL, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name)
 #endif
@@ -62,7 +62,7 @@ RendererOGL::RendererOGL(wxWindow *parent, wxWindowID id,
     windowParent = parent;
     m_gllist = 0;
 	fov = 50.0;
-#ifdef __WXGTK__
+#ifndef __WXMAC__
     glContext = NULL;
 #endif
 
@@ -72,7 +72,7 @@ RendererOGL::RendererOGL(wxWindow *parent, wxWindowID id,
 
 RendererOGL::~RendererOGL()
 {
-#ifdef __WXGTK__
+#ifndef __WXMAC__
     delete glContext;
 #endif
 }
@@ -211,7 +211,7 @@ void RendererOGL::InitGL()
 void RendererOGL::SetGLContext()
 {
     
-#ifdef __WXGTK__
+#ifndef __WXMAC__
     if (!glContext)
         glContext = new wxGLContext(this, NULL);
     SetCurrent(*glContext);
