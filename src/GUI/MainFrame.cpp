@@ -60,19 +60,26 @@ EVT_MENU(ID_FULLSCREEN, MainFrame::OnFullScreen)
 EVT_UPDATE_UI( ID_START, MainFrame::OnPlayUpdateUI )
 EVT_UPDATE_UI( ID_PAUSE, MainFrame::OnPauseUpdateUI )
 EVT_UPDATE_UI( ID_STOP, MainFrame::OnStopUpdateUI )
+EVT_UPDATE_UI( ID_FULLSCREEN, MainFrame::OnFullScreenUpdateUI )
 EVT_UPDATE_UI_RANGE(ID_LOADSTATE0, ID_LOADSTATE9, MainFrame::OnLoadStateUpdateUI)
 EVT_UPDATE_UI_RANGE(ID_SAVESTATE0, ID_SAVESTATE9, MainFrame::OnSaveStateUpdateUI)
 EVT_TIMER(ID_TIMER, MainFrame::OnTimer)
-EVT_LEFT_DCLICK(MainFrame::OnDoubleClick)
+EVT_LEFT_DCLICK(MainFrame::OnDoubleClick)       
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(wxString fileName)
 {
     // Create the MainFrame
+#ifdef __WXGTK__
+    // En linux parece ser que no permitir modificar el tamaño del frame al usuario
+    // afecta a los posteriores redimensionados por codigo
+    this->Create(0, ID_MAINFRAME, wxT("gbpablog"), wxDefaultPosition,
+           wxDefaultSize, wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX);
+#else
     this->Create(0, ID_MAINFRAME, wxT("gbpablog"), wxDefaultPosition,
            wxDefaultSize, wxCAPTION | wxSYSTEM_MENU |
-           wxMINIMIZE_BOX | wxCLOSE_BOX);
-
+           wxMINIMIZE_BOX | wxCLOSE_BOX | wxCLIP_CHILDREN);
+#endif
 	wxIconBundle * icons = new wxIconBundle(wxIcon(gb16_xpm));
 	icons->AddIcon(wxIcon(gb32_xpm));
 	this->SetIcons(*icons);
@@ -627,6 +634,11 @@ void MainFrame::OnSaveStateUpdateUI(wxUpdateUIEvent& event)
 		event.Enable(false);
 	else
 		event.Enable(true);
+}
+
+void MainFrame::OnFullScreenUpdateUI(wxUpdateUIEvent& event)
+{
+    event.Enable(typeRenderer == 1);
 }
 
 void MainFrame::OnTimer(wxTimerEvent &event)

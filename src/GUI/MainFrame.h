@@ -86,8 +86,8 @@ private:
 	void OnStopUpdateUI(wxUpdateUIEvent& event);
 	void OnLoadStateUpdateUI(wxUpdateUIEvent& event);
 	void OnSaveStateUpdateUI(wxUpdateUIEvent& event);
+    void OnFullScreenUpdateUI(wxUpdateUIEvent& event);
     void OnDoubleClick(wxMouseEvent &event);
-	//void OnIdle(wxIdleEvent &event);
 	void OnTimer(wxTimerEvent &event);
 	void CreateMenuBar();
 	void CreateToolBar();

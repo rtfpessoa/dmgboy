@@ -53,7 +53,7 @@ RendererOGL::RendererOGL(wxWindow *parent, wxWindowID id,
 // Debido a una incoherencia en el API de wxWidgets hay que realizar dos codigos distintos, uno para
 // mac y otro para linux y windows
 #ifndef __WXMAC__
-: wxGLCanvas(parent, wxID_ANY, attribList, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE)
+: wxGLCanvas(parent, id, attribList, pos, size, style|wxFULL_REPAINT_ON_RESIZE, name)
 #else
 : wxGLCanvas(parent, (wxGLCanvas*) NULL, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name)
 #endif
