@@ -42,11 +42,13 @@ private:
 	int numItems;
 	ItemLog * first;
 	ItemLog * last;
+    void Empty();
+    void DestroyAll();
 public:
 	QueueLog(int maxItems);
 	~QueueLog();
 	void Enqueue(std::string prefix, Registers * regs, std::string suffix);
-	void Save(std::string path);
+	void Save(std::string path, bool empty=true);
 };
 
 #endif

@@ -59,6 +59,7 @@ void RendererBase::SetWinRenderer(wxWindow * parent, wxWindow *renderer)
 {
 	this->winRenderer = renderer;
 	renderer->SetDropTarget(new DnDFile(parent));
+    //renderer->SetCursor( wxCursor( wxCURSOR_BLANK ) ); 
 }
 
 void RendererBase::CreateScreen() {

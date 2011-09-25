@@ -44,9 +44,7 @@ CPU::CPU(Video *v, Cartridge *c, Sound * s): Memory(s)
 
 void CPU::Init(Video *v)
 {
-	numInstructions = 0;
-	cyclesLCD = 0;
-	bitSerial = -1;
+	ResetGlobalVariables();
 	this->v = v;
 	v->SetMem(this->GetPtrMemory());
 	
@@ -63,8 +61,21 @@ CPU::~CPU()
 {
 }
 
+void CPU::ResetGlobalVariables()
+{
+    numInstructions = 0;
+    cyclesLCD = 0;
+	bitSerial = -1;
+	cyclesTimer = 0;
+	cyclesDIV = 0;
+	cyclesSerial = 0;
+	frameCompleted = false;
+	VBlankIntPending = false;
+}
+
 void CPU::Reset()
 {
+    ResetGlobalVariables();
 	ResetRegs();
 	ResetMem();
 	v->ClearScreen();

@@ -60,6 +60,7 @@ public:
 	void LoadState(std::string loadDirectory, int numSlot);
 private:
 	void Init(Video *v);
+    void ResetGlobalVariables();
 	void FillInstructionCycles();
 	void FillInstructionCyclesCB();
 	void OpCodeCB(Instructions * inst);

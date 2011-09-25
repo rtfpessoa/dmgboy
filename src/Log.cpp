@@ -27,14 +27,17 @@ QueueLog::QueueLog(int maxItems)
 		maxItems = 100;
 	
 	this->maxItems = maxItems;
-	this->numItems = 0;
-	this->first = NULL;
-	this->last = NULL;
+	Empty();
 }
 
 QueueLog::~QueueLog()
 {
-	ItemLog * item;
+	DestroyAll();
+}
+
+void QueueLog::DestroyAll()
+{
+    ItemLog * item;
 	ItemLog * auxItem;
 	
 	item = first;
@@ -45,6 +48,15 @@ QueueLog::~QueueLog()
 		delete item;
 		item = auxItem;
 	}
+    
+    Empty();
+}
+
+void QueueLog::Empty()
+{
+    this->numItems = 0;
+	this->first = NULL;
+	this->last = NULL;
 }
 
 void QueueLog::Enqueue(string prefix, Registers * regs, string suffix)
@@ -88,7 +100,7 @@ void QueueLog::Enqueue(string prefix, Registers * regs, string suffix)
 
 }
 
-void QueueLog::Save(string path)
+void QueueLog::Save(string path, bool empty)
 {
 	ofstream file(path.c_str(), ios_base::out);
 	
@@ -106,4 +118,9 @@ void QueueLog::Save(string path)
 		}
 		file.close();
 	}
+    
+    if (empty)
+    {
+        DestroyAll();
+    }
 }
