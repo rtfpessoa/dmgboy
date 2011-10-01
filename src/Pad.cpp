@@ -34,15 +34,15 @@ void PadSetKeys(int * keys)
 BYTE PadUpdateInput(BYTE valueP1)
 {
 	if(!BIT5(valueP1))
-		return ((valueP1 & 0x30) |
+		return ((valueP1 & 0xF0) |
 			(!gbPadState[gbSTART] << 3) | (!gbPadState[gbSELECT] << 2) | (!gbPadState[gbB] << 1) | (!gbPadState[gbA]));
 
 	if(!BIT4(valueP1))
-		return ((valueP1 & 0x30) |
+		return ((valueP1 & 0xF0) |
 			(!gbPadState[gbDOWN] << 3) | (!gbPadState[gbUP] << 2) | (!gbPadState[gbLEFT] << 1) | (!gbPadState[gbRIGHT]));
 
 	//Desactivar los botones
-	return 0x3F;
+	return 0xFF;
 }
 
 // Devuelve 1 cuando se ha pulsado una tecla
