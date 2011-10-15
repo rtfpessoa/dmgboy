@@ -15,48 +15,38 @@
  along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "SoundPortaudio.h"
-
 #include <assert.h>
 #include <string.h>
+#include "SoundPortaudio.h"
 
 static bool paInitialized = false;
-
-// Return current SDL_GetError() string, or str if SDL didn't have a string
-static const char* sdl_error( const char* str )
-{
-	const char* sdl_str = SDL_GetError();
-	if ( sdl_str && *sdl_str )
-		str = sdl_str;
-	return str;
-}
 
 SoundPortaudio::SoundPortaudio()
 {
 	bufs = NULL;
 	free_sem = NULL;
-	sound_open = false;
+	soundOpen = false;
     fullBuffers = 0;
 }
 
 SoundPortaudio::~SoundPortaudio()
 {
-	stop();
+	Stop();
 }
 
-const char* SoundPortaudio::start( long sample_rate, int chan_count )
+bool SoundPortaudio::Start(long sampleRate, int numChannels)
 {
 	assert( !bufs ); // can only be initialized once
 	
-	write_buf = 0;
-	write_pos = 0;
-	read_buf = 0;
+    PaError err;
+	writeBuf = 0;
+	writePos = 0;
+	readBuf = 0;
     fullBuffers = 0;
 	
-	bufs = new sample_t [(long) buf_size * buf_count];
-	if ( !bufs )
-		return "Out of memory";
-	currently_playing_ = bufs;
+	bufs = new short[(long) bufSize * numBuffers];
+	if (!bufs)
+		return false;
 	
 	//free_sem = SDL_CreateSemaphore( buf_count - 1 );
 	//if ( !free_sem )
@@ -64,54 +54,61 @@ const char* SoundPortaudio::start( long sample_rate, int chan_count )
 	
     if (!paInitialized)
     {
-        PaError err = Pa_Initialize();
+        err = Pa_Initialize();
         if( err != paNoError )
+        {
             printf("PortAudio error: %s\n", Pa_GetErrorText( err ));
+            return false;
+        }
         
         paInitialized = true;
     }
     
-	PaError err;
-    
     /* Open an audio I/O stream. */
     err = Pa_OpenDefaultStream( &stream,
-                               0,          /* no input channels */
-                               2,          /* stereo output */
-                               paInt16,     /* 8 bit floating point output */
-                               sample_rate,
-                               buf_size / chan_count,        /* frames per buffer, i.e. the number
+                               0,           /* no input channels */
+                               numChannels, /* mono, stereo, ..., output */
+                               paInt16,     /* 16 bits output */
+                               sampleRate,
+                               bufSize / numChannels, /* frames per buffer, i.e. the number
                                             of sample frames that PortAudio will
                                             request from the callback. Many apps
                                             may want to use
                                             paFramesPerBufferUnspecified, which
                                             tells PortAudio to pick the best,
                                             possibly changing, buffer size.*/
-                               fill_buffer_, /* this is your callback function */
+                               PortaudioCallback, /* this is your callback function */
                                this ); /*This is a pointer that will be passed to
                                          your callback*/
     if( err != paNoError )
+    {
         printf("PortAudio error: %s\n", Pa_GetErrorText( err ));
+        return false;
+    }
     
     err = Pa_StartStream( stream );
     if( err != paNoError )
+    {
         printf("PortAudio error: %s\n", Pa_GetErrorText( err ));
+        return false;
+    }
     
-	sound_open = true;
+	soundOpen = true;
 	
-	return NULL;
+	return true;
 }
 
-void SoundPortaudio::stop()
+void SoundPortaudio::Stop()
 {
-	if ( sound_open )
+	if (soundOpen)
 	{
-		sound_open = false;
+		soundOpen = false;
         
         PaError err;
         
-		err = Pa_StopStream( stream );
-        if( err != paNoError )
-            printf("PortAudio error: %s\n", Pa_GetErrorText( err ));
+		err = Pa_StopStream(stream);
+        if(err != paNoError)
+            printf("PortAudio error: %s\n", Pa_GetErrorText(err));
 	}
 	
 	//if ( free_sem )
@@ -120,51 +117,52 @@ void SoundPortaudio::stop()
 	//	free_sem = NULL;
 	//}
 	
-	delete [] bufs;
-	bufs = NULL;
+    if (bufs)
+    {
+        delete [] bufs;
+        bufs = NULL;
+    }
 }
 
-int SoundPortaudio::sample_count() const
+inline short* SoundPortaudio::buf( int index )
 {
-	int buf_free = SDL_SemValue( free_sem ) * buf_size + (buf_size - write_pos);
-	return buf_size * buf_count - buf_free;
+	assert( (unsigned) index < numBuffers );
+	return bufs + (long) index * bufSize;
 }
 
-inline SoundPortaudio::sample_t* SoundPortaudio::buf( int index )
+void SoundPortaudio::Write(const short* in, int count)
 {
-	assert( (unsigned) index < buf_count );
-	return bufs + (long) index * buf_size;
-}
-
-void SoundPortaudio::write( const sample_t* in, int count )
-{
-	while ( count )
+	while (count)
 	{
 		// n = espacio disponible en el buffer actual
-		int n = buf_size - write_pos;
+		int n = bufSize - writePos;
 		// si es mayor a lo que queremos copiar
 		// n = count
-		if ( n > count )
+		if (n > count)
 			n = count;
 		
 		// copiar en el buffer actual (write_buf) n samples
-		memcpy( buf( write_buf ) + write_pos, in, n * sizeof (sample_t) );
+		memcpy( buf( writeBuf ) + writePos, in, n * sizeof(short));
 		in += n;
-		write_pos += n;
+		writePos += n;
 		count -= n;
 		
 		// si el buffer ya está lleno
-		if ( write_pos >= buf_size )
+		if (writePos >= bufSize )
 		{
-			write_pos = 0;
+			writePos = 0;
 			// seleccionar el buffer siguiente
-			write_buf = (write_buf + 1) % buf_count;
+			writeBuf = (writeBuf + 1) % numBuffers;
 			// si todos los buffers estan a la espera de ser
 			// reproducidos se suspende este hilo
 			//SDL_SemWait( free_sem );
             fullBuffers++;
-            if (fullBuffers > buf_count)
-                fullBuffers = buf_count;
+            if (fullBuffers > numBuffers)
+            {
+                fullBuffers = numBuffers;
+                printf("Sobreescribiendo buffer\n");
+            }
+            //printf("write: fullBuffers: %d\n", fullBuffers);
 		}
 		
 		// si aun no se han copiado todos los datos se hace
@@ -172,40 +170,37 @@ void SoundPortaudio::write( const sample_t* in, int count )
 	}
 }
 
-int SoundPortaudio::fill_buffer(void *outputBuffer,
-                                 unsigned long framesPerBuffer,
-                                 const PaStreamCallbackTimeInfo* timeInfo,
-                                 PaStreamCallbackFlags statusFlags)
+int SoundPortaudio::FillBuffer(void *outputBuffer, unsigned long framesPerBuffer)
 {
-    sample_t *out = (sample_t*)outputBuffer;
+    short * out = (short *)outputBuffer;
+    size_t copyBytes = framesPerBuffer*2 * sizeof(short);
     
-	// si hay por lo menos un buffer para reproducir
+    // si hay por lo menos un buffer para reproducir
 	if ( fullBuffers > 0 )
     //if ( SDL_SemValue( free_sem ) < buf_count - 1 )
 	{
-		currently_playing_ = buf( read_buf );
-		memcpy( out, buf( read_buf ), framesPerBuffer*sizeof(sample_t) );
-		read_buf = (read_buf + 1) % buf_count;
+		memcpy( out, buf(readBuf), copyBytes);
+		readBuf = (readBuf + 1) % numBuffers;
 		//SDL_SemPost( free_sem );
         fullBuffers--;
 	}
 	// si no hay nada reproducir silencio
 	else
 	{
-		memset(out, 0, framesPerBuffer*sizeof(sample_t));
+		memset(out, 0, copyBytes);
 	}
+    
+    //printf("fill: fullBuffers: %d\n", fullBuffers);
     
     return 0;
 }
 
-int SoundPortaudio::fill_buffer_( const void *inputBuffer, void *outputBuffer,
-                                                    unsigned long framesPerBuffer,
-                                                    const PaStreamCallbackTimeInfo* timeInfo,
-                                                    PaStreamCallbackFlags statusFlags,
-                                                    void *userData )
+int SoundPortaudio::PortaudioCallback( const void *inputBuffer, void *outputBuffer,
+                                        unsigned long framesPerBuffer,
+                                        const PaStreamCallbackTimeInfo* timeInfo,
+                                        PaStreamCallbackFlags statusFlags,
+                                        void *userData )
 {
-	return ((SoundPortaudio*) userData)->fill_buffer(outputBuffer,
-                                              framesPerBuffer, timeInfo,
-                                              statusFlags);
+	return ((SoundPortaudio*) userData)->FillBuffer(outputBuffer, framesPerBuffer);
 }
 

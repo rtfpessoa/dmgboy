@@ -21,50 +21,39 @@
 #include "SDL.h"
 #include "portaudio.h"
 
-// Simple SDL sound wrapper that has a synchronous interface
+// Simple Portaudio sound wrapper that has a synchronous interface
 class SoundPortaudio {
 public:
 	SoundPortaudio();
 	~SoundPortaudio();
 	
-	// Initialize with specified sample rate and channel count.
-	// Returns NULL on success, otherwise error string.
-	const char* start( long sample_rate, int chan_count = 1 );
-	
-	// Number of samples in buffer waiting to be played
-	int sample_count() const;
+	// Initialize with specified sample rate and number of channels.
+	// Returns true on success, otherwise false.
+	bool Start(long sampleRate, int numChannels);
 	
 	// Write samples to buffer and block until enough space is available
-	typedef short sample_t;
-	void write( const sample_t*, int count );
-	
-	// Pointer to samples currently playing (for showing waveform display)
-	sample_t const* currently_playing() const { return currently_playing_; }
+	void Write( const short * data, int count);
 	
 	// Stop audio output
-	void stop();
+	void Stop();
 	
 private:
     PaStream *stream;
     
-    enum { buf_size = 1024 };
-	enum { buf_count = 3 };
-	sample_t* volatile bufs;
+    enum { bufSize = 1024 };
+	enum { numBuffers = 10 };
+	short* volatile bufs;
 	SDL_sem* volatile free_sem;
-	sample_t* volatile currently_playing_;
-	int volatile read_buf;
-	int write_buf;	// id del buffer actual
-	int write_pos;
+	int volatile readBuf;
+	int writeBuf;	// id del buffer actual
+	int writePos;
     int fullBuffers;
-	bool sound_open;
+	bool soundOpen;
 	
-	sample_t* buf( int index );
-	int fill_buffer(  void *outputBuffer,
-                       unsigned long framesPerBuffer,
-                       const PaStreamCallbackTimeInfo* timeInfo,
-                       PaStreamCallbackFlags statusFlags);
+	short* buf(int index);
+	int FillBuffer(void *outputBuffer, unsigned long framesPerBuffer);
     
-	static int fill_buffer_( const void *inputBuffer, void *outputBuffer,
+	static int PortaudioCallback( const void *inputBuffer, void *outputBuffer,
                             unsigned long framesPerBuffer,
                             const PaStreamCallbackTimeInfo* timeInfo,
                             PaStreamCallbackFlags statusFlags,
