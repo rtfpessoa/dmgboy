@@ -18,8 +18,10 @@
 #ifndef SOUNDPORTAUDIO_H
 #define SOUNDPORTAUDIO_H
 
-#include "SDL.h"
 #include "portaudio.h"
+
+class wxSemaphore;
+class wxMutex;
 
 // Simple Portaudio sound wrapper that has a synchronous interface
 class SoundPortaudio {
@@ -43,14 +45,15 @@ private:
     enum { bufSize = 1024 };
 	enum { numBuffers = 10 };
 	short* volatile bufs;
-	SDL_sem* volatile free_sem;
+	wxSemaphore* volatile semaphore;
+    wxMutex* mutex;
 	int volatile readBuf;
 	int writeBuf;	// id del buffer actual
 	int writePos;
     int fullBuffers;
 	bool soundOpen;
 	
-	short* buf(int index);
+	short* GetBufPtr(int index);
 	int FillBuffer(void *outputBuffer, unsigned long framesPerBuffer);
     
 	static int PortaudioCallback( const void *inputBuffer, void *outputBuffer,

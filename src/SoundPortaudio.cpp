@@ -17,6 +17,8 @@
 
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
+#include <wx/thread.h>
 #include "SoundPortaudio.h"
 
 static bool paInitialized = false;
@@ -24,7 +26,7 @@ static bool paInitialized = false;
 SoundPortaudio::SoundPortaudio()
 {
 	bufs = NULL;
-	free_sem = NULL;
+	semaphore = NULL;
 	soundOpen = false;
     fullBuffers = 0;
 }
@@ -42,15 +44,14 @@ bool SoundPortaudio::Start(long sampleRate, int numChannels)
 	writeBuf = 0;
 	writePos = 0;
 	readBuf = 0;
-    fullBuffers = 0;
 	
 	bufs = new short[(long) bufSize * numBuffers];
 	if (!bufs)
 		return false;
 	
-	//free_sem = SDL_CreateSemaphore( buf_count - 1 );
-	//if ( !free_sem )
-	//	return sdl_error( "Couldn't create semaphore" );
+    fullBuffers = 0;
+	semaphore = new wxSemaphore(numBuffers - 1);
+    mutex = new wxMutex();
 	
     if (!paInitialized)
     {
@@ -111,11 +112,17 @@ void SoundPortaudio::Stop()
             printf("PortAudio error: %s\n", Pa_GetErrorText(err));
 	}
 	
-	//if ( free_sem )
-	//{
-	//	SDL_DestroySemaphore( free_sem );
-	//	free_sem = NULL;
-	//}
+	if (semaphore)
+	{
+		delete semaphore;
+		semaphore = NULL;
+	}
+    
+    if (mutex)
+    {
+        delete mutex;
+        mutex = NULL;
+    }
 	
     if (bufs)
     {
@@ -124,7 +131,7 @@ void SoundPortaudio::Stop()
     }
 }
 
-inline short* SoundPortaudio::buf( int index )
+inline short* SoundPortaudio::GetBufPtr( int index )
 {
 	assert( (unsigned) index < numBuffers );
 	return bufs + (long) index * bufSize;
@@ -142,7 +149,7 @@ void SoundPortaudio::Write(const short* in, int count)
 			n = count;
 		
 		// copiar en el buffer actual (write_buf) n samples
-		memcpy( buf( writeBuf ) + writePos, in, n * sizeof(short));
+		memcpy(GetBufPtr(writeBuf) + writePos, in, n * sizeof(short));
 		in += n;
 		writePos += n;
 		count -= n;
@@ -155,14 +162,10 @@ void SoundPortaudio::Write(const short* in, int count)
 			writeBuf = (writeBuf + 1) % numBuffers;
 			// si todos los buffers estan a la espera de ser
 			// reproducidos se suspende este hilo
-			//SDL_SemWait( free_sem );
+			semaphore->Wait();
+            
+            wxMutexLocker lock(*mutex);
             fullBuffers++;
-            if (fullBuffers > numBuffers)
-            {
-                fullBuffers = numBuffers;
-                printf("Sobreescribiendo buffer\n");
-            }
-            //printf("write: fullBuffers: %d\n", fullBuffers);
 		}
 		
 		// si aun no se han copiado todos los datos se hace
@@ -177,20 +180,19 @@ int SoundPortaudio::FillBuffer(void *outputBuffer, unsigned long framesPerBuffer
     
     // si hay por lo menos un buffer para reproducir
 	if ( fullBuffers > 0 )
-    //if ( SDL_SemValue( free_sem ) < buf_count - 1 )
 	{
-		memcpy( out, buf(readBuf), copyBytes);
+		memcpy(out, GetBufPtr(readBuf), copyBytes);
 		readBuf = (readBuf + 1) % numBuffers;
-		//SDL_SemPost( free_sem );
+        semaphore->Post();
+        
+        wxMutexLocker lock(*mutex);
         fullBuffers--;
 	}
-	// si no hay nada reproducir silencio
+	// si no hay ninguno reproducir silencio
 	else
 	{
 		memset(out, 0, copyBytes);
 	}
-    
-    //printf("fill: fullBuffers: %d\n", fullBuffers);
     
     return 0;
 }
