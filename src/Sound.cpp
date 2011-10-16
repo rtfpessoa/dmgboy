@@ -16,11 +16,11 @@
  */
 
 #include <iostream>
-#include "SDL.h"
 // Definir la siguiente linea para que en Visual Studio no haya conflicto
 // entre SDL y GB_Snd_Emu al definir tipos basicos
 #define BLARGG_COMPILER_HAS_NAMESPACE 1
-#include "Sound_Queue.h"
+//#include "SoundPortaudio.h"
+#include "SoundSDL.h"
 #include "Basic_Gb_Apu.h"
 #include "Sound.h"
 
@@ -45,16 +45,9 @@ Sound::Sound()
 	initialized = true;
 	sampleRate = 44100;//22050;
     
-    sound = new Sound_Queue();
+    //sound = new Sound_Queue();
+    sound = new SoundSDL();
     apu = new Basic_Gb_Apu();
-	
-	if ( SDL_Init( SDL_INIT_AUDIO ) < 0 )
-	{
-		initialized = false;
-		return;
-	}
-	
-	atexit( SDL_Quit );
 	
 	if (ChangeSampleRate(sampleRate) == ERROR)
 	{
@@ -67,9 +60,6 @@ Sound::Sound()
 		initialized = false;
 		return;
 	}
-	
-	//char name[32];
-	//printf("Using audio driver: %s\n", SDL_AudioDriverName(name, 32));
 }
 
 Sound::~Sound()
@@ -110,7 +100,7 @@ int Sound::Start()
 	if (!enabled)
 	{
 		// Generate a few seconds of sound and play using SDL
-		if (HandleError( sound->start(sampleRate, 2) ) == ERROR)
+		if (sound->Start(sampleRate, 2) == false)
 			return ERROR;
 	}
 	enabled = true;
@@ -124,7 +114,7 @@ int Sound::Stop()
 		return NO_ERROR;
 	
 	if (enabled)
-		sound->stop();
+		sound->Stop();
 	
 	enabled = false;
 	
@@ -151,22 +141,20 @@ void Sound::EndFrame()
 	
 	apu->end_frame();
 	
-	int const buf_size = 4096;
-	static blip_sample_t buf [buf_size];
+	int const bufSize = apu->samples_avail();
+	blip_sample_t buf [bufSize];
 	
-	while ( apu->samples_avail() >= buf_size )
-	{
-		// Play whatever samples are available
-		long count = apu->read_samples( buf, buf_size );
-		sound->write( buf, count );
-	}
+    // Play whatever samples are available
+    long count = apu->read_samples(buf, bufSize);
+    
+    sound->Write(buf, count);
 }
 void Sound::WriteRegister(WORD dir, BYTE value)
 {
-    if (enabled) apu->write_register( dir, value );
+    if (enabled) apu->write_register(dir, value);
 }
 
 BYTE Sound::ReadRegister(WORD dir)
 {
-    return enabled ? apu->read_register( dir ) : 0;
+    return enabled ? apu->read_register(dir) : 0;
 }
