@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		6E0823A613C2429700C42CE0 /* RendererOGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E0823A413C2429700C42CE0 /* RendererOGL.cpp */; };
+		6E148F6414422F2D0021740C /* SoundPortaudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E148F6214422F2D0021740C /* SoundPortaudio.cpp */; };
+		6E148F7514423EA10021740C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E148F7114423EA10021740C /* AudioToolbox.framework */; };
+		6E148F7614423EA10021740C /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E148F7214423EA10021740C /* AudioUnit.framework */; };
+		6E148F7714423EA10021740C /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E148F7314423EA10021740C /* CoreAudio.framework */; };
+		6E148F7814423EA10021740C /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E148F7414423EA10021740C /* CoreServices.framework */; };
 		6E205760120589BF00079331 /* gbpablog.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6E20575F120589BF00079331 /* gbpablog.icns */; };
 		6E22367A1233B4C6009D019F /* SettingsDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2236791233B4C6009D019F /* SettingsDialog.cpp */; };
 		6E23C6C511D7CA0C0043AF47 /* MainApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C6BF11D7CA0C0043AF47 /* MainApp.cpp */; };
@@ -37,6 +42,7 @@
 		6E97934413C8CBCE0078E8EC /* RendererBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E97934213C8CBCE0078E8EC /* RendererBase.cpp */; };
 		6EA1AB79127F0F0E00AC510C /* AboutDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */; };
 		6EDDDE7512EA037200BFB26A /* InputTextCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDDE7412EA037200BFB26A /* InputTextCtrl.cpp */; };
+		6EE81E0C144A1879007FB325 /* SoundSDL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EE81E0A144A1879007FB325 /* SoundSDL.cpp */; };
 		6EFEDB441245230600646E83 /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEDB421245230600646E83 /* Settings.cpp */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -64,6 +70,12 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		6E0823A413C2429700C42CE0 /* RendererOGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RendererOGL.cpp; sourceTree = "<group>"; };
 		6E0823A513C2429700C42CE0 /* RendererOGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RendererOGL.h; sourceTree = "<group>"; };
+		6E148F6214422F2D0021740C /* SoundPortaudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SoundPortaudio.cpp; path = ../../../src/SoundPortaudio.cpp; sourceTree = "<group>"; };
+		6E148F6314422F2D0021740C /* SoundPortaudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundPortaudio.h; path = ../../../src/SoundPortaudio.h; sourceTree = "<group>"; };
+		6E148F7114423EA10021740C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		6E148F7214423EA10021740C /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		6E148F7314423EA10021740C /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		6E148F7414423EA10021740C /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		6E20575F120589BF00079331 /* gbpablog.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = gbpablog.icns; sourceTree = "<group>"; };
 		6E2236781233B4C6009D019F /* SettingsDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsDialog.h; sourceTree = "<group>"; };
 		6E2236791233B4C6009D019F /* SettingsDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsDialog.cpp; sourceTree = "<group>"; };
@@ -130,6 +142,8 @@
 		6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AboutDialog.cpp; sourceTree = "<group>"; };
 		6EDDDE7312EA037200BFB26A /* InputTextCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputTextCtrl.h; sourceTree = "<group>"; };
 		6EDDDE7412EA037200BFB26A /* InputTextCtrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputTextCtrl.cpp; sourceTree = "<group>"; };
+		6EE81E0A144A1879007FB325 /* SoundSDL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SoundSDL.cpp; path = ../../../src/SoundSDL.cpp; sourceTree = "<group>"; };
+		6EE81E0B144A1879007FB325 /* SoundSDL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundSDL.h; path = ../../../src/SoundSDL.h; sourceTree = "<group>"; };
 		6EFA5275126354F2000E541D /* ToDo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ToDo.txt; path = ../../../src/ToDo.txt; sourceTree = SOURCE_ROOT; };
 		6EFEDB421245230600646E83 /* Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Settings.cpp; path = ../../../src/Settings.cpp; sourceTree = SOURCE_ROOT; };
 		6EFEDB431245230600646E83 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Settings.h; path = ../../../src/Settings.h; sourceTree = SOURCE_ROOT; };
@@ -142,6 +156,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E148F7514423EA10021740C /* AudioToolbox.framework in Frameworks */,
+				6E148F7614423EA10021740C /* AudioUnit.framework in Frameworks */,
+				6E148F7714423EA10021740C /* CoreAudio.framework in Frameworks */,
+				6E148F7814423EA10021740C /* CoreServices.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				6E23C6DC11D7CB770043AF47 /* SDL.framework in Frameworks */,
 			);
@@ -220,6 +238,10 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6E148F7114423EA10021740C /* AudioToolbox.framework */,
+				6E148F7214423EA10021740C /* AudioUnit.framework */,
+				6E148F7314423EA10021740C /* CoreAudio.framework */,
+				6E148F7414423EA10021740C /* CoreServices.framework */,
 				6E23C6DB11D7CB770043AF47 /* SDL.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
@@ -281,6 +303,10 @@
 				6EFEDB431245230600646E83 /* Settings.h */,
 				6E2C365D1334FF7100BE7D7B /* Sound.h */,
 				6E2C365E1334FF7100BE7D7B /* Sound.cpp */,
+				6E148F6314422F2D0021740C /* SoundPortaudio.h */,
+				6E148F6214422F2D0021740C /* SoundPortaudio.cpp */,
+				6EE81E0B144A1879007FB325 /* SoundSDL.h */,
+				6EE81E0A144A1879007FB325 /* SoundSDL.cpp */,
 			);
 			name = HW;
 			sourceTree = "<group>";
@@ -429,6 +455,8 @@
 				6E2C365F1334FF7100BE7D7B /* Sound.cpp in Sources */,
 				6E0823A613C2429700C42CE0 /* RendererOGL.cpp in Sources */,
 				6E97934413C8CBCE0078E8EC /* RendererBase.cpp in Sources */,
+				6E148F6414422F2D0021740C /* SoundPortaudio.cpp in Sources */,
+				6EE81E0C144A1879007FB325 /* SoundSDL.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,11 +496,16 @@
 				GCC_PREFIX_HEADER = "";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
-					"/Users/pablo/Documents/Programacion/gbpablog/src/Gb_Snd_Emu-0.1.4",
+					"$(GBSNDEMU)",
 					/Library/Frameworks/SDL.framework/Versions/A/Headers,
+					"$(PORTAUDIODIR)/include",
 				);
 				INFOPLIST_FILE = "gbpablog-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PORTAUDIODIR)/lib/.libs/",
+				);
 				OTHER_CFLAGS = (
 					"-I$(WXWIN)/build-release/lib/wx/include/mac-ansi-release-static-2.8",
 					"-I$(WXWIN)/include",
@@ -482,6 +515,7 @@
 					"-D__WXMAC__",
 				);
 				OTHER_LDFLAGS = (
+					"$(PORTAUDIODIR)/lib/.libs/libportaudio.a",
 					"-read_only_relocs",
 					suppress,
 					"-L$(WXWIN)/build-release/lib",
@@ -523,6 +557,48 @@
 					"-liconv",
 				);
 				PRODUCT_NAME = gbpablog;
+				WARNING_LDFLAGS = (
+					"$(PORTAUDIODIR)/lib/.libs/libportaudio.a",
+					"-read_only_relocs",
+					suppress,
+					"-L$(WXWIN)/build-release/lib",
+					"-arch",
+					i386,
+					"-framework",
+					IOKit,
+					"-framework",
+					Carbon,
+					"-framework",
+					Cocoa,
+					"-framework",
+					System,
+					"-framework",
+					QuickTime,
+					"-framework",
+					OpenGL,
+					"-framework",
+					AGL,
+					"$(WXWIN)/build-release/lib/libwx_mac_richtext-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_aui-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_xrc-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_qa-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_html-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_adv-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_core-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_base_carbon_xml-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_base_carbon_net-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_base_carbon-2.8.a",
+					"-framework",
+					WebKit,
+					"-lexpat",
+					"-lwx_mac_gl-2.8",
+					"-lwxtiff-2.8",
+					"-lwxjpeg-2.8",
+					"-lwxpng-2.8",
+					"-lz",
+					"-lpthread",
+					"-liconv",
+				);
 			};
 			name = Debug;
 		};
@@ -539,11 +615,16 @@
 				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
-					"/Users/pablo/Documents/Programacion/gbpablog/src/Gb_Snd_Emu-0.1.4",
+					"$(GBSNDEMU)",
 					/Library/Frameworks/SDL.framework/Versions/A/Headers,
+					"$(PORTAUDIODIR)/include",
 				);
 				INFOPLIST_FILE = "gbpablog-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PORTAUDIODIR)/lib/.libs/",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-I$(WXWIN)/build-release/lib/wx/include/mac-ansi-release-static-2.8",
@@ -554,6 +635,7 @@
 					"-D__WXMAC__",
 				);
 				OTHER_LDFLAGS = (
+					"$(PORTAUDIODIR)/lib/.libs/libportaudio.a",
 					"-read_only_relocs",
 					suppress,
 					"-L$(WXWIN)/build-release/lib",
@@ -595,6 +677,48 @@
 					"-liconv",
 				);
 				PRODUCT_NAME = gbpablog;
+				WARNING_LDFLAGS = (
+					"$(PORTAUDIODIR)/lib/.libs/libportaudio.a",
+					"-read_only_relocs",
+					suppress,
+					"-L$(WXWIN)/build-release/lib",
+					"-arch",
+					i386,
+					"-framework",
+					IOKit,
+					"-framework",
+					Carbon,
+					"-framework",
+					Cocoa,
+					"-framework",
+					System,
+					"-framework",
+					QuickTime,
+					"-framework",
+					OpenGL,
+					"-framework",
+					AGL,
+					"$(WXWIN)/build-release/lib/libwx_mac_richtext-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_aui-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_xrc-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_qa-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_html-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_adv-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_mac_core-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_base_carbon_xml-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_base_carbon_net-2.8.a",
+					"$(WXWIN)/build-release/lib/libwx_base_carbon-2.8.a",
+					"-framework",
+					WebKit,
+					"-lexpat",
+					"-lwx_mac_gl-2.8",
+					"-lwxtiff-2.8",
+					"-lwxjpeg-2.8",
+					"-lwxpng-2.8",
+					"-lz",
+					"-lpthread",
+					"-liconv",
+				);
 			};
 			name = Release;
 		};
