@@ -31,12 +31,14 @@
 			<Add option="`wx-config --cxxflags` `sdl-config --cflags`" />
 			<Add directory="/usr/include/SDL" />
 			<Add directory="../../../src/Gb_Snd_Emu-0.1.4" />
+			<Add directory="/usr/include/" />
 		</Compiler>
 		<Linker>
 			<Add option="`wx-config --libs --gl-libs` `sdl-config --libs`" />
 			<Add library="SDL" />
 			<Add library="GL" />
 			<Add library="GLU" />
+			<Add library="libportaudio" />
 		</Linker>
 		<Unit filename="../../../src/CPU.cpp">
 			<Option virtualFolder="HW/" />
@@ -216,6 +218,18 @@
 			<Option virtualFolder="HW/" />
 		</Unit>
 		<Unit filename="../../../src/Sound.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/SoundPortaudio.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/SoundPortaudio.h">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/SoundSDL.cpp">
+			<Option virtualFolder="HW/" />
+		</Unit>
+		<Unit filename="../../../src/SoundSDL.h">
 			<Option virtualFolder="HW/" />
 		</Unit>
 		<Unit filename="../../../src/Video.cpp">

@@ -42,7 +42,7 @@ public:
 private:
     PaStream *stream;
     
-    enum { bufSize = 1024 };
+    enum { bufSize = 2048 };
 	enum { numBuffers = 10 };
 	short* volatile bufs;
 	wxSemaphore* volatile semaphore;

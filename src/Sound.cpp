@@ -19,8 +19,8 @@
 // Definir la siguiente linea para que en Visual Studio no haya conflicto
 // entre SDL y GB_Snd_Emu al definir tipos basicos
 #define BLARGG_COMPILER_HAS_NAMESPACE 1
-//#include "SoundPortaudio.h"
-#include "SoundSDL.h"
+#include "SoundPortaudio.h"
+//#include "SoundSDL.h"
 #include "Basic_Gb_Apu.h"
 #include "Sound.h"
 
@@ -45,8 +45,8 @@ Sound::Sound()
 	initialized = true;
 	sampleRate = 44100;//22050;
     
-    //sound = new Sound_Queue();
-    sound = new SoundSDL();
+    sound = new SoundPortaudio();
+    //sound = new SoundSDL();
     apu = new Basic_Gb_Apu();
 	
 	if (ChangeSampleRate(sampleRate) == ERROR)

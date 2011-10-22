@@ -21,15 +21,15 @@
 #include "Def.h"
 
 class Basic_Gb_Apu;
-class SoundSDL;
-//class SoundPortaudio;
+//class SoundSDL;
+class SoundPortaudio;
 
 class Sound
 {
 private:
 	Basic_Gb_Apu * apu;
-	SoundSDL * sound;
-    //SoundPortaudio * sound;
+	//SoundSDL * sound;
+    SoundPortaudio * sound;
 	bool initialized;
 	bool enabled;
 	long sampleRate;

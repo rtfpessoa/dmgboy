@@ -114,7 +114,7 @@ MainFrame::MainFrame(wxString fileName)
 		ChangeFile(fileName);
 	
 	timerExecution = new wxTimer(this, ID_TIMER);
-	timerExecution->Start(15);
+	timerExecution->Start(16);
 }
 
 MainFrame::~MainFrame()
