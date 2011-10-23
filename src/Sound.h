@@ -21,15 +21,21 @@
 #include "Def.h"
 
 class Basic_Gb_Apu;
-//class SoundSDL;
+#ifdef __WXMSW__
+class SoundSDL;
+#else
 class SoundPortaudio;
+#endif
 
 class Sound
 {
 private:
 	Basic_Gb_Apu * apu;
-	//SoundSDL * sound;
+#ifdef __WXMSW__
+	SoundSDL * sound;
+#else
     SoundPortaudio * sound;
+#endif
 	bool initialized;
 	bool enabled;
 	long sampleRate;

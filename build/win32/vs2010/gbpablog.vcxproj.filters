@@ -118,6 +118,12 @@
     <ClInclude Include="..\..\..\src\GUI\RendererOGL.h">
       <Filter>GUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\SoundSDL.h">
+      <Filter>HW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\SoundPortaudio.h">
+      <Filter>HW</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Cartridge.cpp">
@@ -200,6 +206,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\GUI\RendererSW.cpp">
       <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\SoundPortaudio.cpp">
+      <Filter>HW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\SoundSDL.cpp">
+      <Filter>HW</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

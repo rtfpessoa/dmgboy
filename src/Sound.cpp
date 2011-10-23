@@ -19,9 +19,12 @@
 // Definir la siguiente linea para que en Visual Studio no haya conflicto
 // entre SDL y GB_Snd_Emu al definir tipos basicos
 #define BLARGG_COMPILER_HAS_NAMESPACE 1
-#include "SoundPortaudio.h"
-//#include "SoundSDL.h"
 #include "Basic_Gb_Apu.h"
+#ifdef __WXMSW__
+#include "SoundSDL.h"
+#else
+#include "SoundPortaudio.h"
+#endif
 #include "Sound.h"
 
 using namespace std;
@@ -44,9 +47,13 @@ Sound::Sound()
 	enabled = false;
 	initialized = true;
 	sampleRate = 44100;//22050;
-    
+
+#ifdef __WXMSW__
+	sound = new SoundSDL();
+#else
     sound = new SoundPortaudio();
-    //sound = new SoundSDL();
+#endif
+    
     apu = new Basic_Gb_Apu();
 	
 	if (ChangeSampleRate(sampleRate) == ERROR)
@@ -142,12 +149,14 @@ void Sound::EndFrame()
 	apu->end_frame();
 	
 	int const bufSize = apu->samples_avail();
-	blip_sample_t buf [bufSize];
+	blip_sample_t * buf = new blip_sample_t[bufSize];
 	
     // Play whatever samples are available
     long count = apu->read_samples(buf, bufSize);
     
     sound->Write(buf, count);
+
+	delete[] buf;
 }
 void Sound::WriteRegister(WORD dir, BYTE value)
 {
