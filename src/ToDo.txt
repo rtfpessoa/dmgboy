@@ -1,8 +1,9 @@
-- Pasarlo a OpenGL
 - Multi idioma / unicode
 - Permitir cargar roms comprimidas en 7z
+- Separar emulación en un hilo aparte
 
 Terminado:
+- Pasarlo a OpenGL
 - Sonido
 - Permitir Savestates en cualquier momento
 - Guardar a disco duro la memoria de los cartuchos que llevan bateria
