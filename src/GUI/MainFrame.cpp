@@ -113,8 +113,8 @@ MainFrame::MainFrame(wxString fileName)
 	if (fileName != wxT(""))
 		ChangeFile(fileName);
 	
-	timerExecution = new wxTimer(this, ID_TIMER);
-	timerExecution->Start(15);
+	//timerExecution = new wxTimer(this, ID_TIMER);
+	//timerExecution->Start(15);
 }
 
 MainFrame::~MainFrame()
