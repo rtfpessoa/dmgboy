@@ -41,6 +41,7 @@
 		6E974A5A134F586C00ECC09C /* SDL.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6E23C6DB11D7CB770043AF47 /* SDL.framework */; };
 		6E97934413C8CBCE0078E8EC /* RendererBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E97934213C8CBCE0078E8EC /* RendererBase.cpp */; };
 		6EA1AB79127F0F0E00AC510C /* AboutDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */; };
+		6EBF280E146746D100F2D9F8 /* EmulationThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EBF280C146746D100F2D9F8 /* EmulationThread.cpp */; };
 		6EDDDE7512EA037200BFB26A /* InputTextCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDDE7412EA037200BFB26A /* InputTextCtrl.cpp */; };
 		6EE81E0C144A1879007FB325 /* SoundSDL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EE81E0A144A1879007FB325 /* SoundSDL.cpp */; };
 		6EFEDB441245230600646E83 /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEDB421245230600646E83 /* Settings.cpp */; };
@@ -140,6 +141,8 @@
 		6E97934313C8CBCE0078E8EC /* RendererBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RendererBase.h; sourceTree = "<group>"; };
 		6EA1AB77127F0F0E00AC510C /* AboutDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutDialog.h; sourceTree = "<group>"; };
 		6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AboutDialog.cpp; sourceTree = "<group>"; };
+		6EBF280C146746D100F2D9F8 /* EmulationThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EmulationThread.cpp; sourceTree = "<group>"; };
+		6EBF280D146746D100F2D9F8 /* EmulationThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationThread.h; sourceTree = "<group>"; };
 		6EDDDE7312EA037200BFB26A /* InputTextCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputTextCtrl.h; sourceTree = "<group>"; };
 		6EDDDE7412EA037200BFB26A /* InputTextCtrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputTextCtrl.cpp; sourceTree = "<group>"; };
 		6EE81E0A144A1879007FB325 /* SoundSDL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SoundSDL.cpp; path = ../../../src/SoundSDL.cpp; sourceTree = "<group>"; };
@@ -253,6 +256,8 @@
 			isa = PBXGroup;
 			children = (
 				6E23C6BE11D7CA0C0043AF47 /* IDControls.h */,
+				6EBF280D146746D100F2D9F8 /* EmulationThread.h */,
+				6EBF280C146746D100F2D9F8 /* EmulationThread.cpp */,
 				6E23C6C011D7CA0C0043AF47 /* MainApp.h */,
 				6E23C6BF11D7CA0C0043AF47 /* MainApp.cpp */,
 				6E23C6C211D7CA0C0043AF47 /* MainFrame.h */,
@@ -457,6 +462,7 @@
 				6E97934413C8CBCE0078E8EC /* RendererBase.cpp in Sources */,
 				6E148F6414422F2D0021740C /* SoundPortaudio.cpp in Sources */,
 				6EE81E0C144A1879007FB325 /* SoundSDL.cpp in Sources */,
+				6EBF280E146746D100F2D9F8 /* EmulationThread.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

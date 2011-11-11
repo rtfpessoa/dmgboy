@@ -38,6 +38,7 @@
 #include "Xpm/gb32.xpm"
 #include "RendererOGL.h"
 #include "RendererSW.h"
+#include "EmulationThread.h"
 
 using namespace std;
 
@@ -115,6 +116,21 @@ MainFrame::MainFrame(wxString fileName)
 	
 	//timerExecution = new wxTimer(this, ID_TIMER);
 	//timerExecution->Start(15);
+    // create the thread
+    EmulationThread * t = new EmulationThread();
+    wxThreadError err = t->Create();
+    
+    if (err != wxTHREAD_NO_ERROR)
+    {
+        wxMessageBox( _("Couldn't create thread!") );
+    }
+    
+    err = t->Run();
+    
+    if (err != wxTHREAD_NO_ERROR)
+    {
+        wxMessageBox( _("Couldn't run thread!") );
+    }
 }
 
 MainFrame::~MainFrame()
@@ -492,7 +508,6 @@ void MainFrame::OnFileExit(wxCommandEvent &)
 void MainFrame::Clean()
 {
 	emuState = Stopped;
-	timerExecution->Stop();
 	delete cpu;
 	delete video;
 	delete sound;
