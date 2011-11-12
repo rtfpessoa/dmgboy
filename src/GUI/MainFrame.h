@@ -25,10 +25,7 @@
 
 class RendererBase;
 class SettingsDialog;
-class CPU;
-class Video;
-class Sound;
-class Cartridge;
+class EmulationThread;
 
 struct RecentFile
 {
@@ -49,21 +46,14 @@ private:
 	wxMenu *recentMenuFile;
 	wxMenu *recentMenuPopup;
 	wxToolBar* toolBar;
-	wxTimer * timerExecution;
     bool fullScreen;
     RendererBase *renderer;
     int typeRenderer;
 	SettingsDialog * settingsDialog;
-	Video * video;
-	Sound * sound;
-	Cartridge * cartridge;
+    EmulationThread * emulation;
 	
 	RecentFile recentFiles[MAX_RECENT_FILES];
 	int numRecentFiles;
-	
-	enum enumEmuStates { NotStartedYet, Stopped, Paused, Playing };
-	
-	enumEmuStates emuState;
     
     /**
      * Called when exit from the file menu is selected.
@@ -101,7 +91,6 @@ private:
 	void Clean();
     
 public:
-	CPU * cpu;
 	
     /**
      * Creates a new MainFrame.

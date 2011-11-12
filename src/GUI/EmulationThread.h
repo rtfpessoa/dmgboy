@@ -20,16 +20,43 @@
 
 #include <wx/wx.h>
 
+enum enumEmuStates { NotStartedYet, Stopped, Paused, Playing };
+
+class Cartridge;
+class Video;
+class Sound;
+class CPU;
+class IGBScreenDrawable;
+class wxMutex;
+
 class EmulationThread : public wxThread {
 
 private:
-	
+	Video * video;
+	Sound * sound;
+	Cartridge * cartridge;
+    CPU * cpu;
+    wxMutex * mutex;
+    
+	enumEmuStates emuState;
+    
+    void LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * size);
     
 public:
 	EmulationThread();
     ~EmulationThread();
     
     virtual ExitCode Entry();
+    
+    bool ChangeFile(wxString fileName);
+    void LoadState(std::string fileName, int id);
+    void SaveState(std::string fileName, int id);
+    void ApplySettings();
+    void SetScreen(IGBScreenDrawable * screen);
+    
+    enumEmuStates GetState();
+    void SetState(enumEmuStates state);
+    
 };
 
 #endif
