@@ -59,7 +59,8 @@ EVT_UPDATE_UI( ID_STOP, MainFrame::OnStopUpdateUI )
 EVT_UPDATE_UI( ID_FULLSCREEN, MainFrame::OnFullScreenUpdateUI )
 EVT_UPDATE_UI_RANGE(ID_LOADSTATE0, ID_LOADSTATE9, MainFrame::OnLoadStateUpdateUI)
 EVT_UPDATE_UI_RANGE(ID_SAVESTATE0, ID_SAVESTATE9, MainFrame::OnSaveStateUpdateUI)
-EVT_LEFT_DCLICK(MainFrame::OnDoubleClick)       
+EVT_LEFT_DCLICK(MainFrame::OnDoubleClick)
+EVT_COMMAND(wxID_ANY, wxEVT_RENDERER_REFRESHSCREEN, MainFrame::OnRefreshScreen)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(wxString fileName)
@@ -92,19 +93,14 @@ MainFrame::MainFrame(wxString fileName)
 	
     // create the emulation
     emulation = new EmulationThread();
-    wxThreadError err = emulation->Create();
     
+    wxThreadError err = emulation->Create();
     if (err != wxTHREAD_NO_ERROR)
-    {
         wxMessageBox( _("Couldn't create thread!") );
-    }
     
     err = emulation->Run();
-    
     if (err != wxTHREAD_NO_ERROR)
-    {
         wxMessageBox( _("Couldn't run thread!") );
-    }
     
     fullScreen = false;
     renderer = NULL;
@@ -545,6 +541,11 @@ void MainFrame::OnDoubleClick(wxMouseEvent &event)
 {
     ToggleFullScreen();
     event.Skip();
+}
+
+void MainFrame::OnRefreshScreen(wxCommandEvent& event)
+{
+    renderer->OnRefreshScreen();
 }
 
 void MainFrame::ToggleFullScreen()

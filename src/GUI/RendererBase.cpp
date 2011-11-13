@@ -20,6 +20,8 @@
 #include "MainFrame.h"
 #include "RendererBase.h"
 
+DEFINE_EVENT_TYPE(wxEVT_RENDERER_REFRESHSCREEN)
+
 static BYTE palettes[][4][3] =
 {
 	{
@@ -98,8 +100,16 @@ void RendererBase::OnRefreshScreen()
 	// refresh the panel
 	if (winRenderer)
 	{
-		winRenderer->Refresh(false);
-		winRenderer->Update();
+        if (wxThread::IsMain())
+        {
+            winRenderer->Refresh(false);
+            //winRenderer->Update();
+        }
+        else
+        {
+            wxCommandEvent evt(wxEVT_RENDERER_REFRESHSCREEN, wxID_ANY);
+            winRenderer->AddPendingEvent(evt);
+        }
 	}
 }
 

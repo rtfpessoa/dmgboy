@@ -180,7 +180,7 @@ void RendererOGL::OnPaint( wxPaintEvent& event)
 
 void RendererOGL::OnSize(wxSizeEvent& event)
 {
-	    Refresh();
+    Refresh();
 }
 
 void RendererOGL::OnEraseBackground(wxEraseEvent& event)

@@ -78,7 +78,7 @@ private:
 	void OnSaveStateUpdateUI(wxUpdateUIEvent& event);
     void OnFullScreenUpdateUI(wxUpdateUIEvent& event);
     void OnDoubleClick(wxMouseEvent &event);
-	void OnTimer(wxTimerEvent &event);
+    void OnRefreshScreen(wxCommandEvent& evt);
 	void CreateMenuBar();
 	void CreateToolBar();
 	void CreateRecentMenu(std::string * roms);

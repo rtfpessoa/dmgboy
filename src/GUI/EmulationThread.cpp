@@ -79,7 +79,7 @@ wxThread::ExitCode EmulationThread::Entry()
         if (emuState == Playing)
             cpu->ExecuteOneFrame();
         
-        this->Sleep(12);
+        this->Sleep(10);
     }
     
     return 0;
