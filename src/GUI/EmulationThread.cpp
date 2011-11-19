@@ -73,7 +73,7 @@ enumEmuStates EmulationThread::GetState()
 
 wxThread::ExitCode EmulationThread::Entry()
 {
-    for (;;)
+    while (!TestDestroy())
     {
         wxMutexLocker lock(*mutex);
         if (emuState == Playing)

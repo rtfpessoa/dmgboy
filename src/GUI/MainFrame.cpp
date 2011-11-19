@@ -61,6 +61,7 @@ EVT_UPDATE_UI_RANGE(ID_LOADSTATE0, ID_LOADSTATE9, MainFrame::OnLoadStateUpdateUI
 EVT_UPDATE_UI_RANGE(ID_SAVESTATE0, ID_SAVESTATE9, MainFrame::OnSaveStateUpdateUI)
 EVT_LEFT_DCLICK(MainFrame::OnDoubleClick)
 EVT_COMMAND(wxID_ANY, wxEVT_RENDERER_REFRESHSCREEN, MainFrame::OnRefreshScreen)
+EVT_CLOSE(MainFrame::OnClose)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(wxString fileName)
@@ -112,7 +113,8 @@ MainFrame::MainFrame(wxString fileName)
 
 MainFrame::~MainFrame()
 {
-	this->Clean();
+	// No hacer nada aqui mejor hacerlo todo
+    // en el OnClose
 }
 
 void MainFrame::CreateMenuBar()
@@ -398,10 +400,12 @@ void MainFrame::OnFileExit(wxCommandEvent &)
 	this->Close();
 }
 
-void MainFrame::Clean()
+void MainFrame::OnClose(wxCloseEvent&)
 {
 	if (settingsDialog)
 		settingsDialog->Destroy();
+    
+    Destroy();
 }
 
 /*

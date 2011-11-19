@@ -88,7 +88,7 @@ private:
     void ToggleFullScreen();
     void ChangeRenderer();
 	
-	void Clean();
+	void OnClose(wxCloseEvent&);
     
 public:
 	
