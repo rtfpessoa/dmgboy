@@ -405,6 +405,9 @@ void MainFrame::OnClose(wxCloseEvent&)
 	if (settingsDialog)
 		settingsDialog->Destroy();
     
+    emulation->Delete();
+    emulation->Wait();
+    
     Destroy();
 }
 
