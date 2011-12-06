@@ -29,6 +29,7 @@
     <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Sound_Queue.h" />
     <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Wave_Writer.h" />
     <ClInclude Include="..\..\..\src\GUI\AboutDialog.h" />
+    <ClInclude Include="..\..\..\src\GUI\EmulationThread.h" />
     <ClInclude Include="..\..\..\src\GUI\IDControls.h" />
     <ClInclude Include="..\..\..\src\GUI\InputTextCtrl.h" />
     <ClInclude Include="..\..\..\src\GUI\MainApp.h" />
@@ -61,6 +62,7 @@
     <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Sound_Queue.cpp" />
     <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Wave_Writer.cpp" />
     <ClCompile Include="..\..\..\src\GUI\AboutDialog.cpp" />
+    <ClCompile Include="..\..\..\src\GUI\EmulationThread.cpp" />
     <ClCompile Include="..\..\..\src\GUI\InputTextCtrl.cpp" />
     <ClCompile Include="..\..\..\src\GUI\MainApp.cpp" />
     <ClCompile Include="..\..\..\src\GUI\MainFrame.cpp" />
