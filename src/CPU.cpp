@@ -98,7 +98,7 @@ void CPU::ExecuteOneFrame()
 	
 	frameCompleted = false;
 	
-	UpdatePad();
+	//UpdatePad();
 
 #ifdef MAKEGBLOG
 	log->Enqueue("\n\nStartFrame", NULL, "");

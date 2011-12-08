@@ -46,6 +46,7 @@ private:
 	wxMenu *recentMenuFile;
 	wxMenu *recentMenuPopup;
 	wxToolBar* toolBar;
+	wxTimer * timer;
     bool fullScreen;
     RendererBase *renderer;
     int typeRenderer;
@@ -79,6 +80,7 @@ private:
     void OnFullScreenUpdateUI(wxUpdateUIEvent& event);
     void OnDoubleClick(wxMouseEvent &event);
     void OnRefreshScreen(wxCommandEvent& evt);
+    void OnTimer(wxTimerEvent &event);
 	void CreateMenuBar();
 	void CreateToolBar();
 	void CreateRecentMenu(std::string * roms);

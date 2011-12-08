@@ -61,6 +61,7 @@ EVT_UPDATE_UI_RANGE(ID_LOADSTATE0, ID_LOADSTATE9, MainFrame::OnLoadStateUpdateUI
 EVT_UPDATE_UI_RANGE(ID_SAVESTATE0, ID_SAVESTATE9, MainFrame::OnSaveStateUpdateUI)
 EVT_LEFT_DCLICK(MainFrame::OnDoubleClick)
 EVT_COMMAND(wxID_ANY, wxEVT_RENDERER_REFRESHSCREEN, MainFrame::OnRefreshScreen)
+EVT_TIMER(ID_TIMER, MainFrame::OnTimer)
 EVT_CLOSE(MainFrame::OnClose)
 END_EVENT_TABLE()
 
@@ -109,6 +110,9 @@ MainFrame::MainFrame(wxString fileName)
     
 	if (fileName != wxT(""))
 		ChangeFile(fileName);
+		
+    timer = new wxTimer(this, ID_TIMER);
+	timer->Start(16);
 }
 
 MainFrame::~MainFrame()
@@ -402,6 +406,8 @@ void MainFrame::OnFileExit(wxCommandEvent &)
 
 void MainFrame::OnClose(wxCloseEvent&)
 {
+    timer->Stop();
+    
 	if (settingsDialog)
 		settingsDialog->Destroy();
     
@@ -565,4 +571,9 @@ void MainFrame::ToggleFullScreen()
         renderer->ChangeSize();
         this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
     }
+}
+
+void MainFrame::OnTimer(wxTimerEvent &event)
+{
+    emulation->UpdatePad();
 }

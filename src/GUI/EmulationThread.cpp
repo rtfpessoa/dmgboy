@@ -75,11 +75,13 @@ wxThread::ExitCode EmulationThread::Entry()
 {
     while (!TestDestroy())
     {
-        wxMutexLocker lock(*mutex);
         if (emuState == Playing)
+        {
+            wxMutexLocker lock(*mutex);
             cpu->ExecuteOneFrame();
-        
-        this->Sleep(10);
+        }
+		else
+			this->Sleep(16);
     }
     
     return 0;
@@ -202,6 +204,13 @@ void EmulationThread::ApplySettings()
 void EmulationThread::SetScreen(IGBScreenDrawable * screen)
 {
     wxMutexLocker lock(*mutex);
-    
+
     video->SetScreen(screen);
+}
+
+void EmulationThread::UpdatePad()
+{
+    wxMutexLocker lock(*mutex);
+    
+    cpu->UpdatePad();
 }

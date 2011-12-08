@@ -53,6 +53,7 @@ public:
     void SaveState(std::string fileName, int id);
     void ApplySettings();
     void SetScreen(IGBScreenDrawable * screen);
+    void UpdatePad();
     
     enumEmuStates GetState();
     void SetState(enumEmuStates state);
