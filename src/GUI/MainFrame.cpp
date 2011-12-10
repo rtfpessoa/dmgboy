@@ -575,5 +575,6 @@ void MainFrame::ToggleFullScreen()
 
 void MainFrame::OnTimer(wxTimerEvent &event)
 {
+    renderer->OnRefreshScreen();
     emulation->UpdatePad();
 }

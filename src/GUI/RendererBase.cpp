@@ -103,13 +103,15 @@ void RendererBase::OnRefreshScreen()
         if (wxThread::IsMain())
         {
             winRenderer->Refresh(false);
-            //winRenderer->Update();
+            winRenderer->Update();
         }
+        /*
         else
         {
             wxCommandEvent evt(wxEVT_RENDERER_REFRESHSCREEN, wxID_ANY);
             winRenderer->AddPendingEvent(evt);
         }
+        */
 	}
 }
 
