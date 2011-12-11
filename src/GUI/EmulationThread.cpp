@@ -210,7 +210,7 @@ void EmulationThread::SetScreen(IGBScreenDrawable * screen)
 
 void EmulationThread::UpdatePad()
 {
-    wxMutexLocker lock(*mutex);
+    //wxMutexLocker lock(*mutex);
     
     cpu->UpdatePad();
 }
