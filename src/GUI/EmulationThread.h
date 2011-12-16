@@ -37,6 +37,7 @@ private:
 	Cartridge * cartridge;
     CPU * cpu;
     wxMutex * mutex;
+    wxStopWatch swFrame;
     
 	enumEmuStates emuState;
     

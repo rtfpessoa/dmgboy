@@ -75,13 +75,21 @@ wxThread::ExitCode EmulationThread::Entry()
 {
     while (!TestDestroy())
     {
+        long desired = 15;  // Milisegundos deseados por frame
+        // Deberia ser 16 pero con ese valor en linux el sonido se entrecorta
+        
+        swFrame.Start();
+        
         if (emuState == Playing)
         {
             wxMutexLocker lock(*mutex);
             cpu->ExecuteOneFrame();
         }
-		else
-			this->Sleep(16);
+        
+        long time = swFrame.Time();
+        
+        if (time < desired)
+            this->Sleep(desired-time);
     }
     
     return 0;
@@ -211,6 +219,8 @@ void EmulationThread::SetScreen(IGBScreenDrawable * screen)
 void EmulationThread::UpdatePad()
 {
     //wxMutexLocker lock(*mutex);
-    
-    cpu->UpdatePad();
+    if (emuState == Playing)
+    {
+        cpu->UpdatePad();
+    }
 }
