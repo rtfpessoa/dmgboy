@@ -42,6 +42,7 @@ RendererBase::RendererBase()
 {
     imgBuf = NULL;
 	winRenderer = NULL;
+    changed = false;
 	CreateScreen();
 	ChangeSize();
 }
@@ -93,17 +94,19 @@ void RendererBase::OnClear()
 {
 	int size = GB_SCREEN_W*GB_SCREEN_H*3;
 	memset(imgBuf, 0, size);
+    changed = true;
 }
 
 void RendererBase::OnRefreshScreen()
 {
 	// refresh the panel
-	if (winRenderer)
+	if (winRenderer && changed)
 	{
         if (wxThread::IsMain())
         {
             winRenderer->Refresh(false);
             winRenderer->Update();
+            changed = false;
         }
         /*
         else
@@ -139,6 +142,8 @@ void RendererBase::OnDrawPixel(int idColor, int x, int y)
 	imgBuf[offsetBuf + 0] = colorR;
 	imgBuf[offsetBuf + 1] = colorG;
 	imgBuf[offsetBuf + 2] = colorB;
+    
+    changed = true;
 }
 
 DnDFile::DnDFile(wxWindow * parent)

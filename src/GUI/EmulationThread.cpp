@@ -39,7 +39,7 @@ EmulationThread::EmulationThread()
     
     ApplySettings();
     
-	emuState = NotStartedYet;
+    SetState(NotStartedYet);
 }
 
 EmulationThread::~EmulationThread() {
@@ -56,6 +56,11 @@ void EmulationThread::SetState(enumEmuStates state)
     wxMutexLocker lock(*mutex);
     
     this->emuState = state;
+    
+    if (state == Playing)
+        sound->SetEnabled(SettingsGetSoundEnabled());
+    else
+        sound->SetEnabled(false);
     
     if (state == Stopped)
     {
@@ -97,55 +102,61 @@ wxThread::ExitCode EmulationThread::Entry()
 
 bool EmulationThread::ChangeFile(wxString fileName)
 {
-    wxMutexLocker lock(*mutex);
+    // Meter dentro de las llaves para que se desbloquee el mutex antes de
+    // llamar a SetState
+    {
+        wxMutexLocker lock(*mutex);
+        
+        BYTE * buffer = NULL;
+        unsigned long size = 0;
+        bool isZip = false;
+        
+        if (!wxFileExists(fileName))
+        {
+            wxMessageBox(wxT("The file:\n")+fileName+wxT("\ndoesn't exist"), wxT("Error"));
+            return false;
+        }
+        
+        wxString fileLower = fileName.Lower();
+        if (fileLower.EndsWith(wxT(".zip")))
+        {
+            isZip = true;
+            this->LoadZip(fileName, &buffer, &size);
+            if ((buffer == NULL) || (size == 0))
+                return false;
+        }
+        else if (!fileLower.EndsWith(wxT(".gb")))
+        {
+            wxMessageBox(wxT("Only gb and zip files allowed!"), wxT("Error"));
+            return false;
+        }
+        
+        
+        // Si ha llegado aquí es que es un archivo permitido
+        cpu->Reset();
+        if (cartridge)
+            delete cartridge;
+        
+        wxString battsDir = wxStandardPaths::Get().GetUserDataDir() + wxFileName::GetPathSeparator()
+        + wxT("Batts");
+        
+        if (!wxFileName::DirExists(battsDir))
+            wxFileName::Mkdir(battsDir, 0777, wxPATH_MKDIR_FULL);
+        
+        battsDir += wxFileName::GetPathSeparator();
+        
+        if (isZip) {
+            cartridge = new Cartridge(buffer, size, string(battsDir.mb_str()));
+        }else {
+            cartridge = new Cartridge(string(fileName.mb_str()), string(battsDir.mb_str()));
+        }
+        
+        
+        cpu->LoadCartridge(cartridge);
+    }
     
-    BYTE * buffer = NULL;
-	unsigned long size = 0;
-	bool isZip = false;
     
-	if (!wxFileExists(fileName))
-	{
-		wxMessageBox(wxT("The file:\n")+fileName+wxT("\ndoesn't exist"), wxT("Error"));
-		return false;
-	}
-    
-	wxString fileLower = fileName.Lower();
-	if (fileLower.EndsWith(wxT(".zip")))
-	{
-		isZip = true;
-		this->LoadZip(fileName, &buffer, &size);
-		if ((buffer == NULL) || (size == 0))
-			return false;
-	}
-	else if (!fileLower.EndsWith(wxT(".gb")))
-	{
-		wxMessageBox(wxT("Only gb and zip files allowed!"), wxT("Error"));
-		return false;
-	}
-    
-    
-	// Si ha llegado aquí es que es un archivo permitido
-	cpu->Reset();
-	if (cartridge)
-		delete cartridge;
-    
-	wxString battsDir = wxStandardPaths::Get().GetUserDataDir() + wxFileName::GetPathSeparator()
-    + wxT("Batts");
-	
-	if (!wxFileName::DirExists(battsDir))
-		wxFileName::Mkdir(battsDir, 0777, wxPATH_MKDIR_FULL);
-	
-	battsDir += wxFileName::GetPathSeparator();
-	
-	if (isZip) {
-		cartridge = new Cartridge(buffer, size, string(battsDir.mb_str()));
-	}else {
-		cartridge = new Cartridge(string(fileName.mb_str()), string(battsDir.mb_str()));
-	}
-    
-    
-	cpu->LoadCartridge(cartridge);
-	emuState = Playing;
+	SetState(Playing);
     
     return true;
 }

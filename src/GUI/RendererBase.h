@@ -33,6 +33,7 @@ class RendererBase: public IGBScreenDrawable {
 private:
 	wxWindow * winRenderer;
 	int  selPalette;
+    bool changed;
 	
 protected:
 	BYTE * imgBuf;
