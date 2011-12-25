@@ -36,7 +36,10 @@ private:
     bool changed;
 	
 protected:
-	BYTE * imgBuf;
+	BYTE * imgBuf1;
+    BYTE * imgBuf2;
+    BYTE * frontBuffer;
+    BYTE * backBuffer;
 	
 public:
 	RendererBase();
