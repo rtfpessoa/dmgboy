@@ -85,11 +85,11 @@ wxThread::ExitCode EmulationThread::Entry()
         
         swFrame.Start();
         
-        if (emuState == Playing)
-        {
-            wxMutexLocker lock(*mutex);
-            cpu->ExecuteOneFrame();
-        }
+		{
+			wxMutexLocker lock(*mutex);
+			if (emuState == Playing)
+			    cpu->ExecuteOneFrame();
+		} // Desbloquear el mutex
         
         long time = swFrame.Time();
         

@@ -102,16 +102,24 @@ void RendererBase::ChangeSize()
 void RendererBase::OnClear()
 {
 	int size = GB_SCREEN_W*GB_SCREEN_H*3;
-	memset(backBuffer, 0, size);
+    memset(backBuffer, 0, size);
+    memset(frontBuffer, 0, size);
+	PageFlip();
+}
+
+void RendererBase::PageFlip()
+{
+    BYTE * aux = frontBuffer;
+    frontBuffer = backBuffer;
+    backBuffer = aux;
     changed = true;
 }
 
 void RendererBase::OnRefreshScreen()
 {
-	// refresh the panel
 	if (winRenderer)
 	{
-        if (wxThread::IsMain())
+		if (wxThread::IsMain())
         {
             if (changed)
             {
@@ -121,19 +129,7 @@ void RendererBase::OnRefreshScreen()
             }
         }
         else
-        {
-            BYTE * aux = frontBuffer;
-            frontBuffer = backBuffer;
-            backBuffer = aux;
-            changed = true;
-        }
-        /*
-        else
-        {
-            wxCommandEvent evt(wxEVT_RENDERER_REFRESHSCREEN, wxID_ANY);
-            winRenderer->AddPendingEvent(evt);
-        }
-        */
+            PageFlip();
 	}
 }
 
