@@ -46,7 +46,7 @@ void InitMBC(string romName, BYTE * memCartridge, int romSize)
 {
 	_romName = romName;
 	_memCartridge = memCartridge;
-	_ptrCartridge = memCartridge;
+	_ptrCartridge = memCartridge + 0x4000;
 	_memMode = 0;
 
 	_romBank = 1;
