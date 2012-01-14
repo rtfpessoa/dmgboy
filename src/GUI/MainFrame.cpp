@@ -412,7 +412,6 @@ void MainFrame::OnClose(wxCloseEvent&)
 		settingsDialog->Destroy();
     
     emulation->Delete();
-    emulation->Wait();
     
     Destroy();
 }
@@ -500,9 +499,7 @@ void MainFrame::OnPause(wxCommandEvent &)
 
 void MainFrame::OnStop(wxCommandEvent &)
 {
-    if (renderer)
-        renderer->OnRefreshScreen();
-	emulation->SetState(Stopped);
+    emulation->SetState(Stopped);
 }
 
 void MainFrame::OnPlayUpdateUI(wxUpdateUIEvent& event)
