@@ -80,12 +80,10 @@ RendererOGL::~RendererOGL()
 
 void RendererOGL::Render()
 {
-    if(!IsShown())
+	if(!IsShown())
         return;
 	
     SetGLContext();
-    
-    wxPaintDC dc(this);
     
     // Init OpenGL once, but after SetCurrent
     if (!initialized)
@@ -175,6 +173,7 @@ void RendererOGL::Render()
 
 void RendererOGL::OnPaint( wxPaintEvent& event)
 {
+	wxPaintDC dc(this);
     Render();
 }
 
