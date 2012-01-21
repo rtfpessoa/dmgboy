@@ -784,9 +784,9 @@ void Instructions::EI()
 
 void Instructions::SBC_A(e_registers place)
 {
-	WORD sum, value;
+	WORD value;
     BYTE result;
-    bool halfCarry = false;
+    int sum;
 	int length = 1;
 
 	switch(place)
@@ -804,19 +804,21 @@ void Instructions::SBC_A(e_registers place)
             value = reg->Get_Reg(place);
 			sum = value + reg->Get_flagC();
 	}
-    
     result = reg->Get_A() - sum;
     
-	reg->Set_flagZ(result ? 0 : 1);
+	reg->Set_flagZ(!result);
 	reg->Set_flagN(1);
     
     if ((reg->Get_A() & 0x0F) < (value & 0x0F))
-        halfCarry = true;
+        reg->Set_flagH(true);
     else if ((reg->Get_A() & 0x0F) < (sum & 0x0F))
-        halfCarry = true;
+        reg->Set_flagH(true);
+    else if (((reg->Get_A() & 0x0F)==(value & 0x0F)) && ((value & 0x0F)==0x0F) && (reg->Get_flagC()))
+        reg->Set_flagH(true);
+    else
+        reg->Set_flagH(false);
     
-	reg->Set_flagH(halfCarry);
-	reg->Set_flagC((reg->Get_A() < sum) ? 1 : 0);
+    reg->Set_flagC(reg->Get_A() < sum);
 
 	reg->Set_A(result);
 
