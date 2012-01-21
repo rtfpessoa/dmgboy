@@ -403,7 +403,7 @@ void Instructions::RLCA()
 	value = (value << 1) | bit7;
 	reg->Set_A(value);
 
-	//真真真真reg->Set_flagZ(0);??????? Este o el que hay?
+	//reg->Set_flagZ(0);??????? Este o el que hay?
 	reg->Set_flagZ(value ? 0 : 1);
 	reg->Set_flagN(0);
 	reg->Set_flagH(0);
@@ -784,28 +784,43 @@ void Instructions::EI()
 
 void Instructions::SBC_A(e_registers place)
 {
-	WORD aux;
+	WORD value;
+    BYTE result;
+    int sum;
 	int length = 1;
 
 	switch(place)
 	{
 		case c_HL:
-			aux = mem->MemR(reg->Get_HL()) + reg->Get_flagC();
+            value = mem->MemR(reg->Get_HL());
+            sum = value + reg->Get_flagC();
 			break;
 		case $:
-			aux = _8bitsInmValue + reg->Get_flagC();
+            value = _8bitsInmValue;
+            sum = value + reg->Get_flagC();
 			length = 2;
 			break;
 		default:
-			aux = reg->Get_Reg(place) + reg->Get_flagC();
+            value = reg->Get_Reg(place);
+			sum = value + reg->Get_flagC();
 	}
-	
-	reg->Set_flagZ((reg->Get_A() - aux) ? 0 : 1);
+    result = reg->Get_A() - sum;
+    
+	reg->Set_flagZ(!result);
 	reg->Set_flagN(1);
-	reg->Set_flagH(((reg->Get_A() & 0x0F) < (aux & 0x0F)) ? 1 : 0);
-	reg->Set_flagC((reg->Get_A() < aux) ? 1 : 0);
+    
+    if ((reg->Get_A() & 0x0F) < (value & 0x0F))
+        reg->Set_flagH(true);
+    else if ((reg->Get_A() & 0x0F) < (sum & 0x0F))
+        reg->Set_flagH(true);
+    else if (((reg->Get_A() & 0x0F)==(value & 0x0F)) && ((value & 0x0F)==0x0F) && (reg->Get_flagC()))
+        reg->Set_flagH(true);
+    else
+        reg->Set_flagH(false);
+    
+    reg->Set_flagC(reg->Get_A() < sum);
 
-	reg->Set_A(reg->Get_A() - aux);
+	reg->Set_A(result);
 
 	reg->Add_PC(length);
 }

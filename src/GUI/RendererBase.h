@@ -23,19 +23,14 @@
 #include "../Def.h"
 #include "../IGBScreenDrawable.h"
 
+DECLARE_EVENT_TYPE(wxEVT_RENDERER_REFRESHSCREEN, -1)
 
 /*******************************************************************************
  * RendererBase Class
  *******************************************************************************/
 
 class RendererBase: public IGBScreenDrawable {
-private:
-	wxWindow * winRenderer;
-	int  selPalette;
-	
-protected:
-	BYTE * imgBuf;
-	
+    
 public:
 	RendererBase();
 	~RendererBase();
@@ -51,6 +46,19 @@ public:
 	void OnPreDraw();
 	void OnPostDraw();
 	void OnDrawPixel(int idColor, int x, int y);
+    
+protected:
+	BYTE * imgBuf1;
+    BYTE * imgBuf2;
+    BYTE * frontBuffer;
+    BYTE * backBuffer;
+    
+private:
+	wxWindow * winRenderer;
+	int  selPalette;
+    bool changed;
+    
+    void PageFlip();
 };
 
 // A drop target that adds filenames to a list box

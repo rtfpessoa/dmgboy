@@ -80,12 +80,10 @@ RendererOGL::~RendererOGL()
 
 void RendererOGL::Render()
 {
-    if(!IsShown())
+	if(!IsShown())
         return;
 	
     SetGLContext();
-    
-    wxPaintDC dc(this);
     
     // Init OpenGL once, but after SetCurrent
     if (!initialized)
@@ -112,7 +110,7 @@ void RendererOGL::Render()
     /* clear color and depth buffers */
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	glTexSubImage2D (GL_TEXTURE_2D, 0, 0, 0, GB_SCREEN_W, GB_SCREEN_H, GL_RGB, GL_UNSIGNED_BYTE, imgBuf);
+	glTexSubImage2D (GL_TEXTURE_2D, 0, 0, 0, GB_SCREEN_W, GB_SCREEN_H, GL_RGB, GL_UNSIGNED_BYTE, frontBuffer);
 	
     if( m_gllist == 0 )
     {
@@ -175,12 +173,13 @@ void RendererOGL::Render()
 
 void RendererOGL::OnPaint( wxPaintEvent& event)
 {
+	wxPaintDC dc(this);
     Render();
 }
 
 void RendererOGL::OnSize(wxSizeEvent& event)
 {
-	    Refresh();
+    Refresh();
 }
 
 void RendererOGL::OnEraseBackground(wxEraseEvent& event)
@@ -205,7 +204,7 @@ void RendererOGL::InitGL()
 	//glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);		// Set The Texture Generation Mode For S To Sphere Mapping
 	//glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);		// Set The Texture Generation Mode For T To Sphere Mapping
 	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GB_SCREEN_W, GB_SCREEN_H, 0, GL_RGB, GL_UNSIGNED_BYTE, imgBuf);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GB_SCREEN_W, GB_SCREEN_H, 0, GL_RGB, GL_UNSIGNED_BYTE, frontBuffer);
 }
 
 void RendererOGL::SetGLContext()

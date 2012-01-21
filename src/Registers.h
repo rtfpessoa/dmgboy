@@ -62,14 +62,14 @@ public:
 	inline BYTE Get_E()				{return this->de.simple[0];}
 	inline void Set_E(BYTE value)	{this->de.simple[0] = value;}
 	inline BYTE Get_F()				{return this->af.simple[0];}
-	inline void Set_F(BYTE value)	{this->af.simple[0] = value;}
+	inline void Set_F(BYTE value)	{this->af.simple[0] = value & 0x0F;}
 	inline BYTE Get_H()				{return this->hl.simple[1];}
 	inline void Set_H(BYTE value)	{this->hl.simple[1] = value;}
 	inline BYTE Get_L()				{return this->hl.simple[0];}
 	inline void Set_L(BYTE value)	{this->hl.simple[0] = value;}
 
 	inline WORD Get_AF()			{return this->af.doble;}
-	inline void Set_AF(WORD value)	{this->af.doble = value;}
+	inline void Set_AF(WORD value)	{this->af.doble = value & 0xFFF0;}
 	inline WORD Get_BC()			{return this->bc.doble;}
 	inline void Set_BC(WORD value)	{this->bc.doble = value;}
 	inline WORD Get_DE()			{return this->de.doble;}

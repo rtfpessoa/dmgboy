@@ -29,6 +29,7 @@
     <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Sound_Queue.h" />
     <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Wave_Writer.h" />
     <ClInclude Include="..\..\..\src\GUI\AboutDialog.h" />
+    <ClInclude Include="..\..\..\src\GUI\EmulationThread.h" />
     <ClInclude Include="..\..\..\src\GUI\IDControls.h" />
     <ClInclude Include="..\..\..\src\GUI\InputTextCtrl.h" />
     <ClInclude Include="..\..\..\src\GUI\MainApp.h" />
@@ -61,10 +62,13 @@
     <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Sound_Queue.cpp" />
     <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Wave_Writer.cpp" />
     <ClCompile Include="..\..\..\src\GUI\AboutDialog.cpp" />
+    <ClCompile Include="..\..\..\src\GUI\EmulationThread.cpp" />
     <ClCompile Include="..\..\..\src\GUI\InputTextCtrl.cpp" />
     <ClCompile Include="..\..\..\src\GUI\MainApp.cpp" />
     <ClCompile Include="..\..\..\src\GUI\MainFrame.cpp" />
-    <ClCompile Include="..\..\..\src\GUI\RendererBase.cpp" />
+    <ClCompile Include="..\..\..\src\GUI\RendererBase.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(WXWIN)\include;$(WXWIN)\include\msvc;$(GBSNDEMU);$(PORTAUDIO)\include</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\GUI\RendererOGL.cpp" />
     <ClCompile Include="..\..\..\src\GUI\RendererSW.cpp" />
     <ClCompile Include="..\..\..\src\GUI\SettingsDialog.cpp" />
@@ -137,18 +141,18 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc;..\..\..\src\Gb_Snd_Emu-0.1.4</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc;$(GBSNDEMU);$(PORTAUDIO)\include</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>
       </PrecompiledHeaderOutputFile>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>comctl32.lib;rpcrt4.lib;winmm.lib;advapi32.lib;wsock32.lib;wxmsw28d_core.lib;wxbase28d.lib;wxmsw28d_gl.lib;SDL.lib;SDLmain.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comctl32.lib;rpcrt4.lib;winmm.lib;advapi32.lib;wsock32.lib;wxmsw28d_core.lib;wxbase28d.lib;wxmsw28d_gl.lib;SDL.lib;SDLmain.lib;portaudio_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(WXWIN)\lib\vc_lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(WXWIN)\lib\vc_lib;$(PORTAUDIO)\build\msvc\Win32\Release</AdditionalLibraryDirectories>
       <Profile>false</Profile>
     </Link>
     <ResourceCompile>

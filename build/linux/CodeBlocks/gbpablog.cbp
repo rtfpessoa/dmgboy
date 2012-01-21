@@ -67,6 +67,12 @@
 		<Unit filename="../../../src/GUI/AboutDialog.h">
 			<Option virtualFolder="GUI/" />
 		</Unit>
+		<Unit filename="../../../src/GUI/EmulationThread.cpp">
+			<Option virtualFolder="GUI/" />
+		</Unit>
+		<Unit filename="../../../src/GUI/EmulationThread.h">
+			<Option virtualFolder="GUI/" />
+		</Unit>
 		<Unit filename="../../../src/GUI/IDControls.h">
 			<Option virtualFolder="GUI/" />
 		</Unit>

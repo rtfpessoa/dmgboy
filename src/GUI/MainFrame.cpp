@@ -16,18 +16,13 @@
  */
 
 #include <string>
-#include <wx/wfstream.h>
-#include <wx/zipstrm.h>
 #include <wx/stdpaths.h>
+#include <wx/filename.h>
 #include "MainFrame.h"
 #include "AboutDialog.h"
 #include "SettingsDialog.h"
 #include "IDControls.h"
 #include "../Settings.h"
-#include "../Pad.h"
-#include "../Sound.h"
-#include "../Video.h"
-#include "../CPU.h"
 #include "../GBException.h"
 #include "Xpm/open.xpm"
 #include "Xpm/play.xpm"
@@ -38,6 +33,7 @@
 #include "Xpm/gb32.xpm"
 #include "RendererOGL.h"
 #include "RendererSW.h"
+#include "EmulationThread.h"
 
 using namespace std;
 
@@ -63,8 +59,10 @@ EVT_UPDATE_UI( ID_STOP, MainFrame::OnStopUpdateUI )
 EVT_UPDATE_UI( ID_FULLSCREEN, MainFrame::OnFullScreenUpdateUI )
 EVT_UPDATE_UI_RANGE(ID_LOADSTATE0, ID_LOADSTATE9, MainFrame::OnLoadStateUpdateUI)
 EVT_UPDATE_UI_RANGE(ID_SAVESTATE0, ID_SAVESTATE9, MainFrame::OnSaveStateUpdateUI)
+EVT_LEFT_DCLICK(MainFrame::OnDoubleClick)
+EVT_COMMAND(wxID_ANY, wxEVT_RENDERER_REFRESHSCREEN, MainFrame::OnRefreshScreen)
 EVT_TIMER(ID_TIMER, MainFrame::OnTimer)
-EVT_LEFT_DCLICK(MainFrame::OnDoubleClick)       
+EVT_CLOSE(MainFrame::OnClose)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(wxString fileName)
@@ -93,33 +91,34 @@ MainFrame::MainFrame(wxString fileName)
 	settingsDialog->CentreOnScreen();
 	settingsDialog->LoadFromFile();
 	SettingsSetNewValues(settingsDialog->settings);
-	PadSetKeys(SettingsGetInput());
 	this->CreateRecentMenu(SettingsGetRecentRoms());
-
-	sound = new Sound();
-    sound->ChangeSampleRate(SettingsGetSoundSampleRate());
-	sound->SetEnabled(SettingsGetSoundEnabled());
-    video = new Video(NULL);
-	cpu = new CPU(video, sound);
+	
+    // create the emulation
+    emulation = new EmulationThread();
+    
+    wxThreadError err = emulation->Create();
+    if (err != wxTHREAD_NO_ERROR)
+        wxMessageBox( _("Couldn't create thread!") );
+    
+    err = emulation->Run();
+    if (err != wxTHREAD_NO_ERROR)
+        wxMessageBox( _("Couldn't run thread!") );
     
     fullScreen = false;
     renderer = NULL;
     ChangeRenderer();
-
-	cartridge = NULL;
-
-	emuState = NotStartedYet;
-
+    
 	if (fileName != wxT(""))
 		ChangeFile(fileName);
-	
-	timerExecution = new wxTimer(this, ID_TIMER);
-	timerExecution->Start(15);
+		
+    timer = new wxTimer(this, ID_TIMER);
+	timer->Start(16);
 }
 
 MainFrame::~MainFrame()
 {
-	this->Clean();
+	// No hacer nada aqui mejor hacerlo todo
+    // en el OnClose
 }
 
 void MainFrame::CreateMenuBar()
@@ -221,8 +220,8 @@ void MainFrame::OnRecent(wxCommandEvent &event)
 
 void MainFrame::OnFileOpen(wxCommandEvent &) {
 
-	enumEmuStates copyState = emuState;
-	emuState = Paused;
+	enumEmuStates copyState = emulation->GetState();
+    emulation->SetState(Paused);
 	
 	wxFileDialog* openDialog = new wxFileDialog(this, wxT("Choose a gameboy rom to open"), wxEmptyString, wxEmptyString,
 												wxT("Gameboy roms (*.gb; *.zip)|*.gb;*.zip"),
@@ -233,7 +232,7 @@ void MainFrame::OnFileOpen(wxCommandEvent &) {
 	if (openDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 		this->ChangeFile(openDialog->GetPath());
 	else
-		emuState = copyState;
+		emulation->SetState(copyState);
 
 	// Clean up after ourselves
 	openDialog->Destroy();
@@ -256,7 +255,7 @@ void MainFrame::OnLoadState(wxCommandEvent &event)
 
 	try
 	{
-		cpu->LoadState(string(savesDir.mb_str()), id);
+		emulation->LoadState(string(savesDir.mb_str()), id);
 	}
 	catch(GBException e)
 	{
@@ -278,7 +277,7 @@ void MainFrame::OnSaveState(wxCommandEvent &event)
 	savesDir += wxFileName::GetPathSeparator();
 	try
 	{
-		cpu->SaveState(string(savesDir.mb_str()), id);
+		emulation->SaveState(string(savesDir.mb_str()), id);
 	}
 	catch(GBException e)
 	{
@@ -301,92 +300,8 @@ void MainFrame::OnClearRecent(wxCommandEvent &)
 
 void MainFrame::ChangeFile(const wxString fileName)
 {
-	BYTE * buffer = NULL;
-	unsigned long size = 0;
-	bool isZip = false;
-
-	if (!wxFileExists(fileName))
-	{
-		wxMessageBox(wxT("The file:\n")+fileName+wxT("\ndoesn't exist"), wxT("Error"));
-		return;
-	}
-
-	wxString fileLower = fileName.Lower();
-	if (fileLower.EndsWith(wxT(".zip")))
-	{
-		isZip = true;
-		this->LoadZip(fileName, &buffer, &size);
-		if ((buffer == NULL) || (size == 0))
-			return;
-	}
-	else if (!fileLower.EndsWith(wxT(".gb")))
-	{
-		wxMessageBox(wxT("Only gb and zip files allowed!"), wxT("Error"));
-		return;
-	}
-
-
-	// Si ha llegado aquí es que es un archivo permitido
-	cpu->Reset();
-	if (cartridge)
-		delete cartridge;
-
-	wxString battsDir = wxStandardPaths::Get().GetUserDataDir() + wxFileName::GetPathSeparator()
-						+ wxT("Batts");
-	
-	if (!wxFileName::DirExists(battsDir))
-		wxFileName::Mkdir(battsDir, 0777, wxPATH_MKDIR_FULL);
-	
-	battsDir += wxFileName::GetPathSeparator();
-	
-	if (isZip) {
-		cartridge = new Cartridge(buffer, size, string(battsDir.mb_str()));
-	}else {
-		cartridge = new Cartridge(string(fileName.mb_str()), string(battsDir.mb_str()));
-	}
-
-
-	cpu->LoadCartridge(cartridge);
-	emuState = Playing;
-	
-	
-	this->UpdateRecentMenu(fileName);
-}
-
-/*
- * Carga un fichero comprimido con zip y busca una rom de gameboy (un fichero con extension gb).
- * Si existe mas de una rom solo carga la primera. Si se ha encontrado, la rom se devuelve en un buffer
- * junto con su tamaño, sino las variables se dejan intactas
- */
-void MainFrame::LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * size)
-{
-	wxString fileInZip, fileLower;
-	wxZipEntry* entry;
-	wxFFileInputStream in(zipPath);
-	wxZipInputStream zip(in);
-	while ((entry = zip.GetNextEntry()))
-	{
-		fileInZip = entry->GetName();
-
-		fileLower = fileInZip.Lower();
-		if (fileLower.EndsWith(wxT(".gb")))
-		{
-			*size = zip.GetSize();
-			*buffer = new BYTE[*size];
-			zip.Read(*buffer, *size);
-			delete entry;
-			return;
-		}
-		else
-		{
-			delete entry;
-			continue;
-		}
-	}
-
-	// Archivo no encontrado
-	wxMessageBox(wxT("GameBoy rom not found in the file:\n")+zipPath, wxT("Error"));
-	return;
+	if (emulation->ChangeFile(fileName))
+        this->UpdateRecentMenu(fileName);
 }
 
 void MainFrame::CreateRecentMenu(std::string * roms)
@@ -489,17 +404,16 @@ void MainFrame::OnFileExit(wxCommandEvent &)
 	this->Close();
 }
 
-void MainFrame::Clean()
+void MainFrame::OnClose(wxCloseEvent&)
 {
-	emuState = Stopped;
-	timerExecution->Stop();
-	delete cpu;
-	delete video;
-	delete sound;
-	if (cartridge)
-		delete cartridge;
+    timer->Stop();
+    
 	if (settingsDialog)
 		settingsDialog->Destroy();
+    
+    emulation->Delete();
+    
+    Destroy();
 }
 
 /*
@@ -507,9 +421,9 @@ void MainFrame::Clean()
  */
 void MainFrame::OnSettings(wxCommandEvent &)
 {
-	enumEmuStates lastState = emuState;
-	if (emuState == Playing)
-		emuState = Paused;
+	enumEmuStates lastState = emulation->GetState();
+	if (emulation->GetState() == Playing)
+		emulation->SetState(Paused);
 
 
     if (settingsDialog->ShowModal() == wxID_OK)
@@ -529,12 +443,10 @@ void MainFrame::OnSettings(wxCommandEvent &)
                 renderer->ChangeSize();
             this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
         }
-		PadSetKeys(SettingsGetInput());
-		sound->ChangeSampleRate(SettingsGetSoundSampleRate());
-		sound->SetEnabled(SettingsGetSoundEnabled());
+		emulation->ApplySettings();
 	}
 
-	emuState = lastState;
+    emulation->SetState(lastState);
 }
 
 void MainFrame::ChangeRenderer()
@@ -559,7 +471,7 @@ void MainFrame::ChangeRenderer()
     this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom()+1, GB_SCREEN_H*SettingsGetWindowZoom()+1);
     this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
     
-    video->SetScreen(renderer);
+    emulation->SetScreen(renderer);
 }
 
 void MainFrame::OnFullScreen(wxCommandEvent &)
@@ -574,31 +486,25 @@ void MainFrame::OnAbout(wxCommandEvent &)
 
 void MainFrame::OnPlay(wxCommandEvent &)
 {
-    emuState = Playing;
+    emulation->SetState(Playing);
 }
 
 void MainFrame::OnPause(wxCommandEvent &)
 {
-	if (emuState == Playing)
-		emuState = Paused;
-	else if (emuState == Paused)
-		emuState = Playing;
+	if (emulation->GetState() == Playing)
+		emulation->SetState(Paused);
+	else if (emulation->GetState() == Paused)
+		emulation->SetState(Playing);
 }
 
 void MainFrame::OnStop(wxCommandEvent &)
 {
-#ifdef MAKEGBLOG
-	cpu->SaveLog();
-#endif
-	cpu->Reset();
-    if (renderer)
-        renderer->OnRefreshScreen();
-	emuState = Stopped;
+    emulation->SetState(Stopped);
 }
 
 void MainFrame::OnPlayUpdateUI(wxUpdateUIEvent& event)
 {
-	if ((emuState == NotStartedYet) || (emuState == Playing))
+	if ((emulation->GetState() == NotStartedYet) || (emulation->GetState() == Playing))
 		event.Enable(false);
 	else
 		event.Enable(true);
@@ -606,7 +512,7 @@ void MainFrame::OnPlayUpdateUI(wxUpdateUIEvent& event)
 
 void MainFrame::OnPauseUpdateUI(wxUpdateUIEvent& event)
 {
-	if ((emuState == NotStartedYet) || (emuState == Stopped))
+	if ((emulation->GetState() == NotStartedYet) || (emulation->GetState() == Stopped))
 		event.Enable(false);
 	else
 		event.Enable(true);
@@ -614,7 +520,7 @@ void MainFrame::OnPauseUpdateUI(wxUpdateUIEvent& event)
 
 void MainFrame::OnStopUpdateUI(wxUpdateUIEvent& event)
 {
-	if ((emuState == Stopped)||(emuState == NotStartedYet))
+	if ((emulation->GetState() == Stopped)||(emulation->GetState() == NotStartedYet))
 		event.Enable(false);
 	else
 		event.Enable(true);
@@ -622,7 +528,7 @@ void MainFrame::OnStopUpdateUI(wxUpdateUIEvent& event)
 
 void MainFrame::OnLoadStateUpdateUI(wxUpdateUIEvent& event)
 {
-	if ((emuState == Stopped)||(emuState == NotStartedYet))
+	if ((emulation->GetState() == Stopped)||(emulation->GetState() == NotStartedYet))
 		event.Enable(false);
 	else
 		event.Enable(true);
@@ -630,7 +536,7 @@ void MainFrame::OnLoadStateUpdateUI(wxUpdateUIEvent& event)
 
 void MainFrame::OnSaveStateUpdateUI(wxUpdateUIEvent& event)
 {
-	if ((emuState == Stopped)||(emuState == NotStartedYet))
+	if ((emulation->GetState() == Stopped)||(emulation->GetState() == NotStartedYet))
 		event.Enable(false);
 	else
 		event.Enable(true);
@@ -641,16 +547,15 @@ void MainFrame::OnFullScreenUpdateUI(wxUpdateUIEvent& event)
     event.Enable(typeRenderer == 1);
 }
 
-void MainFrame::OnTimer(wxTimerEvent &event)
-{
-	if (emuState == Playing)
-		cpu->ExecuteOneFrame();
-}
-
 void MainFrame::OnDoubleClick(wxMouseEvent &event)
 {
     ToggleFullScreen();
     event.Skip();
+}
+
+void MainFrame::OnRefreshScreen(wxCommandEvent& event)
+{
+    renderer->OnRefreshScreen();
 }
 
 void MainFrame::ToggleFullScreen()
@@ -663,4 +568,10 @@ void MainFrame::ToggleFullScreen()
         renderer->ChangeSize();
         this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
     }
+}
+
+void MainFrame::OnTimer(wxTimerEvent &event)
+{
+    renderer->OnRefreshScreen();
+    emulation->UpdatePad();
 }

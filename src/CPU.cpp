@@ -96,7 +96,7 @@ void CPU::ExecuteOneFrame()
 	
 	frameCompleted = false;
 	
-	UpdatePad();
+	//UpdatePad();
 
 #ifdef MAKEGBLOG
 	log->Enqueue("\n\nStartFrame", NULL, "");
@@ -389,6 +389,9 @@ void CPU::ExecuteOneFrame()
 					stringstream out;
 					out << "Error, instruction not implemented: 0x";
 					out << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << endl;
+#ifdef MAKEGBLOG
+                    SaveLog();
+#endif
 					throw GBException(out.str());
 			}
 
@@ -698,6 +701,9 @@ void CPU::OpCodeCB(Instructions * inst)
 			stringstream out;
 			out << "Error, instruction not implemented: 0xCB";
 			out << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << "\n";
+#ifdef MAKEGBLOG
+            SaveLog();
+#endif
 			throw GBException(out.str().data());
     }
 }

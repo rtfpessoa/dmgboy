@@ -44,7 +44,7 @@ RendererSW::~RendererSW() {
 
 void RendererSW::OnPaint(wxPaintEvent &) {
     
-	wxImage img = wxImage(GB_SCREEN_W, GB_SCREEN_H, imgBuf, true);
+	wxImage img = wxImage(GB_SCREEN_W, GB_SCREEN_H, frontBuffer, true);
 	
 	int winZoom = SettingsGetWindowZoom();
 	if (winZoom > 1)

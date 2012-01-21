@@ -20,6 +20,8 @@
 #include "MainFrame.h"
 #include "RendererBase.h"
 
+DEFINE_EVENT_TYPE(wxEVT_RENDERER_REFRESHSCREEN)
+
 static BYTE palettes[][4][3] =
 {
 	{
@@ -38,16 +40,23 @@ static BYTE palettes[][4][3] =
 
 RendererBase::RendererBase()
 {
-    imgBuf = NULL;
+    imgBuf1 = NULL;
+    imgBuf2 = NULL;
+    frontBuffer = NULL;
+    backBuffer = NULL;
 	winRenderer = NULL;
+    changed = false;
 	CreateScreen();
 	ChangeSize();
 }
 
 RendererBase::~RendererBase()
 {
-    if (imgBuf)
-        delete[] imgBuf;
+    if (imgBuf1)
+        delete[] imgBuf1;
+    
+    if (imgBuf2)
+        delete[] imgBuf2;
 }
 
 wxWindow * RendererBase::GetWinRenderer()
@@ -63,7 +72,10 @@ void RendererBase::SetWinRenderer(wxWindow * parent, wxWindow *renderer)
 }
 
 void RendererBase::CreateScreen() {
-	imgBuf = new BYTE[GB_SCREEN_W*GB_SCREEN_H*3];
+	imgBuf1 = new BYTE[GB_SCREEN_W*GB_SCREEN_H*3];
+    imgBuf2 = new BYTE[GB_SCREEN_W*GB_SCREEN_H*3];
+    backBuffer = imgBuf1;
+    frontBuffer = imgBuf2;
 	OnClear();
 	ChangePalette(SettingsGetGreenScale());
 }
@@ -90,16 +102,34 @@ void RendererBase::ChangeSize()
 void RendererBase::OnClear()
 {
 	int size = GB_SCREEN_W*GB_SCREEN_H*3;
-	memset(imgBuf, 0, size);
+    memset(backBuffer, 0, size);
+    memset(frontBuffer, 0, size);
+	PageFlip();
+}
+
+void RendererBase::PageFlip()
+{
+    BYTE * aux = frontBuffer;
+    frontBuffer = backBuffer;
+    backBuffer = aux;
+    changed = true;
 }
 
 void RendererBase::OnRefreshScreen()
 {
-	// refresh the panel
 	if (winRenderer)
 	{
-		winRenderer->Refresh(false);
-		winRenderer->Update();
+		if (wxThread::IsMain())
+        {
+            if (changed)
+            {
+                winRenderer->Refresh(false);
+                winRenderer->Update();
+                changed = false;
+            }
+        }
+        else
+            PageFlip();
 	}
 }
 
@@ -124,9 +154,9 @@ void RendererBase::OnDrawPixel(int idColor, int x, int y)
 	int offsetY = y * sizeLine;
 	int offsetBuf = offsetY + offsetX;
 	
-	imgBuf[offsetBuf + 0] = colorR;
-	imgBuf[offsetBuf + 1] = colorG;
-	imgBuf[offsetBuf + 2] = colorB;
+	backBuffer[offsetBuf + 0] = colorR;
+	backBuffer[offsetBuf + 1] = colorG;
+	backBuffer[offsetBuf + 2] = colorB;
 }
 
 DnDFile::DnDFile(wxWindow * parent)
