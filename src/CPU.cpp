@@ -57,9 +57,7 @@ void CPU::Init(Video *v)
 }
 
 
-CPU::~CPU()
-{
-}
+CPU::~CPU() {}
 
 void CPU::ResetGlobalVariables()
 {
