@@ -971,10 +971,7 @@ void Instructions::SCF()
 
 void Instructions::HALT()
 {
-	if (reg->Get_IME())
-	{
-		reg->Set_Halt(true);
-	}
+	reg->Set_Halt(true);
 	
 	reg->Add_PC(1);
 
