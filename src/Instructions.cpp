@@ -571,40 +571,43 @@ void Instructions::DAA()
 	}
 	 */
 	
+    BYTE a = reg->Get_A();
+    
 	if (reg->Get_flagN())
 	{
-		if((reg->Get_A() & 0x0F)>0x09 || reg->Get_flagH()) 
+		if((a & 0x0F)>0x09 || reg->Get_flagH()) 
 		{ 
-			reg->Set_A(reg->Get_A()-0x06); //Half borrow: (0-1) = (0xF-0x6) = 9 
-			if((reg->Get_A() & 0xF0) == 0xF0) reg->Set_flagC(1); 
-			// We don't clear the carry/barrow flag in the DAA
-			//else regF &= ~CarryMask; 
+			a -= 0x06; //Half borrow: (0-1) = (0xF-0x6) = 9 
+			if((a & 0xF0) == 0xF0)
+                reg->Set_flagC(1);
 		} 
 		
-		if((reg->Get_A() & 0xF0) > 0x90 || reg->Get_flagC()) 
+		if((a & 0xF0) > 0x90 || reg->Get_flagC()) 
 		{
-			reg->Set_A(reg->Get_A()-0x60); 
+			a -= 0x60; 
 			reg->Set_flagC(1);
 		}
 	}
 	else
 	{
-		if((reg->Get_A() & 0x0F)>9 || reg->Get_flagH()) 
+		if((a & 0x0F)>0x09 || reg->Get_flagH()) 
 		{ 
-			reg->Set_A(reg->Get_A()+0x06); //Half carry: (9+1) = (0xA+0x6) = 10 
+			a += 0x06; //Half carry: (9+1) = (0xA+0x6) = 10 
 			// never happens in BCD math 
 			//if((regA & 0xF0)==0) regF |= CarryMask; 
 			// We don't clear the carry/barrow flag in the DAA
 			//else regF &= ~CarryMask; 
 		} 
 		
-		if((reg->Get_A() & 0xF0)>0x90 || reg->Get_flagC()) 
+		if((a & 0xF0) > 0x90 || reg->Get_flagC()) 
 		{
-			reg->Set_A(reg->Get_A()+0x60); 
+			a += 0x60; 
 			reg->Set_flagC(1);
 		}
 	} 
-	if(reg->Get_A()==0) reg->Set_F(reg->Get_F()|0x80); else reg->Set_F(reg->Get_F()&~0x80);
+	reg->Set_flagZ(!a);
+    reg->Set_flagH(0);
+    reg->Set_A(a);
 	
 	reg->Add_PC(1);
 }
