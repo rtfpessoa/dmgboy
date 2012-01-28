@@ -884,6 +884,7 @@ void CPU::UpdatePad()
     {
 		memory[IF] |= 0x10;
         Set_Halt(false);
+        Set_Stop(false);
     }
 }
 

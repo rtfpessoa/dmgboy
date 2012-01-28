@@ -64,5 +64,5 @@ int PadCheckKeyboard(BYTE * valueP1)
 	
 	*valueP1 = PadUpdateInput(*valueP1);
 	
-	return 0;
+	return interrupt;
 }
