@@ -881,11 +881,7 @@ void CPU::UpdatePad()
 {
 	int interrupt = PadCheckKeyboard(&memory[P1]);
 	if (interrupt)
-    {
-		memory[IF] |= 0x10;
-        Set_Halt(false);
-        Set_Stop(false);
-    }
+        SetIntFlag(4);
 }
 
 void CPU::UpdateStateLCD()
@@ -916,10 +912,7 @@ void CPU::UpdateStateLCD()
 					// Si interrupcion OAM habilitada, marcar peticion de interrupcion
 					// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
 					if (BIT5(memory[STAT]) && screenOn)
-                    {
-						memory[IF] |= 0x02;
-                        Set_Halt(false);
-                    }
+                        SetIntFlag(1);
                 }
 				
 				v->UpdateLine(memory[LY]-1);
@@ -935,12 +928,11 @@ void CPU::UpdateStateLCD()
 				if (screenOn)
 				{
 					// Interrupcion V-Blank
-					memory[IF] |= 0x01;
+					SetIntFlag(0);
 					// Si interrupcion V-Blank habilitada, marcar peticion de interrupcion
 					// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT.
 					if (BIT4(memory[STAT]))
-						memory[IF] |= 0x02;
-                    Set_Halt(false);
+                        SetIntFlag(1);
 				}
 				VBlankIntPending = false;
 			}
@@ -958,10 +950,7 @@ void CPU::UpdateStateLCD()
 					// Si interrupcion OAM habilitada, marcar peticion de interrupcion
 					// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
 					if (BIT5(memory[STAT]) && screenOn)
-                    {
-						memory[IF] |= 0x02;
-                        Set_Halt(false);
-                    }
+                        SetIntFlag(1);
 					
 					OnEndFrame();
                 }
@@ -990,10 +979,7 @@ void CPU::UpdateStateLCD()
 				// Si interrupcion H-Blank habilitada, marcar peticion de interrupcion
 				// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
 				if (BIT3(memory[STAT]) && screenOn)
-                {
-					memory[IF] |= 0x02;
-                    Set_Halt(false);
-                }
+                    SetIntFlag(1);
             }
             break;
 	}
@@ -1005,10 +991,7 @@ inline void CPU::CheckLYC()
 	{
 		memory[STAT] |= 0x04;
 		if (BIT6(memory[STAT]))
-        {
-			memory[IF] |= 0x02;
-            Set_Halt(false);
-        }
+            SetIntFlag(1);
 	}
 	else
 		memory[STAT] &= ~0x04;
@@ -1030,8 +1013,7 @@ inline void CPU::UpdateSerial()
 			if (bitSerial > 7)
 			{
 				memory[SC] &= 0x7F;
-				memory[IF] |= 0x08;
-                Set_Halt(false);
+				SetIntFlag(3);
 				bitSerial = -1;
 				return;
 			}
@@ -1043,6 +1025,15 @@ inline void CPU::UpdateSerial()
 			bitSerial++;
 		}
 	}
+}
+
+void CPU::SetIntFlag(int bit)
+{
+    int mask = 1 << bit;
+    
+    memory[IF] |= mask;
+    if (memory[IE] & mask)
+        Set_Halt(false);
 }
 
 void CPU::Interrupts(Instructions * inst)

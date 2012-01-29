@@ -67,6 +67,7 @@ private:
 	void UpdateStateLCD();
 	void UpdateTimer();
 	void UpdateSerial();
+    void SetIntFlag(int bit);
 	void Interrupts(Instructions * inst);
 	void CheckLYC();
 	void OnEndFrame();
