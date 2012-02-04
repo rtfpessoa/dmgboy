@@ -21,7 +21,7 @@
 #include "Pad.h"
 using namespace std;
 
-static wxKeyCode keysUsed[] = { WXK_UP, WXK_DOWN, WXK_LEFT, WXK_RIGHT, (wxKeyCode)'A', (wxKeyCode)'S', (wxKeyCode)'Q', (wxKeyCode)'W' };
+static wxKeyCode keysUsed[] = { WXK_UP, WXK_DOWN, WXK_LEFT, WXK_RIGHT, (wxKeyCode)'A', (wxKeyCode)'S', WXK_SHIFT, WXK_RETURN };
 
 static BYTE gbPadState[8];
 
