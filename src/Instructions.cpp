@@ -933,24 +933,15 @@ void Instructions::SRL_n(e_registers place)
 
 void Instructions::ADD_SP_n()
 {
-	BYTE lNibbleSP;
-	char lNibbleN;
+	char n = _8bitsInmValue;
 
 	reg->Set_flagZ(0);
 	reg->Set_flagN(0);
 
-	lNibbleSP = reg->Get_SP() & 0x00FF;
-	lNibbleN = _8bitsInmValue;
+    reg->Set_flagH(((reg->Get_SP() & 0x0F) + (n & 0x0F)) > 0x0F);
+    reg->Set_flagC(((reg->Get_SP() & 0xFF) + (n & 0xFF)) > 0xFF);
 
-	(((lNibbleSP & 0x0F) + (lNibbleN & 0x0F)) > 0x0F) ? reg->Set_flagH(1) : reg->Set_flagH(0);
-
-	reg->Set_flagC(0);
-	if ((reg->Get_SP() + lNibbleN) > 0xFFFF)
-		reg->Set_flagC(1);
-	if ((reg->Get_SP() + lNibbleN) < 0x0000)
-		reg->Set_flagC(1);
-
-	reg->Add_SP(lNibbleN);
+	reg->Add_SP(n);
 
 	reg->Add_PC(2);
 }
