@@ -1120,11 +1120,6 @@ void Instructions::RRC_n(e_registers place)
 		reg->Add_PC(1);
 }
 
-//void Instructions::RRCA()
-//{
-//	RRC_n(A);
-//}
-
 void Instructions::PUSH_PC()
 {
 	reg->Add_SP(-1);
@@ -1145,14 +1140,12 @@ void Instructions::RST_n(BYTE desp)
 
 void Instructions::LDHL_SP_n()
 {
-	char n;
-
-	n = _8bitsInmValue;
+	char n = _8bitsInmValue;
 
 	reg->Set_flagZ(0);
 	reg->Set_flagN(0);
-	(((reg->Get_SP() & 0x00FF) + (n & 0x00FF)) > 0x00FF) ? reg->Set_flagH(1) : reg->Set_flagH(0);
-	((reg->Get_SP() + n) > 0xFFFF) ? reg->Set_flagC(1) : reg->Set_flagC(0);
+    reg->Set_flagH(((reg->Get_SP() & 0x0F) + (n & 0x0F)) > 0x0F);
+    reg->Set_flagC(((reg->Get_SP() & 0xFF) + (n & 0xFF)) > 0xFF);
 
 	reg->Set_HL(reg->Get_SP() + n);
 
