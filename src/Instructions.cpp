@@ -389,29 +389,6 @@ void Instructions::ADD_HL_n(e_registers place)
 	reg->Add_PC(1);
 }
 
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//Revisado hasta aqui
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-//Quitar esta funcion y dejar la generica teniendo encuenta la long. de la instruccion
-void Instructions::RLCA()
-{
-	BYTE bit7, value;
-
-	value = reg->Get_A();
-	bit7 = BIT7(value) >> 7;
-	value = (value << 1) | bit7;
-	reg->Set_A(value);
-
-	//reg->Set_flagZ(0);??????? Este o el que hay?
-	reg->Set_flagZ(value ? 0 : 1);
-	reg->Set_flagN(0);
-	reg->Set_flagH(0);
-	reg->Set_flagC(bit7);
-
-	reg->Add_PC(1);
-}
-
 void Instructions::RLC_n(e_registers place)
 {
 	BYTE bit7, value;
@@ -431,12 +408,18 @@ void Instructions::RLC_n(e_registers place)
 		reg->Set_Reg(place, value);
 	}
 
-	reg->Set_flagZ(value ? 0 : 1);
+	reg->Set_flagZ(0);
 	reg->Set_flagN(0);
 	reg->Set_flagH(0);
 	reg->Set_flagC(bit7);
 
-	reg->Add_PC(2);
+    if (mem->MemR(reg->Get_PC()) == 0xCB)
+    {
+        reg->Set_flagZ(value ? 0 : 1);
+		reg->Add_PC(2);
+    }
+	else
+		reg->Add_PC(1);
 }
 
 void Instructions::INC_nn(e_registers lugar)
@@ -643,22 +626,24 @@ void Instructions::DEC_nn(e_registers lugar)
 void Instructions::OR_n(e_registers lugar)
 {
 	BYTE longitud = 1;
+    BYTE value;
 
 	switch (lugar)
 	{
 		case $:
-			reg->Set_A(reg->Get_A() | _8bitsInmValue);
+			value = reg->Get_A() | _8bitsInmValue;
 			longitud = 2;
 			break;
 		case c_HL:
-			reg->Set_A(reg->Get_A() | mem->MemR(reg->Get_HL()));
+			value = reg->Get_A() | mem->MemR(reg->Get_HL());
 			break;
 		default:
-			reg->Set_A(reg->Get_A() | reg->Get_Reg(lugar));
+			value = reg->Get_A() | reg->Get_Reg(lugar);
 	}
 
-	//if (reg->Get_A() == 0x00) reg->Set_flagZ(1); else reg->Set_flagZ(0);
-	reg->Set_flagZ(!reg->Get_A() ? 1 : 0);
+    reg->Set_A(value);
+
+	reg->Set_flagZ(value ? 0 : 1);
 	reg->Set_flagN(0);
 	reg->Set_flagH(0);
 	reg->Set_flagC(0);
@@ -669,21 +654,24 @@ void Instructions::OR_n(e_registers lugar)
 void Instructions::XOR_n(e_registers lugar)
 {
     BYTE longitud = 1;
+    BYTE value;
 
 	switch (lugar)
 	{
 		case $:
-			reg->Set_A(reg->Get_A() ^ _8bitsInmValue);
+			value = reg->Get_A() ^ _8bitsInmValue;
 			longitud = 2;
 			break;
 		case c_HL:
-			reg->Set_A(reg->Get_A() ^ mem->MemR(reg->Get_HL()));
+			value = reg->Get_A() ^ mem->MemR(reg->Get_HL());
 			break;
 		default:
-			reg->Set_A(reg->Get_A() ^ reg->Get_Reg(lugar));
+			value = reg->Get_A() ^ reg->Get_Reg(lugar);
 	}
+    
+    reg->Set_A(value);
 
-	if (reg->Get_A() == 0x00) reg->Set_flagZ(1); else reg->Set_flagZ(0);
+	reg->Set_flagZ(value ? 0 : 1);
 	reg->Set_flagN(0);
 	reg->Set_flagH(0);
 	reg->Set_flagC(0);
@@ -709,12 +697,7 @@ void Instructions::RET_cc(e_registers flag, BYTE value2check)
 	if (reg->Get_Flag(flag) == value2check)
 		RET();
 }
-/*
-void Instructions::PUSH_nn(e_registers lugar)
-{
 
-}
-*/
 void Instructions::LD_nn_n(e_registers lugar)
 {
 	reg->Set_Reg(lugar, _8bitsInmValue);
@@ -1049,13 +1032,16 @@ void Instructions::RL_n(e_registers place)
 		reg->Set_Reg(place, value);
 	}
 
-	reg->Set_flagZ(!value ? 1 : 0);
+	reg->Set_flagZ(0);
 	reg->Set_flagN(0);
 	reg->Set_flagH(0);
 	reg->Set_flagC(oldBit7);
 
 	if (mem->MemR(reg->Get_PC()) == 0xCB)
+    {
+        reg->Set_flagZ(value ? 0 : 1);
 		reg->Add_PC(2);
+    }
 	else
 		reg->Add_PC(1);
 }
@@ -1079,13 +1065,16 @@ void Instructions::RR_n(e_registers place)
 		reg->Set_Reg(place, value);
 	}
 
-	reg->Set_flagZ(!value ? 1 : 0);
+	reg->Set_flagZ(0);
 	reg->Set_flagN(0);
 	reg->Set_flagH(0);
 	reg->Set_flagC(bit0);
 
 	if (mem->MemR(reg->Get_PC()) == 0xCB)
+    {
+        reg->Set_flagZ(value ? 0 : 1);
 		reg->Add_PC(2);
+    }
 	else
 		reg->Add_PC(1);
 }
@@ -1109,13 +1098,16 @@ void Instructions::RRC_n(e_registers place)
 		reg->Set_Reg(place, value);
 	}
 
-	reg->Set_flagZ(!value ? 1 : 0);
+	reg->Set_flagZ(0);
 	reg->Set_flagN(0);
 	reg->Set_flagH(0);
 	reg->Set_flagC(bit0);
 
 	if (mem->MemR(reg->Get_PC()) == 0xCB)
+    {
+        reg->Set_flagZ(value ? 0 : 1);
 		reg->Add_PC(2);
+    }
 	else
 		reg->Add_PC(1);
 }

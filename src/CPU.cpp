@@ -132,7 +132,7 @@ void CPU::ExecuteOneFrame()
 				case (0x04): inst.INC_n(B); break;
 				case (0x05): inst.DEC_n(B); break;
 				case (0x06): inst.LD_nn_n(B); break;
-				case (0x07): inst.RLCA(); break;
+				case (0x07): inst.RLC_n(A); break;
 				case (0x08): inst.LD_nn_SP(); break;
 				case (0x09): inst.ADD_HL_n(BC); break;
 				case (0x0A): inst.LD_A_n(c_BC); break;
