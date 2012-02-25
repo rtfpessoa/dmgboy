@@ -953,11 +953,12 @@ void Instructions::HALT()
 
 void Instructions::STOP()
 {
-	reg->Set_Stop(true);
+    // En una gameboy real apagaria la pantalla si ha
+    // transcurrido demasiado tiempo sin pulsar ningun
+    // boton. Aqui no se va simular ese comportamiento
+	//reg->Set_Stop(true);
 
 	reg->Add_PC(2);
-
-	cout << "Instruccion 0x10 (Stop)\n";
 }
 
 void Instructions::SWAP(e_registers place)
