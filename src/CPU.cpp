@@ -120,8 +120,7 @@ void CPU::ExecuteOneFrame()
 #endif
 		
 		lastCycles = 4;
-		
-		if (!Get_Halt() && !Get_Stop())
+		if (!Get_Halt())
 		{
 			switch(OpCode)
 			{
@@ -393,7 +392,10 @@ void CPU::ExecuteOneFrame()
                     SaveLog();
 #endif
 					throw GBException(out.str());
-			}
+                    
+			} // end switch
+            
+		} // end if (!Get_Halt())
 
 			if (OpCode == 0xCB)
 				lastCycles = instructionCyclesCB[NextOpcode];
