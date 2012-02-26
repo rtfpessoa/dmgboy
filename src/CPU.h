@@ -41,8 +41,6 @@ private:
 #ifdef MAKEGBLOG
 	QueueLog *log;
 #endif
-	BYTE instructionCycles[0x100];
-	BYTE instructionCyclesCB[0x100];
 	bool frameCompleted;
 	bool VBlankIntPending;
 public:
@@ -61,8 +59,6 @@ public:
 private:
 	void Init(Video *v);
     void ResetGlobalVariables();
-	void FillInstructionCycles();
-	void FillInstructionCyclesCB();
 	void OpCodeCB(Instructions * inst);
 	void UpdateStateLCD(int cycles);
 	void UpdateTimer(int cycles);
