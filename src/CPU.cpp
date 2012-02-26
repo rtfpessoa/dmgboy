@@ -397,21 +397,16 @@ void CPU::ExecuteOneFrame()
             
 		} // end if (!Get_Halt())
 
-			if (OpCode == 0xCB)
-				lastCycles = instructionCyclesCB[NextOpcode];
-			else
-				lastCycles = instructionCycles[OpCode];
-		}
+        if (OpCode == 0xCB)
+            lastCycles = instructionCyclesCB[NextOpcode];
+        else
+            lastCycles = instructionCycles[OpCode];
 
-		cyclesLCD	 += lastCycles;
-		cyclesTimer  += lastCycles;
-		cyclesDIV	 += lastCycles;
 		actualCycles += lastCycles;
-		cyclesSerial += lastCycles;
-
-        UpdateStateLCD();
-		UpdateTimer();
-		UpdateSerial();
+        
+        UpdateStateLCD(lastCycles);
+		UpdateTimer(lastCycles);
+		UpdateSerial(lastCycles);
         Interrupts(&inst);
 		
 	}//end for
@@ -886,8 +881,10 @@ void CPU::UpdatePad()
         SetIntFlag(4);
 }
 
-void CPU::UpdateStateLCD()
+void CPU::UpdateStateLCD(int cycles)
 {
+    cyclesLCD += cycles;
+    
 	BYTE screenOn = BIT7(memory[LCDC]);
 	
     BYTE mode = BITS01(memory[STAT]);
@@ -999,10 +996,12 @@ inline void CPU::CheckLYC()
 		memory[STAT] &= ~0x04;
 }
 
-inline void CPU::UpdateSerial()
+inline void CPU::UpdateSerial(int cycles)
 {
-	if (BIT7(memory[SC]) && BIT0(memory[SC]))
+    if (BIT7(memory[SC]) && BIT0(memory[SC]))
 	{
+        cyclesSerial += cycles;
+        
 		if (bitSerial < 0)
 		{
 			bitSerial = 0;
@@ -1078,7 +1077,7 @@ void CPU::Interrupts(Instructions * inst)
 	}
 }
 
-void CPU::UpdateTimer()
+void CPU::UpdateTimer(int cycles)
 {
 	// Estos serian los valores en Hz que puede tomar TAC:
 	// 4096, 262144, 65536, 16384
@@ -1088,6 +1087,8 @@ void CPU::UpdateTimer()
 
 	if (BIT2(memory[TAC])) //Si esta habilitado el timer
 	{
+		cyclesTimer  += cycles;
+		
 		if (cyclesTimer >= overflowTimer[BITS01(memory[TAC])])
 		{
 			if (memory[TIMA] == 0xFF)
@@ -1105,6 +1106,8 @@ void CPU::UpdateTimer()
 	else
 		cyclesTimer = 0;
 
+    cyclesDIV += cycles;
+    
 	if (cyclesDIV >= 256)
 	{
 		memory[DIV]++;

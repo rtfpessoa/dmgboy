@@ -64,9 +64,9 @@ private:
 	void FillInstructionCycles();
 	void FillInstructionCyclesCB();
 	void OpCodeCB(Instructions * inst);
-	void UpdateStateLCD();
-	void UpdateTimer();
-	void UpdateSerial();
+	void UpdateStateLCD(int cycles);
+	void UpdateTimer(int cycles);
+	void UpdateSerial(int cycles);
     void SetIntFlag(int bit);
 	void Interrupts(Instructions * inst);
 	void CheckLYC();
