@@ -951,23 +951,23 @@ void CPU::UpdateTimer(int cycles)
 	// En overflowTimer se encuentran estos valores en ciclos
 	// maquina
 	WORD overflowTimer[] = {1024, 16, 64, 256};
-
+    
 	if (BIT2(memory[TAC])) //Si esta habilitado el timer
 	{
-		cyclesTimer  += cycles;
-		
-		if (cyclesTimer >= overflowTimer[BITS01(memory[TAC])])
+        cyclesTimer  += cycles;
+        
+        WORD cyclesOverflow = overflowTimer[BITS01(memory[TAC])];
+		while (cyclesTimer >= cyclesOverflow)
 		{
 			if (memory[TIMA] == 0xFF)
 			{
 				memory[TIMA] = memory[TMA];
-				memory[IF] |= 0x04;
-                Set_Halt(false);
+                SetIntFlag(2);
 			}
-			else
-				memory[TIMA]++;
+            else
+                memory[TIMA]++;
 
-			cyclesTimer = 0;
+			cyclesTimer -= cyclesOverflow;
 		}
 	}
 	else
@@ -975,10 +975,10 @@ void CPU::UpdateTimer(int cycles)
 
     cyclesDIV += cycles;
     
-	if (cyclesDIV >= 256)
+	while (cyclesDIV >= 256)
 	{
 		memory[DIV]++;
-		cyclesDIV = 0;
+		cyclesDIV -= 256;
 	}
 }
 
