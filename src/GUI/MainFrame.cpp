@@ -71,10 +71,10 @@ MainFrame::MainFrame(wxString fileName)
 #ifdef __WXGTK__
     // En linux parece ser que no permitir modificar el tamaño del frame al usuario
     // afecta a los posteriores redimensionados por codigo
-    this->Create(0, ID_MAINFRAME, wxT("gbpablog"), wxDefaultPosition,
+    this->Create(0, ID_MAINFRAME, wxT(APP_NAME), wxDefaultPosition,
            wxDefaultSize, wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX);
 #else
-    this->Create(0, ID_MAINFRAME, wxT("gbpablog"), wxDefaultPosition,
+    this->Create(0, ID_MAINFRAME, wxT(APP_NAME), wxDefaultPosition,
            wxDefaultSize, wxCAPTION | wxSYSTEM_MENU |
            wxMINIMIZE_BOX | wxCLOSE_BOX | wxCLIP_CHILDREN);
 #endif

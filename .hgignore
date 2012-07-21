@@ -1,10 +1,10 @@
 syntax: glob
 
 glob:.DS_Store
-build/mac/Xcode/gbpablog\.xcodeproj/xcuserdata/*
-build/mac/Xcode/gbpablog\.xcodeproj/project\.xcworkspace/xcuserdata/*
-build/mac/Xcode/gbpablog.xcodeproj/pablo.pbxuser
-build/mac/Xcode/gbpablog.xcodeproj/pablo.perspectivev3
+build/mac/Xcode/DMGBoy\.xcodeproj/xcuserdata/*
+build/mac/Xcode/DMGBoy\.xcodeproj/project\.xcworkspace/xcuserdata/*
+build/mac/Xcode/DMGBoy.xcodeproj/pablo.pbxuser
+build/mac/Xcode/DMGBoy.xcodeproj/pablo.perspectivev3
 glob:*Xcode/build/*
 
 */debug/*

@@ -20,12 +20,12 @@
 
 //#define MAKEGBLOG
 
-#define APP_NAME		"gbpablog"
+#define APP_NAME		"DMGBoy"
 #define APP_VERSION		"1.0"
 #define APP_MAINT		"Pablo Gasco"
 #define APP_LICENCE		"GPL v3"
-#define APP_COPYRIGTH	"(C) 2011 Pablo Gasco"
-#define APP_WEBSITE		"http://code.google.com/p/gbpablog/"
+#define APP_COPYRIGTH	"(C) 2012 Pablo Gasco"
+#define APP_WEBSITE		"http://code.google.com/p/dmgboy/"
 
 #define SAVE_STATE_VERSION	0x01
 

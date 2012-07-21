@@ -285,7 +285,7 @@ void SettingsDialog::SaveToFile(bool reloadSettings)
 	wxFileName configPath(configDir, wxT("config.ini"));
 
 	// Guardar a disco
-	wxFileConfig fileConfig(wxT("gbpablog"), wxT("pablogasco"), configPath.GetFullPath());
+	wxFileConfig fileConfig(wxT(APP_NAME), wxT("pablogasco"), configPath.GetFullPath());
 
     fileConfig.Write(wxT("General/renderMethod"), settings.renderMethod);
 	fileConfig.Write(wxT("General/greenScale"), settings.greenScale);
@@ -326,7 +326,7 @@ void SettingsDialog::LoadFromFile()
 	wxString configDir = wxStandardPaths::Get().GetUserDataDir();
 	wxFileName configPath(configDir, wxT("config.ini"));
 	// Cargar de disco
-	wxFileConfig fileConfig(wxT("gbpablog"), wxT("pablogasco"), configPath.GetFullPath());
+	wxFileConfig fileConfig(wxT(APP_NAME), wxT("pablogasco"), configPath.GetFullPath());
 
     fileConfig.Read(wxT("General/renderMethod"), &settings.renderMethod);
 	fileConfig.Read(wxT("General/greenScale"), &settings.greenScale);
