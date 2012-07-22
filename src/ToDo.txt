@@ -1,8 +1,8 @@
 - Multi idioma / unicode
 - Permitir cargar roms comprimidas en 7z
-- Separar emulación en un hilo aparte
 
 Terminado:
+- Separar emulación en un hilo aparte
 - Pasarlo a OpenGL
 - Sonido
 - Permitir Savestates en cualquier momento
