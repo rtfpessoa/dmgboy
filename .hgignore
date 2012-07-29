@@ -1,11 +1,11 @@
 syntax: glob
 
-glob:.DS_Store
-build/mac/Xcode/DMGBoy\.xcodeproj/xcuserdata/*
-build/mac/Xcode/DMGBoy\.xcodeproj/project\.xcworkspace/xcuserdata/*
+.DS_Store
+build/mac/Xcode/DMGBoy.xcodeproj/xcuserdata/*
+build/mac/Xcode/DMGBoy.xcodeproj/project.xcworkspace/xcuserdata/*
 build/mac/Xcode/DMGBoy.xcodeproj/pablo.pbxuser
 build/mac/Xcode/DMGBoy.xcodeproj/pablo.perspectivev3
-glob:*Xcode/build/*
+*Xcode/build/*
 
 */debug/*
 */Debug/*
@@ -15,11 +15,12 @@ glob:*Xcode/build/*
 *.user
 *.suo
 *.depend
-build/win32/vs2010/VS2010_vcredist_x86\.exe
+build/win32/vs2010/VS2010_vcredist_x86.exe
 
 build/linux/CodeBlocks/gbpablog
 build/linux/CodeBlocks/gbpablog.layout
 
-glob:*.backup
-glob:*/log.txt
-build/installers/gbpablog*
+*.backup
+*/log.txt
+build/installers/DMGBoy*
+build/installers/binaries/*
