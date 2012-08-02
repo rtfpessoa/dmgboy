@@ -1,6 +1,7 @@
 syntax: glob
 
 .DS_Store
+Config.xcconfig
 build/mac/Xcode/DMGBoy.xcodeproj/xcuserdata/*
 build/mac/Xcode/DMGBoy.xcodeproj/project.xcworkspace/xcuserdata/*
 build/mac/Xcode/DMGBoy.xcodeproj/pablo.pbxuser

@@ -1,0 +1,11 @@
+//
+//  Config.xcconfig
+//  DMGBoy
+//
+//  Created by Pablo Gascó on 29/07/12.
+//
+//
+
+WXWIN = /Users/pablo/Documents/Programacion/wxMac-2.8.12
+PORTAUDIODIR = /Users/pablo/Documents/Programacion/portaudio08-Oct-2011
+GBSNDEMU = /Users/pablo/Documents/Programacion/DMGBoy/src/Gb_Snd_Emu-0.1.4
