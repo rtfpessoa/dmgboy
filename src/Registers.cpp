@@ -129,8 +129,8 @@ string Registers::ToString()
 		<< ", BC: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_BC()
 		<< ", DE: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_DE()
 		<< ", HL: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_HL()
-		<< ", SP: " << setfill('0') << setw(4) << uppercase << hex << (int) Get_SP()
-		<< ", H: " << Get_Halt() << ", S: " << Get_Stop() << ", I: " << Get_IME();
+		<< ", SP: " << setfill('0') << setw(4) << uppercase << hex << (int)Get_SP()
+		<< ", H: " << Get_Halt() << ", I: " << Get_IME();
 	/*
 	out << "PC = " << hex << (int)Get_PC()
 	<< " SP = " << hex << (int)Get_SP()

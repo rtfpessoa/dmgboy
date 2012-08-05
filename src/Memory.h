@@ -31,6 +31,7 @@ protected:
 	Sound * s;
 private:
 	void DmaTransfer(BYTE direction);
+    BYTE MemRSound(WORD address);
 public:
 	BYTE memory[SIZE_MEM];
 public:
@@ -44,15 +45,11 @@ public:
 	inline BYTE MemR(WORD address)
 	{
 		if ((address < 0x8000) || ((address >=0xA000) && (address < 0xC000)))
-		{
-			return c->Read(address);
-		}
+            return c->Read(address);
 		else if ((address >= 0xFF10) && (address <= 0xFF3F))
-		{
-			if(s)
-				return s->ReadRegister(address);
-		}
-		return memory[address];
+            return MemRSound(address);
+        else
+            return memory[address];
 	}
 	void SaveMemory(std::ofstream * file);
 	void LoadMemory(std::ifstream * file);

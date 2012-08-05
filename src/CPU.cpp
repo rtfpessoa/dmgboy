@@ -153,11 +153,11 @@ void CPU::ExecuteOneFrame()
 		
 #ifdef MAKEGBLOG
 		stringstream ssOpCode;
-		ssOpCode << numInstructions << " - ";
-		ssOpCode << "OpCode: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
+		ssOpCode << numInstructions << ", ";
+		ssOpCode << "Op: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
 		if (OpCode == 0xCB)
 			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
-		ssOpCode << ", ";
+        ssOpCode << ", ";
 		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
 #endif
 		

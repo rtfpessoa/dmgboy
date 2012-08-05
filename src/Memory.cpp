@@ -23,6 +23,18 @@
 
 using namespace std;
 
+BYTE soundMask[] = {
+    0x80, 0x3F, 0x00, 0xFF, 0xBF, // NR10-NR14 (0xFF10-0xFF14)
+    0xFF, 0x3F, 0x00, 0xFF, 0xBF, // NR20-NR24 (0xFF15-0xFF19)
+    0x7F, 0xFF, 0x9F, 0xFF, 0xBF, // NR30-NR34 (0xFF1A-0xFF1E)
+    0xFF, 0xFF, 0x00, 0x00, 0xBF, // NR40-NR44 (0xFF1F-0xFF23)
+    0x00, 0x00, 0x70, 0xFF, 0xFF, // NR50-NR54 (0xFF24-0xFF28)
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, // --------- (0xFF29-0xFF2D)
+    0xFF, 0xFF,                   // --------- (0xFF2E-0xFF2F)
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // WaveRAM (0xFF30-0xFF37)
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // WaveRAM (0xFF38-0xFF3F)
+};
+
 Memory::Memory(Sound * s)
 {
 	this->c = NULL;
@@ -45,63 +57,74 @@ void Memory::ResetMem()
 {
 	memset(&memory, 0x00, SIZE_MEM);
 
-	memory[TIMA] = 0x00; //TIMA
-    memory[TMA]  = 0x00; //TMA
-    memory[TAC]  = 0x00; //TAC
+	memory[TIMA] = 0x00;
+    memory[TMA]  = 0x00;
+    memory[TAC]  = 0x00;
 	
-	memory[NR10]  = 0x80; //NR10
-	memory[NR11]  = 0xBF; //NR11
-	memory[NR12]  = 0xF3; //NR12
-	memory[NR14]  = 0xBF; //NR14
-	memory[NR21]  = 0x3F; //NR21
-	memory[NR22]  = 0x00; //NR22
-	memory[NR24]  = 0xBF; //NR24
-	memory[NR30]  = 0x7F; //NR30
-	memory[NR31]  = 0xFF; //NR31
-	memory[NR32]  = 0x9F; //NR32
-	memory[NR33]  = 0xBF; //NR33
-	memory[NR41]  = 0xFF; //NR41
-	memory[NR42]  = 0x00; //NR42
-	memory[NR43]  = 0x00; //NR43
-	memory[NR30]  = 0xBF; //NR30
-	memory[NR50]  = 0x77; //NR50
-	memory[NR51]  = 0xF3; //NR51
-	memory[NR52]  = 0xF1; //NR52
+	memory[NR10]  = 0x80;
+	memory[NR11]  = 0xBF;
+	memory[NR12]  = 0xF3;
+	memory[NR14]  = 0xBF;
+	memory[NR21]  = 0x3F;
+	memory[NR22]  = 0x00;
+	memory[NR24]  = 0xBF;
+	memory[NR30]  = 0x7F;
+	memory[NR31]  = 0xFF;
+	memory[NR32]  = 0x9F;
+	memory[NR33]  = 0xBF;
+	memory[NR41]  = 0xFF;
+	memory[NR42]  = 0x00;
+	memory[NR43]  = 0x00;
+	memory[NR30]  = 0xBF;
+	memory[NR50]  = 0x77;
+	memory[NR51]  = 0xF3;
+	memory[NR52]  = 0xF1;
 	
 	if (s)
 	{
-		s->WriteRegister(NR10, 0x80); //NR10
-		s->WriteRegister(NR11, 0xBF); //NR11
-		s->WriteRegister(NR12, 0xF3); //NR12
-		s->WriteRegister(NR14, 0xBF); //NR14
-		s->WriteRegister(NR21, 0x3F); //NR21
-		s->WriteRegister(NR22, 0x00); //NR22
-		s->WriteRegister(NR24, 0xBF); //NR24
-		s->WriteRegister(NR30, 0x7F); //NR30
-		s->WriteRegister(NR31, 0xFF); //NR31
-		s->WriteRegister(NR32, 0x9F); //NR32
-		s->WriteRegister(NR33, 0xBF); //NR33
-		s->WriteRegister(NR41, 0xFF); //NR41
-		s->WriteRegister(NR42, 0x00); //NR42
-		s->WriteRegister(NR43, 0x00); //NR43
-		s->WriteRegister(NR30, 0xBF); //NR30
-		s->WriteRegister(NR50, 0x77); //NR50
-		s->WriteRegister(NR51, 0xF3); //NR51
-		s->WriteRegister(NR52, 0xF1); //NR52
+		s->WriteRegister(NR10, 0x80);
+		s->WriteRegister(NR11, 0xBF);
+		s->WriteRegister(NR12, 0xF3);
+		s->WriteRegister(NR14, 0xBF);
+		s->WriteRegister(NR21, 0x3F);
+		s->WriteRegister(NR22, 0x00);
+		s->WriteRegister(NR24, 0xBF);
+		s->WriteRegister(NR30, 0x7F);
+		s->WriteRegister(NR31, 0xFF);
+		s->WriteRegister(NR32, 0x9F);
+		s->WriteRegister(NR33, 0xBF);
+		s->WriteRegister(NR41, 0xFF);
+		s->WriteRegister(NR42, 0x00);
+		s->WriteRegister(NR43, 0x00);
+		s->WriteRegister(NR30, 0xBF);
+		s->WriteRegister(NR50, 0x77);
+		s->WriteRegister(NR51, 0xF3);
+		s->WriteRegister(NR52, 0xF1);
 	}
 	
-    memory[LCDC] = 0x91; //LCDC
-    memory[SCY]  = 0x00; //SCY
-    memory[SCX]  = 0x00; //SCX
-    memory[LYC]  = 0x00; //LYC
-    memory[BGP]  = 0xFC; //BGP
-    memory[OBP0] = 0xFF; //OBP0
-    memory[OBP1] = 0xFF; //OBP1
-    memory[WY]   = 0x00; //WY
-    memory[WX]   = 0x00; //WX
-    memory[IE]   = 0x00; //IE
+    memory[LCDC] = 0x91;
+    memory[SCY]  = 0x00;
+    memory[SCX]  = 0x00;
+    memory[LYC]  = 0x00;
+    memory[BGP]  = 0xFC;
+    memory[OBP0] = 0xFF;
+    memory[OBP1] = 0xFF;
+    memory[WY]   = 0x00;
+    memory[WX]   = 0x00;
+    memory[IE]   = 0x00;
 	
-	memory[STAT] = 0x02; //LCD_STAT
+	memory[STAT] = 0x02;
+}
+
+BYTE Memory::MemRSound(WORD address)
+{
+    BYTE value = 0;
+    if(s)
+        value = s->ReadRegister(address);
+    
+    // Los registros de sonido no devuelven directamente su valor.
+    // Hay bits que no son legibles. soundMask lo resuelve.
+    return value|soundMask[address-NR10];
 }
 
 void Memory::MemW(WORD address, BYTE value)
@@ -117,8 +140,20 @@ void Memory::MemW(WORD address, BYTE value)
 		memory[address - 0x2000] = value;
 	else if ((address >= 0xFF10) && (address <= 0xFF3F))
 	{
-		if(s)
-			s->WriteRegister(address, value);
+        if(s)
+        {
+			if ((address == NR52) && ((value & 0x80) == 0))
+            {
+                for (int i=0xFF10; i<=0xFF26; i++)
+                    s->WriteRegister(i, 0);
+            }
+            else
+            {
+                // Si no esta habilitado el sonido se ignora la escribitura a los registros
+                if ((address >= 0xFF30) || (address == NR52) || (s->ReadRegister(NR52)&0x80))
+                    s->WriteRegister(address, value);
+            }
+        }
 	}
 	else
 	{
@@ -141,6 +176,7 @@ void Memory::MemW(WORD address, BYTE value)
 			case STAT: value = (value & ~0x07) | (memory[STAT] & 0x07); break;
 			case LY:
 			case DIV: value = 0; break;
+            //case IF: value = (memory[IF] & 0xF0) | (value & 0x0F); break;
 		}
 	}
 
