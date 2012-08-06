@@ -31,7 +31,6 @@ protected:
 	Sound * s;
 private:
 	void DmaTransfer(BYTE direction);
-    BYTE MemRSound(WORD address);
 public:
 	BYTE memory[SIZE_MEM];
 public:
@@ -47,7 +46,7 @@ public:
 		if ((address < 0x8000) || ((address >=0xA000) && (address < 0xC000)))
             return c->Read(address);
 		else if ((address >= 0xFF10) && (address <= 0xFF3F))
-            return MemRSound(address);
+            return s->ReadRegister(address);
         else
             return memory[address];
 	}

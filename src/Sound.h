@@ -50,8 +50,8 @@ public:
 	int Stop();
 	bool GetEnabled();
 	void SetEnabled(bool enabled);
-	void WriteRegister(WORD dir, BYTE value);
-	BYTE ReadRegister(WORD dir);
+	void WriteRegister(WORD address, BYTE value);
+	BYTE ReadRegister(WORD address);
 	void EndFrame();
 };
 

@@ -29,6 +29,18 @@
 
 using namespace std;
 
+BYTE soundMask[] = {
+    0x80, 0x3F, 0x00, 0xFF, 0xBF, // NR10-NR14 (0xFF10-0xFF14)
+    0xFF, 0x3F, 0x00, 0xFF, 0xBF, // NR20-NR24 (0xFF15-0xFF19)
+    0x7F, 0xFF, 0x9F, 0xFF, 0xBF, // NR30-NR34 (0xFF1A-0xFF1E)
+    0xFF, 0xFF, 0x00, 0x00, 0xBF, // NR40-NR44 (0xFF1F-0xFF23)
+    0x00, 0x00, 0x70, 0xFF, 0xFF, // NR50-NR54 (0xFF24-0xFF28)
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, // --------- (0xFF29-0xFF2D)
+    0xFF, 0xFF,                   // --------- (0xFF2E-0xFF2F)
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // WaveRAM (0xFF30-0xFF37)
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // WaveRAM (0xFF38-0xFF3F)
+};
+
 enum SoundError { ERROR, NO_ERROR };
 
 int Sound::HandleError( const char* str )
@@ -158,12 +170,31 @@ void Sound::EndFrame()
 
 	delete[] buf;
 }
-void Sound::WriteRegister(WORD dir, BYTE value)
+void Sound::WriteRegister(WORD address, BYTE value)
 {
-    if (enabled) apu->write_register(dir, value);
+    if (enabled)
+    {
+        if ((address == NR52) && ((value & 0x80) == 0))
+        {
+            for (int i=0xFF10; i<=0xFF26; i++)
+                apu->write_register(i, 0);
+        }
+        else
+        {
+            // Si no esta habilitado el sonido se ignora la escribitura a los registros
+            if ((address >= 0xFF30) || (address == NR52) || (apu->read_register(NR52)&0x80))
+                apu->write_register(address, value);
+        }
+    }
 }
 
-BYTE Sound::ReadRegister(WORD dir)
+BYTE Sound::ReadRegister(WORD address)
 {
-    return enabled ? apu->read_register(dir) : 0;
+    BYTE value = 0;
+    if(enabled)
+        value = apu->read_register(address);
+    
+    // Los registros de sonido no devuelven directamente su valor.
+    // Hay bits que no son legibles. soundMask lo resuelve.
+    return value|soundMask[address-NR10];
 }
