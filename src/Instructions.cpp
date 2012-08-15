@@ -554,6 +554,7 @@ void Instructions::DAA()
 	}
 	 */
 	
+    /*
     BYTE a = reg->Get_A();
     
 	if (reg->Get_flagN())
@@ -591,6 +592,32 @@ void Instructions::DAA()
 	reg->Set_flagZ(!a);
     reg->Set_flagH(0);
     reg->Set_A(a);
+    */
+    int tmp = reg->Get_A();
+    
+    if ( ! ( reg->Get_flagN()) )
+    {
+        if ( (reg->Get_flagH()) || ( tmp & 0x0F ) > 9 )
+            tmp += 6;
+        if ( (reg->Get_flagC()) || tmp > 0x9F )
+            tmp += 0x60;
+    }
+    else
+    {
+        if (reg->Get_flagH()) {
+            tmp -= 6;
+            if ( ! (reg->Get_flagC()) )
+                tmp &= 0xFF;
+        }
+        if (reg->Get_flagC())
+            tmp -= 0x60;
+    }
+    reg->Set_F(reg->Get_F() & ~(0x80|0x20));
+    if ( tmp & 0x100 )
+        reg->Set_F(reg->Get_F() | 0x10);
+    reg->Set_A(tmp & 0xFF);
+    if (! reg->Get_A())
+        reg->Set_F(reg->Get_F() | 0x80);
 	
 	reg->Add_PC(1);
 }

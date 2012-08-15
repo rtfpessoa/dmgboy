@@ -71,12 +71,12 @@ BYTE instructionCyclesCB[] =
 	 8, 8, 8, 8, 8, 8,16, 8, 8, 8, 8, 8, 8, 8,16, 8
 };
 
-CPU::CPU(Video *v, Sound * s): Memory(s)
+CPU::CPU(Video *v, Sound * s): Memory(this, s)
 {
 	Init(v);
 }
 
-CPU::CPU(Video *v, Cartridge *c, Sound * s): Memory(s)
+CPU::CPU(Video *v, Cartridge *c, Sound * s): Memory(this, s)
 {
 	Init(v);
 	LoadCartridge(c);
@@ -157,7 +157,11 @@ void CPU::ExecuteOneFrame()
 		ssOpCode << "Op: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
 		if (OpCode == 0xCB)
 			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
+        ssOpCode << ", TIMA: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[TIMA];
+        ssOpCode << ", TMA: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[TMA];
+        ssOpCode << ", TAC: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[TAC];
         ssOpCode << ", ";
+        //stringstream ssOpCode2;
 		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
 #endif
 		
@@ -748,14 +752,47 @@ void CPU::UpdatePad()
         SetIntFlag(4);
 }
 
+void CPU::OnWriteLCDC(BYTE value)
+{
+    BYTE lastScreenOn = BIT7(memory[LCDC]);
+    BYTE screenOn = BIT7(value);
+    if (lastScreenOn && !screenOn)
+    {
+        memory[LY] = 0;
+        // Poner a 10 el flag (bits 0-1) del modo 2.
+        memory[STAT] = (memory[STAT] & ~0x03) | 0x02;
+        
+        cyclesLCD = 0;
+    }
+    else if (!lastScreenOn && screenOn)
+    {
+        cyclesLCD = 0;
+    }
+    
+    memory[LCDC] = value;
+}
+
 void CPU::UpdateStateLCD(int cycles)
 {
     cyclesLCD += cycles;
     
 	BYTE screenOn = BIT7(memory[LCDC]);
-	
-    BYTE mode = BITS01(memory[STAT]);
+    if (screenOn)
+        UpdateStateLCDOn();
+    else
+    {
+        if (cyclesLCD > 70224)
+        {
+            OnEndFrame();
+            cyclesLCD -= 70224;
+        }
+    }
+}
 
+void CPU::UpdateStateLCDOn()
+{
+    BYTE mode = BITS01(memory[STAT]);
+    
     switch (mode)
     {
         case (0):	// Durante H-Blank
@@ -777,7 +814,7 @@ void CPU::UpdateStateLCD(int cycles)
 					memory[STAT] = (memory[STAT] & ~0x03) | 0x02;
 					// Si interrupcion OAM habilitada, marcar peticion de interrupcion
 					// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
-					if (BIT5(memory[STAT]) && screenOn)
+					if (BIT5(memory[STAT]))
                         SetIntFlag(1);
                 }
 				
@@ -791,15 +828,12 @@ void CPU::UpdateStateLCD(int cycles)
 			// despues SCY > 144. Con lo que nunca se cumple la condicion)
 			if ((VBlankIntPending) && (cyclesLCD >= 24))
 			{
-				if (screenOn)
-				{
-					// Interrupcion V-Blank
-					SetIntFlag(0);
-					// Si interrupcion V-Blank habilitada, marcar peticion de interrupcion
-					// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT.
-					if (BIT4(memory[STAT]))
-                        SetIntFlag(1);
-				}
+				// Interrupcion V-Blank
+                SetIntFlag(0);
+                // Si interrupcion V-Blank habilitada, marcar peticion de interrupcion
+                // en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT.
+                if (BIT4(memory[STAT]))
+                    SetIntFlag(1);
 				VBlankIntPending = false;
 			}
 			
@@ -815,7 +849,7 @@ void CPU::UpdateStateLCD(int cycles)
 					memory[STAT] = (memory[STAT] & ~0x03) | 0x02;
 					// Si interrupcion OAM habilitada, marcar peticion de interrupcion
 					// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
-					if (BIT5(memory[STAT]) && screenOn)
+					if (BIT5(memory[STAT]))
                         SetIntFlag(1);
 					
 					OnEndFrame();
@@ -844,7 +878,7 @@ void CPU::UpdateStateLCD(int cycles)
 				memory[STAT] &= ~0x03;
 				// Si interrupcion H-Blank habilitada, marcar peticion de interrupcion
 				// en 0xFF0F. Bit 1, flag de interrupcion de LCD STAT
-				if (BIT3(memory[STAT]) && screenOn)
+				if (BIT3(memory[STAT]))
                     SetIntFlag(1);
             }
             break;

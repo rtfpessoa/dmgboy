@@ -20,11 +20,13 @@
 #include "Sound.h"
 #include "Pad.h"
 #include "Memory.h"
+#include "CPU.h"
 
 using namespace std;
 
-Memory::Memory(Sound * s)
+Memory::Memory(CPU * cpu, Sound * s)
 {
+    this->cpu = cpu;
 	this->c = NULL;
 	this->s = s;
 	ResetMem();
@@ -138,6 +140,9 @@ void Memory::MemW(WORD address, BYTE value)
 			case STAT: value = (value & ~0x07) | (memory[STAT] & 0x07); break;
 			case LY:
 			case DIV: value = 0; break;
+            case LCDC:
+                cpu->OnWriteLCDC(value);
+                return;
             //case IF: value = (memory[IF] & 0xF0) | (value & 0x0F); break;
 		}
 	}

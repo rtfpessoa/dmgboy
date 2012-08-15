@@ -21,6 +21,7 @@
 #include <fstream>
 #include "Cartridge.h"
 #include "Sound.h"
+class CPU;
 
 #define SIZE_MEM 65536
 
@@ -29,12 +30,13 @@ class Memory
 protected:
 	Cartridge *c;
 	Sound * s;
+    CPU * cpu;
 private:
 	void DmaTransfer(BYTE direction);
 public:
 	BYTE memory[SIZE_MEM];
 public:
-	Memory(Sound * s);
+	Memory(CPU * cpu, Sound * s);
 	~Memory();
 	Memory *GetPtrMemory();
 	void ResetMem();

@@ -32,7 +32,7 @@ private:
 	unsigned long numInstructions;
 	unsigned long actualCycles;
 	BYTE lastCycles;
-	WORD cyclesLCD;
+	int cyclesLCD;
 	WORD cyclesTimer;
 	WORD cyclesDIV;
 	WORD cyclesSerial;
@@ -50,6 +50,7 @@ public:
 	
 	void ExecuteOneFrame();
 	void UpdatePad();
+    void OnWriteLCDC(BYTE value);
 	void Reset();
 #ifdef MAKEGBLOG
 	void SaveLog();
@@ -61,6 +62,7 @@ private:
     void ResetGlobalVariables();
 	void OpCodeCB(Instructions * inst);
 	void UpdateStateLCD(int cycles);
+    void UpdateStateLCDOn();
 	void UpdateTimer(int cycles);
 	void UpdateSerial(int cycles);
     void SetIntFlag(int bit);
