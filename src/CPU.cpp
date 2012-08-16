@@ -157,9 +157,7 @@ void CPU::ExecuteOneFrame()
 		ssOpCode << "Op: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
 		if (OpCode == 0xCB)
 			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
-        ssOpCode << ", TIMA: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[TIMA];
-        ssOpCode << ", TMA: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[TMA];
-        ssOpCode << ", TAC: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[TAC];
+        ssOpCode << ", STAT: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[STAT];
         ssOpCode << ", ";
         //stringstream ssOpCode2;
 		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
@@ -759,8 +757,10 @@ void CPU::OnWriteLCDC(BYTE value)
     if (lastScreenOn && !screenOn)
     {
         memory[LY] = 0;
-        // Poner a 10 el flag (bits 0-1) del modo 2.
-        memory[STAT] = (memory[STAT] & ~0x03) | 0x02;
+        // Poner a 00 el flag (bits 0-1) del modo 2.
+        memory[STAT] = memory[STAT] & ~0x03;
+        
+        CheckLYC();
         
         cyclesLCD = 0;
     }

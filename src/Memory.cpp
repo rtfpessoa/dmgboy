@@ -103,7 +103,7 @@ void Memory::ResetMem()
     memory[WX]   = 0x00;
     memory[IE]   = 0x00;
 	
-	memory[STAT] = 0x02;
+	memory[STAT] = 0x05;
 }
 
 void Memory::MemW(WORD address, BYTE value)
@@ -140,9 +140,7 @@ void Memory::MemW(WORD address, BYTE value)
 			case STAT: value = (value & ~0x07) | (memory[STAT] & 0x07); break;
 			case LY:
 			case DIV: value = 0; break;
-            case LCDC:
-                cpu->OnWriteLCDC(value);
-                return;
+            case LCDC: cpu->OnWriteLCDC(value); return;
             //case IF: value = (memory[IF] & 0xF0) | (value & 0x0F); break;
 		}
 	}
