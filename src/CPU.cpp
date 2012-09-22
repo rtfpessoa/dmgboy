@@ -1,18 +1,18 @@
 /*
- This file is part of gbpablog.
+ This file is part of DMGBoy.
  
- gbpablog is free software: you can redistribute it and/or modify
+ DMGBoy is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
  
- gbpablog is distributed in the hope that it will be useful,
+ DMGBoy is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
  
  You should have received a copy of the GNU General Public License
- along with gbpablog.  If not, see <http://www.gnu.org/licenses/>.
+ along with DMGBoy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "CPU.h"
@@ -157,7 +157,9 @@ void CPU::ExecuteOneFrame()
 		ssOpCode << "Op: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
 		if (OpCode == 0xCB)
 			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
-        ssOpCode << ", STAT: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[STAT];
+        ssOpCode << ", 0xFF05: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[0xFF05];
+        ssOpCode << ", 0xFF06: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[0xFF06];
+        ssOpCode << ", 0xFF07: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[0xFF07];
         ssOpCode << ", ";
         //stringstream ssOpCode2;
 		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
