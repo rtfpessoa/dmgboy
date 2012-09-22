@@ -17,7 +17,9 @@
 
 #include <wx/wx.h>
 #include <wx/hyperlink.h>   // hyperlink support
+#ifdef __WXMSW__
 #include "SDL.h"
+#endif
 #include "AboutDialog.h"
 #include "Xpm/gb64.xpm"          // app icon bitmap
 #include "../Def.h"
@@ -31,9 +33,11 @@ AboutDialog::AboutDialog (wxWindow *parent)
     // sets the application icon
     SetTitle (_("About ..."));
 
+#ifdef __WXMSW__
 	const SDL_version* sdlVersion = SDL_Linked_Version();
 	wxString stringSDLVersion;
 	stringSDLVersion << (int)sdlVersion->major << wxT(".") << (int)sdlVersion->minor << wxT(".") << (int)sdlVersion->patch;
+#endif
 
     // about info
     wxFlexGridSizer *aboutinfo = new wxFlexGridSizer (2, 3, 3);
@@ -45,8 +49,10 @@ AboutDialog::AboutDialog (wxWindow *parent)
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT(APP_LICENCE)));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("wxWidgets: ")));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxVERSION_STRING));
+#ifdef __WXMSW__
 	aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("SDL: ")));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, stringSDLVersion));
+#endif
 	aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Thanks to: ")));
 	aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Authors of Pan Docs")));
 	aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT("")));

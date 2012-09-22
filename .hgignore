@@ -18,8 +18,8 @@ build/mac/Xcode/DMGBoy.xcodeproj/pablo.perspectivev3
 *.depend
 build/win32/vs2010/VS2010_vcredist_x86.exe
 
-build/linux/CodeBlocks/gbpablog
-build/linux/CodeBlocks/gbpablog.layout
+build/linux/CodeBlocks/DMGBoy
+build/linux/CodeBlocks/DMGBoy.layout
 
 *.backup
 */log.txt

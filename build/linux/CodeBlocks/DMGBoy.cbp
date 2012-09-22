@@ -2,13 +2,13 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="gbpablog" />
+		<Option title="DMGBoy" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Option virtualFolders="Gb_Snd_Emu/;HW/;GUI/;" />
 		<Build>
 			<Target title="Debug">
-				<Option output="gbpablog" prefix_auto="1" extension_auto="1" />
+				<Option output="DMGBoy" prefix_auto="1" extension_auto="1" />
 				<Option object_output="Debug" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -18,7 +18,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="gbpablog" prefix_auto="1" extension_auto="1" />
+				<Option output="DMGBoy" prefix_auto="1" extension_auto="1" />
 				<Option object_output="Release" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -28,14 +28,12 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="`wx-config --cxxflags` `sdl-config --cflags`" />
-			<Add directory="/usr/include/SDL" />
+			<Add option="`wx-config --cxxflags`" />
 			<Add directory="../../../src/Gb_Snd_Emu-0.1.4" />
 			<Add directory="/usr/include/" />
 		</Compiler>
 		<Linker>
-			<Add option="`wx-config --libs --gl-libs` `sdl-config --libs`" />
-			<Add library="SDL" />
+			<Add option="`wx-config --libs --gl-libs`" />
 			<Add library="GL" />
 			<Add library="GLU" />
 			<Add library="libportaudio" />
@@ -122,12 +120,6 @@
 			<Option virtualFolder="Gb_Snd_Emu/" />
 		</Unit>
 		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/Basic_Gb_Apu.h">
-			<Option virtualFolder="Gb_Snd_Emu/" />
-		</Unit>
-		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/Sound_Queue.cpp">
-			<Option virtualFolder="Gb_Snd_Emu/" />
-		</Unit>
-		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/Sound_Queue.h">
 			<Option virtualFolder="Gb_Snd_Emu/" />
 		</Unit>
 		<Unit filename="../../../src/Gb_Snd_Emu-0.1.4/Wave_Writer.cpp">
@@ -230,12 +222,6 @@
 			<Option virtualFolder="HW/" />
 		</Unit>
 		<Unit filename="../../../src/SoundPortaudio.h">
-			<Option virtualFolder="HW/" />
-		</Unit>
-		<Unit filename="../../../src/SoundSDL.cpp">
-			<Option virtualFolder="HW/" />
-		</Unit>
-		<Unit filename="../../../src/SoundSDL.h">
 			<Option virtualFolder="HW/" />
 		</Unit>
 		<Unit filename="../../../src/Video.cpp">
