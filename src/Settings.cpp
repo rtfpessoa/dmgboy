@@ -36,8 +36,8 @@ Settings::Settings()
 	padKeys[3]	= WXK_RIGHT;// Right
 	padKeys[4]	= 'A';		// A
 	padKeys[5]	= 'S';		// B
-	padKeys[6]	= 'Q';		// Select
-	padKeys[7]	= 'W';		// Start
+	padKeys[6]	= WXK_SHIFT;  // Select
+	padKeys[7]	= WXK_RETURN; // Start
 }
 
 Settings SettingsGetCopy()
