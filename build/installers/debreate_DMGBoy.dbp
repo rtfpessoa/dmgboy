@@ -1,5 +1,4 @@
-[DEBREATE-1.0]
-<<MODE>>0<</MODE>>
+[DEBREATE-0.7.7]
 <<CTRL>>
 Package: DMGBoy
 Version: 1.0
@@ -8,7 +7,7 @@ Maintainer: Pablo Gasco <pablogasco@gmail.com>
 Homepage: http://code.google.com/p/dmgboy/
 Priority: optional
 Architecture: i386
-Depends: libc6 (>=2), libwxgtk2.8-0 (>=2.8.0)
+Depends: libportaudio2, libc6 (>=2), libwxgtk2.8-0 (>=2.8.0)
 Description: Gameboy emulator
  Open source Game Boy Emulator written in C++ with wxwidgets.
 
@@ -16,7 +15,7 @@ Description: Gameboy emulator
 <<FILES>>
 1
 /mnt/pablo/Documents/Programacion/DMGBoy/build/linux/CodeBlocks/DMGBoy* -> DMGBoy -> /usr/games
-/mnt/pablo/Documents/Programacion/GB/iconos/gb256.png -> gb256.png -> /usr/share/DMGBoy/icons
+/mnt/pablo/Documents/Programacion/GB/iconos/gb256.png -> gb256.png -> /usr/share/DMGBoy/icons/
 /mnt/pablo/Documents/Programacion/GB/iconos/gb64.png -> gb64.png -> /usr/share/DMGBoy/icons/
 /mnt/pablo/Documents/Programacion/GB/iconos/gb48.png -> gb48.png -> /usr/share/DMGBoy/icons/
 <</FILES>>
@@ -73,7 +72,7 @@ Name=DMGBoy
 Version=1.0
 Exec=DMGBoy
 Comment=Gameboy emulator
-Icon=/usr/share/DMGBoy/icons/gb256.png
+Icon=/usr/share/DMGBoy/icons/gb64.png
 Type=Application
 Terminal=false
 StartupNotify=true
@@ -83,5 +82,5 @@ Categories=Game;
 <<BUILD>>
 0
 1
-1
+0
 <</BUILD>>
