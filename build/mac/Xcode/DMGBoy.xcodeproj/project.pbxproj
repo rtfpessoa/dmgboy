@@ -34,16 +34,11 @@
 		6E2C364C1334CB3900BE7D7B /* Gb_Apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C36391334CB3900BE7D7B /* Gb_Apu.cpp */; };
 		6E2C364D1334CB3900BE7D7B /* Gb_Oscs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C363B1334CB3900BE7D7B /* Gb_Oscs.cpp */; };
 		6E2C364E1334CB3900BE7D7B /* Multi_Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C363D1334CB3900BE7D7B /* Multi_Buffer.cpp */; };
-		6E2C36521334CB3900BE7D7B /* Sound_Queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C36421334CB3900BE7D7B /* Sound_Queue.cpp */; };
-		6E2C36541334CB3900BE7D7B /* Wave_Writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C36451334CB3900BE7D7B /* Wave_Writer.cpp */; };
 		6E2C365F1334FF7100BE7D7B /* Sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C365E1334FF7100BE7D7B /* Sound.cpp */; };
-		6E7CCF5415C5B52B00217AE4 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E7CCF5315C5B52B00217AE4 /* SDL.framework */; };
 		6E97934413C8CBCE0078E8EC /* RendererBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E97934213C8CBCE0078E8EC /* RendererBase.cpp */; };
 		6EA1AB79127F0F0E00AC510C /* AboutDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1AB78127F0F0E00AC510C /* AboutDialog.cpp */; };
 		6EBF280E146746D100F2D9F8 /* EmulationThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EBF280C146746D100F2D9F8 /* EmulationThread.cpp */; };
 		6EDDDE7512EA037200BFB26A /* InputTextCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDDE7412EA037200BFB26A /* InputTextCtrl.cpp */; };
-		6EE81E0C144A1879007FB325 /* SoundSDL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EE81E0A144A1879007FB325 /* SoundSDL.cpp */; };
-		6EEA816515CAE8DC000E001B /* SDL.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6E7CCF5315C5B52B00217AE4 /* SDL.framework */; };
 		6EFEDB441245230600646E83 /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEDB421245230600646E83 /* Settings.cpp */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -56,7 +51,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6EEA816515CAE8DC000E001B /* SDL.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,7 +108,6 @@
 		6E2C362D1334CB3900BE7D7B /* config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
 		6E2C362E1334CB3900BE7D7B /* cstdint.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cstdint.hpp; sourceTree = "<group>"; };
 		6E2C362F1334CB3900BE7D7B /* static_assert.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = static_assert.hpp; sourceTree = "<group>"; };
-		6E2C36301334CB3900BE7D7B /* changes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = changes.txt; path = "../../../src/Gb_Snd_Emu-0.1.4/changes.txt"; sourceTree = SOURCE_ROOT; };
 		6E2C36341334CB3900BE7D7B /* blargg_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blargg_common.h; sourceTree = "<group>"; };
 		6E2C36351334CB3900BE7D7B /* blargg_source.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blargg_source.h; sourceTree = "<group>"; };
 		6E2C36361334CB3900BE7D7B /* Blip_Buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Blip_Buffer.cpp; sourceTree = "<group>"; };
@@ -126,17 +119,8 @@
 		6E2C363C1334CB3900BE7D7B /* Gb_Oscs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gb_Oscs.h; sourceTree = "<group>"; };
 		6E2C363D1334CB3900BE7D7B /* Multi_Buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Multi_Buffer.cpp; sourceTree = "<group>"; };
 		6E2C363E1334CB3900BE7D7B /* Multi_Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Multi_Buffer.h; sourceTree = "<group>"; };
-		6E2C363F1334CB3900BE7D7B /* LGPL.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LGPL.txt; path = "../../../src/Gb_Snd_Emu-0.1.4/LGPL.txt"; sourceTree = SOURCE_ROOT; };
-		6E2C36401334CB3900BE7D7B /* notes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = notes.txt; path = "../../../src/Gb_Snd_Emu-0.1.4/notes.txt"; sourceTree = SOURCE_ROOT; };
-		6E2C36411334CB3900BE7D7B /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = readme.txt; path = "../../../src/Gb_Snd_Emu-0.1.4/readme.txt"; sourceTree = SOURCE_ROOT; };
-		6E2C36421334CB3900BE7D7B /* Sound_Queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sound_Queue.cpp; path = "../../../src/Gb_Snd_Emu-0.1.4/Sound_Queue.cpp"; sourceTree = SOURCE_ROOT; };
-		6E2C36431334CB3900BE7D7B /* Sound_Queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sound_Queue.h; path = "../../../src/Gb_Snd_Emu-0.1.4/Sound_Queue.h"; sourceTree = SOURCE_ROOT; };
-		6E2C36441334CB3900BE7D7B /* usage.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = usage.txt; path = "../../../src/Gb_Snd_Emu-0.1.4/usage.txt"; sourceTree = SOURCE_ROOT; };
-		6E2C36451334CB3900BE7D7B /* Wave_Writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Wave_Writer.cpp; path = "../../../src/Gb_Snd_Emu-0.1.4/Wave_Writer.cpp"; sourceTree = SOURCE_ROOT; };
-		6E2C36461334CB3900BE7D7B /* Wave_Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wave_Writer.h; path = "../../../src/Gb_Snd_Emu-0.1.4/Wave_Writer.h"; sourceTree = SOURCE_ROOT; };
 		6E2C365D1334FF7100BE7D7B /* Sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sound.h; path = ../../../src/Sound.h; sourceTree = SOURCE_ROOT; };
 		6E2C365E1334FF7100BE7D7B /* Sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sound.cpp; path = ../../../src/Sound.cpp; sourceTree = SOURCE_ROOT; };
-		6E7CCF5315C5B52B00217AE4 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
 		6E974A6413508F1A00ECC09C /* IGBScreenDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IGBScreenDrawable.h; path = ../../../src/IGBScreenDrawable.h; sourceTree = SOURCE_ROOT; };
 		6E97934213C8CBCE0078E8EC /* RendererBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RendererBase.cpp; sourceTree = "<group>"; };
 		6E97934313C8CBCE0078E8EC /* RendererBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RendererBase.h; sourceTree = "<group>"; };
@@ -146,8 +130,6 @@
 		6EBF280D146746D100F2D9F8 /* EmulationThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationThread.h; sourceTree = "<group>"; };
 		6EDDDE7312EA037200BFB26A /* InputTextCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputTextCtrl.h; sourceTree = "<group>"; };
 		6EDDDE7412EA037200BFB26A /* InputTextCtrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputTextCtrl.cpp; sourceTree = "<group>"; };
-		6EE81E0A144A1879007FB325 /* SoundSDL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SoundSDL.cpp; path = ../../../src/SoundSDL.cpp; sourceTree = "<group>"; };
-		6EE81E0B144A1879007FB325 /* SoundSDL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundSDL.h; path = ../../../src/SoundSDL.h; sourceTree = "<group>"; };
 		6EFA5275126354F2000E541D /* ToDo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ToDo.txt; path = ../../../src/ToDo.txt; sourceTree = SOURCE_ROOT; };
 		6EFEDB421245230600646E83 /* Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Settings.cpp; path = ../../../src/Settings.cpp; sourceTree = SOURCE_ROOT; };
 		6EFEDB431245230600646E83 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Settings.h; path = ../../../src/Settings.h; sourceTree = SOURCE_ROOT; };
@@ -165,7 +147,6 @@
 				6E148F7714423EA10021740C /* CoreAudio.framework in Frameworks */,
 				6E148F7814423EA10021740C /* CoreServices.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
-				6E7CCF5415C5B52B00217AE4 /* SDL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,7 +224,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6E7CCF5315C5B52B00217AE4 /* SDL.framework */,
 				6E148F7114423EA10021740C /* AudioToolbox.framework */,
 				6E148F7214423EA10021740C /* AudioUnit.framework */,
 				6E148F7314423EA10021740C /* CoreAudio.framework */,
@@ -312,8 +292,6 @@
 				6E2C365E1334FF7100BE7D7B /* Sound.cpp */,
 				6E148F6314422F2D0021740C /* SoundPortaudio.h */,
 				6E148F6214422F2D0021740C /* SoundPortaudio.cpp */,
-				6EE81E0B144A1879007FB325 /* SoundSDL.h */,
-				6EE81E0A144A1879007FB325 /* SoundSDL.cpp */,
 			);
 			name = HW;
 			sourceTree = "<group>";
@@ -324,16 +302,7 @@
 				6E2C362A1334CB3900BE7D7B /* Basic_Gb_Apu.cpp */,
 				6E2C362B1334CB3900BE7D7B /* Basic_Gb_Apu.h */,
 				6E2C362C1334CB3900BE7D7B /* boost */,
-				6E2C36301334CB3900BE7D7B /* changes.txt */,
 				6E2C36331334CB3900BE7D7B /* gb_apu */,
-				6E2C363F1334CB3900BE7D7B /* LGPL.txt */,
-				6E2C36401334CB3900BE7D7B /* notes.txt */,
-				6E2C36411334CB3900BE7D7B /* readme.txt */,
-				6E2C36421334CB3900BE7D7B /* Sound_Queue.cpp */,
-				6E2C36431334CB3900BE7D7B /* Sound_Queue.h */,
-				6E2C36441334CB3900BE7D7B /* usage.txt */,
-				6E2C36451334CB3900BE7D7B /* Wave_Writer.cpp */,
-				6E2C36461334CB3900BE7D7B /* Wave_Writer.h */,
 			);
 			name = Gb_Sound_Emu;
 			sourceTree = "<group>";
@@ -457,13 +426,10 @@
 				6E2C364C1334CB3900BE7D7B /* Gb_Apu.cpp in Sources */,
 				6E2C364D1334CB3900BE7D7B /* Gb_Oscs.cpp in Sources */,
 				6E2C364E1334CB3900BE7D7B /* Multi_Buffer.cpp in Sources */,
-				6E2C36521334CB3900BE7D7B /* Sound_Queue.cpp in Sources */,
-				6E2C36541334CB3900BE7D7B /* Wave_Writer.cpp in Sources */,
 				6E2C365F1334FF7100BE7D7B /* Sound.cpp in Sources */,
 				6E0823A613C2429700C42CE0 /* RendererOGL.cpp in Sources */,
 				6E97934413C8CBCE0078E8EC /* RendererBase.cpp in Sources */,
 				6E148F6414422F2D0021740C /* SoundPortaudio.cpp in Sources */,
-				6EE81E0C144A1879007FB325 /* SoundSDL.cpp in Sources */,
 				6EBF280E146746D100F2D9F8 /* EmulationThread.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -511,7 +477,6 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(GBSNDEMU)",
-					/Library/Frameworks/SDL.framework/Headers,
 					"$(PORTAUDIODIR)/include",
 				);
 				INFOPLIST_FILE = "DMGBoy-Info.plist";
@@ -639,7 +604,6 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(GBSNDEMU)",
-					/Library/Frameworks/SDL.framework/Headers,
 					"$(PORTAUDIODIR)/include",
 				);
 				INFOPLIST_FILE = "DMGBoy-Info.plist";
