@@ -431,16 +431,6 @@ void Instructions::INC_nn(e_registers lugar)
 void Instructions::DAA()
 {
 	/*
-	reg->Set_flagC((reg->Get_A() > 99) ? 1 : 0);
-	reg->Set_flagH(0);
-	reg->Set_flagZ((!reg->Get_A()) ? 1 : 0);
-
-	reg->Set_A(((reg->Get_A() / 10) << 4) | (reg->Get_A() % 10));
-
-	reg->Add_PC(1);
-	 */
-	
-	/*
 	 http://www.emutalk.net/showthread.php?t=41525&page=108
 	 
 	 Detailed info DAA
@@ -510,116 +500,41 @@ void Instructions::DAA()
 	 +0000 0110  06 +error
 	 ---------------
 	 0100 0010  42 Correct BCD!
-	 
-	 #defing CarryMask 0x10
-	 #define HalfCarryMask 0x20
-	 #define NegFlagMask 0x40
-	 
-	void op0x27() //DAA 
-	{ 
-		if(regF & NegFlagMask) //Negative Flag Set 
-		{ 
-			if((regA & 0x0F)>0x09 || regF & HalfCarryMask) 
-			{ 
-				regA-=0x06; //Half borrow: (0-1) = (0xF-0x6) = 9 
-				if((regA & 0xF0) == 0xF0) regF |= CarryMask; 
-				// We don't clear the carry/barrow flag in the DAA
-				//else regF &= ~CarryMask; 
-			} 
-
-			if((regA & 0xF0) > 0x90 || regF & CarryMask) 
-			{
-				regA-=0x60; 
-				regF |= CarryMask;
-			}
-		} 
-		else 
-		{ 
-			if((regA & 0x0F)>9 || regF & HalfCarryMask) 
-			{ 
-				regA += 0x06; //Half carry: (9+1) = (0xA+0x6) = 10 
-				// never happens in BCD math 
-				//if((regA & 0xF0)==0) regF |= CarryMask; 
-				// We don't clear the carry/barrow flag in the DAA
-				//else regF &= ~CarryMask; 
-			} 
-
-			if((regA&0xF0)>0x90 || regF & 0x10) 
-			{
-				regA+=0x60;
-				regF |= CarryMask;
-			}
-		} 
-		if(regA==0) regF|=0x80; else regF&=~0x80; 
-	}
-	 */
-	
-    /*
-    BYTE a = reg->Get_A();
+	*/
     
-	if (reg->Get_flagN())
-	{
-		if((a & 0x0F)>0x09 || reg->Get_flagH()) 
-		{ 
-			a -= 0x06; //Half borrow: (0-1) = (0xF-0x6) = 9 
-			if((a & 0xF0) == 0xF0)
-                reg->Set_flagC(1);
-		} 
-		
-		if((a & 0xF0) > 0x90 || reg->Get_flagC()) 
-		{
-			a -= 0x60; 
-			reg->Set_flagC(1);
-		}
-	}
-	else
-	{
-		if((a & 0x0F)>0x09 || reg->Get_flagH()) 
-		{ 
-			a += 0x06; //Half carry: (9+1) = (0xA+0x6) = 10 
-			// never happens in BCD math 
-			//if((regA & 0xF0)==0) regF |= CarryMask; 
-			// We don't clear the carry/barrow flag in the DAA
-			//else regF &= ~CarryMask; 
-		} 
-		
-		if((a & 0xF0) > 0x90 || reg->Get_flagC()) 
-		{
-			a += 0x60; 
-			reg->Set_flagC(1);
-		}
-	} 
-	reg->Set_flagZ(!a);
-    reg->Set_flagH(0);
-    reg->Set_A(a);
-    */
-    int tmp = reg->Get_A();
+    int a = reg->Get_A();
     
-    if ( ! ( reg->Get_flagN()) )
+    if (reg->Get_flagN() == 0)
     {
-        if ( (reg->Get_flagH()) || ( tmp & 0x0F ) > 9 )
-            tmp += 6;
-        if ( (reg->Get_flagC()) || tmp > 0x9F )
-            tmp += 0x60;
+        if (reg->Get_flagH() || ((a & 0xF) > 9))
+            a += 0x06;
+        
+        if (reg->Get_flagC() || (a > 0x9F))
+            a += 0x60;
     }
     else
     {
-        if (reg->Get_flagH()) {
-            tmp -= 6;
-            if ( ! (reg->Get_flagC()) )
-                tmp &= 0xFF;
-        }
+        if (reg->Get_flagH())
+            a = (a - 6) & 0xFF;
+        
         if (reg->Get_flagC())
-            tmp -= 0x60;
+            a -= 0x60;
     }
-    reg->Set_F(reg->Get_F() & ~(0x80|0x20));
-    if ( tmp & 0x100 )
-        reg->Set_F(reg->Get_F() | 0x10);
-    reg->Set_A(tmp & 0xFF);
-    if (! reg->Get_A())
-        reg->Set_F(reg->Get_F() | 0x80);
-	
-	reg->Add_PC(1);
+    
+    reg->Set_flagH(0);
+    reg->Set_flagZ(0);
+    
+    if ((a & 0x100) == 0x100)
+        reg->Set_flagC(1);
+    
+    a &= 0xFF;
+    
+    if (a == 0)
+        reg->Set_flagZ(1);
+    
+    reg->Set_A(a);
+    
+    reg->Add_PC(1);
 }
 
 void Instructions::DEC_n(e_registers place)

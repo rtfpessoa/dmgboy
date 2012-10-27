@@ -62,7 +62,7 @@ public:
 	inline BYTE Get_E()				{return this->de.simple[0];}
 	inline void Set_E(BYTE value)	{this->de.simple[0] = value;}
 	inline BYTE Get_F()				{return this->af.simple[0];}
-	inline void Set_F(BYTE value)	{this->af.simple[0] = value & 0x0F;}
+	inline void Set_F(BYTE value)	{this->af.simple[0] = value & 0xF0;}
 	inline BYTE Get_H()				{return this->hl.simple[1];}
 	inline void Set_H(BYTE value)	{this->hl.simple[1] = value;}
 	inline BYTE Get_L()				{return this->hl.simple[0];}
