@@ -220,7 +220,10 @@ void Instructions::JR()
 void Instructions::JR_CC_n(e_registers flag, BYTE value2check)
 {
 	if (reg->Get_Flag(flag) == value2check)
+    {
 		JR();
+        reg->Set_ConditionalTaken(true);
+    }
 	else
 		reg->Add_PC(2);
 }
@@ -237,7 +240,10 @@ void Instructions::CALL_nn()
 void Instructions::CALL_cc_nn(e_registers flag, BYTE value2check)
 {
 	if (reg->Get_Flag(flag) == value2check)
+    {
 		CALL_nn();
+        reg->Set_ConditionalTaken(true);
+    }
 	else
 		reg->Add_PC(3);
 }
@@ -637,7 +643,10 @@ void Instructions::RET_cc(e_registers flag, BYTE value2check)
 {
 	reg->Add_PC(1);
 	if (reg->Get_Flag(flag) == value2check)
+    {
 		RET();
+        reg->Set_ConditionalTaken(true);
+    }
 }
 
 void Instructions::LD_nn_n(e_registers lugar)
@@ -955,7 +964,10 @@ void Instructions::JP_cc_nn(e_registers flag, BYTE value2check)
 	reg->Add_PC(3);
 
 	if (reg->Get_Flag(flag) == value2check)
+    {
 		reg->Set_PC(nn);
+        reg->Set_ConditionalTaken(true);
+    }
 }
 
 void Instructions::RL_n(e_registers place)

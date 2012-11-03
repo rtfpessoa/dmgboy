@@ -43,6 +43,7 @@ private:
 #endif
 	bool frameCompleted;
 	bool VBlankIntPending;
+    bool newInterrupt;
 public:
 	CPU(Video *v, Sound * s);
 	CPU(Video *v, Cartridge *c, Sound * s);
@@ -51,6 +52,9 @@ public:
 	void ExecuteOneFrame();
 	void UpdatePad();
     void OnWriteLCDC(BYTE value);
+    BYTE TACChanged(BYTE newValue);
+    BYTE DIVChanged(BYTE newValue);
+    BYTE P1Changed(BYTE newValue);
 	void Reset();
 #ifdef MAKEGBLOG
 	void SaveLog();

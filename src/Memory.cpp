@@ -127,21 +127,26 @@ void Memory::MemW(WORD address, BYTE value)
 				DmaTransfer(value);
 				break;
 			case P1:
-				BYTE oldP1;
-				oldP1 = memory[P1];
-				value = (value & 0xF0) | (oldP1 & ~0xF0);
-				value = PadUpdateInput(value);
-				if ((value != oldP1) && ((value & 0x0F) != 0x0F))
-				{
-					//Debe producir una interrupcion
-					memory[IF] |=  0x10;
-				}
+				value = cpu->P1Changed(value);
 				break;
-			case STAT: value = (value & ~0x07) | (memory[STAT] & 0x07); break;
+            case TAC:
+                value = cpu->TACChanged(value);
+                break;
+			case STAT:
+                value = (value & ~0x07) | (memory[STAT] & 0x07);
+                break;
 			case LY:
-			case DIV: value = 0; break;
-            case LCDC: cpu->OnWriteLCDC(value); return;
-            //case IF: value = (memory[IF] & 0xF0) | (value & 0x0F); break;
+                value = 0;
+                break;
+			case DIV:
+                value = cpu->DIVChanged(value);
+                break;
+            case LCDC:
+                cpu->OnWriteLCDC(value);
+                return;
+            case IF:
+                value = 0xE0 | (value & 0x1F);
+                break;
 		}
 	}
 

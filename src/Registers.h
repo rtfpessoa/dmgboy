@@ -45,6 +45,7 @@ private:
 	bool pendingIMEvalue;
 	bool halt;
 	bool stop;
+    bool conditionalTaken;
 public:
 	Registers();
 	~Registers();
@@ -108,7 +109,6 @@ public:
 		}
 	}
 
-
 	inline bool Get_Halt()				{return this->halt;}
 	inline void Set_Halt(bool value)	{this->halt = value;}
 
@@ -129,6 +129,9 @@ public:
 	
 	BYTE Get_Flag(e_registers flag);
 	void Set_Flag(e_registers flag, BYTE value);
+    
+    void Set_ConditionalTaken(bool value) {conditionalTaken = value;}
+    bool Get_ConditionalTaken() {return conditionalTaken;}
 
 	void ResetRegs();
 	void SaveRegs(std::ofstream * file);

@@ -31,44 +31,61 @@
 
 using namespace std;
 
-BYTE instructionCycles[] =
-{
-     4,12, 8, 8, 4, 4, 8, 4,20, 8, 8, 8, 4, 4, 8, 4,
-	 0,12, 8, 8, 4, 4, 8, 4,12, 8, 8, 8, 4, 4, 8, 4,
-	 8,12, 8, 8, 4, 4, 8, 4, 8, 8, 8, 8, 4, 4, 8, 4,
-	 8,12, 8, 8,12,12,12, 4, 8, 8, 8, 8, 4, 4, 8, 4,
-	 4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,
-	 4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,
-	 4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,
-	 8, 8, 8, 8, 8, 8, 0, 8, 4, 4, 4, 4, 4, 4, 8, 4,
-	 4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,
-	 4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,
-	 4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,
-	 4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,
-	 8,12,12,16,12,16, 8,16, 8,16,12, 0,12,24, 8,16,
-	 8,12,12, 0,12,16, 8,16, 8,16,12, 0,12, 0, 8,16,
-	12,12, 8, 0, 0,16, 8,16,16, 4,16, 0, 0, 0, 8,16,
-	12,12, 8, 4, 0,16, 8,16,12, 8,16, 4, 0, 0, 8,16
+const BYTE instructionCycles[] = {
+    1, 3, 2, 2, 1, 1, 2, 1, 5, 2, 2, 2, 1, 1, 2, 1,
+    0, 3, 2, 2, 1, 1, 2, 1, 3, 2, 2, 2, 1, 1, 2, 1,
+    2, 3, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 1, 1, 2, 1,
+    2, 3, 2, 2, 3, 3, 3, 1, 2, 2, 2, 2, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    2, 2, 2, 2, 2, 2, 0, 2, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    2, 3, 3, 4, 3, 4, 2, 4, 2, 4, 3, 0, 3, 6, 2, 4,
+    2, 3, 3, 0, 3, 4, 2, 4, 2, 4, 3, 0, 3, 0, 2, 4,
+    3, 3, 2, 0, 0, 4, 2, 4, 4, 1, 4, 0, 0, 0, 2, 4,
+    3, 3, 2, 1, 0, 4, 2, 4, 3, 2, 4, 1, 0, 0, 2, 4
 };
 
-BYTE instructionCyclesCB[] = 
-{
-     8, 8, 8, 8, 8, 8,16, 8, 8, 8, 8, 8, 8, 8,16, 8,
-	 8, 8, 8, 8, 8, 8,16, 8, 8, 8, 8, 8, 8, 8,16, 8,
-	 8, 8, 8, 8, 8, 8,16, 8, 8, 8, 8, 8, 8, 8,16, 8,
-	 8, 8, 8, 8, 8, 8,16, 8, 8, 8, 8, 8, 8, 8,16, 8,
-	 8, 8, 8, 8, 8, 8,12, 8, 8, 8, 8, 8, 8, 8,12, 8,
-	 8, 8, 8, 8, 8, 8,12, 8, 8, 8, 8, 8, 8, 8,12, 8,
-	 8, 8, 8, 8, 8, 8,12, 8, 8, 8, 8, 8, 8, 8,12, 8,
-	 8, 8, 8, 8, 8, 8,12, 8, 8, 8, 8, 8, 8, 8,12, 8,
-	 8, 8, 8, 8, 8, 8,16, 8, 8, 8, 8, 8, 8, 8,16, 8,
-	 8, 8, 8, 8, 8, 8,16, 8, 8, 8, 8, 8, 8, 8,16, 8,
-	 8, 8, 8, 8, 8, 8,16, 8, 8, 8, 8, 8, 8, 8,16, 8,
-	 8, 8, 8, 8, 8, 8,16, 8, 8, 8, 8, 8, 8, 8,16, 8,
-	 8, 8, 8, 8, 8, 8,16, 8, 8, 8, 8, 8, 8, 8,16, 8,
-	 8, 8, 8, 8, 8, 8,16, 8, 8, 8, 8, 8, 8, 8,16, 8,
-	 8, 8, 8, 8, 8, 8,16, 8, 8, 8, 8, 8, 8, 8,16, 8,
-	 8, 8, 8, 8, 8, 8,16, 8, 8, 8, 8, 8, 8, 8,16, 8
+const BYTE instructionCondicionalCycles[] = {
+    1, 3, 2, 2, 1, 1, 2, 1, 5, 2, 2, 2, 1, 1, 2, 1,
+    0, 3, 2, 2, 1, 1, 2, 1, 3, 2, 2, 2, 1, 1, 2, 1,
+    3, 3, 2, 2, 1, 1, 2, 1, 3, 2, 2, 2, 1, 1, 2, 1,
+    3, 3, 2, 2, 3, 3, 3, 1, 3, 2, 2, 2, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    2, 2, 2, 2, 2, 2, 0, 2, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    5, 3, 4, 4, 6, 4, 2, 4, 5, 4, 4, 0, 6, 6, 2, 4,
+    5, 3, 4, 0, 6, 4, 2, 4, 5, 4, 4, 0, 6, 0, 2, 4,
+    3, 3, 2, 0, 0, 4, 2, 4, 4, 1, 4, 0, 0, 0, 2, 4,
+    3, 3, 2, 1, 0, 4, 2, 4, 3, 2, 4, 1, 0, 0, 2, 4
+};
+
+const BYTE instructionCyclesCB[] = {
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+    2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+    2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+    2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2
 };
 
 CPU::CPU(Video *v, Sound * s): Memory(this, s)
@@ -106,6 +123,7 @@ void CPU::ResetGlobalVariables()
 	cyclesSerial = 0;
 	frameCompleted = false;
 	VBlankIntPending = false;
+    newInterrupt = false;
 }
 
 void CPU::Reset()
@@ -145,11 +163,6 @@ void CPU::ExecuteOneFrame()
 		lastOpCode = OpCode;
 		OpCode = MemR(Get_PC());
         NextOpcode = MemR(Get_PC() + 1);
-        
-        if (OpCode == 0xCB)
-            lastCycles = instructionCyclesCB[NextOpcode];
-        else
-            lastCycles = instructionCycles[OpCode];
 		
 #ifdef MAKEGBLOG
 		stringstream ssOpCode;
@@ -157,9 +170,6 @@ void CPU::ExecuteOneFrame()
 		ssOpCode << "Op: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
 		if (OpCode == 0xCB)
 			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
-        ssOpCode << ", 0xFF05: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[0xFF05];
-        ssOpCode << ", 0xFF06: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[0xFF06];
-        ssOpCode << ", 0xFF07: " << setfill('0') << setw(2) << uppercase << hex << (int)memory[0xFF07];
         ssOpCode << ", ";
         //stringstream ssOpCode2;
 		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
@@ -441,7 +451,23 @@ void CPU::ExecuteOneFrame()
 			} // end switch
             
 		} // end if (!Get_Halt())
-
+        
+        if (OpCode == 0xCB)
+            lastCycles = instructionCyclesCB[NextOpcode]*4;
+        else if (Get_ConditionalTaken())
+        {
+            lastCycles = instructionCondicionalCycles[OpCode]*4;
+            Set_ConditionalTaken(false);
+        }
+        else
+            lastCycles = instructionCycles[OpCode]*4;
+        
+        if (newInterrupt)
+        {
+            lastCycles += 20;
+            newInterrupt = false;
+        }
+        
 		actualCycles += lastCycles;
         
         UpdateStateLCD(lastCycles);
@@ -952,6 +978,7 @@ void CPU::Interrupts(Instructions * inst)
 	Set_IME(false);
 	Set_Halt(false);
 	inst->PUSH_PC();
+    newInterrupt = true;
 
 	if (BIT0(interrupts))	//V-Blank
 	{
@@ -990,7 +1017,7 @@ void CPU::UpdateTimer(int cycles)
     
 	if (BIT2(memory[TAC])) //Si esta habilitado el timer
 	{
-        cyclesTimer  += cycles;
+        cyclesTimer += cycles;
         
         WORD cyclesOverflow = overflowTimer[BITS01(memory[TAC])];
 		while (cyclesTimer >= cyclesOverflow)
@@ -1006,9 +1033,7 @@ void CPU::UpdateTimer(int cycles)
 			cyclesTimer -= cyclesOverflow;
 		}
 	}
-	else
-		cyclesTimer = 0;
-
+    
     cyclesDIV += cycles;
     
 	while (cyclesDIV >= 256)
@@ -1016,6 +1041,38 @@ void CPU::UpdateTimer(int cycles)
 		memory[DIV]++;
 		cyclesDIV -= 256;
 	}
+}
+
+BYTE CPU::TACChanged(BYTE newValue)
+{
+    newValue &= 0x07;
+    if (((newValue & 0x03) != (memory[TAC] & 0x03)) ||
+        ((newValue & 0x04) == 0))
+    {
+        cyclesTimer = 0;
+        memory[TIMA] = memory[TMA];
+    }
+    return newValue;
+}
+
+BYTE CPU::DIVChanged(BYTE newValue)
+{
+    cyclesDIV = 0;
+    
+    return 0;
+}
+
+BYTE CPU::P1Changed(BYTE newValue)
+{
+    BYTE oldP1 = memory[P1];
+    newValue = (newValue & 0xF0) | (oldP1 & ~0xF0);
+    newValue = PadUpdateInput(newValue);
+    if ((newValue != oldP1) && ((newValue & 0x0F) != 0x0F))
+    {
+        //Debe producir una interrupcion
+        memory[IF] |=  0x10;
+    }
+    return newValue;
 }
 
 void CPU::OnEndFrame()
