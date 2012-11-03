@@ -365,7 +365,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "DMGBoy" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -537,7 +537,7 @@
 					"-liconv",
 				);
 				PRODUCT_NAME = DMGBoy;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				VALID_ARCHS = "i386 x86_64";
 				WARNING_LDFLAGS = (
 					"$(PORTAUDIODIR)/lib/.libs/libportaudio.a",
@@ -665,7 +665,7 @@
 					"-liconv",
 				);
 				PRODUCT_NAME = DMGBoy;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				VALID_ARCHS = "i386 x86_64";
 				WARNING_LDFLAGS = (
 					"$(PORTAUDIODIR)/lib/.libs/libportaudio.a",
