@@ -86,7 +86,6 @@ private:
 	void CreateRecentMenu(std::string * roms);
 	void RecentRomsToSettings();
 	void UpdateRecentMenu(wxString fileName);
-	void LoadZip(const wxString zipPath, BYTE ** buffer, unsigned long * size);
     void ToggleFullScreen();
     void ChangeRenderer();
 	

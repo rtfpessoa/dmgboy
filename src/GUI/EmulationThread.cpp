@@ -125,9 +125,9 @@ bool EmulationThread::ChangeFile(wxString fileName)
             if ((buffer == NULL) || (size == 0))
                 return false;
         }
-        else if (!fileLower.EndsWith(wxT(".gb")))
+        else if (!fileLower.EndsWith(wxT(".gb")) && !fileLower.EndsWith(wxT(".gbc")))
         {
-            wxMessageBox(wxT("Only gb and zip files allowed!"), wxT("Error"));
+            wxMessageBox(wxT("Only gb, gbc and zip files allowed!"), wxT("Error"));
             return false;
         }
         
@@ -162,7 +162,7 @@ bool EmulationThread::ChangeFile(wxString fileName)
 }
 
 /*
- * Carga un fichero comprimido con zip y busca una rom de gameboy (un fichero con extension gb).
+ * Carga un fichero comprimido con zip y busca una rom de gameboy (un fichero con extension gb o gbc).
  * Si existe mas de una rom solo carga la primera. Si se ha encontrado, la rom se devuelve en un buffer
  * junto con su tamaño, sino las variables se dejan intactas
  */
@@ -177,7 +177,7 @@ void EmulationThread::LoadZip(const wxString zipPath, BYTE ** buffer, unsigned l
 		fileInZip = entry->GetName();
         
 		fileLower = fileInZip.Lower();
-		if (fileLower.EndsWith(wxT(".gb")))
+		if (fileLower.EndsWith(wxT(".gb")) || fileLower.EndsWith(wxT(".gbc")))
 		{
 			*size = zip.GetSize();
 			*buffer = new BYTE[*size];
