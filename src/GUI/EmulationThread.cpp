@@ -133,7 +133,6 @@ bool EmulationThread::ChangeFile(wxString fileName)
         
         
         // Si ha llegado aquí es que es un archivo permitido
-        cpu->Reset();
         if (cartridge)
             delete cartridge;
         
@@ -153,6 +152,7 @@ bool EmulationThread::ChangeFile(wxString fileName)
         
         
         cpu->LoadCartridge(cartridge);
+        cpu->Reset();
     }
     
     

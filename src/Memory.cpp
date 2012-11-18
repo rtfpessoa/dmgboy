@@ -104,6 +104,15 @@ void Memory::ResetMem()
     memory[IE]   = 0x00;
 	
 	memory[STAT] = 0x05;
+    
+    wRam = &memory[WRAM_OFFSET];
+    vRam = &memory[VRAM_OFFSET];
+    
+    for (int i=BGP_OFFSET; i<BGP_OFFSET+SIZE_BGPCOLOR; i+=2)
+    {
+        memory[i+0] = 0xFF;
+        memory[i+1] = 0x7F;
+    }
 }
 
 void Memory::MemW(WORD address, BYTE value)
@@ -113,6 +122,16 @@ void Memory::MemW(WORD address, BYTE value)
 		c->Write(address, value);
 		return;
 	}
+    else if ((address >= 0x8000) && (address < 0xA000) && colorMode) //VRAM
+    {
+		vRam[address - 0x8000] = value;
+        return;
+    }
+    else if ((address >= 0xD000) && (address < 0xE000) && colorMode) //WRAM
+    {
+		wRam[address - 0xD000] = value;
+        return;
+    }
 	else if ((address >= 0xC000) && (address < 0xDE00))//C000-DDFF
 		memory[address + 0x2000] = value;
 	else if ((address >= 0xE000) && (address < 0xFE00))//E000-FDFF
@@ -124,7 +143,7 @@ void Memory::MemW(WORD address, BYTE value)
 		switch (address)
 		{
 			case DMA:
-				DmaTransfer(value);
+				OamDmaTransfer(value);
 				break;
 			case P1:
 				value = cpu->P1Changed(value);
@@ -144,6 +163,66 @@ void Memory::MemW(WORD address, BYTE value)
             case LCDC:
                 cpu->OnWriteLCDC(value);
                 return;
+            case VBK:
+                if (colorMode)
+                {
+                    value &= 0x01;
+                    vRam = &memory[VRAM_OFFSET+(value*0x2000)];
+                }
+                break;
+            case HDMA5:
+                if (colorMode)
+                {
+                    VRamDmaTransfer(value);
+                }
+                break;
+            case KEY1:
+                if (colorMode)
+                {
+                    value = ((memory[KEY1] & 0x80) | (value & 0x01));
+                }
+                break;
+            case SVBK:
+                if (colorMode)
+                {
+                    value &= 0x07;
+                    if (value == 0)
+                        value = 1;
+                    wRam = &memory[WRAM_OFFSET+(value*0x1000)];
+                }
+                break;
+            case BGPI:
+                if (colorMode)
+                {
+                    value &= 0xBF;
+                }
+                break;
+            case BGPD:
+                if (colorMode)
+                {
+                    BYTE index = memory[BGPI] & 0x3F;
+                    memory[BGP_OFFSET + index] = value;
+                    
+                    if (BIT7(memory[BGPI]))
+                        memory[BGPI] = 0x80 | ((index+1) & 0x3F);
+                }
+                break;
+            case OBPI:
+                if (colorMode)
+                {
+                    value &= 0xBF;
+                }
+                break;
+            case OBPD:
+                if (colorMode)
+                {
+                    BYTE index = memory[OBPI] & 0x3F;
+                    memory[OBP_OFFSET + index] = value;
+                    
+                    if (BIT7(memory[OBPI]))
+                        memory[OBPI] = 0x80 | ((index+1) & 0x3F);
+                }
+                break;
             case IF:
                 value = 0xE0 | (value & 0x1F);
                 break;
@@ -153,12 +232,17 @@ void Memory::MemW(WORD address, BYTE value)
 	memory[address] = value;
 }
 
-void Memory::DmaTransfer(BYTE address)
+void Memory::OamDmaTransfer(BYTE address)
 {
 	BYTE i;
 
 	for (i=0; i<0xA0; i++)
 		MemWNoCheck(0xFE00 + i, MemR((address << 8) + i));
+}
+
+void Memory::VRamDmaTransfer(BYTE value)
+{
+    
 }
 
 void Memory::SaveMemory(ofstream * file)
