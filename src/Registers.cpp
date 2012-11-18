@@ -109,7 +109,7 @@ void Registers::Set_Flag(e_registers flag, BYTE value)
 
 void Registers::ResetRegs()
 {
-	this->Set_AF(0x01B0);
+	this->Set_AF(0x11B0);
 	this->Set_BC(0x0013);
 	this->Set_DE(0x00D8);
 	this->Set_HL(0x014D);
