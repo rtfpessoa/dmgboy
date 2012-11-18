@@ -46,6 +46,7 @@ public:
 	void OnPreDraw();
 	void OnPostDraw();
 	void OnDrawPixel(int idColor, int x, int y);
+    void OnDrawPixel(BYTE r, BYTE g, BYTE b, int x, int y);
     
 protected:
 	BYTE * imgBuf1;

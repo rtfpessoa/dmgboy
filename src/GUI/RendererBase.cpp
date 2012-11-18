@@ -145,18 +145,23 @@ void RendererBase::OnPostDraw()
 
 void RendererBase::OnDrawPixel(int idColor, int x, int y)
 {
-	BYTE colorR = palettes[selPalette][idColor][0];
-	BYTE colorG = palettes[selPalette][idColor][1];
-	BYTE colorB = palettes[selPalette][idColor][2];
+	BYTE r = palettes[selPalette][idColor][0];
+	BYTE g = palettes[selPalette][idColor][1];
+	BYTE b = palettes[selPalette][idColor][2];
 	
-	int sizeLine = GB_SCREEN_W * 3;
+	OnDrawPixel(r, g, b, x, y);
+}
+
+void RendererBase::OnDrawPixel(BYTE r, BYTE g, BYTE b, int x, int y)
+{
+    int sizeLine = GB_SCREEN_W * 3;
 	int offsetX = x * 3;
 	int offsetY = y * sizeLine;
 	int offsetBuf = offsetY + offsetX;
 	
-	backBuffer[offsetBuf + 0] = colorR;
-	backBuffer[offsetBuf + 1] = colorG;
-	backBuffer[offsetBuf + 2] = colorB;
+	backBuffer[offsetBuf + 0] = r;
+	backBuffer[offsetBuf + 1] = g;
+	backBuffer[offsetBuf + 2] = b;
 }
 
 DnDFile::DnDFile(wxWindow * parent)
