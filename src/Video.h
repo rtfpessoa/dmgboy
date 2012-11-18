@@ -30,14 +30,17 @@ struct VideoPixel
 	int rowMap, tileDataSelect;
 	int color, indexColor, xScrolled;
 	int palette[4];
-	WORD mapIni;
+	int mapIni;
+    int mapIni2;
 	BYTE yTile;
+    BYTE r, g, b;
 };
 
 class Video
 {
 private:
 	Memory *mem;
+    bool colorMode;
 	std::multimap<int, int> orderedOAM;	//posicion x, dir. memoria
 	int indexColorsBGWnd[GB_SCREEN_W][GB_SCREEN_H];	//Indice de color en pantalla pintadas por background y window
 	IGBScreenDrawable * screen;
@@ -46,6 +49,7 @@ public:
 	Video(IGBScreenDrawable * screen);
 	~Video(void);
     void SetScreen(IGBScreenDrawable * screen);
+    void SetColorMode(bool value);
 	void SetMem(Memory *mem);
 	void RefreshScreen();
 	void ClearScreen();
@@ -56,7 +60,8 @@ private:
 	void OrderOAM(int line);
 	void UpdateOAM(int line);
 	inline void GetColor(VideoPixel * p);
-	void GetPalette(int * palette, int dir);
+	void GetDMGPalette(int * palette, int dir);
+    void GetColorPalette(BYTE palette[4][3], int address);
 };
 
 #endif

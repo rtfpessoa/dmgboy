@@ -95,15 +95,15 @@ CPU::CPU(Video *v, Sound * s): Memory(this, s)
 
 CPU::CPU(Video *v, Cartridge *c, Sound * s): Memory(this, s)
 {
+    LoadCartridge(c);
 	Init(v);
-	LoadCartridge(c);
 }
 
 void CPU::Init(Video *v)
 {
-	ResetGlobalVariables();
-	this->v = v;
+    this->v = v;
 	v->SetMem(this->GetPtrMemory());
+	ResetGlobalVariables();
 	
 #ifdef MAKEGBLOG
 	this->log = new QueueLog(1000000);
@@ -124,6 +124,10 @@ void CPU::ResetGlobalVariables()
 	frameCompleted = false;
 	VBlankIntPending = false;
     newInterrupt = false;
+    colorMode = false;
+    if (c && ((MemR(CART_COLOR) == 0x80) || (MemR(CART_COLOR) == 0xC0)))
+        colorMode = true;
+    v->SetColorMode(colorMode);
 }
 
 void CPU::Reset()
