@@ -22,6 +22,7 @@
 #include "Def.h"
 
 #define CART_NAME		0x0134
+#define CART_COLOR		0x0143
 #define CART_TYPE		0x0147
 #define CART_ROM_SIZE	0x0148
 #define CART_RAM_SIZE	0x0149
