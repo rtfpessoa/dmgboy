@@ -58,7 +58,7 @@ void Video::UpdateLine(BYTE y)
 
 	//OrderOAM(y);
 	UpdateBG(y);
-	//UpdateWin(y);
+	UpdateWin(y);
 	//UpdateOAM(y);
 
     if (screen)
@@ -107,12 +107,12 @@ void Video::UpdateBG(int y)
     if (colorMode)
     {
         pixel->mapIni = BIT3(valueLCDC) ? VRAM_OFFSET+0x1C00 : VRAM_OFFSET+0x1800;
-        pixel->mapIni2 = pixel->mapIni - VRAM_OFFSET + 0x8000;
     }
     else
+    {
         pixel->mapIni = BIT3(valueLCDC) ? 0x9C00 : 0x9800;
-
-	GetDMGPalette(pixel->palette, BGP);
+        GetDMGPalette(pixel->palette, BGP);
+    }
 
 	yScrolled = (y + mem->memory[SCY]);
 	if (yScrolled < 0)
@@ -131,6 +131,62 @@ void Video::UpdateBG(int y)
 		pixel->xScrolled = (x + valueSCX);
 		if (pixel->xScrolled > 255)
 			pixel->xScrolled -= 256;
+
+		GetColor(pixel);
+
+        if (screen)
+        {
+            if (colorMode)
+                screen->OnDrawPixel(pixel->r, pixel->g, pixel->b, x, y);
+            else
+                screen->OnDrawPixel(pixel->color, x, y);
+        }
+		indexColorsBGWnd[x][y] = pixel->indexColor;
+	}
+}
+
+void Video::UpdateWin(int y)
+{
+	int x, wndPosX, xIni, yScrolled;
+	WORD wndPosY;
+
+	//Si la ventana esta desactivada no hacemos nada
+	if (!BIT5(mem->memory[LCDC]))
+		return;
+
+	wndPosX = mem->memory[WX] - 7;
+	wndPosY = mem->memory[WY];
+
+	if (y < wndPosY)
+		return;
+
+	if (wndPosX < 0) xIni = 0;
+	else if (wndPosX > GB_SCREEN_W) xIni = GB_SCREEN_W;
+	else xIni = wndPosX;
+
+    if (colorMode)
+    {
+        pixel->mapIni = BIT6(mem->memory[LCDC]) ? VRAM_OFFSET+0x1C00 : VRAM_OFFSET+0x1800;
+    }
+    else
+    {
+        pixel->mapIni = BIT6(mem->memory[LCDC]) ? 0x9C00 : 0x9800;
+        GetDMGPalette(pixel->palette, BGP);
+    }
+
+		
+	yScrolled = y - wndPosY;
+	pixel->yTile = yScrolled % 8;
+	pixel->rowMap = yScrolled/8 * 32;
+	
+	pixel->tileDataSelect = BIT4(mem->memory[LCDC]);
+	
+	pixel->y = y;
+
+	for (x=xIni; x<GB_SCREEN_W; x++)
+	{
+		pixel->x = x;
+		pixel->xScrolled = x - wndPosX;
 
 		GetColor(pixel);
 
@@ -194,50 +250,6 @@ inline void Video::GetColor(VideoPixel * p)
     }
     else
         p->color = p->palette[p->indexColor];
-}
-
-void Video::UpdateWin(int y)
-{
-	int x, wndPosX, xIni, yScrolled;
-	WORD wndPosY;
-
-	//Si la ventana esta desactivada no hacemos nada
-	if (!BIT5(mem->memory[LCDC]))
-		return;
-
-	wndPosX = mem->memory[WX] - 7;
-	wndPosY = mem->memory[WY];
-
-	if (y < wndPosY)
-		return;
-
-	if (wndPosX < 0) xIni = 0;
-	else if (wndPosX > GB_SCREEN_W) xIni = GB_SCREEN_W;
-	else xIni = wndPosX;
-
-	GetDMGPalette(pixel->palette, BGP);
-
-	pixel->mapIni = BIT6(mem->memory[LCDC]) ? 0x9C00 : 0x9800;
-	
-	yScrolled = y - wndPosY;
-	pixel->yTile = yScrolled % 8;
-	pixel->rowMap = yScrolled/8 * 32;
-	
-	pixel->tileDataSelect = BIT4(mem->memory[LCDC]);
-	
-	pixel->y = y;
-
-	for (x=xIni; x<GB_SCREEN_W; x++)
-	{
-		pixel->x = x;
-		pixel->xScrolled = x - wndPosX;
-
-		GetColor(pixel);
-
-        if (screen)
-            screen->OnDrawPixel(pixel->color, x, y);
-		indexColorsBGWnd[x][y] = pixel->indexColor;
-	}
 }
 
 void Video::OrderOAM(int y)

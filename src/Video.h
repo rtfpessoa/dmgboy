@@ -31,7 +31,6 @@ struct VideoPixel
 	int color, indexColor, xScrolled;
 	int palette[4];
 	int mapIni;
-    int mapIni2;
 	BYTE yTile;
     BYTE r, g, b;
 };
