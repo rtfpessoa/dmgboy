@@ -105,13 +105,19 @@ void Memory::ResetMem()
 	
 	memory[STAT] = 0x05;
     
-    wRam = &memory[WRAM_OFFSET];
-    vRam = &memory[VRAM_OFFSET];
-    
-    for (int i=BGP_OFFSET; i<BGP_OFFSET+SIZE_BGPCOLOR; i+=2)
+    if (colorMode)
     {
-        memory[i+0] = 0xFF;
-        memory[i+1] = 0x7F;
+        wRam = &memory[WRAM_OFFSET];
+        vRam = &memory[VRAM_OFFSET];
+        
+        for (int i=BGP_OFFSET; i<BGP_OFFSET+SIZE_BGPCOLOR; i+=2)
+        {
+            memory[i+0] = 0xFF;
+            memory[i+1] = 0x7F;
+        }
+        
+        memory[HDMA5] = 0xFF;
+        hdmaActive = false;
     }
 }
 
@@ -166,8 +172,11 @@ void Memory::MemW(WORD address, BYTE value)
             case VBK:
                 if (colorMode)
                 {
-                    value &= 0x01;
-                    vRam = &memory[VRAM_OFFSET+(value*0x2000)];
+                    if (!hdmaActive)   // Si no esta activo el HDMA
+                    {
+                        value &= 0x01;
+                        vRam = &memory[VRAM_OFFSET+(value*0x2000)];
+                    }
                 }
                 break;
             case HDMA5:
@@ -242,7 +251,51 @@ void Memory::OamDmaTransfer(BYTE address)
 
 void Memory::VRamDmaTransfer(BYTE value)
 {
+    WORD mode = memory[HDMA5] & 0x80;
     
+    if (hdmaActive && mode == 0)    // Se quiere parar el hdma manualmente
+    {
+        hdmaActive = false;
+        memory[HDMA5] |= 0x80;  // Se pone a 1 el bit 7
+    }
+    else
+    {
+        WORD src = (memory[HDMA1] << 8) | (memory[HDMA2] & 0xF0);           // valores entre 0000-7FF0 o A000-DFF0
+        WORD dst = ((memory[HDMA3] & 0x1F) << 8) | (memory[HDMA4] & 0xF0);  // Valores entre 0x0000-0x1FF0
+        WORD length = ((memory[HDMA5] & 0x7F) + 1) * 0x10;                  // Valores entre 0x10-0x800
+        
+        if (mode == 0)  // Todo de golpe
+        {
+            for (int i= 0; i<length; i++)
+                vRam[dst+i] = MemR(src+i);
+            
+            memory[HDMA5] = 0xFF; // Se especifica que se ha terminado la copia
+        }
+        else
+        {
+            hdmaActive = true;
+            memory[HDMA5] &= 0x7F;  // Se pone a 0 el bit 7
+        }
+    }
+}
+
+void Memory::UpdateHDMA()
+{
+    if (hdmaActive)
+    {
+        WORD src = (memory[HDMA1] << 8) | (memory[HDMA2] & 0xF0);           // valores entre 0000-7FF0 o A000-DFF0
+        WORD dst = ((memory[HDMA3] & 0x1F) << 8) | (memory[HDMA4] & 0xF0);  // Valores entre 0x0000-0x1FF0
+        
+        for (int i=0; i<0x10; i++)
+            vRam[dst+i] = MemR(src+i);
+        
+        memory[HDMA5] -= 1;
+        if ((memory[HDMA5] & 0x7F) == 0x7F)
+        {
+            hdmaActive = false;
+            memory[HDMA5] = 0xFF;
+        }
+    }
 }
 
 void Memory::SaveMemory(ofstream * file)

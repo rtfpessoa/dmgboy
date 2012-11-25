@@ -44,6 +44,7 @@ protected:
 	Sound * s;
     CPU * cpu;
     bool colorMode;
+    WORD hdmaActive;
 private:
     BYTE *wRam;
     BYTE *vRam;
@@ -82,6 +83,7 @@ public:
         else
             return memory[address];
 	}
+    void UpdateHDMA();
 	void SaveMemory(std::ofstream * file);
 	void LoadMemory(std::ifstream * file);
 };

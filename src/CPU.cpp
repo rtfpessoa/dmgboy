@@ -849,6 +849,9 @@ void CPU::UpdateStateLCDOn()
 					if (BIT5(memory[STAT]))
                         SetIntFlag(1);
                 }
+                
+                if (colorMode)
+                    UpdateHDMA();
 				
 				v->UpdateLine(memory[LY]-1);
             }
