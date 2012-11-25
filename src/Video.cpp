@@ -204,11 +204,9 @@ void Video::UpdateWin(int y)
 inline void Video::GetColor(VideoPixel * p)
 {
 	int xTile, line[2], addressIdTile, addressTile, mapAttributes;
-    int addressIdTile2;
     BYTE colorPalette[4][3];
 	
 	addressIdTile = p->mapIni + (p->rowMap + p->xScrolled/8);
-    addressIdTile2 = addressIdTile - VRAM_OFFSET + 0x8000;
 	
 	if (!p->tileDataSelect)	//Seleccionar el tile data
 	{
@@ -228,7 +226,7 @@ inline void Video::GetColor(VideoPixel * p)
         if (BIT3(mapAttributes))
             addressTile += 0x2000;
         
-        int numPalette = addressTile & 0x07;
+        int numPalette = mapAttributes & 0x07;
         GetColorPalette(colorPalette, BGP_OFFSET + (numPalette*8));
     }
 	

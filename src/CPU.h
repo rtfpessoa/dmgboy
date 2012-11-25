@@ -73,6 +73,7 @@ private:
 	void Interrupts(Instructions * inst);
 	void CheckLYC();
 	void OnEndFrame();
+    void ChangeSpeed();
 };
 
 #endif

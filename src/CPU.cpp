@@ -200,7 +200,7 @@ void CPU::ExecuteOneFrame()
 				case (0x0E): inst.LD_nn_n(C); break;
 				case (0x0F): inst.RRC_n(A); break;
 
-				case (0x10): inst.STOP(); break;
+				case (0x10): inst.STOP(); ChangeSpeed(); break;
 				case (0x11): inst.LD_n_nn(DE); break;
 				case (0x12): inst.LD_n_A(c_DE); break;
 				case (0x13): inst.INC_nn(DE); break;
@@ -1088,6 +1088,15 @@ void CPU::OnEndFrame()
 	if (s)
 		s->EndFrame();
 	frameCompleted = true;
+}
+
+void CPU::ChangeSpeed()
+{
+    if (colorMode)
+    {
+        //BYTE currentSpeed = (MemR(KEY1) & 0x80) >> 7;
+        memory[KEY1] = memory[KEY1] << 7;
+    }
 }
 
 #ifdef MAKEGBLOG
