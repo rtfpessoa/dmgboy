@@ -128,6 +128,12 @@ void CPU::ResetGlobalVariables()
     if (c && ((MemR(CART_COLOR) == 0x80) || (MemR(CART_COLOR) == 0xC0)))
         colorMode = true;
     v->SetColorMode(colorMode);
+    
+    lcdMode0 = LCD_MODE_0;
+    lcdMode1 = LCD_MODE_1;
+    lcdMode2 = LCD_MODE_2;
+    lcdMode3 = LCD_MODE_3;
+    cyclesFrame = FRAME_CYCLES;
 }
 
 void CPU::Reset()
@@ -457,10 +463,10 @@ void CPU::ExecuteOneFrame()
 		} // end if (!Get_Halt())
         
         if (OpCode == 0xCB)
-            lastCycles = instructionCyclesCB[NextOpcode]*4;
+            lastCycles += instructionCyclesCB[NextOpcode]*4;
         else if (Get_ConditionalTaken())
         {
-            lastCycles = instructionCondicionalCycles[OpCode]*4;
+            lastCycles += instructionCondicionalCycles[OpCode]*4;
             Set_ConditionalTaken(false);
         }
         else
@@ -472,12 +478,15 @@ void CPU::ExecuteOneFrame()
             newInterrupt = false;
         }
         
+        int tmpCycles = lastCycles;
 		actualCycles += lastCycles;
         
         UpdateStateLCD(lastCycles);
 		UpdateTimer(lastCycles);
 		UpdateSerial(lastCycles);
         Interrupts(&inst);
+        
+        lastCycles -= tmpCycles;
 		
 	}//end for
 }
@@ -813,10 +822,10 @@ void CPU::UpdateStateLCD(int cycles)
         UpdateStateLCDOn();
     else
     {
-        if (cyclesLCD > 70224)
+        if (cyclesLCD > cyclesFrame)
         {
             OnEndFrame();
-            cyclesLCD -= 70224;
+            cyclesLCD -= cyclesFrame;
         }
     }
 }
@@ -828,11 +837,11 @@ void CPU::UpdateStateLCDOn()
     switch (mode)
     {
         case (0):	// Durante H-Blank
-            if (cyclesLCD >= MAX_LCD_MODE_0)
+            if (cyclesLCD >= lcdMode0)
             {
 				memory[LY]++;
 				CheckLYC();
-                cyclesLCD -= MAX_LCD_MODE_0;
+                cyclesLCD -= lcdMode0;
 				
                 if (memory[LY] == 144) // Si estamos en la linea 144, cambiamos al modo 1 (V-Blank)
                 {
@@ -872,9 +881,9 @@ void CPU::UpdateStateLCDOn()
 				VBlankIntPending = false;
 			}
 			
-            if (cyclesLCD >= MAX_LCD_MODE_1)
+            if (cyclesLCD >= lcdMode1)
             {
-				cyclesLCD -= MAX_LCD_MODE_1;
+				cyclesLCD -= lcdMode1;
 				
                 // Si hemos llegado al final
                 if (memory[LY] == 153)
@@ -896,18 +905,18 @@ void CPU::UpdateStateLCDOn()
             }
             break;
         case (2):	// Cuando OAM se esta usando
-            if (cyclesLCD >= MAX_LCD_MODE_2)
+            if (cyclesLCD >= lcdMode2)
             {
-				cyclesLCD -= MAX_LCD_MODE_2;
+				cyclesLCD -= lcdMode2;
 				
 				// Poner a 11 el flag (bits 0-1) del modo 3.
 				memory[STAT] = (memory[STAT] & ~0x03) | 0x03;
             }
             break;
         case (3):	// Cuando OAM y memoria de video se estan usando (Se esta pasando informacion al LCD)
-            if (cyclesLCD >= MAX_LCD_MODE_3)
+            if (cyclesLCD >= lcdMode3)
             {
-				cyclesLCD -= MAX_LCD_MODE_3;
+				cyclesLCD -= lcdMode3;
 				
 				// Poner a 00 el flag (bits 0-1) del modo 0.
 				memory[STAT] &= ~0x03;
@@ -1094,9 +1103,30 @@ void CPU::ChangeSpeed()
 {
     if (colorMode)
     {
-        //BYTE currentSpeed = (MemR(KEY1) & 0x80) >> 7;
+        
         memory[KEY1] = memory[KEY1] << 7;
+        
+        lcdMode0 = LCD_MODE_0;
+        lcdMode1 = LCD_MODE_1;
+        lcdMode2 = LCD_MODE_2;
+        lcdMode3 = LCD_MODE_3;
+        cyclesFrame = FRAME_CYCLES;
+        
+        // Si doble velocidad
+        if (memory[KEY1] & 0x80)
+        {
+            lcdMode0 = LCD_MODE_0 * 2;
+            lcdMode1 = LCD_MODE_1 * 2;
+            lcdMode2 = LCD_MODE_2 * 2;
+            lcdMode3 = LCD_MODE_3 * 2;
+            cyclesFrame = FRAME_CYCLES * 2;
+        }
     }
+}
+
+void CPU::AddCycles(int cycles)
+{
+    lastCycles += cycles;
 }
 
 #ifdef MAKEGBLOG

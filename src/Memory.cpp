@@ -270,6 +270,11 @@ void Memory::VRamDmaTransfer(BYTE value)
                 vRam[dst+i] = MemR(src+i);
             
             memory[HDMA5] = 0xFF; // Se especifica que se ha terminado la copia
+            
+            if (memory[KEY1] & 0x80)
+                cpu->AddCycles(HDMA_CYCLES*length/0x10*2);
+            else
+                cpu->AddCycles(HDMA_CYCLES*length/0x10);
         }
         else
         {
@@ -295,6 +300,11 @@ void Memory::UpdateHDMA()
             hdmaActive = false;
             memory[HDMA5] = 0xFF;
         }
+        
+        if (memory[KEY1] & 0x80)
+            cpu->AddCycles(HDMA_CYCLES*2);
+        else
+            cpu->AddCycles(HDMA_CYCLES);
     }
 }
 
