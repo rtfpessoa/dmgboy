@@ -56,10 +56,10 @@ void Video::UpdateLine(BYTE y)
     if (screen)
         screen->OnPreDraw();
 
-	//OrderOAM(y);
+	OrderOAM(y);
 	UpdateBG(y);
 	UpdateWin(y);
-	//UpdateOAM(y);
+	UpdateOAM(y);
 
     if (screen)
         screen->OnPostDraw();
@@ -203,7 +203,7 @@ void Video::UpdateWin(int y)
 
 inline void Video::GetColor(VideoPixel * p)
 {
-	int xTile, line[2], addressIdTile, addressTile, mapAttributes;
+	int xTile, line[2], addressIdTile, addressTile, mapAttributes, yTile;
     BYTE colorPalette[4][3];
 	
 	addressIdTile = p->mapIni + (p->rowMap + p->xScrolled/8);
@@ -218,6 +218,8 @@ inline void Video::GetColor(VideoPixel * p)
 		addressTile = 0x8000 + mem->memory[addressIdTile]*16;
 	}
     
+    xTile = p->xScrolled % 8;
+    yTile = p->yTile;
     if (colorMode)
     {
         mapAttributes = mem->memory[addressIdTile + 0x2000];
@@ -225,17 +227,20 @@ inline void Video::GetColor(VideoPixel * p)
         addressTile += VRAM_OFFSET - 0x8000;
         if (BIT3(mapAttributes))
             addressTile += 0x2000;
+        if (BIT5(mapAttributes))    // Flip x
+            xTile = ABS(xTile - 7);
+        if (BIT6(mapAttributes))    // Flip y
+            yTile = ABS(yTile - 7);
         
         int numPalette = mapAttributes & 0x07;
         GetColorPalette(colorPalette, BGP_OFFSET + (numPalette*8));
     }
 	
-	int addressLineTile = addressTile + (p->yTile * 2);
+	int addressLineTile = addressTile + (yTile * 2); //yTile * 2 porque cada linea de 1 tile ocupa 2 bytes
 	
-	line[0] = mem->memory[addressLineTile + 0];	//yTile * 2 porque cada linea de 1 tile ocupa 2 bytes
+	line[0] = mem->memory[addressLineTile + 0];	
 	line[1] = mem->memory[addressLineTile + 1];
 	
-	xTile = p->xScrolled % 8;
 	int pixX = (BYTE)ABS((int)xTile - 7);
 	//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 	//Esto devolvera un numero de color que junto a la paleta de color nos dara el color requerido
@@ -252,7 +257,7 @@ inline void Video::GetColor(VideoPixel * p)
 
 void Video::OrderOAM(int y)
 {
-	int ySprite, hSprite, dir;
+	int ySprite, hSprite, address;
 
 	orderedOAM.clear();
 
@@ -261,13 +266,13 @@ void Video::OrderOAM(int y)
 
 	hSprite = BIT2(mem->memory[LCDC]) ? 16 : 8;
 
-	for(dir=0xFE00; dir<0xFEA0; dir+=0x04)
+	for(address=0xFE00; address<0xFEA0; address+=0x04)
 	{
-		ySprite = mem->memory[dir];
+		ySprite = mem->memory[address];
 
 		ySprite -= 16;	//y en pantalla
 		if ((ySprite > y-hSprite) && (ySprite <= y))
-				orderedOAM.insert(pair<int, int>(mem->memory[dir+1], dir));
+				orderedOAM.insert(pair<int, int>(mem->memory[address+1], address));
 	}
 }
 
@@ -275,10 +280,11 @@ void Video::UpdateOAM(int y)
 {
 	int x, xSprite, numSpritesLine, xBeg;
 	int attrSprite, xTile, yTile, xFlip, yFlip, countX, countY, behind, mode16, ySprite;
-	WORD dirSprite, tileNumber, dirTile;
+	int addressSprite, tileNumber, addressTile;
 	int color;
 	int palette0[4], palette1[4];
 	BYTE line[2];
+    BYTE colorPalette[4][3];
 
 	if (!BIT1(mem->memory[LCDC]))	//OAM desactivado
 		return;
@@ -296,20 +302,30 @@ void Video::UpdateOAM(int y)
 	{
 		numSpritesLine++;
 
-		dirSprite = (*it).second;
-		ySprite = mem->memory[dirSprite] - 16;	//=mem->MemR(dirSprite + 0);
+		addressSprite = (*it).second;
+		ySprite = mem->memory[addressSprite] - 16;	//=mem->MemR(dirSprite + 0);
 		xSprite = (*it).first - 8;				//=mem->MemR(dirSprite + 1);
 		if (xSprite == -8)
 			continue;
-		tileNumber = mem->memory[dirSprite + 2];
+		tileNumber = mem->memory[addressSprite + 2];
 		if (mode16)
 			tileNumber = tileNumber & 0xFE;
 			//!!!!!!!!!Si toca la parte de abajo del tile de 8x16 hay que sumar uno (tileNumber | 0x01)
-		attrSprite = mem->memory[dirSprite + 3];
-		dirTile = 0x8000 + tileNumber*16;
+		attrSprite = mem->memory[addressSprite + 3];
+		addressTile = 0x8000 + tileNumber*16;
 		xFlip = BIT5(attrSprite);
 		yFlip = BIT6(attrSprite);
 		behind = BIT7(attrSprite);
+        
+        if (colorMode)
+        {
+            addressTile += VRAM_OFFSET - 0x8000;
+            if (BIT3(attrSprite))
+                addressTile += 0x2000;
+            
+            int numPalette = attrSprite & 0x07;
+            GetColorPalette(colorPalette, BGP_OFFSET + (numPalette*8));
+        }
 
 		xTile = countX = countY = 0;
 		yTile = y - ySprite;
@@ -332,8 +348,8 @@ void Video::UpdateOAM(int y)
 		{
 			xTile = xFlip ? ABS(countX - 7) : countX;
 
-			line[0] = mem->memory[dirTile + (yTile * 2)];	//yTile * 2 porque cada linea de 1 tile ocupa 2 bytes
-			line[1] = mem->memory[dirTile + (yTile * 2) + 1];
+			line[0] = mem->memory[addressTile + (yTile * 2)];	//yTile * 2 porque cada linea de 1 tile ocupa 2 bytes
+			line[1] = mem->memory[addressTile + (yTile * 2) + 1];
 
 			int pixX = ABS((int)xTile - 7);
 			//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
@@ -343,14 +359,21 @@ void Video::UpdateOAM(int y)
 			//El 0 es transparente (no pintar)
 			if ((index) && ((!behind) || (!indexColorsBGWnd[xSprite + countX][ySprite + countY])))
 			{
-				//color = !BIT4(attrSprite) ? palette0[index] : palette1[index];
-				if (!BIT4(attrSprite))
-					color = palette0[index];
-				else
-					color = palette1[index];
+                if (colorMode) {
+                    BYTE r = colorPalette[index][0];
+                    BYTE g = colorPalette[index][1];
+                    BYTE b = colorPalette[index][2];
+                    
+                    if (screen)
+                        screen->OnDrawPixel(r, g, b, xSprite + countX, ySprite + countY);
+                }
+                else
+                {
+                    color = !BIT4(attrSprite) ? palette0[index] : palette1[index];
 
-                if (screen)
-                    screen->OnDrawPixel(color, xSprite + countX, ySprite + countY);
+                    if (screen)
+                        screen->OnDrawPixel(color, xSprite + countX, ySprite + countY);
+                }
 			}
 
 			countX++;
