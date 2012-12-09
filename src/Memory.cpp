@@ -107,7 +107,7 @@ void Memory::ResetMem()
     
     if (colorMode)
     {
-        wRam = &memory[WRAM_OFFSET];
+        wRam = &memory[WRAM_OFFSET+0x1000];
         vRam = &memory[VRAM_OFFSET];
         
         for (int i=BGP_OFFSET; i<BGP_OFFSET+SIZE_BGPCOLOR; i+=2)
@@ -275,6 +275,8 @@ void Memory::VRamDmaTransfer(BYTE value)
                 cpu->AddCycles(HDMA_CYCLES*length/0x10*2);
             else
                 cpu->AddCycles(HDMA_CYCLES*length/0x10);
+            
+            hdmaActive = false;
         }
         else
         {
