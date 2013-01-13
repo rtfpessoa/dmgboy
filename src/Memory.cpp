@@ -269,6 +269,12 @@ void Memory::VRamDmaTransfer(BYTE value)
             for (int i= 0; i<length; i++)
                 vRam[dst+i] = MemR(src+i);
             
+            WORD srcEnd = src + length;
+            WORD dstEnd = dst + length;
+            memory[HDMA1] = srcEnd >> 8;
+            memory[HDMA2] = srcEnd & 0xF0;
+            memory[HDMA3] = dstEnd >> 8;
+            memory[HDMA4] = dstEnd & 0xF0;
             memory[HDMA5] = 0xFF; // Se especifica que se ha terminado la copia
             
             if (memory[KEY1] & 0x80)
@@ -295,6 +301,13 @@ void Memory::UpdateHDMA()
         
         for (int i=0; i<0x10; i++)
             vRam[dst+i] = MemR(src+i);
+        
+        WORD srcEnd = src + 0x10;
+        WORD dstEnd = dst + 0x10;
+        memory[HDMA1] = srcEnd >> 8;
+        memory[HDMA2] = srcEnd & 0xF0;
+        memory[HDMA3] = dstEnd >> 8;
+        memory[HDMA4] = dstEnd & 0xF0;
         
         memory[HDMA5] -= 1;
         if ((memory[HDMA5] & 0x7F) == 0x7F)
