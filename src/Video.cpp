@@ -242,7 +242,7 @@ inline void Video::GetColor(VideoPixel * p)
 	line[0] = mem->memory[addressLineTile + 0];	
 	line[1] = mem->memory[addressLineTile + 1];
 	
-	int pixX = (BYTE)ABS((int)xTile - 7);
+	int pixX = ABS(xTile - 7);
 	//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 	//Esto devolvera un numero de color que junto a la paleta de color nos dara el color requerido
 	p->indexColor = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
@@ -352,10 +352,10 @@ void Video::UpdateOAM(int y)
 			line[0] = mem->memory[addressTile + (yTile * 2)];	//yTile * 2 porque cada linea de 1 tile ocupa 2 bytes
 			line[1] = mem->memory[addressTile + (yTile * 2) + 1];
 
-			int pixX = ABS((int)xTile - 7);
+			int pixX = ABS(xTile - 7);
 			//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 			//Esto devolvera un numero de color que junto a la paleta de color nos dara el color requerido
-			BYTE index = (((line[1] & (0x01 << pixX)) >> pixX) << 1) | ((line[0] & (0x01 << pixX)) >> pixX);
+			BYTE index = (((line[1] & (1 << pixX)) >> pixX) << 1) | ((line[0] & (1 << pixX)) >> pixX);
 
 			//El 0 es transparente (no pintar)
 			if ((index) && ((!behind) || (!indexColorsBGWnd[xSprite + countX][ySprite + countY])))
