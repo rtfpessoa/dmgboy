@@ -251,7 +251,7 @@ void Memory::OamDmaTransfer(BYTE address)
 
 void Memory::VRamDmaTransfer(BYTE value)
 {
-    WORD mode = memory[HDMA5] & 0x80;
+    WORD mode = value & 0x80;
     
     if (hdmaActive && mode == 0)    // Se quiere parar el hdma manualmente
     {
@@ -262,7 +262,7 @@ void Memory::VRamDmaTransfer(BYTE value)
     {
         WORD src = (memory[HDMA1] << 8) | (memory[HDMA2] & 0xF0);           // valores entre 0000-7FF0 o A000-DFF0
         WORD dst = ((memory[HDMA3] & 0x1F) << 8) | (memory[HDMA4] & 0xF0);  // Valores entre 0x0000-0x1FF0
-        WORD length = ((memory[HDMA5] & 0x7F) + 1) * 0x10;                  // Valores entre 0x10-0x800
+        WORD length = ((value & 0x7F) + 1) * 0x10;                  // Valores entre 0x10-0x800
         
         if (mode == 0)  // Todo de golpe
         {
@@ -287,7 +287,7 @@ void Memory::VRamDmaTransfer(BYTE value)
         else
         {
             hdmaActive = true;
-            memory[HDMA5] &= 0x7F;  // Se pone a 0 el bit 7
+            memory[HDMA5] = value & 0x7F;  // Se pone a 0 el bit 7
         }
     }
 }
