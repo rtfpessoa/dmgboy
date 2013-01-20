@@ -400,7 +400,7 @@ void Video::GetColorPalette(BYTE palette[4][3], int address)
         BYTE data2 = mem->memory[address+1];
         
         palette[i][0] = data1 & 0x1F;
-        palette[i][1] = ((data2 & 0x07) << 2) | ((data1 & 0xE0) >> 5);
+        palette[i][1] = ((data2 & 0x03) << 3) | ((data1 & 0xE0) >> 5);
         palette[i][2] = (data2 & 0x7C) >> 2;
         
         palette[i][0] = palette[i][0] * 255 / 0x1F;
