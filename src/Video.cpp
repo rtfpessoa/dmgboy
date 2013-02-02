@@ -258,7 +258,7 @@ inline void Video::GetColor(VideoPixel * p)
 
 void Video::OrderOAM(int y)
 {
-	int ySprite, hSprite, address, numSpritesLine;
+	int ySprite, hSprite, address, numSprite;
 
 	orderedOAM.clear();
 
@@ -267,20 +267,35 @@ void Video::OrderOAM(int y)
 
 	hSprite = BIT2(mem->memory[LCDC]) ? 16 : 8;
     
-    numSpritesLine = 0;
-	for(address=0xFE00; address<0xFEA0; address+=0x04)
+    numSprite = 40;
+    for(address=0xFE9C; address>=0xFE00; address-=0x04)
 	{
 		ySprite = mem->memory[address];
 
 		ySprite -= 16;	//y en pantalla
 		if ((ySprite > y-hSprite) && (ySprite <= y))
         {
-				orderedOAM.insert(pair<int, int>(mem->memory[address+1], address));
-                numSpritesLine++;
-                if (numSpritesLine >= 10)
-                    return;
+            if (colorMode)
+                orderedOAM.insert(pair<int, int>(numSprite, address));
+            else
+                orderedOAM.insert(pair<int, int>(mem->memory[address+1], address));
         }
+        numSprite--;
 	}
+    
+    int size = orderedOAM.size();
+    if (size > 10)
+    {
+        numSprite = 0;
+        multimap<int, int>::iterator it;
+        for (it=orderedOAM.begin(); it!=orderedOAM.end(); it++)
+        {
+            numSprite++;
+            if (numSprite > 10)
+                break;
+        }
+        orderedOAM.erase(it, orderedOAM.end());
+    }
 }
 
 void Video::UpdateOAM(int y)
@@ -308,8 +323,8 @@ void Video::UpdateOAM(int y)
 	for (it=orderedOAM.rbegin(); it != orderedOAM.rend(); it++)
 	{
 		addressSprite = (*it).second;
-		ySprite = mem->memory[addressSprite] - 16;	//=mem->MemR(dirSprite + 0);
-		xSprite = (*it).first - 8;				//=mem->MemR(dirSprite + 1);
+		ySprite = mem->memory[addressSprite+0] - 16;
+		xSprite = mem->memory[addressSprite+1] - 8;
 		if (xSprite == -8)
 			continue;
 		tileNumber = mem->memory[addressSprite + 2];
