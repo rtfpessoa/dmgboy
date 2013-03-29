@@ -41,7 +41,9 @@ private:
 	Memory *mem;
     bool colorMode;
 	std::multimap<int, int> orderedOAM;	//posicion x, dir. memoria
-	int indexColorsBGWnd[GB_SCREEN_W][GB_SCREEN_H];	//Indice de color en pantalla pintadas por background y window
+    //  -1 = BGWnd attribute = 1
+    // >=0 = BGWnd attribute = 0 (indica el color del pixel)
+	int stateBGWnd[GB_SCREEN_W][GB_SCREEN_H];
 	IGBScreenDrawable * screen;
 	VideoPixel * pixel;
 public:

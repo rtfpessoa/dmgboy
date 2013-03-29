@@ -86,9 +86,9 @@ void Video::UpdateBG(int y)
 	valueLCDC = mem->memory[LCDC];
 	valueSCX = mem->memory[SCX];
 
-	display = BIT7(valueLCDC) && BIT0(valueLCDC);
+	display = BIT7(valueLCDC);
 	
-	//Si el LCD o Background desactivado
+	//Si el LCD desactivado
 	//pintamos la linea de blanco o negro
 	if (!display && screen)
 	{
@@ -120,6 +120,7 @@ void Video::UpdateBG(int y)
 	else if (yScrolled > 255)
 		yScrolled -= 256;
 	
+    pixel->y = y;
 	pixel->yTile = yScrolled % 8;
 	pixel->rowMap = (yScrolled/8 * 32);
 	
@@ -141,7 +142,6 @@ void Video::UpdateBG(int y)
             else
                 screen->OnDrawPixel(pixel->color, x, y);
         }
-		indexColorsBGWnd[x][y] = pixel->indexColor;
 	}
 }
 
@@ -197,13 +197,12 @@ void Video::UpdateWin(int y)
             else
                 screen->OnDrawPixel(pixel->color, x, y);
         }
-		indexColorsBGWnd[x][y] = pixel->indexColor;
 	}
 }
 
 inline void Video::GetColor(VideoPixel * p)
 {
-	int xTile, line[2], addressIdTile, addressTile, mapAttributes, yTile, idMapTile;
+	int xTile, line[2], addressIdTile, addressTile, mapAttributes, yTile, idMapTile, bgPriority;
     BYTE colorPalette[4][3];
 	
     idMapTile = p->rowMap + p->xScrolled/8;
@@ -219,6 +218,7 @@ inline void Video::GetColor(VideoPixel * p)
 		addressTile = 0x8000 + mem->memory[addressIdTile]*16;
 	}
     
+    bgPriority = 0;
     xTile = p->xScrolled % 8;
     yTile = p->yTile;
     if (colorMode)
@@ -232,6 +232,7 @@ inline void Video::GetColor(VideoPixel * p)
             xTile = ABS(xTile - 7);
         if (BIT6(mapAttributes))    // Flip y
             yTile = ABS(yTile - 7);
+        bgPriority = BIT7(mapAttributes);
         
         int numPalette = mapAttributes & 0x07;
         GetColorPalette(colorPalette, BGP_OFFSET + (numPalette*8));
@@ -254,6 +255,11 @@ inline void Video::GetColor(VideoPixel * p)
     }
     else
         p->color = p->palette[p->indexColor];
+    
+    if (bgPriority)
+        stateBGWnd[pixel->x][pixel->y] = -1;
+    else
+        stateBGWnd[pixel->x][pixel->y] = pixel->indexColor;
 }
 
 void Video::OrderOAM(int y)
@@ -301,7 +307,7 @@ void Video::OrderOAM(int y)
 void Video::UpdateOAM(int y)
 {
 	int x, xSprite, numSpritesLine, xBeg;
-	int attrSprite, xTile, yTile, xFlip, yFlip, countX, countY, behind, mode16, ySprite;
+	int attrSprite, xTile, yTile, xFlip, yFlip, countX, countY, spritePriority, mode16, ySprite;
 	int addressSprite, tileNumber, addressTile;
 	int color;
 	int palette0[4], palette1[4];
@@ -335,7 +341,7 @@ void Video::UpdateOAM(int y)
 		addressTile = 0x8000 + tileNumber*16;
 		xFlip = BIT5(attrSprite);
 		yFlip = BIT6(attrSprite);
-		behind = BIT7(attrSprite);
+		spritePriority = BIT7(attrSprite);
         
         if (colorMode)
         {
@@ -375,9 +381,26 @@ void Video::UpdateOAM(int y)
 			//Un pixel lo componen 2 bits. Seleccionar la posicion del bit en los dos bytes (line[0] y line[1])
 			//Esto devolvera un numero de color que junto a la paleta de color nos dara el color requerido
 			BYTE index = (((line[1] & (1 << pixX)) >> pixX) << 1) | ((line[0] & (1 << pixX)) >> pixX);
-
+            
+            bool paintSprite = (BIT0(mem->memory[LCDC]) == 0);
+            if (!paintSprite) {
+                int bgColor = stateBGWnd[xSprite + countX][ySprite + countY];
+                bool bgPriority = (bgColor == -1);
+                if (bgPriority)
+                    paintSprite = false;
+                else {
+                    if (spritePriority) {
+                        if (bgColor == 0)
+                            paintSprite = true;
+                        else
+                            paintSprite = false;
+                    }
+                    else
+                        paintSprite = true;
+                }
+            }
 			//El 0 es transparente (no pintar)
-			if ((index) && ((!behind) || (!indexColorsBGWnd[xSprite + countX][ySprite + countY])))
+			if (paintSprite && (index > 0))
 			{
                 if (colorMode) {
                     BYTE r = colorPalette[index][0];
