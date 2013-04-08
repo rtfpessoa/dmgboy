@@ -326,11 +326,19 @@ void Memory::UpdateHDMA()
 void Memory::SaveMemory(ofstream * file)
 {
 	file->write((char *)&memory[0x8000], 0x8000);
+    if (colorMode) {
+        file->write((char *)&hdmaActive, sizeof(hdmaActive));
+        file->write((char *)&memory[WRAM_OFFSET], SIZE_MEM - WRAM_OFFSET);
+    }
 }
 
 void Memory::LoadMemory(ifstream * file)
 {
 	file->read((char *)&memory[0x8000], 0x8000);
+    if (colorMode) {
+        file->read((char *)&hdmaActive, sizeof(hdmaActive));
+        file->read((char *)&memory[WRAM_OFFSET], SIZE_MEM - WRAM_OFFSET);
+    }
 	if (s)
 	{
 		for (int dir=0xFF10; dir<0xFF40; dir++)

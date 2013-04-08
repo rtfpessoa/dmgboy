@@ -1200,7 +1200,7 @@ void CPU::LoadState(string loadDirectory, int numSlot)
 		{
 			file->close();
 			delete file;
-			throw GBException("This filesave does not correspond to this rom and can't be loaded.");
+			throw GBException("This filesave does not belong to this rom and can't be loaded.");
 		}
 		
 		LoadRegs(file);
