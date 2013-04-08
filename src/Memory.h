@@ -44,7 +44,7 @@ protected:
 	Sound * s;
     CPU * cpu;
     bool colorMode;
-    WORD hdmaActive;
+    bool hdmaActive;
 private:
     BYTE *wRam;
     BYTE *vRam;
