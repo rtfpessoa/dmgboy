@@ -42,7 +42,7 @@ Cartridge::Cartridge(string fileName, string batteriesPath)
 		this->_romSize = (unsigned long)size;
 		_memCartridge = new BYTE [size];
 		file.seekg (0, ios::beg);
-		file.read ((char *)_memCartridge, size);
+		file.read((char *)_memCartridge, (streamsize)size);
 		file.close();
 
 		cout << fileName << ":\nFile loaded in memory correctly" << endl;

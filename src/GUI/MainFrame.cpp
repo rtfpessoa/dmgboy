@@ -16,8 +16,14 @@
  */
 
 #include <string>
+#include <math.h>
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
+#include <wx/msgdlg.h>
+#include <wx/menu.h>
+#include <wx/filedlg.h>
+#include <wx/button.h>
+#include <wx/settings.h>
 #include "MainFrame.h"
 #include "AboutDialog.h"
 #include "SettingsDialog.h"
@@ -36,8 +42,6 @@
 #include "EmulationThread.h"
 
 using namespace std;
-
-IMPLEMENT_CLASS(MainFrame, wxFrame)
 
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 EVT_MENU(wxID_EXIT, MainFrame::OnFileExit)
@@ -59,29 +63,25 @@ EVT_UPDATE_UI( ID_STOP, MainFrame::OnStopUpdateUI )
 EVT_UPDATE_UI( ID_FULLSCREEN, MainFrame::OnFullScreenUpdateUI )
 EVT_UPDATE_UI_RANGE(ID_LOADSTATE0, ID_LOADSTATE9, MainFrame::OnLoadStateUpdateUI)
 EVT_UPDATE_UI_RANGE(ID_SAVESTATE0, ID_SAVESTATE9, MainFrame::OnSaveStateUpdateUI)
-EVT_LEFT_DCLICK(MainFrame::OnDoubleClick)
 EVT_COMMAND(wxID_ANY, wxEVT_RENDERER_REFRESHSCREEN, MainFrame::OnRefreshScreen)
 EVT_TIMER(ID_TIMER, MainFrame::OnTimer)
 EVT_CLOSE(MainFrame::OnClose)
+EVT_SIZE(MainFrame::OnResize)
+EVT_MAXIMIZE(MainFrame::OnMaximize)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(wxString fileName)
 {
     // Create the MainFrame
-#ifdef __WXGTK__
-    // En linux parece ser que no permitir modificar el tamaño del frame al usuario
-    // afecta a los posteriores redimensionados por codigo
     this->Create(0, ID_MAINFRAME, wxT(APP_NAME), wxDefaultPosition,
-           wxDefaultSize, wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX);
-#else
-    this->Create(0, ID_MAINFRAME, wxT(APP_NAME), wxDefaultPosition,
-           wxDefaultSize, wxCAPTION | wxSYSTEM_MENU |
-           wxMINIMIZE_BOX | wxCLOSE_BOX | wxCLIP_CHILDREN);
-#endif
+           wxDefaultSize, wxDEFAULT_FRAME_STYLE);
+    
 	wxIconBundle * icons = new wxIconBundle(wxIcon(gb16_xpm));
 	icons->AddIcon(wxIcon(gb32_xpm));
 	this->SetIcons(*icons);
 
+    mainSizer = new wxBoxSizer(wxVERTICAL);
+    
     this->CreateMenuBar();
 	this->CreateToolBar();
 	
@@ -92,7 +92,7 @@ MainFrame::MainFrame(wxString fileName)
 	settingsDialog->LoadFromFile();
 	SettingsSetNewValues(settingsDialog->settings);
 	this->CreateRecentMenu(SettingsGetRecentRoms());
-	
+
     // create the emulation
     emulation = new EmulationThread();
     
@@ -113,6 +113,8 @@ MainFrame::MainFrame(wxString fileName)
 		
     timer = new wxTimer(this, ID_TIMER);
 	timer->Start(16);
+    
+    SetSizerAndFit(mainSizer);
 }
 
 MainFrame::~MainFrame()
@@ -187,30 +189,37 @@ void MainFrame::CreateMenuBar()
 void MainFrame::CreateToolBar()
 {
 
-	toolBar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxNO_BORDER);
+	toolBar = new wxToolBar(this, wxID_ANY);
+    
+    //toolBar->AddStretchableSpace();
+    
 	wxBitmap bmpOpen(open_xpm);
-	toolBar->AddTool(wxID_OPEN, bmpOpen, wxT("Open"));
+	toolBar->AddTool(wxID_OPEN, wxT("Open"), bmpOpen);
 	
 	wxBitmap bmpRecent(recent_xpm);
-	toolBar->AddTool(ID_OPEN_RECENT, bmpRecent, wxT("Recent"));
+	toolBar->AddTool(ID_OPEN_RECENT, wxT("Recent"), bmpRecent);
 
 	toolBar->AddSeparator();
 
 	wxBitmap bmpPlay(play_xpm);
-	toolBar->AddTool(ID_START, bmpPlay, wxT("Start"));
+	toolBar->AddTool(ID_START, wxT("Start"), bmpPlay);
 
 	wxBitmap bmpPause(pause_xpm);
-	toolBar->AddTool(ID_PAUSE, bmpPause, wxT("Pause"));
+	toolBar->AddTool(ID_PAUSE, wxT("Pause"), bmpPause);
 
 	wxBitmap bmpStop(stop_xpm);
-	toolBar->AddTool(ID_STOP, bmpStop, wxT("Stop"));
+	toolBar->AddTool(ID_STOP, wxT("Stop"), bmpStop);
 	
 	toolBar->EnableTool(ID_START, false);
 	toolBar->EnableTool(ID_PAUSE, false);
 	toolBar->EnableTool(ID_STOP, false);
 
-	toolBar->Realize();
-	this->SetToolBar(toolBar);
+    //toolBar->AddStretchableSpace();
+    
+	
+    //SetToolBar(toolBar);
+    toolBar->Realize();
+    mainSizer->Add(toolBar, 0, wxEXPAND);
 }
 
 void MainFrame::OnRecent(wxCommandEvent &event)
@@ -441,7 +450,7 @@ void MainFrame::OnSettings(wxCommandEvent &)
         {
             if (renderer)
                 renderer->ChangeSize();
-            this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
+            //this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
         }
 		emulation->ApplySettings();
 	}
@@ -455,7 +464,9 @@ void MainFrame::ChangeRenderer()
     
     if (renderer)
     {
-        ((wxWindow *)renderer->GetWinRenderer())->Destroy();
+        wxWindow *window = renderer->GetWinRenderer();
+        mainSizer->Detach(window);
+        window->Destroy();
     }
     
     if (typeRenderer == 0)
@@ -467,11 +478,10 @@ void MainFrame::ChangeRenderer()
         renderer = new RendererOGL(this);
     }
     
-    // Redimensionar el frame para que el dibujado se realize correctamente
-    this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom()+1, GB_SCREEN_H*SettingsGetWindowZoom()+1);
-    this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
-    
     emulation->SetScreen(renderer);
+    
+    mainSizer->Add(renderer->GetWinRenderer(), 1, wxEXPAND);
+    mainSizer->Layout();
 }
 
 void MainFrame::OnFullScreen(wxCommandEvent &)
@@ -566,7 +576,7 @@ void MainFrame::ToggleFullScreen()
     if (!fullScreen)
     {
         renderer->ChangeSize();
-        this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
+        renderer->GetWinRenderer()->SetClientSize(lastWidth, lastHeight);
     }
 }
 
@@ -574,4 +584,49 @@ void MainFrame::OnTimer(wxTimerEvent &event)
 {
     renderer->OnRefreshScreen();
     emulation->UpdatePad();
+}
+
+void MainFrame::OnResize(wxSizeEvent &event)
+{
+    wxSize clientSize = this->GetClientSize();
+    wxSize imageSize = clientSize;
+    imageSize.y -= 24;
+    
+    float aspectRatio = (float)GB_SCREEN_W / GB_SCREEN_H;
+
+    int magneticBorder = 20;
+    int mod = imageSize.x % GB_SCREEN_W;
+    
+    if (mod < magneticBorder)
+        imageSize.x -= mod;
+    else if (mod > (GB_SCREEN_W-magneticBorder))
+        imageSize.x += (GB_SCREEN_W-mod);
+    
+    imageSize.y = imageSize.x / aspectRatio;
+    
+    if (imageSize.y > wxSystemSettings::GetMetric(wxSYS_SCREEN_Y)-(24+22))
+        imageSize.y = wxSystemSettings::GetMetric(wxSYS_SCREEN_Y)-(24+22);
+    
+    if (!IsFullScreen())
+        this->SetClientSize(wxSize(imageSize.x, imageSize.y+24));
+    
+    this->Layout();
+}
+
+void MainFrame::OnMaximize(wxMaximizeEvent &event) {
+    static int width=0, height=0;
+    
+    printf("%d, %d\n", width, height);
+    
+    if (IsMaximized()) {
+        printf("SetSize()\n");
+        SetSize(width, height);
+    }
+    else {
+        printf("GetSize()\n");
+        GetSize(&width, &height);
+        //-->Maximize();
+    }
+    
+    //event.Skip(true);
 }

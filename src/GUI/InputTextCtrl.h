@@ -20,17 +20,18 @@
 
 #define NUM_KEYNAMES 1024
 
-#include <wx/wx.h>
+#include <wx/textctrl.h>
 
 class InputTextCtrl: public wxTextCtrl
 {
-	DECLARE_CLASS(InputTextCtrl)
-	DECLARE_EVENT_TABLE()
-	
 public:
 	int keyCode;
 	InputTextCtrl(wxWindow* parent, wxWindowID id);
 	void OnChangeKey(int keyCode);
+    
+protected:
+	DECLARE_EVENT_TABLE()
+    
 private:
 	static wxString keyNames[NUM_KEYNAMES];
 	static bool keyNamesInitialized;

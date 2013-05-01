@@ -66,6 +66,7 @@ wxWindow * RendererBase::GetWinRenderer()
 
 void RendererBase::SetWinRenderer(wxWindow * parent, wxWindow *renderer)
 {
+    renderer->SetMinSize(wxSize(GB_SCREEN_W, GB_SCREEN_H));
 	this->winRenderer = renderer;
 	renderer->SetDropTarget(new DnDFile(parent));
     //renderer->SetCursor( wxCursor( wxCURSOR_BLANK ) ); 
@@ -95,7 +96,7 @@ void RendererBase::ChangeSize()
 	wxSize size(GB_SCREEN_W*zoom, GB_SCREEN_H*zoom);
 	if (winRenderer)
 	{
-		winRenderer->SetClientSize(size);
+		//winRenderer->SetClientSize(size);
 	}
 }
 

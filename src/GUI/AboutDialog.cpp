@@ -15,7 +15,10 @@
  along with DMGBoy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <wx/wx.h>
+#include <wx/sizer.h>
+#include <wx/stattext.h>
+#include <wx/statbmp.h>
+#include <wx/button.h>
 #include <wx/hyperlink.h>   // hyperlink support
 #ifdef __WXMSW__
 #include "SDL.h"

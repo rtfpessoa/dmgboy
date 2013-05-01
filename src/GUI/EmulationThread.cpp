@@ -19,6 +19,7 @@
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 #include <wx/stdpaths.h>
+#include <wx/msgdlg.h>
 #include "../Pad.h"
 #include "../Sound.h"
 #include "../Video.h"

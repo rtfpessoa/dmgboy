@@ -18,16 +18,12 @@
 #ifndef __SETTINGSDIALOG_H__
 #define __SETTINGSDIALOG_H__
 
-#include <wx/wx.h>
 #include <wx/propdlg.h>
 #include <wx/imaglist.h>
 #include "../Settings.h"
 
 class SettingsDialog: public wxPropertySheetDialog
 {
-	DECLARE_CLASS(SettingsDialog)
-	DECLARE_EVENT_TABLE()
-	
 private:
 	bool TransferDataToWindow();
 	bool TransferDataFromWindow();
@@ -35,6 +31,9 @@ private:
 	wxPanel* CreateVideoSettingsPage(wxWindow* parent);
 	wxPanel* CreateSoundSettingsPage(wxWindow* parent);
 	wxPanel* CreateInputSettingsPage(wxWindow* parent);
+
+protected:
+	DECLARE_EVENT_TABLE()
 	
 public:
     SettingsDialog(wxWindow* parent);

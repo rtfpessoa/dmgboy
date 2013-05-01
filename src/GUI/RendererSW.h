@@ -18,7 +18,7 @@
 #ifndef __RENDERERSW_H__
 #define __RENDERERSW_H__
 
-#include <wx/wx.h>
+#include <wx/panel.h>
 #include "RendererBase.h"
 
 /*******************************************************************************
@@ -26,12 +26,13 @@
  *******************************************************************************/
 
 class RendererSW : public wxPanel, public RendererBase {
-    DECLARE_CLASS(RendererSW)
-    DECLARE_EVENT_TABLE()
 
 private:
 	void OnPaint(wxPaintEvent &);
     void OnEraseBackground(wxEraseEvent &);
+    
+protected:
+	DECLARE_EVENT_TABLE()
     
 public:
 	RendererSW(wxWindow *parent);

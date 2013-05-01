@@ -289,6 +289,8 @@ void Video::OrderOAM(int y)
         numSprite--;
 	}
     
+// Habilitar para permitir solo 10 tiles por linea (asi es como funciona en la realidad)
+#if (0)
     int size = orderedOAM.size();
     if (size > 10)
     {
@@ -302,6 +304,7 @@ void Video::OrderOAM(int y)
         }
         orderedOAM.erase(it, orderedOAM.end());
     }
+#endif
 }
 
 void Video::UpdateOAM(int y)

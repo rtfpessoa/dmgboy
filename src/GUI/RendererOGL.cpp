@@ -15,7 +15,8 @@
  along with DMGBoy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "wx/wx.h"
+#include <wx/setup.h>
+#include <wx/dcclient.h>
 
 #if !wxUSE_GLCANVAS
 #error "OpenGL required: set wxUSE_GLCANVAS to 1 and rebuild the library"
@@ -28,6 +29,7 @@
 #endif
 
 #include "RendererOGL.h"
+#include "MainFrame.h"
 #include "../Settings.h"
 #include "../Def.h"
 
@@ -37,34 +39,31 @@
 /*----------------------------------------------------------------
  Implementation of RendererOGL
  -----------------------------------------------------------------*/
-IMPLEMENT_CLASS(RendererOGL, wxGLCanvas)
 
 BEGIN_EVENT_TABLE(RendererOGL, wxGLCanvas)
 EVT_SIZE(RendererOGL::OnSize)
 EVT_PAINT(RendererOGL::OnPaint)
 EVT_ERASE_BACKGROUND(RendererOGL::OnEraseBackground)
 EVT_LEFT_DCLICK(RendererOGL::OnDoubleClick)
+EVT_KEY_DOWN(RendererOGL::OnKeyPressed)
 END_EVENT_TABLE()
+
+void RendererOGL::OnKeyPressed(wxKeyEvent &ev)
+{
+    
+}
 
 int attribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
 
-RendererOGL::RendererOGL(wxWindow *parent, wxWindowID id,
+RendererOGL::RendererOGL(MainFrame *parent, wxWindowID id,
 						   const wxPoint& pos, const wxSize& size, long style, const wxString& name)
-// Debido a una incoherencia en el API de wxWidgets hay que realizar dos codigos distintos, uno para
-// mac y otro para linux y windows
-#ifndef __WXMAC__
 : wxGLCanvas(parent, id, attribList, pos, size, style|wxFULL_REPAINT_ON_RESIZE, name)
-#else
-: wxGLCanvas(parent, (wxGLCanvas*) NULL, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name)
-#endif
 {
     initialized = false;
-    windowParent = parent;
+    this->parent = parent;
     m_gllist = 0;
-	fov = 50.0;
-#ifndef __WXMAC__
+	fov = 50.0f;
     glContext = NULL;
-#endif
 
 	SetWinRenderer(parent, this);
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
@@ -72,9 +71,7 @@ RendererOGL::RendererOGL(wxWindow *parent, wxWindowID id,
 
 RendererOGL::~RendererOGL()
 {
-#ifndef __WXMAC__
     delete glContext;
-#endif
 }
 
 
@@ -93,12 +90,28 @@ void RendererOGL::Render()
     }
 	
     // set GL viewport
-    int winW, winH, w, x;
+    int winW, winH, w, h, x, y;
     GetClientSize(&winW, &winH);
     
-    w = winH * GB_SCREEN_W / GB_SCREEN_H;
-    x = (winW - w) / 2;
-    glViewport(x, 0, (GLint) w, (GLint) winH);
+    float gbAspectRatio = (float)GB_SCREEN_W / GB_SCREEN_H;
+    float wAspectRatio = (float)winW / winH;
+    
+    if (gbAspectRatio < wAspectRatio)
+    {
+        w = winH * gbAspectRatio;
+        h = winH;
+        x = (winW - w) / 2;
+        y = 0;
+    }
+    else
+    {
+        w = winW;
+        h = winW / gbAspectRatio;
+        x = 0;
+        y = (winH - h) / 2;
+    }
+    
+    glViewport(x, y, (GLint) w, (GLint) h);
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -154,7 +167,7 @@ void RendererOGL::Render()
     {
 		static float rot = 0;
 		float radFov = fov * PI / 180.0f;
-		float dist = ((float)GB_SCREEN_H/2.0f) / tan(radFov/2.0f); 
+		float dist = (GB_SCREEN_H/2.0f) / (float)tan(radFov/2.0f);
 		
 		glLoadIdentity();
 		
@@ -162,7 +175,7 @@ void RendererOGL::Render()
 		//glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
 		//glRotatef(-rot, 0.0f, 1.0f, 0.0f);
 		
-		rot+=1.0;
+		rot+=1.0f;
 		
         glCallList(m_gllist);
     }
@@ -209,20 +222,12 @@ void RendererOGL::InitGL()
 
 void RendererOGL::SetGLContext()
 {
-    
-#ifndef __WXMAC__
     if (!glContext)
         glContext = new wxGLContext(this, NULL);
     SetCurrent(*glContext);
-#else
-    if (!GetContext())
-        return;
-    else
-        SetCurrent();
-#endif
 }
 
 void RendererOGL::OnDoubleClick(wxMouseEvent &event)
 {
-    this->windowParent->ProcessEvent(event);
+    parent->OnDoubleClick(event);
 }

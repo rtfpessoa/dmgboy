@@ -28,27 +28,15 @@
 
 #if wxUSE_GLCANVAS
 
+class MainFrame;
+
 class RendererOGL: public wxGLCanvas, public RendererBase {
-	DECLARE_CLASS(RendererOGL)
-	DECLARE_EVENT_TABLE()
-	
-private:
-    bool initialized;
-	wxWindow * windowParent;
-#ifndef __WXMAC__
-    wxGLContext * glContext;
-#endif
-    GLuint m_gllist;
-	float fov;
-	
-	void InitGL();
-    void SetGLContext();
-	
+
 public:
-    RendererOGL( wxWindow *parent, wxWindowID id = wxID_ANY,
-				 const wxPoint& pos = wxDefaultPosition,
-				 const wxSize& size = wxDefaultSize,
-				 long style = 0, const wxString& name = _T("OGLRenderer") );
+    RendererOGL( MainFrame *parent, wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0, const wxString& name = _T("OGLRenderer") );
     
     ~RendererOGL();
 	
@@ -56,8 +44,22 @@ public:
     void OnSize(wxSizeEvent&);
     void OnEraseBackground(wxEraseEvent&);
     void OnDoubleClick(wxMouseEvent&);
+    void OnKeyPressed(wxKeyEvent &);
 	
     void Render();
+	
+protected:
+	DECLARE_EVENT_TABLE()
+    
+private:
+    bool initialized;
+	MainFrame *parent;
+    wxGLContext * glContext;
+    GLuint m_gllist;
+	float fov;
+	
+	void InitGL();
+    void SetGLContext();
 };
 
 #endif // #if wxUSE_GLCANVAS

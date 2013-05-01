@@ -18,7 +18,8 @@
 #ifndef __EMULATIONTHREAD_H__
 #define __EMULATIONTHREAD_H__
 
-#include <wx/wx.h>
+#include <wx/thread.h>
+#include <wx/stopwatch.h>
 
 enum enumEmuStates { NotStartedYet, Stopped, Paused, Playing };
 

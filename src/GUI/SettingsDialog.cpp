@@ -18,6 +18,11 @@
 #include <wx/artprov.h>
 #include <wx/bookctrl.h>
 #include <wx/spinctrl.h>
+#include <wx/radiobox.h>
+#include <wx/choice.h>
+#include <wx/checkbox.h>
+#include <wx/stattext.h>
+#include <wx/sizer.h>
 #include <wx/config.h>
 #include <wx/fileconf.h>
 #include <wx/stdpaths.h>
@@ -27,8 +32,6 @@
 #include "InputTextCtrl.h"
 #include "../Pad.h"
 
-
-IMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog)
 
 BEGIN_EVENT_TABLE(SettingsDialog, wxPropertySheetDialog)
 END_EVENT_TABLE()

@@ -18,6 +18,8 @@
 #ifndef __ABOUTDIALOG_H__
 #define __ABOUTDIALOG_H__
 
+#include <wx/dialog.h>
+
 class AboutDialog: public wxDialog {
 	
 public:

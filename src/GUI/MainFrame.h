@@ -20,7 +20,9 @@
 
 #define MAX_RECENT_FILES 10
 
-#include <wx/wx.h>
+#include <wx/frame.h>
+#include <wx/timer.h>
+#include <wx/sizer.h>
 #include "../Def.h"
 
 class RendererBase;
@@ -38,8 +40,19 @@ struct RecentFile
  *******************************************************************************/
 
 class MainFrame : public wxFrame {
-    DECLARE_CLASS(MainFrame)
-    DECLARE_EVENT_TABLE()
+public:
+	
+    /**
+     * Creates a new MainFrame.
+     */
+    MainFrame(wxString fileName);
+	~MainFrame();
+	
+	void ChangeFile(const wxString fileName);
+    void OnDoubleClick(wxMouseEvent &event);
+    
+protected:
+	DECLARE_EVENT_TABLE()
     
 private:
 	wxMenuBar *mb;
@@ -47,11 +60,13 @@ private:
 	wxMenu *recentMenuPopup;
 	wxToolBar* toolBar;
 	wxTimer * timer;
+    wxBoxSizer *mainSizer;
     bool fullScreen;
     RendererBase *renderer;
     int typeRenderer;
 	SettingsDialog * settingsDialog;
     EmulationThread * emulation;
+    int lastWidth, lastHeight;
 	
 	RecentFile recentFiles[MAX_RECENT_FILES];
 	int numRecentFiles;
@@ -78,7 +93,6 @@ private:
 	void OnLoadStateUpdateUI(wxUpdateUIEvent& event);
 	void OnSaveStateUpdateUI(wxUpdateUIEvent& event);
     void OnFullScreenUpdateUI(wxUpdateUIEvent& event);
-    void OnDoubleClick(wxMouseEvent &event);
     void OnRefreshScreen(wxCommandEvent& evt);
     void OnTimer(wxTimerEvent &event);
 	void CreateMenuBar();
@@ -88,18 +102,9 @@ private:
 	void UpdateRecentMenu(wxString fileName);
     void ToggleFullScreen();
     void ChangeRenderer();
-	
 	void OnClose(wxCloseEvent&);
-    
-public:
-	
-    /**
-     * Creates a new MainFrame.
-     */
-    MainFrame(wxString fileName);
-	~MainFrame();
-	
-	void ChangeFile(const wxString fileName);
+    void OnResize(wxSizeEvent &event);
+    void OnMaximize(wxMaximizeEvent &event);
 };
 
 #endif

@@ -15,9 +15,9 @@
  along with DMGBoy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "InputTextCtrl.h"
 
-IMPLEMENT_CLASS(InputTextCtrl, wxTextCtrl)
 BEGIN_EVENT_TABLE(InputTextCtrl, wxTextCtrl)
 	EVT_KEY_DOWN(InputTextCtrl::OnKeyDown)
 END_EVENT_TABLE()
@@ -192,8 +192,8 @@ void InputTextCtrl::InitializeKeyNames()
 	InputTextCtrl::keyNames[WXK_SCROLL]		= wxT("ScrollLock");
 	InputTextCtrl::keyNames[WXK_PAGEUP]		= wxT("PageUp");
 	InputTextCtrl::keyNames[WXK_PAGEDOWN]	= wxT("PageDown");
-	InputTextCtrl::keyNames[WXK_PRIOR]		= wxT("PageUp");
-	InputTextCtrl::keyNames[WXK_NEXT]		= wxT("PageDown");
+	//InputTextCtrl::keyNames[WXK_PRIOR]		= wxT("PageUp");
+	//InputTextCtrl::keyNames[WXK_NEXT]		= wxT("PageDown");
 	
 	InputTextCtrl::keyNames[WXK_NUMPAD_SPACE]		= wxT("Numpad Space");
 	InputTextCtrl::keyNames[WXK_NUMPAD_TAB]			= wxT("Numpad Tab");
@@ -209,8 +209,8 @@ void InputTextCtrl::InitializeKeyNames()
 	InputTextCtrl::keyNames[WXK_NUMPAD_DOWN]		= wxT("Numpad Down");
 	InputTextCtrl::keyNames[WXK_NUMPAD_PAGEUP]		= wxT("Numpad PageUp");
 	InputTextCtrl::keyNames[WXK_NUMPAD_PAGEDOWN]	= wxT("Numpad PageDown");
-	InputTextCtrl::keyNames[WXK_NUMPAD_PRIOR]		= wxT("Numpad PageUp");
-	InputTextCtrl::keyNames[WXK_NUMPAD_NEXT]		= wxT("Numpad PageDown");
+	//InputTextCtrl::keyNames[WXK_NUMPAD_PRIOR]		= wxT("Numpad PageUp");
+	//InputTextCtrl::keyNames[WXK_NUMPAD_NEXT]		= wxT("Numpad PageDown");
 	InputTextCtrl::keyNames[WXK_NUMPAD_END]			= wxT("Numpad End");
 	InputTextCtrl::keyNames[WXK_NUMPAD_BEGIN]		= wxT("Numpad Begin");
 	InputTextCtrl::keyNames[WXK_NUMPAD_INSERT]		= wxT("Numpad Insert");

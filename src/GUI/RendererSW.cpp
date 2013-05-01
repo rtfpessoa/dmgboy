@@ -24,8 +24,6 @@
 
 inline void RendererSW::OnEraseBackground(wxEraseEvent &) { /* do nothing */ }
 
-IMPLEMENT_CLASS(RendererSW, wxPanel)
-
 BEGIN_EVENT_TABLE(RendererSW, wxPanel)
 EVT_PAINT(RendererSW::OnPaint)
 EVT_ERASE_BACKGROUND(RendererSW::OnEraseBackground)

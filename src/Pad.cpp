@@ -15,7 +15,8 @@
  along with DMGBoy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <wx/wx.h>
+#include <wx/defs.h>
+#include <wx/utils.h>
 #include <iostream>
 #include "GBException.h"
 #include "Pad.h"

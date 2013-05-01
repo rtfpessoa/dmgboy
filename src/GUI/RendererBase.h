@@ -18,7 +18,6 @@
 #ifndef __BASERENDERER_H__
 #define __BASERENDERER_H__
 
-#include <wx/wx.h>
 #include <wx/dnd.h>
 #include "../Def.h"
 #include "../IGBScreenDrawable.h"

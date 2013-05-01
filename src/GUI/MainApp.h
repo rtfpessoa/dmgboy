@@ -18,8 +18,7 @@
 #ifndef __MAINAPP_H__
 #define __MAINAPP_H__
 
-#include <wx/wx.h>
-#undef main
+#include <wx/app.h>
 
 class MainFrame;
 /*******************************************************************************
@@ -27,7 +26,6 @@ class MainFrame;
  *******************************************************************************/
 
 class MainApp : public wxApp {
-    DECLARE_CLASS(MainApp)
     
 private:
     MainFrame *frame;
@@ -56,5 +54,7 @@ public:
 	
 	void MacOpenFile(const wxString &fileName);
 };
+
+DECLARE_APP(MainApp)
 
 #endif
