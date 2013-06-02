@@ -98,11 +98,11 @@ MainFrame::MainFrame(wxString fileName)
     
     wxThreadError err = emulation->Create();
     if (err != wxTHREAD_NO_ERROR)
-        wxMessageBox( _("Couldn't create thread!") );
+        wxMessageBox("Couldn't create thread!");
     
     err = emulation->Run();
     if (err != wxTHREAD_NO_ERROR)
-        wxMessageBox( _("Couldn't run thread!") );
+        wxMessageBox("Couldn't run thread!");
     
     fullScreen = false;
     renderer = NULL;
@@ -130,18 +130,18 @@ void MainFrame::CreateMenuBar()
 
     // create the file menu
     wxMenu *fileMenu = new wxMenu;
-	fileMenu->Append(wxID_OPEN, wxT("&Open\tCtrl+O"));
+	fileMenu->Append(wxID_OPEN, _("&Open")+wxT("\tCtrl+O"));
 	
 	recentMenuFile = new wxMenu;
 	recentMenuFile->AppendSeparator();
-	recentMenuFile->Append(ID_CLEAR_RECENT, wxT("Clear recent roms"));
-	fileMenu->AppendSubMenu(recentMenuFile, wxT("Open Recent"));
+	recentMenuFile->Append(ID_CLEAR_RECENT, _("Clear recent roms"));
+	fileMenu->AppendSubMenu(recentMenuFile, _("Open Recent"));
 	
 	// Se crea un wxMenu que se tratará exactamente igual que a recentMenuFile
 	// para poder tener uno en el menuBar y otro como popUp
 	recentMenuPopup = new wxMenu;
 	recentMenuPopup->AppendSeparator();
-	recentMenuPopup->Append(ID_CLEAR_RECENT, wxT("Clear recent roms"));
+	recentMenuPopup->Append(ID_CLEAR_RECENT, _("Clear recent roms"));
 	
 	wxMenu * loadMenuFile = new wxMenu;
 	wxMenu * saveMenuFile = new wxMenu;
@@ -156,31 +156,31 @@ void MainFrame::CreateMenuBar()
 		slotMenu << wxT("Slot ") << id << wxT("\tCtrl+") << id;
 		saveMenuFile->Append(ID_SAVESTATE0+id, slotMenu);
 	}
-	fileMenu->AppendSubMenu(loadMenuFile, wxT("Load State"));
-	fileMenu->AppendSubMenu(saveMenuFile, wxT("Save State"));
+	fileMenu->AppendSubMenu(loadMenuFile, _("Load State"));
+	fileMenu->AppendSubMenu(saveMenuFile, _("Save State"));
 	
-	fileMenu->Append(wxID_EXIT, wxT("E&xit"));
+	fileMenu->Append(wxID_EXIT, _("E&xit"));
 
     // add the file menu to the menu bar
-    mb->Append(fileMenu, wxT("&File"));
+    mb->Append(fileMenu, _("&File"));
 
 	// create the emulation menu
     wxMenu *emulationMenu = new wxMenu;
-	emulationMenu->Append(wxID_PREFERENCES, wxT("&Settings\tCtrl+E"));
-    emulationMenu->Append(ID_START, wxT("&Start\tCtrl+S"));
-	emulationMenu->Append(ID_PAUSE, wxT("&Pause\tCtrl+P"));
-	emulationMenu->Append(ID_STOP, wxT("S&top\tCtrl+T"));
-    emulationMenu->Append(ID_FULLSCREEN, wxT("&FullScreen\tCtrl+F"));
+	emulationMenu->Append(wxID_PREFERENCES, _("&Settings")+wxT("\tCtrl+E"));
+    emulationMenu->Append(ID_START, _("&Start")+wxT("\tCtrl+S"));
+	emulationMenu->Append(ID_PAUSE, _("&Pause")+wxT("\tCtrl+P"));
+	emulationMenu->Append(ID_STOP, _("S&top")+wxT("\tCtrl+T"));
+    emulationMenu->Append(ID_FULLSCREEN, _("&FullScreen")+wxT("\tCtrl+F"));
 
     // add the file menu to the menu bar
-    mb->Append(emulationMenu, wxT("&Emulation"));
+    mb->Append(emulationMenu, _("&Emulation"));
 
     // create the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_ABOUT, wxT("&About"));
+    helpMenu->Append(wxID_ABOUT, _("&About"));
 
     // add the help menu to the menu bar
-    mb->Append(helpMenu, wxT("&Help"));
+    mb->Append(helpMenu, _("&Help"));
 
     // add the menu bar to the MainFrame
     this->SetMenuBar(mb);
@@ -194,21 +194,21 @@ void MainFrame::CreateToolBar()
     //toolBar->AddStretchableSpace();
     
 	wxBitmap bmpOpen(open_xpm);
-	toolBar->AddTool(wxID_OPEN, wxT("Open"), bmpOpen);
+	toolBar->AddTool(wxID_OPEN, _("Open"), bmpOpen);
 	
 	wxBitmap bmpRecent(recent_xpm);
-	toolBar->AddTool(ID_OPEN_RECENT, wxT("Recent"), bmpRecent);
+	toolBar->AddTool(ID_OPEN_RECENT, _("Recent"), bmpRecent);
 
 	toolBar->AddSeparator();
 
 	wxBitmap bmpPlay(play_xpm);
-	toolBar->AddTool(ID_START, wxT("Start"), bmpPlay);
+	toolBar->AddTool(ID_START, _("Start"), bmpPlay);
 
 	wxBitmap bmpPause(pause_xpm);
-	toolBar->AddTool(ID_PAUSE, wxT("Pause"), bmpPause);
+	toolBar->AddTool(ID_PAUSE, _("Pause"), bmpPause);
 
 	wxBitmap bmpStop(stop_xpm);
-	toolBar->AddTool(ID_STOP, wxT("Stop"), bmpStop);
+	toolBar->AddTool(ID_STOP, _("Stop"), bmpStop);
 	
 	toolBar->EnableTool(ID_START, false);
 	toolBar->EnableTool(ID_PAUSE, false);
@@ -232,7 +232,7 @@ void MainFrame::OnFileOpen(wxCommandEvent &) {
 	enumEmuStates copyState = emulation->GetState();
     emulation->SetState(Paused);
 	
-	wxFileDialog* openDialog = new wxFileDialog(this, wxT("Choose a gameboy rom to open"), wxEmptyString, wxEmptyString,
+	wxFileDialog* openDialog = new wxFileDialog(this, _("Choose a gameboy rom to open"), wxEmptyString, wxEmptyString,
 												wxT("Gameboy roms (*.gb; *.gbc; *.zip)|*.gb;*.gbc;*.zip"),
 												wxFD_OPEN, wxDefaultPosition);
 
@@ -268,7 +268,7 @@ void MainFrame::OnLoadState(wxCommandEvent &event)
 	}
 	catch(GBException e)
 	{
-		wxMessageBox(wxString(e.what(), wxConvUTF8), wxT("Error"), wxICON_WARNING);
+		wxMessageBox(wxString(e.what(), wxConvUTF8), _("Error"), wxICON_WARNING);
 	}
 }
 
@@ -290,7 +290,7 @@ void MainFrame::OnSaveState(wxCommandEvent &event)
 	}
 	catch(GBException e)
 	{
-		wxMessageBox(wxString(e.what(), wxConvUTF8), wxT("Error"), wxICON_WARNING);
+		wxMessageBox(wxString(e.what(), wxConvUTF8), _("Error"), wxICON_WARNING);
 	}
 }
 
@@ -446,12 +446,6 @@ void MainFrame::OnSettings(wxCommandEvent &)
         if (renderer)
             renderer->ChangePalette(SettingsGetGreenScale());
         
-        if (!fullScreen)
-        {
-            if (renderer)
-                renderer->ChangeSize();
-            //this->SetClientSize(GB_SCREEN_W*SettingsGetWindowZoom(), GB_SCREEN_H*SettingsGetWindowZoom());
-        }
 		emulation->ApplySettings();
 	}
 
@@ -570,14 +564,16 @@ void MainFrame::OnRefreshScreen(wxCommandEvent& event)
 
 void MainFrame::ToggleFullScreen()
 {
+    //wxWindow *window = renderer->GetWinRenderer();
     fullScreen = !fullScreen;
     ShowFullScreen(fullScreen, wxFULLSCREEN_ALL);
     
+    /*
     if (!fullScreen)
     {
-        renderer->ChangeSize();
         renderer->GetWinRenderer()->SetClientSize(lastWidth, lastHeight);
     }
+    */
 }
 
 void MainFrame::OnTimer(wxTimerEvent &event)

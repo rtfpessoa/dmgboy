@@ -152,21 +152,21 @@ wxPanel* SettingsDialog::CreateVideoSettingsPage(wxWindow* parent)
 {
     wxPanel* panel = new wxPanel(parent, wxID_ANY);
 
-    wxStaticText * renderLabel = new wxStaticText(panel, wxID_ANY, wxT("Render method:"));
+    wxStaticText * renderLabel = new wxStaticText(panel, wxID_ANY, _("Render method:"));
 	wxString renderChoices[2];
-    renderChoices[0] = wxT("Software (Slower)");
-    renderChoices[1] = wxT("OpenGL (Faster)");
+    renderChoices[0] = _("Software (Slower)");
+    renderChoices[1] = _("OpenGL (Faster)");
     wxRadioBox* renderRadioBox = new wxRadioBox(panel, ID_RENDERMETHOD, wxT(""),
                                                    wxDefaultPosition, wxDefaultSize, 2, renderChoices, 1, wxRA_SPECIFY_COLS);
 
-	wxStaticText * grayGreenLabel = new wxStaticText(panel, wxID_ANY, wxT("Color palette:"));
+	wxStaticText * grayGreenLabel = new wxStaticText(panel, wxID_ANY, _("Color palette:"));
 	wxString grayGreenChoices[2];
-    grayGreenChoices[0] = wxT("Grayscale");
-    grayGreenChoices[1] = wxT("Greenscale");
+    grayGreenChoices[0] = _("Grayscale");
+    grayGreenChoices[1] = _("Greenscale");
     wxRadioBox* grayGreenRadioBox = new wxRadioBox(panel, ID_GREENSCALE, wxT(""),
 												 wxDefaultPosition, wxDefaultSize, 2, grayGreenChoices, 1, wxRA_SPECIFY_COLS);
 
-	wxStaticText * winZoomLabel = new wxStaticText(panel, wxID_ANY, wxT("Window size:"));
+	wxStaticText * winZoomLabel = new wxStaticText(panel, wxID_ANY, _("Window size:"));
     wxChoice* winZoomChoice = new wxChoice(panel, ID_WINZOOM);
 	winZoomChoice->Append(wxT("1x"));
 	winZoomChoice->Append(wxT("2x"));
@@ -193,11 +193,11 @@ wxPanel* SettingsDialog::CreateSoundSettingsPage(wxWindow* parent)
 {
 	wxPanel* panel = new wxPanel(parent, wxID_ANY);
 	
-	wxStaticText * enabledLabel = new wxStaticText(panel, wxID_ANY, wxT("Enabled:"));
+	wxStaticText * enabledLabel = new wxStaticText(panel, wxID_ANY, _("Enabled:"));
 	wxCheckBox * enabledCheckBox = new wxCheckBox(panel, ID_SOUND_ENABLED, wxT(""));
 	enabledCheckBox->SetValue(true);
 	
-	wxStaticText * sampleRateLabel = new wxStaticText(panel, wxID_ANY, wxT("Sample Rate:"));
+	wxStaticText * sampleRateLabel = new wxStaticText(panel, wxID_ANY, _("Sample Rate:"));
     wxChoice* sampleRateChoice = new wxChoice(panel, ID_SOUND_SR);
 	sampleRateChoice->Append(wxT("22050 Hz"));
 	sampleRateChoice->Append(wxT("32000 Hz"));
@@ -223,28 +223,28 @@ wxPanel* SettingsDialog::CreateInputSettingsPage(wxWindow* parent)
 {
 	wxPanel* panel = new wxPanel(parent, wxID_ANY);
 	
-    wxStaticText * upLabel = new wxStaticText(panel, wxID_ANY, wxT("Up:"));
+    wxStaticText * upLabel = new wxStaticText(panel, wxID_ANY, _("Up:"));
 	InputTextCtrl * upTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_UP);
 	
-	wxStaticText * downLabel = new wxStaticText(panel, wxID_ANY, wxT("Down:"));
+	wxStaticText * downLabel = new wxStaticText(panel, wxID_ANY, _("Down:"));
 	InputTextCtrl * downTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_DOWN);
 	
-	wxStaticText * leftLabel = new wxStaticText(panel, wxID_ANY, wxT("Left:"));
+	wxStaticText * leftLabel = new wxStaticText(panel, wxID_ANY, _("Left:"));
 	InputTextCtrl * leftTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_LEFT);
 	
-	wxStaticText * rightLabel = new wxStaticText(panel, wxID_ANY, wxT("Right:"));
+	wxStaticText * rightLabel = new wxStaticText(panel, wxID_ANY, _("Right:"));
 	InputTextCtrl * rightTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_RIGHT);
 	
-	wxStaticText * aLabel = new wxStaticText(panel, wxID_ANY, wxT("A:"));
+	wxStaticText * aLabel = new wxStaticText(panel, wxID_ANY, _("A:"));
 	InputTextCtrl * aTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_A);
 	
-	wxStaticText * bLabel = new wxStaticText(panel, wxID_ANY, wxT("B:"));
+	wxStaticText * bLabel = new wxStaticText(panel, wxID_ANY, _("B:"));
 	InputTextCtrl * bTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_B);
 	
-	wxStaticText * selectLabel = new wxStaticText(panel, wxID_ANY, wxT("Select:"));
+	wxStaticText * selectLabel = new wxStaticText(panel, wxID_ANY, _("Select:"));
 	InputTextCtrl * selectTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_SELECT);
 	
-	wxStaticText * startLabel = new wxStaticText(panel, wxID_ANY, wxT("Start:"));
+	wxStaticText * startLabel = new wxStaticText(panel, wxID_ANY, _("Start:"));
 	InputTextCtrl * startTextCtrl = new InputTextCtrl(panel, ID_TEXTCTRL_START);
 	
 	wxFlexGridSizer *grid = new wxFlexGridSizer(2, 3, 5);

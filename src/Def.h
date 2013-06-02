@@ -22,7 +22,7 @@
 
 #define APP_NAME		"DMGBoy"
 #define APP_VERSION		"1.0"
-#define APP_MAINT		"Pablo Gasco"
+#define APP_MAINT		"Pablo Gascó"
 #define APP_LICENCE		"GPL v3"
 #define APP_COPYRIGTH	"(C) 2013 Pablo Gasco"
 #define APP_WEBSITE		"http://code.google.com/p/dmgboy/"

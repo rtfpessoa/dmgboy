@@ -47,7 +47,6 @@ RendererBase::RendererBase()
 	winRenderer = NULL;
     changed = false;
 	CreateScreen();
-	ChangeSize();
 }
 
 RendererBase::~RendererBase()
@@ -87,17 +86,6 @@ void RendererBase::ChangePalette(bool original)
 		selPalette = 0;
 	else
 		selPalette = 1;
-}
-
-void RendererBase::ChangeSize()
-{
-	int zoom = SettingsGetWindowZoom();
-	
-	wxSize size(GB_SCREEN_W*zoom, GB_SCREEN_H*zoom);
-	if (winRenderer)
-	{
-		//winRenderer->SetClientSize(size);
-	}
 }
 
 void RendererBase::OnClear()

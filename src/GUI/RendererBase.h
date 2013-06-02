@@ -37,7 +37,6 @@ public:
     wxWindow * GetWinRenderer();
 	void SetWinRenderer(wxWindow * parent, wxWindow *renderer);
 	void CreateScreen();
-	void ChangeSize();
 	void ChangePalette(bool original);
 	
 	void OnClear();
