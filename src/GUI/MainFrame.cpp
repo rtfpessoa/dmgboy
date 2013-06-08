@@ -564,16 +564,8 @@ void MainFrame::OnRefreshScreen(wxCommandEvent& event)
 
 void MainFrame::ToggleFullScreen()
 {
-    //wxWindow *window = renderer->GetWinRenderer();
     fullScreen = !fullScreen;
     ShowFullScreen(fullScreen, wxFULLSCREEN_ALL);
-    
-    /*
-    if (!fullScreen)
-    {
-        renderer->GetWinRenderer()->SetClientSize(lastWidth, lastHeight);
-    }
-    */
 }
 
 void MainFrame::OnTimer(wxTimerEvent &event)
@@ -610,19 +602,16 @@ void MainFrame::OnResize(wxSizeEvent &event)
 }
 
 void MainFrame::OnMaximize(wxMaximizeEvent &event) {
-    static int width=0, height=0;
+    static int width=160, height=190;
+    static bool maximized = false;
     
-    printf("%d, %d\n", width, height);
-    
-    if (IsMaximized()) {
-        printf("SetSize()\n");
+    if (maximized) {
         SetSize(width, height);
     }
     else {
-        printf("GetSize()\n");
         GetSize(&width, &height);
-        //-->Maximize();
+        event.Skip(true);
     }
     
-    //event.Skip(true);
+    maximized = !maximized;
 }
