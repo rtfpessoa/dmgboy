@@ -604,12 +604,15 @@ void MainFrame::OnResize(wxSizeEvent &event)
 void MainFrame::OnMaximize(wxMaximizeEvent &event) {
     static int width=160, height=190;
     static bool maximized = false;
+    static int posX=0, posY=0;
     
     if (maximized) {
         SetSize(width, height);
+        SetPosition(wxPoint(posX, posY));
     }
     else {
         GetSize(&width, &height);
+        GetPosition(&posX, &posY);
         event.Skip(true);
     }
     
