@@ -448,9 +448,11 @@ void Video::GetColorPalette(BYTE palette[4][3], int address)
         palette[i][1] = ((data2 & 0x03) << 3) | ((data1 & 0xE0) >> 5);
         palette[i][2] = (data2 & 0x7C) >> 2;
         
-        palette[i][0] = palette[i][0] * 255 / 0x1F;
-        palette[i][1] = palette[i][1] * 255 / 0x1F;
-        palette[i][2] = palette[i][2] * 255 / 0x1F;
+        // Como el valor va de 0 a 31 (1F), hay que convertirlo de 0 a 255
+        // para que sea mas eficiente lo hare de 0 a 248
+        palette[i][0] <<= 3;
+        palette[i][1] <<= 3;
+        palette[i][2] <<= 3;
         
         address += 2;
     }
