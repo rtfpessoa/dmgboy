@@ -105,6 +105,7 @@ private:
 	void OnClose(wxCloseEvent&);
     void OnResize(wxSizeEvent &event);
     void OnMaximize(wxMaximizeEvent &event);
+    void OnChangeLanguage(wxCommandEvent &event);
 };
 
 #endif

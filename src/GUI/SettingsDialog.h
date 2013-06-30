@@ -24,24 +24,26 @@
 
 class SettingsDialog: public wxPropertySheetDialog
 {
+public:
+    SettingsDialog(wxWindow* parent);
+    ~SettingsDialog();
+    void Reload();
+    void AcceptValues();
+	static void SaveToFile();
+	static Settings LoadFromFile();
+    
+protected:
+	DECLARE_EVENT_TABLE()
+    
 private:
+    Settings m_settings;
+    
 	bool TransferDataToWindow();
 	bool TransferDataFromWindow();
 	
 	wxPanel* CreateVideoSettingsPage(wxWindow* parent);
 	wxPanel* CreateSoundSettingsPage(wxWindow* parent);
 	wxPanel* CreateInputSettingsPage(wxWindow* parent);
-
-protected:
-	DECLARE_EVENT_TABLE()
-	
-public:
-    SettingsDialog(wxWindow* parent);
-    ~SettingsDialog();
-	void SaveToFile(bool reloadSettings=false);
-	void LoadFromFile();
-	
-	Settings settings;
 };
 
 

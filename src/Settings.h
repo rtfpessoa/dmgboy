@@ -28,6 +28,7 @@ public:
 	int  windowZoom;
 	bool soundEnabled;
 	int  soundSampleRate;
+    long language;
 	
 	int  padKeys[8];
 	std::string recentRoms[10];
@@ -43,6 +44,7 @@ bool SettingsGetGreenScale();
 int  SettingsGetWindowZoom();
 bool SettingsGetSoundEnabled();
 int  SettingsGetSoundSampleRate();
+long SettingsGetLanguage();
 int* SettingsGetInput();
 std::string* SettingsGetRecentRoms();
 
@@ -53,6 +55,7 @@ void SettingsSetGreenScale(bool greenScale);
 void SettingsSetWindowZoom(int windowZoom);
 void SettingsSetSoundEnabled(bool enabled);
 void SettingsSetSoundSampleRate(int sampleRate);
+void SettingsSetLanguage(long language);
 void SettingsSetInput(const int* padKeys);
 void SettingsSetRecentRoms(const std::string* recentRoms);
 

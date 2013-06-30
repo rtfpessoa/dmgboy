@@ -15,6 +15,7 @@
  along with DMGBoy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
 #include <string>
 #include <math.h>
 #include <wx/stdpaths.h>
@@ -24,6 +25,7 @@
 #include <wx/filedlg.h>
 #include <wx/button.h>
 #include <wx/settings.h>
+#include "MainApp.h"
 #include "MainFrame.h"
 #include "AboutDialog.h"
 #include "SettingsDialog.h"
@@ -68,6 +70,7 @@ EVT_TIMER(ID_TIMER, MainFrame::OnTimer)
 EVT_CLOSE(MainFrame::OnClose)
 EVT_SIZE(MainFrame::OnResize)
 EVT_MAXIMIZE(MainFrame::OnMaximize)
+EVT_MENU_RANGE(ID_LANG_ENGLISH, ID_LANG_SPANISH, MainFrame::OnChangeLanguage)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(wxString fileName)
@@ -89,8 +92,6 @@ MainFrame::MainFrame(wxString fileName)
 
 	settingsDialog = new SettingsDialog(this);
 	settingsDialog->CentreOnScreen();
-	settingsDialog->LoadFromFile();
-	SettingsSetNewValues(settingsDialog->settings);
 	this->CreateRecentMenu(SettingsGetRecentRoms());
 
     // create the emulation
@@ -98,11 +99,11 @@ MainFrame::MainFrame(wxString fileName)
     
     wxThreadError err = emulation->Create();
     if (err != wxTHREAD_NO_ERROR)
-        wxMessageBox("Couldn't create thread!");
+        wxMessageBox("Couldn't create the thread!");
     
     err = emulation->Run();
     if (err != wxTHREAD_NO_ERROR)
-        wxMessageBox("Couldn't run thread!");
+        wxMessageBox("Couldn't run the thread!");
     
     fullScreen = false;
     renderer = NULL;
@@ -174,6 +175,11 @@ void MainFrame::CreateMenuBar()
 
     // add the file menu to the menu bar
     mb->Append(emulationMenu, _("&Emulation"));
+    
+    wxMenu *languageMenu = new wxMenu;
+    languageMenu->Append(ID_LANG_ENGLISH, "English");
+    languageMenu->Append(ID_LANG_SPANISH, "Español");
+    mb->Append(languageMenu, _("&Language"));
 
     // create the help menu
     wxMenu *helpMenu = new wxMenu;
@@ -304,7 +310,8 @@ void MainFrame::OnClearRecent(wxCommandEvent &)
 	numRecentFiles = 0;
 	
 	this->RecentRomsToSettings();
-	settingsDialog->SaveToFile(true);
+    settingsDialog->Reload();
+    SettingsDialog::SaveToFile();
 }
 
 void MainFrame::ChangeFile(const wxString fileName)
@@ -387,7 +394,8 @@ void MainFrame::UpdateRecentMenu(wxString fileName)
 	}
 	
 	this->RecentRomsToSettings();
-	settingsDialog->SaveToFile(true);
+    settingsDialog->Reload();
+    SettingsDialog::SaveToFile();
 }
 
 
@@ -437,7 +445,7 @@ void MainFrame::OnSettings(wxCommandEvent &)
 
     if (settingsDialog->ShowModal() == wxID_OK)
 	{
-		SettingsSetNewValues(settingsDialog->settings);
+		settingsDialog->AcceptValues();
         if (SettingsGetRenderMethod() != typeRenderer)
         {
             ChangeRenderer();    
@@ -617,4 +625,25 @@ void MainFrame::OnMaximize(wxMaximizeEvent &event) {
     }
     
     maximized = !maximized;
+}
+
+void MainFrame::OnChangeLanguage(wxCommandEvent &event) {
+    int id = event.GetId();
+    
+    switch (id) {
+        case ID_LANG_ENGLISH:
+            SettingsSetLanguage(wxLANGUAGE_ENGLISH);
+            break;
+            
+        case ID_LANG_SPANISH:
+            SettingsSetLanguage(wxLANGUAGE_SPANISH);
+            break;
+            
+        default:
+            SettingsSetLanguage(wxLANGUAGE_ENGLISH);
+            break;
+    }
+    
+    SettingsDialog::SaveToFile();
+    wxMessageBox(_("The language will change the next time you restart the application"), _("Language"));
 }

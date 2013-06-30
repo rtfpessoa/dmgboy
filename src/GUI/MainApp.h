@@ -51,6 +51,8 @@ public:
      * @return The exit code.
      */
     int OnExit();
+    
+    void ChangeLanguage(long language);
 	
 	void MacOpenFile(const wxString &fileName);
 };

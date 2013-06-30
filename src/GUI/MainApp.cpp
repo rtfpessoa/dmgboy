@@ -24,6 +24,8 @@
 #endif
 #include "MainApp.h"
 #include "MainFrame.h"
+#include "SettingsDialog.h"
+#include "../Settings.h"
 #include "../Def.h"
 
 IMPLEMENT_APP(MainApp)
@@ -36,15 +38,9 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] =
 	{ wxCMD_LINE_NONE, NULL, NULL, NULL, wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL }
 };
 
-wxLocale* locale;
-long language;
-
-void initLanguageSupport()
+void MainApp::ChangeLanguage(long language)
 {
-    language =  wxLANGUAGE_DEFAULT;
-    
-    // fake functions, use proper implementation
-    language = wxLANGUAGE_SPANISH_MODERN;
+    wxLocale* locale;
     
     // load language if possible, fall back to english otherwise
     if(wxLocale::IsAvailable(language))
@@ -81,8 +77,10 @@ void initLanguageSupport()
 }
 
 bool MainApp::OnInit() {
-
-    initLanguageSupport();
+    Settings settings = SettingsDialog::LoadFromFile();
+	SettingsSetNewValues(settings);
+    
+    ChangeLanguage(settings.language);
     
 	wxString cmdFilename = wxT("");
 	wxCmdLineParser cmdParser(g_cmdLineDesc, argc, argv);

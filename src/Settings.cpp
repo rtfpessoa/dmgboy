@@ -16,6 +16,7 @@
  */
 
 #include <wx/defs.h>
+#include <wx/language.h>
 #include "Settings.h"
 
 using namespace std;
@@ -29,6 +30,7 @@ Settings::Settings()
 	windowZoom	 = 1;
 	soundEnabled	= true;
 	soundSampleRate = 44100;
+    language = wxLANGUAGE_DEFAULT;
 	
 	padKeys[0]	= WXK_UP;	// Up
 	padKeys[1]	= WXK_DOWN; // Down
@@ -98,6 +100,16 @@ int SettingsGetSoundSampleRate()
 void SettingsSetSoundSampleRate(int sampleRate)
 {
 	settings.soundSampleRate = sampleRate;
+}
+
+long SettingsGetLanguage()
+{
+	return settings.language;
+}
+
+void SettingsSetLanguage(long language)
+{
+	settings.language = language;
 }
 
 int* SettingsGetInput()

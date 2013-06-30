@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-02 11:29+0200\n"
+"POT-Creation-Date: 2013-06-30 18:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,43 +23,47 @@ msgid ""
 "doesn't exist"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:180
+#: ../GUI/MainFrame.cpp:186
 msgid "&About"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:176
+#: ../GUI/MainFrame.cpp:177
 msgid "&Emulation"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:165
+#: ../GUI/MainFrame.cpp:166
 msgid "&File"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:173
+#: ../GUI/MainFrame.cpp:174
 msgid "&FullScreen"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:183
+#: ../GUI/MainFrame.cpp:189
 msgid "&Help"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:133
+#: ../GUI/MainFrame.cpp:182
+msgid "&Language"
+msgstr ""
+
+#: ../GUI/MainFrame.cpp:134
 msgid "&Open"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:171
+#: ../GUI/MainFrame.cpp:172
 msgid "&Pause"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:169
+#: ../GUI/MainFrame.cpp:170
 msgid "&Settings"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:170
+#: ../GUI/MainFrame.cpp:171
 msgid "&Start"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:238
+#: ../GUI/SettingsDialog.cpp:239
 msgid "A:"
 msgstr ""
 
@@ -71,37 +75,37 @@ msgstr ""
 msgid "Authors of Pan Docs"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:241
+#: ../GUI/SettingsDialog.cpp:242
 msgid "B:"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:235
+#: ../GUI/MainFrame.cpp:241
 msgid "Choose a gameboy rom to open"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:137 ../GUI/MainFrame.cpp:144
+#: ../GUI/MainFrame.cpp:138 ../GUI/MainFrame.cpp:145
 msgid "Clear recent roms"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:162
+#: ../GUI/SettingsDialog.cpp:163
 msgid "Color palette:"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:229
+#: ../GUI/SettingsDialog.cpp:230
 msgid "Down:"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:162
+#: ../GUI/MainFrame.cpp:163
 msgid "E&xit"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:196
+#: ../GUI/SettingsDialog.cpp:197
 msgid "Enabled:"
 msgstr ""
 
 #: ../GUI/EmulationThread.cpp:117 ../GUI/EmulationThread.cpp:131
-#: ../GUI/EmulationThread.cpp:197 ../GUI/MainFrame.cpp:271
-#: ../GUI/MainFrame.cpp:293
+#: ../GUI/EmulationThread.cpp:197 ../GUI/MainFrame.cpp:277
+#: ../GUI/MainFrame.cpp:299
 msgid "Error"
 msgstr ""
 
@@ -109,11 +113,11 @@ msgstr ""
 msgid "GameBoy rom not found in the file:\n"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:164
+#: ../GUI/SettingsDialog.cpp:165
 msgid "Grayscale"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:165
+#: ../GUI/SettingsDialog.cpp:166
 msgid "Greenscale"
 msgstr ""
 
@@ -121,7 +125,11 @@ msgstr ""
 msgid "Input"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:232
+#: ../GUI/MainFrame.cpp:648
+msgid "Language"
+msgstr ""
+
+#: ../GUI/SettingsDialog.cpp:233
 msgid "Left:"
 msgstr ""
 
@@ -129,7 +137,7 @@ msgstr ""
 msgid "Licence type: "
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:159
+#: ../GUI/MainFrame.cpp:160
 msgid "Load State"
 msgstr ""
 
@@ -141,19 +149,19 @@ msgstr ""
 msgid "Only gb, gbc and zip files allowed!"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:197
+#: ../GUI/MainFrame.cpp:203
 msgid "Open"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:138
+#: ../GUI/MainFrame.cpp:139
 msgid "Open Recent"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:158
+#: ../GUI/SettingsDialog.cpp:159
 msgid "OpenGL (Faster)"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:208
+#: ../GUI/MainFrame.cpp:214
 msgid "Pause"
 msgstr ""
 
@@ -161,35 +169,35 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:200
+#: ../GUI/MainFrame.cpp:206
 msgid "Recent"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:155
+#: ../GUI/SettingsDialog.cpp:156
 msgid "Render method:"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:235
+#: ../GUI/SettingsDialog.cpp:236
 msgid "Right:"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:172
+#: ../GUI/MainFrame.cpp:173
 msgid "S&top"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:200
+#: ../GUI/SettingsDialog.cpp:201
 msgid "Sample Rate:"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:160
+#: ../GUI/MainFrame.cpp:161
 msgid "Save State"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:244
+#: ../GUI/SettingsDialog.cpp:245
 msgid "Select:"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:157
+#: ../GUI/SettingsDialog.cpp:158
 msgid "Software (Slower)"
 msgstr ""
 
@@ -197,15 +205,15 @@ msgstr ""
 msgid "Sound"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:205
+#: ../GUI/MainFrame.cpp:211
 msgid "Start"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:247
+#: ../GUI/SettingsDialog.cpp:248
 msgid "Start:"
 msgstr ""
 
-#: ../GUI/MainFrame.cpp:211
+#: ../GUI/MainFrame.cpp:217
 msgid "Stop"
 msgstr ""
 
@@ -217,7 +225,11 @@ msgstr ""
 msgid "The file:\n"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:226
+#: ../GUI/MainFrame.cpp:648
+msgid "The language will change the next time you restart the application"
+msgstr ""
+
+#: ../GUI/SettingsDialog.cpp:227
 msgid "Up:"
 msgstr ""
 
@@ -229,7 +241,7 @@ msgstr ""
 msgid "Video"
 msgstr ""
 
-#: ../GUI/SettingsDialog.cpp:169
+#: ../GUI/SettingsDialog.cpp:170
 msgid "Window size:"
 msgstr ""
 

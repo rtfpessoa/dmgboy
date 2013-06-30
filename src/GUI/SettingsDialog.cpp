@@ -38,7 +38,7 @@ END_EVENT_TABLE()
 
 SettingsDialog::SettingsDialog(wxWindow* win)
 {
-	settings = SettingsGetCopy();
+	m_settings = SettingsGetCopy();
 
 	SetSheetStyle(wxPROPSHEET_SHRINKTOFIT);
 	
@@ -67,7 +67,7 @@ SettingsDialog::~SettingsDialog()
 /*! * Transfer data to the window */
 bool SettingsDialog::TransferDataToWindow()
 {
-	settings = SettingsGetCopy();
+	m_settings = SettingsGetCopy();
 	
     wxRadioBox* renderCtrl =     (wxRadioBox*)	  FindWindow(ID_RENDERMETHOD);
 	wxRadioBox* greenscaleCtrl = (wxRadioBox*)	  FindWindow(ID_GREENSCALE);
@@ -83,28 +83,28 @@ bool SettingsDialog::TransferDataToWindow()
 	InputTextCtrl* selectCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_SELECT);
 	InputTextCtrl* startCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_START);
 
-    renderCtrl->SetSelection(settings.renderMethod);
-	greenscaleCtrl->SetSelection(settings.greenScale);
-	winZoomCtrl->SetSelection(settings.windowZoom - 1);
+    renderCtrl->SetSelection(m_settings.renderMethod);
+	greenscaleCtrl->SetSelection(m_settings.greenScale);
+	winZoomCtrl->SetSelection(m_settings.windowZoom - 1);
 	
-	soundEnabledCtrl->SetValue(settings.soundEnabled);
+	soundEnabledCtrl->SetValue(m_settings.soundEnabled);
 	int sampleRates[] = { 22050, 32000, 44100, 48000 };
 	int idSampleRate = 2;
 	for (int i=0; i<4; i++)
 	{
-		if (settings.soundSampleRate == sampleRates[i])
+		if (m_settings.soundSampleRate == sampleRates[i])
 			idSampleRate = i;
 	}
 	soundSRCtrl->SetSelection(idSampleRate);
 	
-	upCtrl->OnChangeKey(	settings.padKeys[0]);
-	downCtrl->OnChangeKey(	settings.padKeys[1]);
-	leftCtrl->OnChangeKey(	settings.padKeys[2]);
-	rightCtrl->OnChangeKey(	settings.padKeys[3]);
-	aCtrl->OnChangeKey(		settings.padKeys[4]);
-	bCtrl->OnChangeKey(		settings.padKeys[5]);
-	selectCtrl->OnChangeKey(settings.padKeys[6]);
-	startCtrl->OnChangeKey(	settings.padKeys[7]);
+	upCtrl->OnChangeKey(	m_settings.padKeys[0]);
+	downCtrl->OnChangeKey(	m_settings.padKeys[1]);
+	leftCtrl->OnChangeKey(	m_settings.padKeys[2]);
+	rightCtrl->OnChangeKey(	m_settings.padKeys[3]);
+	aCtrl->OnChangeKey(		m_settings.padKeys[4]);
+	bCtrl->OnChangeKey(		m_settings.padKeys[5]);
+	selectCtrl->OnChangeKey(m_settings.padKeys[6]);
+	startCtrl->OnChangeKey(	m_settings.padKeys[7]);
 
 	return true;
 }
@@ -126,23 +126,24 @@ bool SettingsDialog::TransferDataFromWindow()
 	InputTextCtrl* selectCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_SELECT);
 	InputTextCtrl* startCtrl =	 (InputTextCtrl*) FindWindow(ID_TEXTCTRL_START);
 
-    settings.renderMethod = renderCtrl->GetSelection();
-	settings.greenScale = greenscaleCtrl->GetSelection();
-	settings.windowZoom = winZoomCtrl->GetSelection()+1;
-	settings.soundEnabled = soundEnabledCtrl->GetValue();
+    m_settings.renderMethod = renderCtrl->GetSelection();
+	m_settings.greenScale = greenscaleCtrl->GetSelection();
+	m_settings.windowZoom = winZoomCtrl->GetSelection()+1;
+	m_settings.soundEnabled = soundEnabledCtrl->GetValue();
 	int sampleRates[] = { 22050, 32000, 44100, 48000 };
 	int idSampleRate = soundSRCtrl->GetSelection();
-	settings.soundSampleRate = sampleRates[idSampleRate];
+	m_settings.soundSampleRate = sampleRates[idSampleRate];
 
-	settings.padKeys[0] = upCtrl->keyCode;
-	settings.padKeys[1] = downCtrl->keyCode;
-	settings.padKeys[2] = leftCtrl->keyCode;
-	settings.padKeys[3] = rightCtrl->keyCode;
-	settings.padKeys[4] = aCtrl->keyCode;
-	settings.padKeys[5] = bCtrl->keyCode;
-	settings.padKeys[6] = selectCtrl->keyCode;
-	settings.padKeys[7] = startCtrl->keyCode;
+	m_settings.padKeys[0] = upCtrl->keyCode;
+	m_settings.padKeys[1] = downCtrl->keyCode;
+	m_settings.padKeys[2] = leftCtrl->keyCode;
+	m_settings.padKeys[3] = rightCtrl->keyCode;
+	m_settings.padKeys[4] = aCtrl->keyCode;
+	m_settings.padKeys[5] = bCtrl->keyCode;
+	m_settings.padKeys[6] = selectCtrl->keyCode;
+	m_settings.padKeys[7] = startCtrl->keyCode;
 	
+    SettingsSetNewValues(m_settings);
 	SaveToFile();
 
 	return true;
@@ -275,11 +276,18 @@ wxPanel* SettingsDialog::CreateInputSettingsPage(wxWindow* parent)
     return panel;
 }
 
-void SettingsDialog::SaveToFile(bool reloadSettings)
+void SettingsDialog::Reload() {
+    m_settings = SettingsGetCopy();
+}
+
+void SettingsDialog::AcceptValues() {
+    SettingsSetNewValues(m_settings);
+}
+
+void SettingsDialog::SaveToFile()
 {
-	if (reloadSettings)
-		settings = SettingsGetCopy();
-		
+    Settings settings = SettingsGetCopy();
+    
 	wxString configDir = wxStandardPaths::Get().GetUserDataDir();
 
 	if (!wxFileName::DirExists(configDir))
@@ -293,6 +301,7 @@ void SettingsDialog::SaveToFile(bool reloadSettings)
     fileConfig.Write(wxT("General/renderMethod"), settings.renderMethod);
 	fileConfig.Write(wxT("General/greenScale"), settings.greenScale);
 	fileConfig.Write(wxT("General/windowZoom"), settings.windowZoom);
+    fileConfig.Write(wxT("General/language"), settings.language);
 	
 	fileConfig.Write(wxT("Sound/enabled"), settings.soundEnabled);
 	fileConfig.Write(wxT("Sound/sampleRate"), settings.soundSampleRate);
@@ -324,8 +333,10 @@ void SettingsDialog::SaveToFile(bool reloadSettings)
 	fileConfig.Write(wxT("RecentRoms/10"), auxString[9]);
 }
 
-void SettingsDialog::LoadFromFile()
+Settings SettingsDialog::LoadFromFile()
 {
+    Settings settings;
+    
 	wxString configDir = wxStandardPaths::Get().GetUserDataDir();
 	wxFileName configPath(configDir, wxT("config.ini"));
 	// Cargar de disco
@@ -334,6 +345,7 @@ void SettingsDialog::LoadFromFile()
     fileConfig.Read(wxT("General/renderMethod"), &settings.renderMethod);
 	fileConfig.Read(wxT("General/greenScale"), &settings.greenScale);
 	fileConfig.Read(wxT("General/windowZoom"), &settings.windowZoom);
+    fileConfig.Read(wxT("General/language"), &settings.language);
 	
 	fileConfig.Read(wxT("Sound/enabled"),	 &settings.soundEnabled);
 	fileConfig.Read(wxT("Sound/sampleRate"), &settings.soundSampleRate);
@@ -363,4 +375,6 @@ void SettingsDialog::LoadFromFile()
 	{
 		settings.recentRoms[i] = auxString[i].mb_str();
 	}
+    
+    return settings;
 }
