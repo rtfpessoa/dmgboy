@@ -24,9 +24,6 @@
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/config.h>
-#include <wx/fileconf.h>
-#include <wx/stdpaths.h>
-#include <wx/filename.h>
 #include "SettingsDialog.h"
 #include "IDControls.h"
 #include "InputTextCtrl.h"
@@ -144,7 +141,7 @@ bool SettingsDialog::TransferDataFromWindow()
 	m_settings.padKeys[7] = startCtrl->keyCode;
 	
     SettingsSetNewValues(m_settings);
-	SaveToFile();
+	SettingsSaveToFile();
 
 	return true;
 }
@@ -282,99 +279,4 @@ void SettingsDialog::Reload() {
 
 void SettingsDialog::AcceptValues() {
     SettingsSetNewValues(m_settings);
-}
-
-void SettingsDialog::SaveToFile()
-{
-    Settings settings = SettingsGetCopy();
-    
-	wxString configDir = wxStandardPaths::Get().GetUserDataDir();
-
-	if (!wxFileName::DirExists(configDir))
-		wxFileName::Mkdir(configDir, 0777, wxPATH_MKDIR_FULL);
-
-	wxFileName configPath(configDir, wxT("config.ini"));
-
-	// Guardar a disco
-	wxFileConfig fileConfig(wxT(APP_NAME), wxT("pablogasco"), configPath.GetFullPath());
-
-    fileConfig.Write(wxT("General/renderMethod"), settings.renderMethod);
-	fileConfig.Write(wxT("General/greenScale"), settings.greenScale);
-	fileConfig.Write(wxT("General/windowZoom"), settings.windowZoom);
-    fileConfig.Write(wxT("General/language"), settings.language);
-	
-	fileConfig.Write(wxT("Sound/enabled"), settings.soundEnabled);
-	fileConfig.Write(wxT("Sound/sampleRate"), settings.soundSampleRate);
-	
-	fileConfig.Write(wxT("Input/up"), settings.padKeys[0]);
-	fileConfig.Write(wxT("Input/down"), settings.padKeys[1]);
-	fileConfig.Write(wxT("Input/left"), settings.padKeys[2]);
-	fileConfig.Write(wxT("Input/right"), settings.padKeys[3]);
-	fileConfig.Write(wxT("Input/a"), settings.padKeys[4]);
-	fileConfig.Write(wxT("Input/b"), settings.padKeys[5]);
-	fileConfig.Write(wxT("Input/select"), settings.padKeys[6]);
-	fileConfig.Write(wxT("Input/start"), settings.padKeys[7]);
-	
-	wxString auxString[10];
-	for (int i=0; i<10; i++)
-	{
-		auxString[i] = wxString(settings.recentRoms[i].c_str(), wxConvUTF8);
-	}
-	
-	fileConfig.Write(wxT("RecentRoms/01"), auxString[0]);
-	fileConfig.Write(wxT("RecentRoms/02"), auxString[1]);
-	fileConfig.Write(wxT("RecentRoms/03"), auxString[2]);
-	fileConfig.Write(wxT("RecentRoms/04"), auxString[3]);
-	fileConfig.Write(wxT("RecentRoms/05"), auxString[4]);
-	fileConfig.Write(wxT("RecentRoms/06"), auxString[5]);
-	fileConfig.Write(wxT("RecentRoms/07"), auxString[6]);
-	fileConfig.Write(wxT("RecentRoms/08"), auxString[7]);
-	fileConfig.Write(wxT("RecentRoms/09"), auxString[8]);
-	fileConfig.Write(wxT("RecentRoms/10"), auxString[9]);
-}
-
-Settings SettingsDialog::LoadFromFile()
-{
-    Settings settings;
-    
-	wxString configDir = wxStandardPaths::Get().GetUserDataDir();
-	wxFileName configPath(configDir, wxT("config.ini"));
-	// Cargar de disco
-	wxFileConfig fileConfig(wxT(APP_NAME), wxT("pablogasco"), configPath.GetFullPath());
-
-    fileConfig.Read(wxT("General/renderMethod"), &settings.renderMethod);
-	fileConfig.Read(wxT("General/greenScale"), &settings.greenScale);
-	fileConfig.Read(wxT("General/windowZoom"), &settings.windowZoom);
-    fileConfig.Read(wxT("General/language"), &settings.language);
-	
-	fileConfig.Read(wxT("Sound/enabled"),	 &settings.soundEnabled);
-	fileConfig.Read(wxT("Sound/sampleRate"), &settings.soundSampleRate);
-	
-	fileConfig.Read(wxT("Input/up"),	 &settings.padKeys[0]);
-	fileConfig.Read(wxT("Input/down"),	 &settings.padKeys[1]);
-	fileConfig.Read(wxT("Input/left"),	 &settings.padKeys[2]);
-	fileConfig.Read(wxT("Input/right"),  &settings.padKeys[3]);
-	fileConfig.Read(wxT("Input/a"),		 &settings.padKeys[4]);
-	fileConfig.Read(wxT("Input/b"),		 &settings.padKeys[5]);
-	fileConfig.Read(wxT("Input/select"), &settings.padKeys[6]);
-	fileConfig.Read(wxT("Input/start"),  &settings.padKeys[7]);
-	
-	wxString auxString[10];
-	fileConfig.Read(wxT("RecentRoms/01"), &auxString[0]);
-	fileConfig.Read(wxT("RecentRoms/02"), &auxString[1]);
-	fileConfig.Read(wxT("RecentRoms/03"), &auxString[2]);
-	fileConfig.Read(wxT("RecentRoms/04"), &auxString[3]);
-	fileConfig.Read(wxT("RecentRoms/05"), &auxString[4]);
-	fileConfig.Read(wxT("RecentRoms/06"), &auxString[5]);
-	fileConfig.Read(wxT("RecentRoms/07"), &auxString[6]);
-	fileConfig.Read(wxT("RecentRoms/08"), &auxString[7]);
-	fileConfig.Read(wxT("RecentRoms/09"), &auxString[8]);
-	fileConfig.Read(wxT("RecentRoms/10"), &auxString[9]);
-	
-	for (int i=0; i<10; i++)
-	{
-		settings.recentRoms[i] = auxString[i].mb_str();
-	}
-    
-    return settings;
 }

@@ -24,7 +24,7 @@
 #include "../Sound.h"
 #include "../Video.h"
 #include "../CPU.h"
-#include "../Settings.h"
+#include "Settings.h"
 #include "EmulationThread.h"
 
 using namespace std;

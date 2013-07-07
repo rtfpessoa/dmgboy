@@ -20,7 +20,7 @@
 
 #include <wx/propdlg.h>
 #include <wx/imaglist.h>
-#include "../Settings.h"
+#include "Settings.h"
 
 class SettingsDialog: public wxPropertySheetDialog
 {
@@ -29,8 +29,6 @@ public:
     ~SettingsDialog();
     void Reload();
     void AcceptValues();
-	static void SaveToFile();
-	static Settings LoadFromFile();
     
 protected:
 	DECLARE_EVENT_TABLE()

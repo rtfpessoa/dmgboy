@@ -59,4 +59,7 @@ void SettingsSetLanguage(long language);
 void SettingsSetInput(const int* padKeys);
 void SettingsSetRecentRoms(const std::string* recentRoms);
 
+void SettingsSaveToFile();
+Settings SettingsLoadFromFile();
+
 #endif

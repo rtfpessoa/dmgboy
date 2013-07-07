@@ -32,7 +32,6 @@
 		6E47555B1719970B00602FE1 /* Pad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72D11D7CD510043AF47 /* Pad.cpp */; };
 		6E47555D1719970B00602FE1 /* Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C72F11D7CD510043AF47 /* Registers.cpp */; };
 		6E47555F1719970B00602FE1 /* Video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E23C73311D7CD510043AF47 /* Video.cpp */; };
-		6E4755611719970B00602FE1 /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEDB421245230600646E83 /* Settings.cpp */; };
 		6E4755641719970B00602FE1 /* Sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C365E1334FF7100BE7D7B /* Sound.cpp */; };
 		6E4755661719970B00602FE1 /* SoundPortaudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E148F6214422F2D0021740C /* SoundPortaudio.cpp */; };
 		6E4755671719977500602FE1 /* Basic_Gb_Apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C362A1334CB3900BE7D7B /* Basic_Gb_Apu.cpp */; };
@@ -41,6 +40,7 @@
 		6E47556A1719977500602FE1 /* Gb_Oscs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C363B1334CB3900BE7D7B /* Gb_Oscs.cpp */; };
 		6E47556B1719977500602FE1 /* Multi_Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E2C363D1334CB3900BE7D7B /* Multi_Buffer.cpp */; };
 		6EAFD344172C03EC0089D6D0 /* DMGBoy.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6E20575F120589BF00079331 /* DMGBoy.icns */; };
+		6EFA5C0517895CCF00DD9E94 /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EFA5C0317895CCF00DD9E94 /* Settings.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -131,8 +131,8 @@
 		6EDDDE7312EA037200BFB26A /* InputTextCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputTextCtrl.h; sourceTree = "<group>"; };
 		6EDDDE7412EA037200BFB26A /* InputTextCtrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputTextCtrl.cpp; sourceTree = "<group>"; };
 		6EFA5275126354F2000E541D /* ToDo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ToDo.txt; path = ../../../src/ToDo.txt; sourceTree = SOURCE_ROOT; };
-		6EFEDB421245230600646E83 /* Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Settings.cpp; path = ../../../src/Settings.cpp; sourceTree = SOURCE_ROOT; };
-		6EFEDB431245230600646E83 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Settings.h; path = ../../../src/Settings.h; sourceTree = SOURCE_ROOT; };
+		6EFA5C0317895CCF00DD9E94 /* Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Settings.cpp; sourceTree = "<group>"; };
+		6EFA5C0417895CCF00DD9E94 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		6EFFA58B17317C4800A561CC /* DMGBoy-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "DMGBoy-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -224,6 +224,8 @@
 				6E23C6C311D7CA0C0043AF47 /* RendererSW.cpp */,
 				6E0823A513C2429700C42CE0 /* RendererOGL.h */,
 				6E0823A413C2429700C42CE0 /* RendererOGL.cpp */,
+				6EFA5C0417895CCF00DD9E94 /* Settings.h */,
+				6EFA5C0317895CCF00DD9E94 /* Settings.cpp */,
 				6E2236781233B4C6009D019F /* SettingsDialog.h */,
 				6E2236791233B4C6009D019F /* SettingsDialog.cpp */,
 				6EA1AB77127F0F0E00AC510C /* AboutDialog.h */,
@@ -260,8 +262,6 @@
 				6E23C73011D7CD510043AF47 /* Registers.h */,
 				6E23C73311D7CD510043AF47 /* Video.cpp */,
 				6E23C73411D7CD510043AF47 /* Video.h */,
-				6EFEDB421245230600646E83 /* Settings.cpp */,
-				6EFEDB431245230600646E83 /* Settings.h */,
 				6E2C365D1334FF7100BE7D7B /* Sound.h */,
 				6E2C365E1334FF7100BE7D7B /* Sound.cpp */,
 				6E148F6314422F2D0021740C /* SoundPortaudio.h */,
@@ -408,9 +408,9 @@
 				6E47555B1719970B00602FE1 /* Pad.cpp in Sources */,
 				6E47555D1719970B00602FE1 /* Registers.cpp in Sources */,
 				6E47555F1719970B00602FE1 /* Video.cpp in Sources */,
-				6E4755611719970B00602FE1 /* Settings.cpp in Sources */,
 				6E4755641719970B00602FE1 /* Sound.cpp in Sources */,
 				6E4755661719970B00602FE1 /* SoundPortaudio.cpp in Sources */,
+				6EFA5C0517895CCF00DD9E94 /* Settings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

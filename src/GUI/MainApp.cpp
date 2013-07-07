@@ -25,7 +25,7 @@
 #include "MainApp.h"
 #include "MainFrame.h"
 #include "SettingsDialog.h"
-#include "../Settings.h"
+#include "Settings.h"
 #include "../Def.h"
 
 IMPLEMENT_APP(MainApp)
@@ -77,7 +77,7 @@ void MainApp::ChangeLanguage(long language)
 }
 
 bool MainApp::OnInit() {
-    Settings settings = SettingsDialog::LoadFromFile();
+    Settings settings = SettingsLoadFromFile();
 	SettingsSetNewValues(settings);
     
     ChangeLanguage(settings.language);

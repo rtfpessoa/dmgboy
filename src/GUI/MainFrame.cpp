@@ -30,7 +30,7 @@
 #include "AboutDialog.h"
 #include "SettingsDialog.h"
 #include "IDControls.h"
-#include "../Settings.h"
+#include "Settings.h"
 #include "../GBException.h"
 #include "Xpm/open.xpm"
 #include "Xpm/play.xpm"
@@ -311,7 +311,7 @@ void MainFrame::OnClearRecent(wxCommandEvent &)
 	
 	this->RecentRomsToSettings();
     settingsDialog->Reload();
-    SettingsDialog::SaveToFile();
+    SettingsSaveToFile();
 }
 
 void MainFrame::ChangeFile(const wxString fileName)
@@ -395,7 +395,7 @@ void MainFrame::UpdateRecentMenu(wxString fileName)
 	
 	this->RecentRomsToSettings();
     settingsDialog->Reload();
-    SettingsDialog::SaveToFile();
+    SettingsSaveToFile();
 }
 
 
@@ -644,6 +644,6 @@ void MainFrame::OnChangeLanguage(wxCommandEvent &event) {
             break;
     }
     
-    SettingsDialog::SaveToFile();
+    SettingsSaveToFile();
     wxMessageBox(_("The language will change the next time you restart the application"), _("Language"));
 }
