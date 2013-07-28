@@ -29,7 +29,7 @@ Settings settings;
 
 Settings::Settings()
 {
-    renderMethod = 0;
+    renderMethod = 1;
 	greenScale	 = false;
 	windowZoom	 = 1;
 	soundEnabled	= true;

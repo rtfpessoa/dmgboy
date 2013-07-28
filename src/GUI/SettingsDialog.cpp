@@ -156,13 +156,16 @@ wxPanel* SettingsDialog::CreateVideoSettingsPage(wxWindow* parent)
     renderChoices[1] = _("OpenGL (Faster)");
     wxRadioBox* renderRadioBox = new wxRadioBox(panel, ID_RENDERMETHOD, wxT(""),
                                                    wxDefaultPosition, wxDefaultSize, 2, renderChoices, 1, wxRA_SPECIFY_COLS);
+    renderLabel->Hide();
+    renderRadioBox->Hide();
 
-	wxStaticText * grayGreenLabel = new wxStaticText(panel, wxID_ANY, _("Color palette:"));
+	wxStaticText * grayGreenLabel = new wxStaticText(panel, wxID_ANY, _("DMG color palette:"));
 	wxString grayGreenChoices[2];
     grayGreenChoices[0] = _("Grayscale");
     grayGreenChoices[1] = _("Greenscale");
     wxRadioBox* grayGreenRadioBox = new wxRadioBox(panel, ID_GREENSCALE, wxT(""),
 												 wxDefaultPosition, wxDefaultSize, 2, grayGreenChoices, 1, wxRA_SPECIFY_COLS);
+    
 
 	wxStaticText * winZoomLabel = new wxStaticText(panel, wxID_ANY, _("Window size:"));
     wxChoice* winZoomChoice = new wxChoice(panel, ID_WINZOOM);
@@ -170,14 +173,17 @@ wxPanel* SettingsDialog::CreateVideoSettingsPage(wxWindow* parent)
 	winZoomChoice->Append(wxT("2x"));
 	winZoomChoice->Append(wxT("3x"));
 	winZoomChoice->Append(wxT("4x"));
+    
+    winZoomLabel->Hide();
+    winZoomChoice->Hide();
 
 	wxFlexGridSizer *grid = new wxFlexGridSizer(2, 3, 5);
-    grid->Add(renderLabel, 0, wxUP, 7);
-    grid->Add(renderRadioBox);
+    //grid->Add(renderLabel, 0, wxUP, 7);
+    //grid->Add(renderRadioBox);
 	grid->Add(grayGreenLabel, 0, wxUP, 7);
 	grid->Add(grayGreenRadioBox);
-	grid->Add(winZoomLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
-	grid->Add(winZoomChoice);
+	//grid->Add(winZoomLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
+	//grid->Add(winZoomChoice);
 	
 	wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
 	topSizer->Add(grid, 0, wxALL, 10);

@@ -1,7 +1,7 @@
-- Multi idioma / unicode
 - Permitir cargar roms comprimidas en 7z
 
 Terminado:
+- Multi idioma / unicode
 - Separar emulación en un hilo aparte
 - Pasarlo a OpenGL
 - Sonido
