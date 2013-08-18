@@ -45,6 +45,7 @@ public:
 	void OnPostDraw();
 	void OnDrawPixel(int idColor, int x, int y);
     void OnDrawPixel(BYTE r, BYTE g, BYTE b, int x, int y);
+    virtual void OnChangeView() = 0;
     
 protected:
 	BYTE * imgBuf1;

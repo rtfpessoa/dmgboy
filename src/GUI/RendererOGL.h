@@ -28,6 +28,11 @@
 
 #if wxUSE_GLCANVAS
 
+struct Camera{
+    float x, y, z;
+    float alpha, beta, gamma;
+};
+
 class MainFrame;
 
 class RendererOGL: public wxGLCanvas, public RendererBase {
@@ -45,6 +50,13 @@ public:
     void OnEraseBackground(wxEraseEvent&);
     void OnDoubleClick(wxMouseEvent&);
     void OnKeyPressed(wxKeyEvent &);
+    void OnMouseLeftDown(wxMouseEvent &event);
+    void OnMouseLeftUp(wxMouseEvent &event);
+    void OnMouseRightDown(wxMouseEvent &event);
+    void OnMouseRightUp(wxMouseEvent &event);
+    void OnMouseMove(wxMouseEvent &event);
+    void OnMouseWheel(wxMouseEvent &event);
+    void OnChangeView();
 	
     void Render();
 	
@@ -52,14 +64,31 @@ protected:
 	DECLARE_EVENT_TABLE()
     
 private:
-    bool initialized;
-	MainFrame *parent;
-    wxGLContext * glContext;
-    GLuint m_gllist;
-	float fov;
+    bool         m_initialized;
+	MainFrame   *m_parent;
+    wxGLContext *m_glContext;
+    GLuint       m_glList;
+	float        m_fov;
+    Camera       m_camera;
+    Camera       m_camera2D;
+    Camera       m_camera3D;
+    int          m_mouseOldX, m_mouseOldY;
+    int          m_mouseNewX, m_mouseNewY;
+    int          m_mouseWheel;
+    bool         m_mouseLeft, m_mouseRight;
+    bool         m_restoreView;
+    float        m_defaultZ;
+    float        m_filter;
 	
 	void InitGL();
     void SetGLContext();
+    void SetPerspective();
+    void CreateCube();
+    void MoveCamera(Camera &cam);
+    void ApplyCamera(Camera &cam);
+    bool CamsAreEqual(Camera &cam1, Camera &cam2, float delta);
+    void FilterCam(Camera &cam, Camera &dstCamera, float filter);
+    void UnrollAnglesCam(Camera &cam);
 };
 
 #endif // #if wxUSE_GLCANVAS

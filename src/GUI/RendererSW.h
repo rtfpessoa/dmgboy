@@ -30,6 +30,7 @@ class RendererSW : public wxPanel, public RendererBase {
 private:
 	void OnPaint(wxPaintEvent &);
     void OnEraseBackground(wxEraseEvent &);
+    void OnChangeView(){};
     
 protected:
 	DECLARE_EVENT_TABLE()

@@ -39,6 +39,7 @@
 #include "Xpm/recent.xpm"
 #include "Xpm/gb16.xpm"
 #include "Xpm/gb32.xpm"
+#include "Xpm/changeView.xpm"
 #include "RendererOGL.h"
 #include "RendererSW.h"
 #include "EmulationThread.h"
@@ -58,6 +59,7 @@ EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
 EVT_MENU(ID_START, MainFrame::OnPlay)
 EVT_MENU(ID_PAUSE, MainFrame::OnPause)
 EVT_MENU(ID_STOP, MainFrame::OnStop)
+EVT_MENU(ID_CHANGEVIEW, MainFrame::OnChangeView)
 EVT_MENU(ID_FULLSCREEN, MainFrame::OnFullScreen)
 EVT_UPDATE_UI( ID_START, MainFrame::OnPlayUpdateUI )
 EVT_UPDATE_UI( ID_PAUSE, MainFrame::OnPauseUpdateUI )
@@ -219,6 +221,11 @@ void MainFrame::CreateToolBar()
 	toolBar->EnableTool(ID_START, false);
 	toolBar->EnableTool(ID_PAUSE, false);
 	toolBar->EnableTool(ID_STOP, false);
+    
+    toolBar->AddSeparator();
+    
+    wxBitmap bmpChangeView(changeView_xpm);
+	toolBar->AddTool(ID_CHANGEVIEW, _("Change View"), bmpChangeView);
 
     //toolBar->AddStretchableSpace();
     
@@ -646,4 +653,8 @@ void MainFrame::OnChangeLanguage(wxCommandEvent &event) {
     
     SettingsSaveToFile();
     wxMessageBox(_("The language will change the next time you restart the application"), _("Language"));
+}
+
+void MainFrame::OnChangeView(wxCommandEvent &event) {
+    renderer->OnChangeView();
 }

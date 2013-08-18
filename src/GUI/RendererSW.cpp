@@ -19,7 +19,7 @@
 #include <wx/image.h>
 #include "IDControls.h"
 #include "../Def.h"
-#include "../Settings.h"
+#include "Settings.h"
 #include "RendererSW.h"
 
 inline void RendererSW::OnEraseBackground(wxEraseEvent &) { /* do nothing */ }

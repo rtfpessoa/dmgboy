@@ -16,7 +16,7 @@
  */
 
 #include "../Def.h"
-#include "../Settings.h"
+#include "Settings.h"
 #include "MainFrame.h"
 #include "RendererBase.h"
 
