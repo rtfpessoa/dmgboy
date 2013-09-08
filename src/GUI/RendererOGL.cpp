@@ -17,6 +17,7 @@
 
 #include <wx/setup.h>
 #include <wx/dcclient.h>
+#include <wx/stdpaths.h>
 
 #if !wxUSE_GLCANVAS
 #error "OpenGL required: set wxUSE_GLCANVAS to 1 and rebuild the library"
@@ -59,7 +60,7 @@ void RendererOGL::OnKeyPressed(wxKeyEvent &ev)
     
 }
 
-int attribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
+int attribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_SAMPLE_BUFFERS, 1, WX_GL_SAMPLES, 2, WX_GL_DEPTH_SIZE, 16, 0 };
 
 RendererOGL::RendererOGL(MainFrame *parent, wxWindowID id,
 						   const wxPoint& pos, const wxSize& size, long style, const wxString& name)
@@ -68,67 +69,36 @@ RendererOGL::RendererOGL(MainFrame *parent, wxWindowID id,
     m_initialized = false;
     m_parent      = parent;
     m_glList      = 0;
-	m_fov         = 50.0f;
+	m_fov         = 28.0f;
+    m_zNear       = 20.0f;
+    m_zFar        = 1000.0f;
     m_glContext   = NULL;
-    m_camera.x = m_camera.y = m_camera.z = 0;
-    m_camera.alpha = m_camera.beta = m_camera.gamma = 0;
     m_mouseNewX = m_mouseNewY = m_mouseOldX = m_mouseOldY = 0;
     m_mouseWheel = 0;
     m_mouseLeft = m_mouseRight = false;
-    m_restoreView = false;
+    m_restoreTo2D = m_restoreTo3D = false;
     m_filter = 0.1f;
     
+    float h = 42.75f;
     float radFov = m_fov * PI / 180.0f;
-    float dist = (GB_SCREEN_H/2.0f) / (float)tan(radFov/2.0f);
-    m_defaultZ = -(dist+(float)GB_SCREEN_W/2.0f);
+    float dist = (h/2.0f) / (float)tan(radFov/2.0f);
+    m_minZ = -(dist+16);
     
-    m_camera.z = m_defaultZ;
-    
-    m_camera2D.alpha = 0;
-    m_camera2D.beta = 0;
-    m_camera2D.gamma = 0;
-    m_camera2D.x = 0;
-    m_camera2D.y = 0;
-    m_camera2D.z = m_defaultZ;
+    m_camera3D.Set(0, -2, -300, -30, 30, 0);
+    m_camera2D.Set(0, -32.9f, m_minZ, 0, 0, 0);
+    m_camera.CopyFrom(m_camera2D);
 
 	SetWinRenderer(parent, this);
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    
+    wxSetWorkingDirectory(wxStandardPaths::Get().GetResourcesDir());
+    
+    m_obj = ObjLoad("gb.obj");
 }
 
 RendererOGL::~RendererOGL()
 {
     delete m_glContext;
-}
-
-void RendererOGL::Render()
-{
-	if(!IsShown())
-        return;
-	
-    SetGLContext();
-    
-    // Init OpenGL once, but after SetCurrent
-    if (!m_initialized)
-    {
-        InitGL();
-        CreateCube();
-        m_initialized = true;
-    }
-	
-    SetPerspective();
-	
-    /* clear color and depth buffers */
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glTexSubImage2D (GL_TEXTURE_2D, 0, 0, 0, GB_SCREEN_W, GB_SCREEN_H, GL_RGB, GL_UNSIGNED_BYTE, frontBuffer);
-    
-    glLoadIdentity();
-    MoveCamera(m_camera);
-    ApplyCamera(m_camera);
-    
-    glCallList(m_glList);
-	
-    glFlush();
-    SwapBuffers();
 }
 
 void RendererOGL::OnPaint( wxPaintEvent& event)
@@ -149,23 +119,41 @@ void RendererOGL::OnEraseBackground(wxEraseEvent& event)
 
 void RendererOGL::InitGL()
 {
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
+    glEnable(GL_LIGHT2);
+    
+    float position1[] = {0.0f, 0.0f, 1.0f, 0.0f};
+    float position2[] = {-5.77f, 5.77f, -5.0f, 0.0f};
+    float position3[] = {5.77f, -5.77f, -5.0f, 0.0f};
+    float diffuse[]  = {1.0f, 1.0f, 1.0f, 1.0f};
+    
+    glLightfv(GL_LIGHT0, GL_POSITION, position1);
+    glLightfv(GL_LIGHT1, GL_POSITION, position2);
+    glLightfv(GL_LIGHT2, GL_POSITION, position3);
+    
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse);
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, diffuse);
     
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_LIGHTING);
-    //glEnable(GL_LIGHT0);
 	
 	glHint (GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	
 	glEnable(GL_TEXTURE_2D);
+    
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 	
-    //glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);// Set Texture Max Filter
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);// Set Texture Min Filter
-	
-	//glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);		// Set The Texture Generation Mode For S To Sphere Mapping
-	//glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);		// Set The Texture Generation Mode For T To Sphere Mapping
-	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GB_SCREEN_W, GB_SCREEN_H, 0, GL_RGB, GL_UNSIGNED_BYTE, frontBuffer);
+    glGenTextures(1, &m_textureID);
+	glBindTexture(GL_TEXTURE_2D, m_textureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GB_SCREEN_W, GB_SCREEN_H, 0, GL_RGB, GL_UNSIGNED_BYTE, frontBuffer);
+    
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    
+    LoadTextures(m_obj.materials);
 }
 
 void RendererOGL::SetPerspective() {
@@ -193,86 +181,24 @@ void RendererOGL::SetPerspective() {
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	//gluPerspective(m_fov, (GLdouble)gbAspectRatio, 1.0, 500.0);
-    gluPerspective(m_fov, wAspectRatio, 1.0, 5000.0);
+    gluPerspective(m_fov, wAspectRatio, m_zNear, m_zFar);
     glMatrixMode(GL_MODELVIEW);
-    //glViewport(x, y, (GLint) w, (GLint) h);
     glViewport(0, 0, (GLint) winW, (GLint) winH);
 }
 
-void RendererOGL::CreateCube() {
-    float w2 = GB_SCREEN_W / 2.0f;
-    float h2 = GB_SCREEN_H / 2.0f;
+void RendererOGL::ScreenCreate() {
+    m_glList = glGenLists(1);
+    glNewList(m_glList, GL_COMPILE_AND_EXECUTE);
     
-    m_glList = glGenLists( 1 );
-    glNewList( m_glList, GL_COMPILE_AND_EXECUTE );
-    /* draw six faces of a cube */
     glBegin(GL_QUADS);
-    
     glNormal3f( 0.0f, 0.0f, 1.0f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-w2, h2, w2); glTexCoord2f(0.0f, 1.0f); glVertex3f(-w2,-h2, w2);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f( w2,-h2, w2); glTexCoord2f(1.0f, 0.0f); glVertex3f( w2, h2, w2);
-    
-    glNormal3f( 0.0f, 0.0f,-1.0f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f( w2, h2,-w2); glTexCoord2f(0.0f, 1.0f); glVertex3f( w2,-h2,-w2);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(-w2,-h2,-w2); glTexCoord2f(1.0f, 0.0f); glVertex3f(-w2, h2,-w2);
-    
-    glNormal3f( 1.0f, 0.0f, 0.0f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f( w2, h2, w2); glTexCoord2f(0.0f, 1.0f); glVertex3f( w2,-h2, w2);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f( w2,-h2,-w2); glTexCoord2f(1.0f, 0.0f); glVertex3f( w2, h2,-w2);
-    
-    glNormal3f(-1.0f, 0.0f, 0.0f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-w2, h2,-w2); glTexCoord2f(0.0f, 1.0f); glVertex3f(-w2,-h2,-w2);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(-w2,-h2, w2); glTexCoord2f(1.0f, 0.0f); glVertex3f(-w2, h2, w2);
-    
-    glNormal3f( 0.0f, 1.0f, 0.0f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-w2, h2,-w2); glTexCoord2f(0.0f, 1.0f); glVertex3f(-w2, h2, w2);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f( w2, h2, w2); glTexCoord2f(1.0f, 0.0f); glVertex3f( w2, h2,-w2);
-    
-    glNormal3f( 0.0f,-1.0f, 0.0f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-w2,-h2, w2); glTexCoord2f(0.0f, 1.0f); glVertex3f(-w2,-h2,-w2);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f( w2,-h2,-w2); glTexCoord2f(1.0f, 0.0f); glVertex3f( w2,-h2, w2);
-    
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-23.75f, 54.225f, 16.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-23.75f, 11.475f, 16.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f( 23.75f, 11.475f, 16.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f( 23.75f, 54.225f, 16.0f);
     glEnd();
     
     glEndList();
-}
-
-void RendererOGL::ApplyCamera(Camera &cam) {
-    glTranslatef(cam.x, cam.y, cam.z);
-    glRotatef(cam.beta,  1, 0, 0);
-    glRotatef(cam.alpha, 0, 1, 0);
-    glRotatef(cam.gamma, 0, 0, 1);
-}
-
-void RendererOGL::MoveCamera(Camera &cam) {
-    if (m_restoreView) {
-        UnrollAnglesCam(cam);
-        FilterCam(cam, m_camera2D, m_filter);
-        
-        if (CamsAreEqual(cam, m_camera2D, 0.1f))
-            m_restoreView = false;
-    }
-        
-    if (m_mouseLeft) {
-        cam.alpha += 0.1f*(m_mouseNewX - m_mouseOldX);
-        cam.beta  += 0.1f*(m_mouseNewY - m_mouseOldY);
-        if (cam.beta > 90)
-            cam.beta = 90;
-        else if (cam.beta < -90)
-            cam.beta = -90;
-    }
-    
-    cam.z += m_mouseWheel;
-    m_mouseWheel = 0;
-    
-    if (m_mouseRight) {
-        cam.x += 0.1f*(m_mouseNewX - m_mouseOldX);
-        cam.y += 0.1f*(m_mouseNewY - m_mouseOldY);
-    }
-    
-    m_mouseOldX = m_mouseNewX;
-    m_mouseOldY = m_mouseNewY;
 }
 
 void RendererOGL::SetGLContext()
@@ -313,43 +239,109 @@ void RendererOGL::OnMouseWheel(wxMouseEvent &event) {
 }
 
 void RendererOGL::OnChangeView() {
-    m_restoreView = true;
-}
-
-bool RendererOGL::CamsAreEqual(Camera &cam1, Camera &cam2, float delta) {
-    if ((cam1.alpha < (cam2.alpha+delta)) && (cam1.alpha > (cam2.alpha-delta)) &&
-        (cam1.beta  < (cam2.beta +delta)) && (cam1.beta  > (cam2.beta -delta)) &&
-        (cam1.gamma < (cam2.gamma+delta)) && (cam1.gamma > (cam2.gamma-delta)) &&
-        (cam1.x     < (cam2.x    +delta)) && (cam1.x     > (cam2.x    -delta)) &&
-        (cam1.y     < (cam2.y    +delta)) && (cam1.y     > (cam2.y    -delta)) &&
-        (cam1.z     < (cam2.z    +delta)) && (cam1.z     > (cam2.z    -delta))) {
-        
-        return true;
+    if (m_camera.IsEqualTo(m_camera2D, 0.01f)) {
+        m_restoreTo3D = true;
+        m_restoreTo2D = false;
     }
-    else
-        return false;
+    else if (m_camera.IsEqualTo(m_camera3D, 0.01f)){
+        m_restoreTo2D = true;
+        m_restoreTo3D = false;
+    }
+    else if (m_restoreTo2D) {
+        m_restoreTo3D = true;
+        m_restoreTo2D = false;
+    }
+    else {
+        m_restoreTo2D = true;
+        m_restoreTo3D = false;
+    }
 }
 
-void RendererOGL::FilterCam(Camera &cam, Camera &dstCamera, float filter) {
-    cam.alpha = cam.alpha * (1-filter) + dstCamera.alpha * (filter);
-    cam.beta  = cam.beta  * (1-filter) + dstCamera.beta  * (filter);
-    cam.gamma = cam.gamma * (1-filter) + dstCamera.gamma * (filter);
-    cam.x     = cam.x     * (1-filter) + dstCamera.x     * (filter);
-    cam.y     = cam.y     * (1-filter) + dstCamera.y     * (filter);
-    cam.z     = cam.z     * (1-filter) + dstCamera.z     * (filter);
+bool RendererOGL::RestoreTo(Camera &camSrc, Camera &camDst) {
+    camSrc.UnrollAngles();
+    camSrc.GoTo(camDst, m_filter);
+    
+    return !camSrc.IsEqualTo(camDst, 0.01f);
 }
 
-void RendererOGL::UnrollAnglesCam(Camera &cam) {
-    while (cam.alpha > 360)
-        cam.alpha -= 360;
-    while (cam.alpha < -360)
-        cam.alpha += 360;
-    while (cam.beta > 360)
-        cam.beta -= 360;
-    while (cam.beta < -360)
-        cam.beta += 360;
-    while (cam.gamma > 360)
-        cam.gamma -= 360;
-    while (cam.gamma < -360)
-        cam.gamma += 360;
+void RendererOGL::MoveCamera(Camera &cam) {
+    float x, y, z, alpha, beta;
+    x = y = z = alpha = beta = 0;
+    
+    if (m_restoreTo2D)
+        m_restoreTo2D = RestoreTo(cam, m_camera2D);
+    else if (m_restoreTo3D)
+            m_restoreTo3D = RestoreTo(cam, m_camera3D);
+    else {
+        if (m_mouseLeft) {
+            cam.alpha += 0.1f*(m_mouseNewX - m_mouseOldX);
+            cam.beta  += 0.1f*(m_mouseNewY - m_mouseOldY);
+            if (cam.beta > 90)
+                cam.beta = 90;
+            else if (cam.beta < -90)
+                cam.beta = -90;
+        }
+        
+        if (m_mouseRight) {
+            cam.x += 0.1f*(m_mouseNewX - m_mouseOldX);
+            cam.y -= 0.1f*(m_mouseNewY - m_mouseOldY);
+        }
+        
+        cam.z += m_mouseWheel;
+        m_mouseWheel = 0;
+        if (cam.z > m_minZ)
+            cam.z = m_minZ;
+        else if (cam.z < -(m_zFar-100))
+            cam.z = -(m_zFar-100);
+    }
+    m_mouseOldX = m_mouseNewX;
+    m_mouseOldY = m_mouseNewY;
+}
+
+void RendererOGL::Render()
+{
+	if(!IsShown())
+        return;
+	
+    SetGLContext();
+    
+    // Init OpenGL once, but after SetCurrent
+    if (!m_initialized)
+    {
+        InitGL();
+        ScreenCreate();
+        m_initialized = true;
+    }
+	
+    SetPerspective();
+	
+    /* clear color and depth buffers */
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    glLoadIdentity();
+    MoveCamera(m_camera);
+    m_camera.Apply();
+    
+    ObjDraw(m_obj);
+    ScreenDraw();
+	
+    glFlush();
+    SwapBuffers();
+}
+
+void RendererOGL::ScreenDraw() {
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, m_textureID);
+    glTexSubImage2D (GL_TEXTURE_2D, 0, 0, 0, GB_SCREEN_W, GB_SCREEN_H, GL_RGB, GL_UNSIGNED_BYTE, frontBuffer);
+    
+    float ambient[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    float diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    float specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    float shininess = 128.0f;
+    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+    
+    glCallList(m_glList);
 }

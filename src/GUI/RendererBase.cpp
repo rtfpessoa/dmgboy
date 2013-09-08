@@ -110,12 +110,9 @@ void RendererBase::OnRefreshScreen()
 	{
 		if (wxThread::IsMain())
         {
-            if (changed)
-            {
-                winRenderer->Refresh(false);
-                winRenderer->Update();
-                changed = false;
-            }
+            winRenderer->Refresh(false);
+            winRenderer->Update();
+            changed = false;
         }
         else
             PageFlip();

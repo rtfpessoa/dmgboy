@@ -25,13 +25,10 @@
 
 #include "wx/glcanvas.h"
 #include "RendererBase.h"
+#include "3D/Obj.h"
+#include "3D/Camera.h"
 
 #if wxUSE_GLCANVAS
-
-struct Camera{
-    float x, y, z;
-    float alpha, beta, gamma;
-};
 
 class MainFrame;
 
@@ -68,7 +65,10 @@ private:
 	MainFrame   *m_parent;
     wxGLContext *m_glContext;
     GLuint       m_glList;
+    GLuint       m_textureID;
 	float        m_fov;
+    float        m_zNear;
+    float        m_zFar;
     Camera       m_camera;
     Camera       m_camera2D;
     Camera       m_camera3D;
@@ -76,19 +76,20 @@ private:
     int          m_mouseNewX, m_mouseNewY;
     int          m_mouseWheel;
     bool         m_mouseLeft, m_mouseRight;
-    bool         m_restoreView;
-    float        m_defaultZ;
+    bool         m_restoreTo2D;
+    bool         m_restoreTo3D;
     float        m_filter;
+    float        m_minZ;
+    
+    ObjGeo       m_obj;
 	
 	void InitGL();
     void SetGLContext();
     void SetPerspective();
-    void CreateCube();
+    void ScreenCreate();
+    void ScreenDraw();
     void MoveCamera(Camera &cam);
-    void ApplyCamera(Camera &cam);
-    bool CamsAreEqual(Camera &cam1, Camera &cam2, float delta);
-    void FilterCam(Camera &cam, Camera &dstCamera, float filter);
-    void UnrollAnglesCam(Camera &cam);
+    bool RestoreTo(Camera &camSrc, Camera &camDst);
 };
 
 #endif // #if wxUSE_GLCANVAS
