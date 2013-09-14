@@ -133,6 +133,7 @@ void DrawVBO() {
 
 void ObjDraw(ObjGeo geo){
     unsigned long i,j;
+    int idMaterial = -1;
     Vec3D *vertices = (Vec3D*) geo.vertices.buffer;
     Vec3D *normals  = (Vec3D*) geo.normals.buffer;
     Vec2D *texCoord = (Vec2D*) geo.texCoords.buffer;
@@ -143,8 +144,10 @@ void ObjDraw(ObjGeo geo){
     // Modo inmediato
     for (i=0;i<geo.faces.elements;i++){
         point = (Point*) face[i].points.buffer;
-        if (face[i].IdMaterial)
-            MatApply(materials[face[i].IdMaterial-1]);
+        if (face[i].IdMaterial && (idMaterial != face[i].IdMaterial)) {
+            idMaterial = face[i].IdMaterial;
+            MatApply(materials[idMaterial-1]);
+        }
         glBegin(GL_TRIANGLES);
         for (j=0;j<face[i].points.elements;j++){
             if (point[j].IdNormal)
