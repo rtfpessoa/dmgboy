@@ -44,21 +44,21 @@ typedef struct{
 }Material;
 
 ObjGeo ObjLoad(const char *filename);
-void   ObjScale(ObjGeo geo, float s);
-void   ObjClear(ObjGeo *geo);
-void   ObjDraw(ObjGeo geo);
+void   ObjScale(ObjGeo &geo, float s);
+void   ObjClear(ObjGeo &geo);
+void   ObjDraw(const ObjGeo &geo);
 
 Array MtlLoad(const char *filename);
 Array GetFace(char *line);
 
-Material MatCreate(char *name);
-int      MatGetID(Array materials, char *name);
-void     MatApply(Material mat);
+Material MatCreate(const char *name);
+int      MatGetID(const Array &materials, char *name);
+void     MatApply(const Material &mat);
 
-void PrintMaterials(Array materials);
+void PrintMaterials(const Array &materials);
 
-unsigned int LoadTexture(char* filename);
-void LoadTextures(Array materials);
+unsigned int LoadTexture(const char* filename);
+void LoadTextures(Array &materials);
 
 class Obj {
 public:

@@ -14,13 +14,11 @@ ObjGeo ObjLoad(const char *filename){
     unsigned int currentMat;
     
     ObjGeo geo;
-    geo.vertices   = ArrayCreate(sizeof(Vec3D),50);
-    geo.normals    = ArrayCreate(sizeof(Vec3D),50);
-    geo.texCoords  = ArrayCreate(sizeof(Vec2D),50);
-    geo.faces      = ArrayCreate(sizeof(Face),50);
-    geo.materials  = ArrayCreate(sizeof(Material),50);
-    
-    //material m = (material*) &obj.materiales.buffer;
+    geo.vertices   = ArrayCreate<Vec3D>();
+    geo.normals    = ArrayCreate<Vec3D>();
+    geo.texCoords  = ArrayCreate<Vec2D>();
+    geo.faces      = ArrayCreate<Face>();
+    geo.materials  = ArrayCreate<Material>(10);
     
     FILE *file;
     
@@ -28,20 +26,20 @@ ObjGeo ObjLoad(const char *filename){
         while (fgets(line, MAXCHAR, file)){
             if (!memcmp(line, "v ", 2)){
                     sscanf(line+1, "%f%f%f", &vec3D.x, &vec3D.y, &vec3D.z);
-                    ArrayAdd(&geo.vertices, &vec3D);
+                    ArrayAdd(geo.vertices, &vec3D);
             }
             else if (!memcmp(line,"vn",2)){
                     sscanf(line+2, "%f%f%f", &vec3D.x, &vec3D.y, &vec3D.z);
-                    ArrayAdd(&geo.normals, &vec3D);
+                    ArrayAdd(geo.normals, &vec3D);
             }
             else if (!memcmp(line, "vt", 2)){
                     sscanf(line+2, "%f%f", &vec2D.u, &vec2D.v);
-                    ArrayAdd(&geo.texCoords, &vec2D);
+                    ArrayAdd(geo.texCoords, &vec2D);
             }
             else if (!memcmp(line,"f ",2)){
                     face.points = GetFace(line);
                     face.IdMaterial = currentMat;
-                    ArrayAdd(&geo.faces, &face);
+                    ArrayAdd(geo.faces, &face);
             }
             else if (!memcmp(line, "mtllib", 6)){
                     sscanf(line+7, "%s", temp);
@@ -57,12 +55,13 @@ ObjGeo ObjLoad(const char *filename){
     }
     else
         printf("OBJ file not found\n");
+    
     return geo;    
 }    
 
 Array GetFace(char *line){
     
-    Array points = ArrayCreate(sizeof(Point), 3);
+    Array points = ArrayCreate<Point>(3);
     Point p;
     char *tuple = strtok(line+2," ");
     while (tuple){
@@ -83,24 +82,26 @@ Array GetFace(char *line){
             //CASO D
             sscanf(tuple, "%d/%d/%d", &p.IdVertex, &p.IdTexCoord, &p.IdNormal);
         }
-        ArrayAdd(&points, &p);
+        ArrayAdd(points, &p);
         tuple = strtok(NULL, " \n");
+        if(tuple && strchr(tuple, '\r'))
+            tuple = NULL;
     }
     return points;
 }
 
-void ObjClear(ObjGeo *geo){
+void ObjClear(ObjGeo &geo){
     unsigned long i;
-    Face *face = (Face*) &(geo->faces.buffer);
     
-    ArrayClear(&(geo->vertices));
-    ArrayClear(&(geo->normals));
-    ArrayClear(&(geo->texCoords));
-    for (i=0;i<geo->faces.elements;i++){
-        ArrayClear(&(face[i].points));
+    ArrayClear(geo.vertices);
+    ArrayClear(geo.normals);
+    ArrayClear(geo.texCoords);
+    Face *face = ArrayPtr<Face>(geo.faces);
+    for (i=0; i<ArrayLength(geo.faces); i++){
+        ArrayClear(face[i].points);
     }
-    ArrayClear(&(geo->faces));
-    ArrayClear(&(geo->materials));
+    ArrayClear(geo.faces);
+    ArrayClear(geo.materials);
 }    
 
 /*
@@ -131,51 +132,57 @@ void DrawVBO() {
 }
 */
 
-void ObjDraw(ObjGeo geo){
+void ObjDraw(const ObjGeo &geo){
     unsigned long i,j;
+    unsigned int idNormal, idTexCoord, idVertex;
     int idMaterial = -1;
-    Vec3D *vertices = (Vec3D*) geo.vertices.buffer;
-    Vec3D *normals  = (Vec3D*) geo.normals.buffer;
-    Vec2D *texCoord = (Vec2D*) geo.texCoords.buffer;
-    Material *materials = (Material*) geo.materials.buffer;
-    Face *face = (Face*) geo.faces.buffer;
-    Point *point;
+    const Vec3D *vertices = ArrayPtr<Vec3D>(geo.vertices);
+    const Vec3D *normals  = ArrayPtr<Vec3D>(geo.normals);
+    const Vec2D *texCoord = ArrayPtr<Vec2D>(geo.texCoords);
+    const Material *materials = ArrayPtr<Material>(geo.materials);
+    const Face *face = ArrayPtr<Face>(geo.faces);
+    const Point *point;
     
     // Modo inmediato
-    for (i=0;i<geo.faces.elements;i++){
-        point = (Point*) face[i].points.buffer;
+    for (i=0; i<ArrayLength(geo.faces); i++){
+        point = ArrayPtr<Point>(face[i].points);
         if (face[i].IdMaterial && (idMaterial != face[i].IdMaterial)) {
             idMaterial = face[i].IdMaterial;
             MatApply(materials[idMaterial-1]);
         }
-        glBegin(GL_TRIANGLES);
-        for (j=0;j<face[i].points.elements;j++){
-            if (point[j].IdNormal)
-                glNormal3fv((float*)&normals[point[j].IdNormal-1]);
-            if (point[j].IdTexCoord)
-                glTexCoord2fv((float*)&texCoord[point[j].IdTexCoord-1]);
-            glVertex3fv((float*)&vertices[point[j].IdVertex-1]);
+        glBegin(GL_POLYGON);
+        for (j=0; j<ArrayLength(face[i].points); j++){
+            idNormal   = point[j].IdNormal;
+            idTexCoord = point[j].IdTexCoord;
+            idVertex   = point[j].IdVertex;
+            
+            if (idNormal > 0)
+                glNormal3fv((float*)&normals[idNormal-1]);
+            if (idTexCoord > 0)
+                glTexCoord2fv((float*)&texCoord[idTexCoord-1]);
+            glVertex3fv((float*)&vertices[idVertex-1]);
         }
         glEnd();
     }
 }
 
 
-void ObjScale(ObjGeo geo, float s){
-    Vec3D *vertices = (Vec3D*) geo.vertices.buffer;
+void ObjScale(ObjGeo &geo, float s){
     unsigned long i;
-    for (i=0;i<geo.vertices.elements;i++){
+    
+    Vec3D *vertices = ArrayPtr<Vec3D>(geo.vertices);
+    for (i=0; i<ArrayLength(geo.vertices); i++){
         vertices[i].x *= s;
         vertices[i].y *= s;
         vertices[i].z *= s;
     }    
 }   
 
-Material MatCreate(char *name){
+Material MatCreate(const char *name){
     Material mat;
     
     mat.name = (char*)malloc(sizeof(char)*strlen(name));
-    strncpy(mat.name, name,strlen(name)-1);
+    strncpy(mat.name, name, strlen(name)-1);
     mat.name[strlen(name)-1]='\0';
     
     mat.texture = NULL;
@@ -192,15 +199,15 @@ Material MatCreate(char *name){
     return mat;
 }     
 
-int MatGetID(Array materiales, char *name){
+int MatGetID(const Array &materials, char *name){
     int i,j,res;
-    Material *m = (Material*) materiales.buffer;
+    const Material *m = ArrayPtr<Material>(materials);
     
-    res=0;
-    j=1;
-    for(i=0; i<materiales.elements; i++){
+    res = 0;
+    j = 1;
+    for(i=0; i<ArrayLength(materials); i++){
         if (!strcmp(m[i].name, name))
-            res=j;
+            res = j;
         j++;    
     }
     return res;
@@ -209,65 +216,67 @@ int MatGetID(Array materiales, char *name){
 Array MtlLoad(const char* filename){
     //Esta funcion lee el fichero de materiales especificado y rellena un array
     //con todos los materiales encontrados, una vez hecho esto retorna el array
-    char linea[MAXCHAR], *copia;
-    Array materiales = ArrayCreate(sizeof(Material),3);
+    char line[MAXCHAR], *copy;
+    Array materials = ArrayCreate<Material>(5);
     Material m;
-    int inicial = 0;
+    int initial = 0;
     
-    FILE *fichero;
+    FILE *file;
     
-    if ((fichero = fopen(filename, "r"))){
-        while (fgets(linea, MAXCHAR, fichero)){ //Mientras queden lineas sigue leyendo
-            if (!strchr(linea, '#')){
-                if (!memcmp(linea, "newmtl", 6)){ //Si es la palabra newmtl, entonces...
+    if ((file = fopen(filename, "r"))){
+        while (fgets(line, MAXCHAR, file)){ //Mientras queden lineas sigue leyendo
+            if (!strchr(line, '#')){
+                if (!memcmp(line, "newmtl", 6)){ //Si es la palabra newmtl, entonces...
                     //anyadir el material anterior (menos la primera vez)
-                    if (inicial){
-                        ArrayAdd(&materiales, &m);
+                    if (initial){
+                        ArrayAdd(materials, &m);
                     }
-                    inicial=1;
-                    m = MatCreate(linea+7);
+                    initial = 1;
+                    m = MatCreate(line+7);
                 }
-                else if (strstr(linea, "Ka ")){
-                    sscanf(linea, " Ka %f %f %f", &m.amb.r, &m.amb.g, &m.amb.b); 
+                else if (strstr(line, "Ka ")){
+                    sscanf(line, " Ka %f %f %f", &m.amb.r, &m.amb.g, &m.amb.b);
                 }
-                else if (strstr(linea, "map_Kd")){
+                else if (strstr(line, "map_Kd")){
                     char *name;
-                    name = strchr(linea, 'm');
-                    copia = (char*)malloc(sizeof(char)*strlen(name));
-                    sscanf(name, "map_Kd %s\n", copia);
-                    m.texture = copia;
+                    name = strchr(line, 'm');
+                    copy = (char*)malloc(sizeof(char)*strlen(name));
+                    sscanf(name, "map_Kd %s\n", copy);
+                    m.texture = copy;
                 }
-                else if (strstr(linea, "Kd ")){
-                    sscanf(linea, " Kd %f %f %f", &m.dif.r, &m.dif.g, &m.dif.b);
+                else if (strstr(line, "Kd ")){
+                    sscanf(line, " Kd %f %f %f", &m.dif.r, &m.dif.g, &m.dif.b);
                 }
-                else if (strstr(linea, "Ks ")){
-                    sscanf(linea, " Ks %f %f %f", &m.spe.r, &m.spe.g, &m.spe.b);
+                else if (strstr(line, "Ks ")){
+                    sscanf(line, " Ks %f %f %f", &m.spe.r, &m.spe.g, &m.spe.b);
                 }
-                else if (strstr(linea, "illum ")){
-                    sscanf(linea, " illum %d", &m.illum);
+                else if (strstr(line, "illum ")){
+                    sscanf(line, " illum %d", &m.illum);
                 }
-                else if (strstr(linea, "Ns ")){
-                    sscanf(linea, " Ns %d", &m.bright);
+                else if (strstr(line, "Ns ")){
+                    sscanf(line, " Ns %d", &m.bright);
                 }
-                else if (strstr(linea, "Tr ")){ //Hay que anyadir la trasparencia a Kd
-                    sscanf(linea, " Tr %f", &m.dif.a);
+                else if (strstr(line, "Tr ")){ //Hay que anyadir la trasparencia a Kd
+                    sscanf(line, " Tr %f", &m.dif.a);
                 }
-                else if (strstr(linea, "d ")){ //Hay que anyadir la trasparencia a Kd
-                    sscanf(linea, " d %f", &m.dif.a);
+                else if (strstr(line, "d ")){ //Hay que anyadir la trasparencia a Kd
+                    sscanf(line, " d %f", &m.dif.a);
                 }
             }    
         }
-        ArrayAdd(&materiales,&m);
+        ArrayAdd(materials,&m);
+        fclose(file);
     }else
         printf("Mtl file not found\n");
     
-    return materiales;            
+    return materials;
 }
 
-void PrintMaterials(Array materials){
-    Material *m = (Material*) materials.buffer;
-    int i;
-    for (i=0; i<materials.elements; i++){
+void PrintMaterials(const Array &materials){
+    unsigned long i;
+    
+    const Material *m = ArrayPtr<Material>(materials);
+    for (i=0; i<ArrayLength(materials); i++){
         printf("Material: %s\n",  m[i].name);
         printf("Texture: %s\n",   m[i].texture);
         printf("IdTexture: %d\n", m[i].texID);
@@ -275,22 +284,22 @@ void PrintMaterials(Array materials){
     }
 }    
 
-void LoadTextures(Array materials){
-    int i;
-    Material *m = (Material*) materials.buffer;
+void LoadTextures(Array &materials){
+    unsigned long i;
     
-    for (i=0; i<materials.elements; i++)
+    Material *m = ArrayPtr<Material>(materials);
+    for (i=0; i<ArrayLength(materials); i++)
         if (m[i].texture != NULL)
             m[i].texID = LoadTexture(m[i].texture);
 }
 
-unsigned int LoadTexture(char* fileName){
+unsigned int LoadTexture(const char* fileName){
     int imageWidth, imageHeight, textureWidth, textureHeight;
     
     return LoadImage(fileName, &imageWidth, &imageHeight, &textureWidth, &textureHeight);
 }    
 
-void MatApply(Material mat) {
+void MatApply(const Material &mat) {
     
     float ambient[] = {mat.amb.r, mat.amb.g, mat.amb.b, 1.0f};
     float diffuse[] = {mat.dif.r, mat.dif.g, mat.dif.b, 1.0f};
