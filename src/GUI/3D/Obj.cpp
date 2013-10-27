@@ -14,6 +14,7 @@ ObjGeo ObjLoad(const char *filename){
     unsigned int currentMat;
     
     ObjGeo geo;
+    geo.vboIndices = NULL;
     geo.vertices   = ArrayCreate<Vec3D>();
     geo.normals    = ArrayCreate<Vec3D>();
     geo.texCoords  = ArrayCreate<Vec2D>();
@@ -102,37 +103,141 @@ void ObjClear(ObjGeo &geo){
     }
     ArrayClear(geo.faces);
     ArrayClear(geo.materials);
-}    
-
-/*
-void CreateVBO(objGeom *geom) {
-    GLuint id;
-    glGenBuffers(1, &id);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, id);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(geom->vertices.buffer), geom->vertices.buffer, GL_STATIC_DRAW);
-    
-    for (i=0;i<geom->caras.elements;i++){
-        glGenBuffers(1, &id);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(geom->caras.buffer.points.buffer), geom->caras.buffer.points.buffer, GL_STATIC_DRAW);
-        geom->caras.vboFace = id;
-    }
-    
-    geom->vboVertices = id[0];
 }
 
-void DrawVBO() {
+bool AreEqual(float a, float b, float delta = 0.01f){
+    return fabs(a-b) < delta;
+}
+
+int ArraySearchPoint(const Vec3D &vertex, const Vec3D &normal, const Vec2D &texCoord,
+                   const Array &outVertices, const Array &outNormals, const Array &outTexCoords) {
+    unsigned int i;
+    
+    for (i=0; i<ArrayLength(outVertices); i++) {
+        
+        Vec3D outVertex = ArrayAt<Vec3D>(outVertices, i);
+        Vec3D outNormal = ArrayAt<Vec3D>(outNormals, i);
+        Vec2D outTexCoord = ArrayAt<Vec2D>(outTexCoords, i);
+        
+        if (AreEqual(vertex.x, outVertex.x) && AreEqual(vertex.y, outVertex.y) && AreEqual(vertex.z, outVertex.z) &&
+            AreEqual(normal.x, outNormal.x) && AreEqual(normal.y, outNormal.y) && AreEqual(normal.z, outNormal.z) &&
+            AreEqual(texCoord.u, outTexCoord.u) && AreEqual(texCoord.v, outTexCoord.v)) {
+                return i;
+            }
+    }
+        
+    return -1;
+}
+
+void CreateIndexedBuffers(const Array &inVertices, const Array &inNormals, const Array &inTexCoords, const Array &inFaces,
+                          Array &outVertices, Array &outNormals, Array &outTexCoords, Array &outIndices)
+{
+    unsigned int i, j, numIndices;
+    
+    numIndices = 0;
+    for (i=0; i<ArrayLength(inFaces); i++) {
+        Face face = ArrayAt<Face>(inFaces, i);
+        for (j=0; j<ArrayLength(face.points); j++) {
+
+            Array *indices = ArrayAtPtr<Array>(outIndices, face.IdMaterial-1);
+            Point p = ArrayAt<Point>(face.points, j);
+            
+            Vec3D vertex = ArrayAt<Vec3D>(inVertices, p.IdVertex-1);
+            Vec3D normal = ArrayAt<Vec3D>(inNormals, p.IdNormal-1);
+            Vec2D texCoord = ArrayAt<Vec2D>(inTexCoords, p.IdTexCoord-1);
+            
+            int index = ArraySearchPoint(vertex, normal, texCoord, outVertices, outNormals, outTexCoords);
+            if (index >= 0) {
+                ArrayAdd(*indices, &index);
+            } else {
+                ArrayAdd(outVertices, &vertex);
+                ArrayAdd(outNormals, &normal);
+                ArrayAdd(outTexCoords, &texCoord);
+                index = ArrayLength(outVertices)-1;
+                ArrayAdd(*indices, &index);
+            }
+        }
+    }
+}
+
+void ObjCreateVBO(ObjGeo &geo) {
+    Array outVertices = ArrayCreate<Vec3D>(300);
+    Array outNormals  = ArrayCreate<Vec3D>(300);
+    Array outTexCoords = ArrayCreate<Vec2D>(300);
+    Array outIndices = ArrayCreate<Array>(10);
+    for (int i=0; i<ArrayLength(geo.materials); i++) {
+        Array indices = ArrayCreate<unsigned int>(1000);
+        ArrayAdd(outIndices, &indices);
+    }
+    
+    CreateIndexedBuffers(geo.vertices, geo.normals, geo.texCoords, geo.faces,
+                         outVertices, outNormals, outTexCoords, outIndices);
+    
+    glGenBuffers(1, &geo.vboVertices);
+    glBindBuffer(GL_ARRAY_BUFFER, geo.vboVertices);
+    glBufferData(GL_ARRAY_BUFFER, ArrayBytes(outVertices), ArrayPtr(outVertices), GL_STATIC_DRAW);
+    
+    glGenBuffers(1, &geo.vboNormals);
+    glBindBuffer(GL_ARRAY_BUFFER, geo.vboNormals);
+    glBufferData(GL_ARRAY_BUFFER, ArrayBytes(outNormals), ArrayPtr(outNormals), GL_STATIC_DRAW);
+    
+    glGenBuffers(1, &geo.vboTexCoords);
+    glBindBuffer(GL_ARRAY_BUFFER, geo.vboTexCoords);
+    glBufferData(GL_ARRAY_BUFFER, ArrayBytes(outTexCoords), ArrayPtr(outTexCoords), GL_STATIC_DRAW);
+    
+    // vboIndices
+    geo.numIndices = ArrayCreate<unsigned int>(10);
+    geo.vboIndices = (GLuint *) malloc(sizeof(GLuint) * ArrayLength(outIndices));
+    glGenBuffers(ArrayLength(outIndices), geo.vboIndices);
+    for (int i=0; i<ArrayLength(outIndices); i++) {
+        Array indices = ArrayAt<Array>(outIndices, i);
+        unsigned int length = ArrayLength(indices);
+        ArrayAdd(geo.numIndices, &length);
+        
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geo.vboIndices[i]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, ArrayBytes(indices), ArrayPtr(indices), GL_STATIC_DRAW);
+        
+        ArrayClear(indices);
+    }
+    
+    printf("%lu\n", ArrayLength(geo.vertices));
+    printf("%lu\n", ArrayLength(outVertices));
+    
+    ArrayClear(outVertices);
+    ArrayClear(outNormals);
+    ArrayClear(outTexCoords);
+    ArrayClear(outIndices);
+}
+
+void DrawVBO(const ObjGeo &geo) {
     glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(3, GL_FLOAT, 0, NULL);
-    glBindBuffer(GL_ARRAY_BUFFER, geom.vboID);
-    for (i=0;i<geom.caras.elements;i++){
-        glDrawElements(GL_TRIANGLES, geom.caras, GL_UNSIGNED_BYTE, 0);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, geo.vboVertices);
+    glVertexPointer(3, GL_FLOAT, 0, 0);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, geo.vboNormals);
+    glNormalPointer(GL_FLOAT, 0, 0);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, geo.vboTexCoords);
+    glTexCoordPointer(2, GL_FLOAT, 0, 0);
+    
+    for (int i=0; i<ArrayLength(geo.numIndices); i++) {
+        MatApply(ArrayAt<Material>(geo.materials, i));
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geo.vboIndices[i]);
+        unsigned int numIndices = ArrayAt<unsigned int>(geo.numIndices, i);
+        glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
     }
+    
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
-*/
 
-void ObjDraw(const ObjGeo &geo){
+void DrawImmediate(const ObjGeo &geo){
     unsigned long i,j;
     unsigned int idNormal, idTexCoord, idVertex;
     int idMaterial = -1;
@@ -166,6 +271,14 @@ void ObjDraw(const ObjGeo &geo){
     }
 }
 
+void ObjDraw(const ObjGeo &geo){
+    
+    if (geo.vboIndices != NULL)
+        DrawVBO(geo);
+    else
+        DrawImmediate(geo);
+    
+}
 
 void ObjScale(ObjGeo &geo, float s){
     unsigned long i;

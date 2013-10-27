@@ -5,8 +5,8 @@ typedef struct{
     void *buffer;
     unsigned long elements;
     unsigned long capacity;
-    unsigned long elementSize;
     unsigned long delta;
+    size_t elementSize;
 }Array;
 
 template <class T>
@@ -18,8 +18,15 @@ template <class T>
 T *ArrayPtr(Array &a);
 template <class T>
 const T *ArrayPtr(const Array &a);
+void *ArrayPtr(Array &a);
+const void *ArrayPtr(const Array &a);
 template <class T>
 T ArrayAt(Array &a, int index);
+template <class T>
+T *ArrayAtPtr(Array &a, int index);
+template <class T>
+const T ArrayAt(const Array &a, int index);
+size_t ArrayBytes(const Array &a);
 
 //----------------------------------------
 
@@ -46,8 +53,17 @@ const T *ArrayPtr(const Array &a) {
 
 template <class T>
 T ArrayAt(Array &a, int index) {
-    return *((T *)a.buffer)[index];
+    return ((T *)a.buffer)[index];
 }
 
+template <class T>
+T *ArrayAtPtr(Array &a, int index) {
+    return &((T *)a.buffer)[index];
+}
+
+template <class T>
+const T ArrayAt(const Array &a, int index) {
+    return ((T *)a.buffer)[index];
+}
     
 #endif

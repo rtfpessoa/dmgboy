@@ -26,6 +26,11 @@ typedef struct{
     Array texCoords;
     Array faces;
     Array materials;
+    GLuint vboVertices;
+    GLuint vboNormals;
+    GLuint vboTexCoords;
+    GLuint *vboIndices;
+    Array numIndices;
 }ObjGeo;
 
 typedef struct{
@@ -47,6 +52,7 @@ ObjGeo ObjLoad(const char *filename);
 void   ObjScale(ObjGeo &geo, float s);
 void   ObjClear(ObjGeo &geo);
 void   ObjDraw(const ObjGeo &geo);
+void   ObjCreateVBO(ObjGeo &geo);
 
 Array MtlLoad(const char *filename);
 Array GetFace(char *line);

@@ -27,3 +27,14 @@ unsigned long ArrayLength(const Array &a) {
     return a.elements;
 }
         
+void *ArrayPtr(Array &a) {
+    return a.buffer;
+}
+
+const void *ArrayPtr(const Array &a) {
+    return a.buffer;
+}
+
+size_t ArrayBytes(const Array &a) {
+    return a.elements * a.elementSize;
+}
