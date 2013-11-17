@@ -31,7 +31,7 @@ typedef struct{
     GLuint vboTexCoords;
     GLuint *vboIndices;
     Array numIndices;
-}ObjGeo;
+}Geo;
 
 typedef struct{
     float r,g,b,a;
@@ -48,11 +48,12 @@ typedef struct{
     int illum;
 }Material;
 
-ObjGeo ObjLoad(const char *filename);
-void   ObjScale(ObjGeo &geo, float s);
-void   ObjClear(ObjGeo &geo);
-void   ObjDraw(const ObjGeo &geo);
-void   ObjCreateVBO(ObjGeo &geo);
+// Esta funcion ha de ser llamada una vez el contexto de OpenGL este inicializado
+Geo    GeoLoad(const char *filename);
+void   GeoScale(Geo &geo, float s);
+void   GeoClear(Geo &geo);
+void   GeoDraw(const Geo &geo);
+void   GeoCreateVBO(Geo &geo);
 
 Array MtlLoad(const char *filename);
 Array GetFace(char *line);
@@ -65,11 +66,11 @@ void PrintMaterials(const Array &materials);
 
 unsigned int LoadTexture(const char* filename);
 void LoadTextures(Array &materials);
-
-class Obj {
+/*
+class Geo {
 public:
-    Obj(const char *filename);
-    ~Obj();
+    Geo(const char *filename);
+    ~Geo();
     
     void Scale(float s);
     void Draw();
@@ -77,6 +78,6 @@ public:
 private:
     int GetMatID(Array materiales, const char *name);
 };
-
+*/
 
 #endif

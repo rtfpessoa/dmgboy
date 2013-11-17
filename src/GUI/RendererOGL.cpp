@@ -90,10 +90,6 @@ RendererOGL::RendererOGL(MainFrame *parent, wxWindowID id,
 
 	SetWinRenderer(parent, this);
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-    
-    wxSetWorkingDirectory(wxStandardPaths::Get().GetResourcesDir());
-    
-    m_obj = ObjLoad("gb.obj");
 }
 
 RendererOGL::~RendererOGL()
@@ -153,8 +149,15 @@ void RendererOGL::InitGL()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     
-    ObjCreateVBO(m_obj);
-    LoadTextures(m_obj.materials);
+    wxString cwd = wxGetCwd();
+    wxSetWorkingDirectory(wxStandardPaths::Get().GetResourcesDir());
+
+    if (wxFileExists("gb.3di"))
+        m_geo = GeoLoad("gb.3di");
+    else if (wxFileExists("gb.obj"))
+        m_geo = GeoLoad("gb.obj");
+
+    wxSetWorkingDirectory(cwd);
 }
 
 void RendererOGL::SetPerspective() {
@@ -303,7 +306,7 @@ void RendererOGL::Render()
 {
 	if(!IsShown())
         return;
-	
+
     SetGLContext();
     
     // Init OpenGL once, but after SetCurrent
@@ -316,18 +319,20 @@ void RendererOGL::Render()
 	
     SetPerspective();
 	
-    /* clear color and depth buffers */
+    // clear color and depth buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     glLoadIdentity();
     MoveCamera(m_camera);
     m_camera.Apply();
     
-    ObjDraw(m_obj);
+    if (!m_camera.IsEqualTo(m_camera2D, 0.01f))
+        GeoDraw(m_geo);
     ScreenDraw();
 	
     glFlush();
     SwapBuffers();
+
 }
 
 void RendererOGL::ScreenDraw() {

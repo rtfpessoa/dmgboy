@@ -1,25 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fstream>
 #include <OpenGL/glu.h>
-#include "Obj.h"
+#include "Geo.h"
 #include "wxImageLoader.h"
 #define MAXCHAR 4098
 
-ObjGeo ObjLoad(const char *filename){
+using namespace std;
+
+void LoadIndexedBuffers(string fileName, Array &vertices, Array &normals, Array &texCoords,
+                   Array &indices, Array &materials);
+void GeoFillVBOBuffers(Geo &geo, Array &outVertices, Array &outNormals, Array &outTexCoords, Array &outIndices);
+void GeoClearVBOArrays(Array &outVertices, Array &outNormals, Array &outTexCoords, Array &outIndices);
+
+bool strEndsWith(const char *str1, const char *str2) {
+    int str1Len = strlen(str1);
+    int str2Len = strlen(str2);
+    
+    if (str1Len >= str2Len && strcmp(str1 + str1Len - str2Len, str2) == 0)
+        return true;
+    else
+        return false;
+}
+
+void ObjLoad(const char *filename, Geo &geo) {
     char line[MAXCHAR], temp[MAXCHAR];
     Vec3D vec3D;
     Vec2D vec2D;
     Face face;
     unsigned int currentMat;
-    
-    ObjGeo geo;
-    geo.vboIndices = NULL;
-    geo.vertices   = ArrayCreate<Vec3D>();
-    geo.normals    = ArrayCreate<Vec3D>();
-    geo.texCoords  = ArrayCreate<Vec2D>();
-    geo.faces      = ArrayCreate<Face>();
-    geo.materials  = ArrayCreate<Material>(10);
     
     FILE *file;
     
@@ -56,9 +66,41 @@ ObjGeo ObjLoad(const char *filename){
     }
     else
         printf("OBJ file not found\n");
+}
+
+void File3diLoad(const char *filename, Geo &geo) {
+    Array vertices   = ArrayCreate<Vec3D>(500);
+    Array normals    = ArrayCreate<Vec3D>(500);
+    Array texCoords  = ArrayCreate<Vec2D>(500);
+    Array indices    = ArrayCreate<Array>();
     
-    return geo;    
-}    
+    LoadIndexedBuffers(filename, vertices, normals, texCoords,
+                       indices, geo.materials);
+    GeoFillVBOBuffers(geo, vertices, normals, texCoords, indices);
+    GeoClearVBOArrays(vertices, normals, texCoords, indices);
+}
+
+Geo GeoLoad(const char *filename) {
+    char extension[] = ".3di";
+    
+    Geo geo;
+    geo.vboIndices = NULL;
+    geo.vertices   = ArrayCreate<Vec3D>(500);
+    geo.normals    = ArrayCreate<Vec3D>(500);
+    geo.texCoords  = ArrayCreate<Vec2D>(500);
+    geo.faces      = ArrayCreate<Face>(300);
+    geo.materials  = ArrayCreate<Material>(10);
+    
+    if (strEndsWith(filename, extension)) {
+        File3diLoad(filename, geo);
+    } else {
+        ObjLoad(filename, geo);
+    }
+    
+    LoadTextures(geo.materials);
+    
+    return geo;
+}
 
 Array GetFace(char *line){
     
@@ -91,7 +133,7 @@ Array GetFace(char *line){
     return points;
 }
 
-void ObjClear(ObjGeo &geo){
+void GeoClear(Geo &geo){
     unsigned long i;
     
     ArrayClear(geo.vertices);
@@ -103,6 +145,160 @@ void ObjClear(ObjGeo &geo){
     }
     ArrayClear(geo.faces);
     ArrayClear(geo.materials);
+}
+
+void SaveArray(ofstream *file, const Array &a) {
+    unsigned int length;
+    const void *data;
+    
+    length = ArrayLength(a);
+    data   = ArrayPtr(a);
+    file->write((char *)&length, sizeof(unsigned int));
+    file->write((char *)data, ArrayBytes(a));
+}
+
+void SaveArrayIndices(ofstream *file, const Array &a) {
+    unsigned int length = ArrayLength(a);
+    file->write((char *)&length, sizeof(unsigned int));
+    for (int i=0; i<length; i++) {
+        const Array *indices = ArrayAtPtr<Array>(a, i);
+        SaveArray(file, *indices);
+    }
+}
+
+void SaveArrayMats(ofstream *file, const Array &a) {
+    unsigned int length = ArrayLength(a);
+    file->write((char *)&length, sizeof(unsigned int));
+    for (int i=0; i<length; i++) {
+        Material mat = ArrayAt<Material>(a, i);
+        
+        size_t nameLen = strlen(mat.name);
+        file->write((char *)&nameLen, sizeof(size_t));
+        file->write(mat.name, sizeof(char)*nameLen);
+        
+        size_t textureLen = 0;
+        if (mat.texture == NULL)
+            file->write((char *)&textureLen, sizeof(size_t));
+        else {
+            textureLen = strlen(mat.texture);
+            file->write((char *)&textureLen, sizeof(size_t));
+            file->write(mat.texture, sizeof(char)*textureLen);
+        }
+        
+        file->write((char *)&mat.amb, sizeof(RGBA));
+        file->write((char *)&mat.dif, sizeof(RGBA));
+        file->write((char *)&mat.spe, sizeof(RGBA));
+        
+        file->write((char *)&mat.bright, sizeof(int));
+        file->write((char *)&mat.illum, sizeof(int));
+    }
+}
+
+void SaveIndexedBuffers(string fileName, const Array &vertices, const Array &normals, const Array &texCoords,
+                        const Array &indices, const Array &materials) {
+    
+    ofstream * file = new ofstream(fileName.c_str(), ios::out|ios::binary|ios::trunc);
+    
+    if (file && file->is_open())
+	{
+        SaveArray(file, vertices);
+        SaveArray(file, normals);
+        SaveArray(file, texCoords);
+        
+        SaveArrayIndices(file, indices);
+        SaveArrayMats(file, materials);
+        
+		file->close();
+	}
+	
+	if (file)
+		delete file;
+}
+
+void LoadArray(ifstream *file, Array &a, size_t elementSize) {
+    unsigned int length;
+    void *data = NULL;
+    
+    file->read((char *)&length, sizeof(unsigned int));
+    data = malloc(elementSize*length);
+    file->read((char *)data, elementSize*length);
+    
+    a.buffer = data;
+    a.elementSize = elementSize;
+    a.elements = length;
+    a.capacity = length;
+}
+
+void LoadArrayIndices(ifstream *file, Array &a) {
+    unsigned int length;
+    file->read((char *)&length, sizeof(unsigned int));
+    
+    for (int i=0; i<length; i++) {
+        Array indices = ArrayCreate<unsigned int>(1000);
+        LoadArray(file, indices, sizeof(unsigned int));
+        ArrayAdd(a, &indices);
+    }
+}
+
+void LoadArrayMats(ifstream *file, Array &a) {
+    unsigned int length;
+    file->read((char *)&length, sizeof(unsigned int));
+    
+    for (int i=0; i<length; i++) {
+        Material mat;
+        
+        size_t nameLen = 0;
+        file->read((char *)&nameLen, sizeof(size_t));
+        mat.name = (char *)malloc(sizeof(char)*nameLen+1);
+        file->read(mat.name, sizeof(char)*nameLen);
+        mat.name[nameLen] = '\0';
+        
+        size_t textureLen = 0;
+        file->read((char *)&textureLen, sizeof(size_t));
+        if (textureLen == 0)
+            mat.texture = NULL;
+        else {
+            mat.texture = (char *)malloc(sizeof(char)*textureLen+1);
+            file->read(mat.texture, sizeof(char)*textureLen);
+            mat.texture[textureLen] = '\0';
+        }
+        
+        file->read((char *)&mat.amb, sizeof(RGBA));
+        file->read((char *)&mat.dif, sizeof(RGBA));
+        file->read((char *)&mat.spe, sizeof(RGBA));
+        
+        file->read((char *)&mat.bright, sizeof(int));
+        file->read((char *)&mat.illum, sizeof(int));
+        
+        mat.texID = -1;
+        
+        ArrayAdd(a, &mat);
+    }
+}
+
+void LoadIndexedBuffers(string fileName, Array &vertices, Array &normals, Array &texCoords,
+                        Array &indices, Array &materials)
+{
+	ifstream * file = new ifstream(fileName.c_str(), ios::in|ios::binary);
+	
+	if (file && file->is_open())
+	{
+        LoadArray(file, vertices, sizeof(Vec3D));
+        LoadArray(file, normals, sizeof(Vec3D));
+        LoadArray(file, texCoords, sizeof(Vec2D));
+        
+        LoadArrayIndices(file, indices);
+        LoadArrayMats(file, materials);
+		
+		file->close();
+	}
+	else
+	{
+		printf("Unable to open the geo file");
+	}
+    
+    if (file)
+        delete file;
 }
 
 bool AreEqual(float a, float b, float delta = 0.01f){
@@ -160,19 +356,7 @@ void CreateIndexedBuffers(const Array &inVertices, const Array &inNormals, const
     }
 }
 
-void ObjCreateVBO(ObjGeo &geo) {
-    Array outVertices = ArrayCreate<Vec3D>(300);
-    Array outNormals  = ArrayCreate<Vec3D>(300);
-    Array outTexCoords = ArrayCreate<Vec2D>(300);
-    Array outIndices = ArrayCreate<Array>(10);
-    for (int i=0; i<ArrayLength(geo.materials); i++) {
-        Array indices = ArrayCreate<unsigned int>(1000);
-        ArrayAdd(outIndices, &indices);
-    }
-    
-    CreateIndexedBuffers(geo.vertices, geo.normals, geo.texCoords, geo.faces,
-                         outVertices, outNormals, outTexCoords, outIndices);
-    
+void GeoFillVBOBuffers(Geo &geo, Array &outVertices, Array &outNormals, Array &outTexCoords, Array &outIndices) {
     glGenBuffers(1, &geo.vboVertices);
     glBindBuffer(GL_ARRAY_BUFFER, geo.vboVertices);
     glBufferData(GL_ARRAY_BUFFER, ArrayBytes(outVertices), ArrayPtr(outVertices), GL_STATIC_DRAW);
@@ -196,20 +380,37 @@ void ObjCreateVBO(ObjGeo &geo) {
         
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geo.vboIndices[i]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, ArrayBytes(indices), ArrayPtr(indices), GL_STATIC_DRAW);
-        
+    }
+}
+
+void GeoClearVBOArrays(Array &outVertices, Array &outNormals, Array &outTexCoords, Array &outIndices) {
+    for (int i=0; i<ArrayLength(outIndices); i++) {
+        Array indices = ArrayAt<Array>(outIndices, i);
         ArrayClear(indices);
     }
-    
-    printf("%lu\n", ArrayLength(geo.vertices));
-    printf("%lu\n", ArrayLength(outVertices));
-    
     ArrayClear(outVertices);
     ArrayClear(outNormals);
     ArrayClear(outTexCoords);
     ArrayClear(outIndices);
 }
 
-void DrawVBO(const ObjGeo &geo) {
+void GeoCreateVBO(Geo &geo) {
+    Array outVertices = ArrayCreate<Vec3D>(300);
+    Array outNormals  = ArrayCreate<Vec3D>(300);
+    Array outTexCoords = ArrayCreate<Vec2D>(300);
+    Array outIndices = ArrayCreate<Array>(10);
+    for (int i=0; i<ArrayLength(geo.materials); i++) {
+        Array indices = ArrayCreate<unsigned int>(1000);
+        ArrayAdd(outIndices, &indices);
+    }
+    
+    CreateIndexedBuffers(geo.vertices, geo.normals, geo.texCoords, geo.faces,
+                         outVertices, outNormals, outTexCoords, outIndices);
+    GeoFillVBOBuffers(geo, outVertices, outNormals, outTexCoords, outIndices);
+    GeoClearVBOArrays(outVertices, outNormals, outTexCoords, outIndices);
+}
+
+void DrawVBO(const Geo &geo) {
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -237,7 +438,7 @@ void DrawVBO(const ObjGeo &geo) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void DrawImmediate(const ObjGeo &geo){
+void DrawImmediate(const Geo &geo){
     unsigned long i,j;
     unsigned int idNormal, idTexCoord, idVertex;
     int idMaterial = -1;
@@ -271,7 +472,7 @@ void DrawImmediate(const ObjGeo &geo){
     }
 }
 
-void ObjDraw(const ObjGeo &geo){
+void GeoDraw(const Geo &geo){
     
     if (geo.vboIndices != NULL)
         DrawVBO(geo);
@@ -280,7 +481,7 @@ void ObjDraw(const ObjGeo &geo){
     
 }
 
-void ObjScale(ObjGeo &geo, float s){
+void GeoScale(Geo &geo, float s){
     unsigned long i;
     
     Vec3D *vertices = ArrayPtr<Vec3D>(geo.vertices);

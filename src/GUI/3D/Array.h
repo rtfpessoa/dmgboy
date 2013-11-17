@@ -62,6 +62,11 @@ T *ArrayAtPtr(Array &a, int index) {
 }
 
 template <class T>
+const T *ArrayAtPtr(const Array &a, int index) {
+    return &((T *)a.buffer)[index];
+}
+
+template <class T>
 const T ArrayAt(const Array &a, int index) {
     return ((T *)a.buffer)[index];
 }

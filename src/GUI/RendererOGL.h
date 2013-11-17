@@ -25,7 +25,7 @@
 
 #include "wx/glcanvas.h"
 #include "RendererBase.h"
-#include "3D/Obj.h"
+#include "3D/Geo.h"
 #include "3D/Camera.h"
 
 #if wxUSE_GLCANVAS
@@ -81,7 +81,7 @@ private:
     float        m_filter;
     float        m_minZ;
     
-    ObjGeo       m_obj;
+    Geo          m_geo;
 	
 	void InitGL();
     void SetGLContext();
