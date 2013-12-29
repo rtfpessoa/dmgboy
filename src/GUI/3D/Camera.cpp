@@ -1,7 +1,10 @@
 #ifdef __WXMAC__
 #include <OpenGL/glu.h>
 #else
-#include <GL/glu.h>
+#ifdef __WXMSW__
+#include <windows.h>
+#endif
+#include <GL/gl.h>
 #endif
 #include "Camera.h"
 

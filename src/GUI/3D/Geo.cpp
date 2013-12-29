@@ -2,7 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fstream>
+
+#ifdef __WXMAC__
 #include <OpenGL/glu.h>
+#else
+#include "GL/glew.h"
+#endif
+
 #include "Geo.h"
 #include "wxImageLoader.h"
 #define MAXCHAR 4098

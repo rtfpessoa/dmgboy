@@ -11,6 +11,12 @@
     <Filter Include="GB_Snd_Emu">
       <UniqueIdentifier>{ba321609-3103-4f49-be70-0c05dc898da3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3D">
+      <UniqueIdentifier>{1ed34d05-de34-4a44-b8a4-c5c30d34911f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3D\GLEW">
+      <UniqueIdentifier>{8ba27f37-37e5-4162-bd52-dca5d805b0b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\Video.h">
@@ -44,9 +50,6 @@
       <Filter>HW</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\Registers.h">
-      <Filter>HW</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\Settings.h">
       <Filter>HW</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\GUI\AboutDialog.h">
@@ -124,6 +127,21 @@
     <ClInclude Include="..\..\..\src\GUI\EmulationThread.h">
       <Filter>GUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\Settings.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\3D\Array.h">
+      <Filter>3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\3D\Camera.h">
+      <Filter>3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\3D\Geo.h">
+      <Filter>3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GUI\3D\wxImageLoader.h">
+      <Filter>3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Cartridge.cpp">
@@ -154,9 +172,6 @@
       <Filter>HW</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Video.cpp">
-      <Filter>HW</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Settings.cpp">
       <Filter>HW</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\GUI\AboutDialog.cpp">
@@ -212,6 +227,24 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\GUI\EmulationThread.cpp">
       <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\Settings.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\3D\Array.cpp">
+      <Filter>3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\3D\Camera.cpp">
+      <Filter>3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\3D\Geo.cpp">
+      <Filter>3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\3D\wxImageLoader.cpp">
+      <Filter>3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GUI\3D\glew-1.10.0\src\glew.c">
+      <Filter>3D\GLEW</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

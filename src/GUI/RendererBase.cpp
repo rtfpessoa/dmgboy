@@ -15,10 +15,10 @@
  along with DMGBoy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../Def.h"
 #include "Settings.h"
 #include "MainFrame.h"
 #include "RendererBase.h"
+#include "../Def.h"
 
 DEFINE_EVENT_TYPE(wxEVT_RENDERER_REFRESHSCREEN)
 

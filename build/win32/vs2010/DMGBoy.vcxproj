@@ -28,6 +28,10 @@
     <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Multi_Buffer.h" />
     <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Sound_Queue.h" />
     <ClInclude Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Wave_Writer.h" />
+    <ClInclude Include="..\..\..\src\GUI\3D\Array.h" />
+    <ClInclude Include="..\..\..\src\GUI\3D\Camera.h" />
+    <ClInclude Include="..\..\..\src\GUI\3D\Geo.h" />
+    <ClInclude Include="..\..\..\src\GUI\3D\wxImageLoader.h" />
     <ClInclude Include="..\..\..\src\GUI\AboutDialog.h" />
     <ClInclude Include="..\..\..\src\GUI\EmulationThread.h" />
     <ClInclude Include="..\..\..\src\GUI\IDControls.h" />
@@ -37,6 +41,7 @@
     <ClInclude Include="..\..\..\src\GUI\RendererBase.h" />
     <ClInclude Include="..\..\..\src\GUI\RendererOGL.h" />
     <ClInclude Include="..\..\..\src\GUI\RendererSW.h" />
+    <ClInclude Include="..\..\..\src\GUI\Settings.h" />
     <ClInclude Include="..\..\..\src\GUI\SettingsDialog.h" />
     <ClInclude Include="..\..\..\src\Instructions.h" />
     <ClInclude Include="..\..\..\src\Log.h" />
@@ -44,7 +49,6 @@
     <ClInclude Include="..\..\..\src\Memory.h" />
     <ClInclude Include="..\..\..\src\Pad.h" />
     <ClInclude Include="..\..\..\src\Registers.h" />
-    <ClInclude Include="..\..\..\src\Settings.h" />
     <ClInclude Include="..\..\..\src\Sound.h" />
     <ClInclude Include="..\..\..\src\SoundSDL.h" />
     <ClInclude Include="..\..\..\src\Video.h" />
@@ -60,6 +64,11 @@
     <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\gb_apu\Multi_Buffer.cpp" />
     <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Sound_Queue.cpp" />
     <ClCompile Include="..\..\..\src\Gb_Snd_Emu-0.1.4\Wave_Writer.cpp" />
+    <ClCompile Include="..\..\..\src\GUI\3D\Array.cpp" />
+    <ClCompile Include="..\..\..\src\GUI\3D\Camera.cpp" />
+    <ClCompile Include="..\..\..\src\GUI\3D\Geo.cpp" />
+    <ClCompile Include="..\..\..\src\GUI\3D\glew-1.10.0\src\glew.c" />
+    <ClCompile Include="..\..\..\src\GUI\3D\wxImageLoader.cpp" />
     <ClCompile Include="..\..\..\src\GUI\AboutDialog.cpp" />
     <ClCompile Include="..\..\..\src\GUI\EmulationThread.cpp" />
     <ClCompile Include="..\..\..\src\GUI\InputTextCtrl.cpp" />
@@ -67,9 +76,11 @@
     <ClCompile Include="..\..\..\src\GUI\MainFrame.cpp" />
     <ClCompile Include="..\..\..\src\GUI\RendererBase.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(WXWIN)\include;$(WXWIN)\include\msvc;$(GBSNDEMU);$(PORTAUDIO)\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">_UNICODE;UNICODE;WXUSINGDLL;wxMSVC_VERSION_AUTO;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="..\..\..\src\GUI\RendererOGL.cpp" />
     <ClCompile Include="..\..\..\src\GUI\RendererSW.cpp" />
+    <ClCompile Include="..\..\..\src\GUI\Settings.cpp" />
     <ClCompile Include="..\..\..\src\GUI\SettingsDialog.cpp" />
     <ClCompile Include="..\..\..\src\Instructions.cpp" />
     <ClCompile Include="..\..\..\src\Log.cpp" />
@@ -77,7 +88,6 @@
     <ClCompile Include="..\..\..\src\Memory.cpp" />
     <ClCompile Include="..\..\..\src\Pad.cpp" />
     <ClCompile Include="..\..\..\src\Registers.cpp" />
-    <ClCompile Include="..\..\..\src\Settings.cpp" />
     <ClCompile Include="..\..\..\src\Sound.cpp" />
     <ClCompile Include="..\..\..\src\SoundSDL.cpp" />
     <ClCompile Include="..\..\..\src\Video.cpp" />
@@ -161,25 +171,25 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;WINVER=0x0400;__WXMSW__;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;WINVER=0x0400;__WXMSW__;_WINDOWS;_UNICODE;UNICODE;WXUSINGDLL;wxMSVC_VERSION_AUTO;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc;$(GBSNDEMU)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(WXWIN)\include\msvc;$(WXWIN)\include;$(GBSNDEMU);$(GLEW)\include</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>
       </PrecompiledHeaderOutputFile>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>comctl32.lib;rpcrt4.lib;winmm.lib;advapi32.lib;wsock32.lib;wxmsw28_core.lib;wxbase28.lib;wxmsw28_gl.lib;SDL.lib;SDLmain.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;SDL.lib;SDLmain.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(WXWIN)\lib\vc_lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(WXWIN)\lib\vc100_dll</AdditionalLibraryDirectories>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc</AdditionalIncludeDirectories>

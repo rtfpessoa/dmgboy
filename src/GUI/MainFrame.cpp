@@ -18,6 +18,7 @@
 #include <iostream>
 #include <string>
 #include <math.h>
+#include <wx/toolbar.h>
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
 #include <wx/msgdlg.h>
@@ -196,8 +197,7 @@ void MainFrame::CreateMenuBar()
 
 void MainFrame::CreateToolBar()
 {
-
-	toolBar = new wxToolBar(this, wxID_ANY);
+    toolBar = new wxToolBar(this, wxID_ANY);
     
     //toolBar->AddStretchableSpace();
     

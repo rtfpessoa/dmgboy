@@ -15,8 +15,9 @@
  along with DMGBoy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/wx.h>
 #include <wx/setup.h>
-#include <wx/dcclient.h>
+//#include <wx/dcclient.h>
 #include <wx/stdpaths.h>
 
 #if !wxUSE_GLCANVAS
@@ -26,7 +27,7 @@
 #ifdef __WXMAC__
 #include <OpenGL/glu.h>
 #else
-#include <GL/glu.h>
+#include <GL/glew.h>
 #endif
 
 #include "RendererOGL.h"
@@ -115,6 +116,10 @@ void RendererOGL::OnEraseBackground(wxEraseEvent& event)
 
 void RendererOGL::InitGL()
 {
+#ifndef __WXMAC__
+	glewInit();
+#endif
+
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glEnable(GL_LIGHT1);
