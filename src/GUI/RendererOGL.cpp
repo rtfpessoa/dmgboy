@@ -155,7 +155,9 @@ void RendererOGL::InitGL()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     
     wxString cwd = wxGetCwd();
-    wxSetWorkingDirectory(wxStandardPaths::Get().GetResourcesDir());
+	wxStandardPaths::Get().DontIgnoreAppSubDir();
+	wxString dir = wxStandardPaths::Get().GetResourcesDir();
+    wxSetWorkingDirectory(dir);
 
     if (wxFileExists("gb.3di"))
         m_geo = GeoLoad("gb.3di");

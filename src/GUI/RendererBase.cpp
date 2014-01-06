@@ -110,9 +110,8 @@ void RendererBase::OnRefreshScreen()
 	{
 		if (wxThread::IsMain())
         {
-            //winRenderer->Refresh(false);
-            winRenderer->Refresh();
-            //winRenderer->Update();
+            winRenderer->Refresh(false);
+            winRenderer->Update();
             changed = false;
         }
         else

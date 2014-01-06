@@ -47,7 +47,7 @@ AboutDialog::AboutDialog (wxWindow *parent)
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Version: ")));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT(APP_VERSION)));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Written by: ")));
-    aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT(APP_MAINT)));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxString::FromUTF8(APP_MAINT)));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Licence type: ")));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT(APP_LICENCE)));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, "wxWidgets: "));
@@ -70,7 +70,6 @@ AboutDialog::AboutDialog (wxWindow *parent)
     aboutpane->Add (new wxStaticBitmap (this, wxID_ANY, wxBitmap (gb64_xpm)),
                     0, wxRIGHT, 10);
     aboutpane->Add (aboutinfo, 0, wxEXPAND);
-    //aboutpane->Add (60, 0);
 
     // about complete
     wxBoxSizer *totalpane = new wxBoxSizer (wxVERTICAL);

@@ -181,7 +181,7 @@ void MainFrame::CreateMenuBar()
     
     wxMenu *languageMenu = new wxMenu;
     languageMenu->Append(ID_LANG_ENGLISH, "English");
-    languageMenu->Append(ID_LANG_SPANISH, "Español");
+    languageMenu->Append(ID_LANG_SPANISH,  wxString::FromUTF8("Español"));
     mb->Append(languageMenu, _("&Language"));
 
     // create the help menu
