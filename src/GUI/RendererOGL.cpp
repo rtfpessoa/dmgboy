@@ -16,6 +16,7 @@
  */
 
 #include <wx/wx.h>
+#include <wx/dcbuffer.h>
 #include <wx/setup.h>
 //#include <wx/dcclient.h>
 #include <wx/stdpaths.h>
@@ -90,7 +91,7 @@ RendererOGL::RendererOGL(MainFrame *parent, wxWindowID id,
     m_camera.CopyFrom(m_camera2D);
 
 	SetWinRenderer(parent, this);
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
 
 RendererOGL::~RendererOGL()
@@ -100,7 +101,7 @@ RendererOGL::~RendererOGL()
 
 void RendererOGL::OnPaint( wxPaintEvent& event)
 {
-	wxPaintDC dc(this);
+	wxAutoBufferedPaintDC dc(this);
     Render();
 }
 
@@ -155,7 +156,9 @@ void RendererOGL::InitGL()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     
     wxString cwd = wxGetCwd();
+#ifdef __WXMSW__
 	wxStandardPaths::Get().DontIgnoreAppSubDir();
+#endif
 	wxString dir = wxStandardPaths::Get().GetResourcesDir();
     wxSetWorkingDirectory(dir);
 

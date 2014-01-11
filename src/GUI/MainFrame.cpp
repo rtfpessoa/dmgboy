@@ -78,6 +78,8 @@ END_EVENT_TABLE()
 
 MainFrame::MainFrame(wxString fileName)
 {
+	renderer = NULL;
+
     // Create the MainFrame
     this->Create(0, ID_MAINFRAME, wxT(APP_NAME), wxDefaultPosition,
            wxDefaultSize, wxDEFAULT_FRAME_STYLE);
@@ -109,7 +111,6 @@ MainFrame::MainFrame(wxString fileName)
         wxMessageBox("Couldn't run the thread!");
     
     fullScreen = false;
-    renderer = NULL;
     ChangeRenderer();
     
 	if (fileName != wxT(""))
@@ -591,6 +592,7 @@ void MainFrame::OnTimer(wxTimerEvent &event)
 
 void MainFrame::OnResize(wxSizeEvent &event)
 {
+#ifndef __WXMSW__
     wxSize clientSize = this->GetClientSize();
     wxSize imageSize = clientSize;
     imageSize.y -= 24;
@@ -614,6 +616,11 @@ void MainFrame::OnResize(wxSizeEvent &event)
         this->SetClientSize(wxSize(imageSize.x, imageSize.y+24));
     
     this->Layout();
+	if (renderer)
+		renderer->OnRefreshScreen();
+#else	
+	event.Skip();
+#endif
 }
 
 void MainFrame::OnMaximize(wxMaximizeEvent &event) {
