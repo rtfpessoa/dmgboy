@@ -101,7 +101,7 @@ RendererOGL::~RendererOGL()
 
 void RendererOGL::OnPaint( wxPaintEvent& event)
 {
-	wxAutoBufferedPaintDC dc(this);
+	wxPaintDC dc(this);
     Render();
 }
 

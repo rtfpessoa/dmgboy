@@ -37,8 +37,8 @@ public:
 	void Stop();
 	
 private:
-	enum { bufSize = 1024 };
-	enum { numBuffers = 10 };
+	enum { bufSize = 2048 };
+	enum { numBuffers = 3 };
 	short * volatile bufs;
 	SDL_sem* volatile semaphore;
 	int volatile readBuf;

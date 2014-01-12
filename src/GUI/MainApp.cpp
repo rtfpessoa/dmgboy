@@ -54,6 +54,8 @@ void MainApp::ChangeLanguage(long language)
         wxStandardPaths* paths = (wxStandardPaths*) &wxStandardPaths::Get();
         wxString prefix = paths->GetInstallPrefix();
         locale->AddCatalogLookupPathPrefix( prefix );
+#elif __WXMSW__
+		locale->AddCatalogLookupPathPrefix(wxT("languages"));
 #endif
         
         locale->AddCatalog(APP_NAME);
