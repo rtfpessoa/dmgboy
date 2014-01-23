@@ -81,7 +81,7 @@ void Video::UpdateBG(int y)
 {
 	int x, yScrolled;
 	BYTE valueLCDC, valueSCX;
-	bool display;
+	int display;
 
 	valueLCDC = mem->memory[LCDC];
 	valueSCX = mem->memory[SCX];

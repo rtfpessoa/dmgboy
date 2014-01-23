@@ -16,7 +16,7 @@
  */
 
 #include <wx/defs.h>
-#include <wx/language.h>
+//#include <wx/language.h>
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
 #include <wx/fileconf.h>

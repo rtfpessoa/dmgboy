@@ -50,7 +50,7 @@ AboutDialog::AboutDialog (wxWindow *parent)
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxString::FromUTF8(APP_MAINT)));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Licence type: ")));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT(APP_LICENCE)));
-    aboutinfo->Add (new wxStaticText(this, wxID_ANY, "wxWidgets: "));
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxT("wxWidgets: ")));
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxVERSION_STRING));
 #ifdef __WXMSW__
 	aboutinfo->Add (new wxStaticText(this, wxID_ANY, "SDL: "));

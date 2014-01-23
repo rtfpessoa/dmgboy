@@ -23,7 +23,7 @@
  * RendererOGL Class
  *******************************************************************************/
 
-#include "wx/glcanvas.h"
+#include <wx/glcanvas.h>
 #include "RendererBase.h"
 #include "3D/Geo.h"
 #include "3D/Camera.h"

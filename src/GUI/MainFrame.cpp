@@ -104,12 +104,12 @@ MainFrame::MainFrame(wxString fileName)
     
     wxThreadError err = emulation->Create();
     if (err != wxTHREAD_NO_ERROR)
-        wxMessageBox("Couldn't create the thread!");
-    
+        wxMessageBox(wxT("Couldn't create the thread!"));
+
     err = emulation->Run();
     if (err != wxTHREAD_NO_ERROR)
-        wxMessageBox("Couldn't run the thread!");
-    
+        wxMessageBox(wxT("Couldn't run the thread!"));
+
     fullScreen = false;
     ChangeRenderer();
     
@@ -135,14 +135,16 @@ void MainFrame::CreateMenuBar()
 
     // create the file menu
     wxMenu *fileMenu = new wxMenu;
-	fileMenu->Append(wxID_OPEN, _("&Open")+wxT("\tCtrl+O"));
-	
+    wxString openName = _("&Open");
+    openName += wxT("\tCtrl+O");
+	fileMenu->Append(wxID_OPEN, openName);
+
 	recentMenuFile = new wxMenu;
 	recentMenuFile->AppendSeparator();
 	recentMenuFile->Append(ID_CLEAR_RECENT, _("Clear recent roms"));
 	fileMenu->AppendSubMenu(recentMenuFile, _("Open Recent"));
-	
-	// Se crea un wxMenu que se tratará exactamente igual que a recentMenuFile
+    
+    // Se crea un wxMenu que se tratará exactamente igual que a recentMenuFile
 	// para poder tener uno en el menuBar y otro como popUp
 	recentMenuPopup = new wxMenu;
 	recentMenuPopup->AppendSeparator();
@@ -169,19 +171,30 @@ void MainFrame::CreateMenuBar()
     // add the file menu to the menu bar
     mb->Append(fileMenu, _("&File"));
 
+    wxString preferencesName = _("&Settings");
+    preferencesName += wxT("\tCtrl+E");
+    wxString startName = _("&Start");
+    startName += wxT("\tCtrl+S");
+    wxString pauseName = _("&Pause");
+    pauseName += wxT("\tCtrl+P");
+    wxString stopName = _("S&top");
+    stopName += wxT("\tCtrl+T");
+    wxString fullscreenName = _("&FullScreen");
+    fullscreenName += wxT("\tCtrl+F");
+
 	// create the emulation menu
     wxMenu *emulationMenu = new wxMenu;
-	emulationMenu->Append(wxID_PREFERENCES, _("&Settings")+wxT("\tCtrl+E"));
-    emulationMenu->Append(ID_START, _("&Start")+wxT("\tCtrl+S"));
-	emulationMenu->Append(ID_PAUSE, _("&Pause")+wxT("\tCtrl+P"));
-	emulationMenu->Append(ID_STOP, _("S&top")+wxT("\tCtrl+T"));
-    emulationMenu->Append(ID_FULLSCREEN, _("&FullScreen")+wxT("\tCtrl+F"));
+	emulationMenu->Append(wxID_PREFERENCES, preferencesName);
+    emulationMenu->Append(ID_START, startName);
+	emulationMenu->Append(ID_PAUSE, pauseName);
+	emulationMenu->Append(ID_STOP, stopName);
+    emulationMenu->Append(ID_FULLSCREEN, fullscreenName);
 
     // add the file menu to the menu bar
     mb->Append(emulationMenu, _("&Emulation"));
     
     wxMenu *languageMenu = new wxMenu;
-    languageMenu->Append(ID_LANG_ENGLISH, "English");
+    languageMenu->Append(ID_LANG_ENGLISH, wxT("English"));
     languageMenu->Append(ID_LANG_SPANISH,  wxString::FromUTF8("Español"));
     mb->Append(languageMenu, _("&Language"));
 

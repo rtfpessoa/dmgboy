@@ -16,9 +16,11 @@
  */
 
 #include <iostream>
+#include <wx/wx.h>
 #include <wx/cmdline.h>
 #include <wx/filename.h>
 #include <wx/log.h>
+#include <wx/stdpaths.h>
 #ifdef __WXMSW__
 #include <SDL.h>
 #endif
@@ -30,6 +32,15 @@
 
 IMPLEMENT_APP(MainApp)
 
+#ifdef __WXGTK__
+static const wxCmdLineEntryDesc g_cmdLineDesc[] =
+{
+	{ wxCMD_LINE_SWITCH, wxT("h"), wxT("help"), wxT("displays this help"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP },
+	{ wxCMD_LINE_SWITCH, wxT("v"), wxT("version"), wxT("print version"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+	{ wxCMD_LINE_PARAM, NULL, NULL, wxT("input file"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+	{ wxCMD_LINE_NONE, NULL, NULL, NULL, wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL }
+};
+#else
 static const wxCmdLineEntryDesc g_cmdLineDesc[] =
 {
 	{ wxCMD_LINE_SWITCH, "h", "help", "displays this help", wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP },
@@ -37,6 +48,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] =
 	{ wxCMD_LINE_PARAM, NULL, NULL, "input file", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 	{ wxCMD_LINE_NONE, NULL, NULL, NULL, wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL }
 };
+#endif
 
 void MainApp::ChangeLanguage(long language)
 {
@@ -57,9 +69,9 @@ void MainApp::ChangeLanguage(long language)
 #elif __WXMSW__
 		locale->AddCatalogLookupPathPrefix(wxT("languages"));
 #endif
-        
-        locale->AddCatalog(APP_NAME);
-        
+
+        locale->AddCatalog(wxT(APP_NAME));
+
         if(! locale->IsOk() )
         {
             std::cerr << "selected language is wrong" << std::endl;

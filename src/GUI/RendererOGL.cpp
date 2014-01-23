@@ -18,7 +18,6 @@
 #include <wx/wx.h>
 #include <wx/dcbuffer.h>
 #include <wx/setup.h>
-//#include <wx/dcclient.h>
 #include <wx/stdpaths.h>
 
 #if !wxUSE_GLCANVAS
@@ -62,7 +61,11 @@ void RendererOGL::OnKeyPressed(wxKeyEvent &ev)
     
 }
 
+#ifndef __WXGTK__
 int attribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_SAMPLE_BUFFERS, 1, WX_GL_SAMPLES, 2, WX_GL_DEPTH_SIZE, 16, 0 };
+#else
+int attribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
+#endif
 
 RendererOGL::RendererOGL(MainFrame *parent, wxWindowID id,
 						   const wxPoint& pos, const wxSize& size, long style, const wxString& name)
@@ -91,7 +94,11 @@ RendererOGL::RendererOGL(MainFrame *parent, wxWindowID id,
     m_camera.CopyFrom(m_camera2D);
 
 	SetWinRenderer(parent, this);
+#ifdef __WXGTK__
+    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+#else
     SetBackgroundStyle(wxBG_STYLE_PAINT);
+#endif
 }
 
 RendererOGL::~RendererOGL()
@@ -162,9 +169,9 @@ void RendererOGL::InitGL()
 	wxString dir = wxStandardPaths::Get().GetResourcesDir();
     wxSetWorkingDirectory(dir);
 
-    if (wxFileExists("gb.3di"))
+    if (wxFileExists(wxT("gb.3di")))
         m_geo = GeoLoad("gb.3di");
-    else if (wxFileExists("gb.obj"))
+    else if (wxFileExists(wxT("gb.obj")))
         m_geo = GeoLoad("gb.obj");
 
     wxSetWorkingDirectory(cwd);
