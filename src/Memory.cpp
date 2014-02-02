@@ -172,11 +172,11 @@ void Memory::MemW(WORD address, BYTE value)
             case VBK:
                 if (colorMode)
                 {
-                    if (!hdmaActive)   // Si no esta activo el HDMA
-                    {
+                    //if (!hdmaActive)   // Si no esta activo el HDMA
+                    //{
                         value &= 0x01;
                         vRam = &memory[VRAM_OFFSET+(value*0x2000)];
-                    }
+                    //}
                 }
                 break;
             case HDMA5:
@@ -260,12 +260,12 @@ void Memory::VRamDmaTransfer(BYTE value)
     }
     else
     {
-        WORD src = (memory[HDMA1] << 8) | (memory[HDMA2] & 0xF0);           // valores entre 0000-7FF0 o A000-DFF0
-        WORD dst = ((memory[HDMA3] & 0x1F) << 8) | (memory[HDMA4] & 0xF0);  // Valores entre 0x0000-0x1FF0
-        WORD length = ((value & 0x7F) + 1) * 0x10;                  // Valores entre 0x10-0x800
-        
         if (mode == 0)  // Todo de golpe
         {
+            WORD src = (memory[HDMA1] << 8) | (memory[HDMA2] & 0xF0);           // valores entre 0000-7FF0 o A000-DFF0
+            WORD dst = ((memory[HDMA3] & 0x1F) << 8) | (memory[HDMA4] & 0xF0);  // Valores entre 0x0000-0x1FF0
+            WORD length = ((value & 0x7F) + 1) * 0x10;                  // Valores entre 0x10-0x800
+            
             for (int i= 0; i<length; i++)
                 vRam[dst+i] = MemR(src+i);
             
