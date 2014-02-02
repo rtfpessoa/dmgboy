@@ -20,6 +20,8 @@ build/win32/vs2010/VS2010_vcredist_x86.exe
 
 build/linux/CodeBlocks/DMGBoy
 build/linux/CodeBlocks/DMGBoy.layout
+build/linux/CodeBlocks/gb.3di
+build/linux/CodeBlocks/gb.jpg
 
 *.backup
 */log.txt
