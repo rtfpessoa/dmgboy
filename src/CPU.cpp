@@ -1103,18 +1103,21 @@ void CPU::ChangeSpeed()
 {
     if (colorMode)
     {
+        // Se cambia a la velocidad contraria a la que estamos
+        if (memory[KEY1] & 0x80) {
+            // Velocidad normal
+            memory[KEY1] = 0;
         
-        memory[KEY1] = memory[KEY1] << 7;
+            lcdMode0 = LCD_MODE_0;
+            lcdMode1 = LCD_MODE_1;
+            lcdMode2 = LCD_MODE_2;
+            lcdMode3 = LCD_MODE_3;
+            cyclesFrame = FRAME_CYCLES;
+        }
+        else {
+            // Velocidad doble
+            memory[KEY1] = 0x80;
         
-        lcdMode0 = LCD_MODE_0;
-        lcdMode1 = LCD_MODE_1;
-        lcdMode2 = LCD_MODE_2;
-        lcdMode3 = LCD_MODE_3;
-        cyclesFrame = FRAME_CYCLES;
-        
-        // Si doble velocidad
-        if (memory[KEY1] & 0x80)
-        {
             lcdMode0 = LCD_MODE_0 * 2;
             lcdMode1 = LCD_MODE_1 * 2;
             lcdMode2 = LCD_MODE_2 * 2;
