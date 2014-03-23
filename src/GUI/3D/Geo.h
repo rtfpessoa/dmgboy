@@ -18,7 +18,7 @@
 #ifndef _OBJLOAD_H_
 #define _OBJLOAD_H_
 
-#include "array.h"
+#include "Array.h"
 
 typedef struct{
     float x,y,z;
