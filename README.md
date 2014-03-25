@@ -1,6 +1,6 @@
 # Dot Matrix GameBoy Emulator
 
-## Build Instructions (Mac OSx 10.9.2)
+## Build Instructions (Mac OSx 10.9.2 & XCode 5.1)
 
 ###wxWidgets 3.0.0
 
@@ -47,3 +47,17 @@ http://portaudio.com/archives/pa_stable_v19_20140130.tgz
     CFLAGS="-O2 -g -Wall ${SDKVER}" \
         LDFLAGS=" ${SDKVER}" \
         sudo ./configure && make
+
+
+## Build Instructions (Ubuntu 14.04)
+
+####Requirements
+
+Install CodeBlocks
+
+####Install
+
+    sudo apt-get install libwxgtk2.8-dev libwxgtk2.8-dbg
+    sudo apt-get install libglew-dev libglew1.8
+    sudo apt-get install portaudio19-dev
+    sudo apt-get install xterm
