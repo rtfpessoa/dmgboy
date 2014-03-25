@@ -1,63 +1,18 @@
-# Dot Matrix GameBoy Emulator
+# _DMGBoy_
 
-## Build Instructions (Mac OSx 10.9.2 & XCode 5.1)
+DMGBoy (Dot Matrix Game Boy) is a Game Boy emulator written in C++.
+It uses wxWidgets for the user interface and SDL and portaudio for the audio.
+Is Cross-Platform: Windows, Linux and Mac OS X builds are available.
 
-###wxWidgets 3.0.0
+## About
 
-####Download
-https://sourceforge.net/projects/wxwindows/files/3.0.0/wxWidgets-3.0.0.tar.bz2
+This is a project started by Pablo Gascó Lluch (https://code.google.com/p/dmgboy/), although it is still under
+active development, i forked it to do a project for my course in virtual execution environments.
 
-####Install
+## Running
 
-      tar -xvf wxWidgets-3.0.0.tar.bz2
-      cd wxWidgets-3.0.0
-      ./autogen.sh
-      mkdir build-release
-      cd build-release
-      export ARCHVAL="-arch i386"
-      export SDK19LOC="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"
-      export MACMINVER="10.6"
-      ../configure \
-          --disable-shared \
-          --with-opengl \
-          --with-osx_cocoa \
-          --with-macosx-version-min=${MACMINVER} \
-          --with-macosx-sdk=${SDK19LOC} \
-          --prefix="$(pwd)" \
-          CFLAGS="${ARCHVAL}" \
-          CXXFLAGS="${ARCHVAL}" \
-          CPPFLAGS="${ARCHVAL}" \
-          LDFLAGS="${ARCHVAL}" \
-          OBJCFLAGS="${ARCHVAL}" \
-          OBJCXXFLAGS="${ARCHVAL}" && make
+_Read the INSTALL.md_
 
-###PortAudio v19
+## Contributors
 
-####Download
-http://portaudio.com/archives/pa_stable_v19_20140130.tgz
-
-####Install
-
-    tar -xvf pa_stable_v19_20140130.tgz
-    cd portaudio
-    export ARCHVAL="-arch i386"
-    export SDK19LOC="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"
-    export MACMINVER="10.6"
-    SDKVER="${ARCHVAL} -arch ppc -isysroot ${SDK19LOC} -mmacosx-version-min=${MACMINVER}"
-    CFLAGS="-O2 -g -Wall ${SDKVER}" \
-        LDFLAGS=" ${SDKVER}" \
-        sudo ./configure && make
-
-
-## Build Instructions (Ubuntu 14.04)
-
-####Requirements
-
-Install CodeBlocks
-
-####Install
-
-    sudo apt-get install libwxgtk2.8-dev libwxgtk2.8-dbg
-    sudo apt-get install libglew-dev libglew1.8
-    sudo apt-get install portaudio19-dev
-    sudo apt-get install xterm
+- _Pablo Gascó Lluch_
