@@ -19,6 +19,7 @@
 #define __DEF_H__
 
 //#define MAKEGBLOG
+#define INSTLOG
 
 #define APP_NAME		"DMGBoy"
 #define APP_VERSION		"1.0"

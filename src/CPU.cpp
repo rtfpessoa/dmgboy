@@ -157,6 +157,13 @@ void CPU::ExecuteOneFrame()
 	actualCycles = 0;
 	BYTE OpCode = 0, NextOpcode = 0, lastOpCode = 0;
 
+#ifdef INSTLOG
+/* *********************** DEBUG *********************** */
+    ofstream logFile;
+    logFile.open ("/tmp/dmgboy.log");
+/* ***************************************************** */
+#endif
+
 	Instructions inst(this->GetPtrRegisters(), this->GetPtrMemory());
 	
 	frameCompleted = false;
@@ -184,7 +191,7 @@ void CPU::ExecuteOneFrame()
         //stringstream ssOpCode2;
 		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
 #endif
-		
+        
 		if (!Get_Halt())
 		{
 			switch(OpCode)
@@ -459,18 +466,34 @@ void CPU::ExecuteOneFrame()
 					throw GBException(out.str());
                     
 			} // end switch
-            
+
 		} // end if (!Get_Halt())
+
+#ifdef INSTLOG
+        /* *********************** DEBUG *********************** */
+        if (OpCode != 0xCB)
+        {
+            logFile << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << std::endl;
+        } else {
+            logFile << setfill('0') << setw(2) << uppercase << hex << (int)OpCode
+            << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode << std::endl;
+        }
+        /* ***************************************************** */
+#endif
         
         if (OpCode == 0xCB)
+        {
             lastCycles += instructionCyclesCB[NextOpcode]*4;
+        }
         else if (Get_ConditionalTaken())
         {
             lastCycles += instructionCondicionalCycles[OpCode]*4;
             Set_ConditionalTaken(false);
         }
         else
+        {
             lastCycles = instructionCycles[OpCode]*4;
+        }
         
         if (newInterrupt)
         {
@@ -489,6 +512,13 @@ void CPU::ExecuteOneFrame()
         lastCycles -= tmpCycles;
 		
 	}//end for
+
+#ifdef INSTLOG
+    /* *********************** DEBUG *********************** */
+    logFile.close();
+    /* ***************************************************** */
+#endif
+
 }
 
 
