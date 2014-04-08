@@ -167,7 +167,7 @@ void CPU::ExecuteOneFrame()
   void *ptr;
   int tmpCycles;
 
-  void *dispatch[] = {
+  static void *dispatch[] = {
     &&_0x00, &&_0x01, &&_0x02, &&_0x03, &&_0x04, &&_0x05, &&_0x06, &&_0x07, &&_0x08, &&_0x09, &&_0x0A, &&_0x0B, &&_0x0C, &&_0x0D, &&_0x0E, &&_0x0F,
     &&_0x10, &&_0x11, &&_0x12, &&_0x13, &&_0x14, &&_0x15, &&_0x16, &&_0x17, &&_0x18, &&_0x19, &&_0x1A, &&_0x1B, &&_0x1C, &&_0x1D, &&_0x1E, &&_0x1F,
     &&_0x20, &&_0x21, &&_0x22, &&_0x23, &&_0x24, &&_0x25, &&_0x26, &&_0x27, &&_0x28, &&_0x29, &&_0x2A, &&_0x2B, &&_0x2C, &&_0x2D, &&_0x2E, &&_0x2F,
@@ -184,6 +184,79 @@ void CPU::ExecuteOneFrame()
     &&_0xD0, &&_0xD1, &&_0xD2, &&_NIMP, &&_0xD4, &&_0xD5, &&_0xD6, &&_0xD7, &&_0xD8, &&_0xD9, &&_0xDA, &&_NIMP, &&_0xDC, &&_NIMP, &&_0xDE, &&_0xDF,
     &&_0xE0, &&_0xE1, &&_0xE2, &&_NIMP, &&_NIMP, &&_0xE5, &&_0xE6, &&_0xE7, &&_0xE8, &&_0xE9, &&_0xEA, &&_NIMP, &&_NIMP, &&_NIMP, &&_0xEE, &&_0xEF,
     &&_0xF0, &&_0xF1, &&_0xF2, &&_0xF3, &&_NIMP, &&_0xF5, &&_0xF6, &&_0xF7, &&_0xF8, &&_0xF9, &&_0xFA, &&_0xFB, &&_NIMP, &&_NIMP, &&_0xFE, &&_0xFF};
+
+  #ifdef MAKEGBLOG
+  	log->Enqueue("\n\nStartFrame", NULL, "");
+  #endif
+
+  frameCompleted = false;
+  while (!frameCompleted)
+  {
+    numInstructions++;
+    lastOpCode = OpCode;
+    OpCode = MemR(Get_PC());
+    NextOpcode = MemR(Get_PC() + 1);
+
+    if (!Get_Halt())
+    {
+      #ifdef MAKEGBLOG
+    		stringstream ssOpCode;
+    		ssOpCode << numInstructions << ", ";
+    		ssOpCode << "Op: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
+    		if (OpCode == 0xCB)
+    			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
+        ssOpCode << ", ";
+    		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
+      #endif
+
+      ptr = dispatch[OpCode];
+      goto *ptr;
+    end: ;
+    } // end if (!Get_Halt())
+
+    #ifdef INSTLOG
+      if (OpCode != 0xCB)
+      {
+          logFile << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << std::endl;
+      } else {
+          logFile << setfill('0') << setw(2) << uppercase << hex << (int)OpCode
+          << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode << std::endl;
+      }
+    #endif
+
+    if (OpCode == 0xCB)
+        lastCycles += instructionCyclesCB[NextOpcode]*4;
+    else if (Get_ConditionalTaken())
+    {
+        lastCycles += instructionCondicionalCycles[OpCode]*4;
+        Set_ConditionalTaken(false);
+    }
+    else
+        lastCycles = instructionCycles[OpCode]*4;
+
+    if (newInterrupt)
+    {
+        lastCycles += 20;
+        newInterrupt = false;
+    }
+
+    tmpCycles = lastCycles;
+    actualCycles += lastCycles;
+
+    UpdateStateLCD(lastCycles);
+    UpdateTimer(lastCycles);
+    UpdateSerial(lastCycles);
+    Interrupts(&inst);
+
+    lastCycles -= tmpCycles;
+
+  } //end while
+
+  #ifdef INSTLOG
+    logFile.close();
+  #endif
+
+  return;
 
   _0x00: inst.NOP(); goto end;
   _0x01: inst.LD_n_nn(BC); goto end;
@@ -446,79 +519,6 @@ void CPU::ExecuteOneFrame()
   _0xFE: inst.CP_n($); goto end;
   _0xFF: inst.RST_n(0x38); goto end;
   _NIMP: throw GBException("something"); goto end;
-
-  #ifdef MAKEGBLOG
-  	log->Enqueue("\n\nStartFrame", NULL, "");
-  #endif
-
-  frameCompleted = false;
-  while (!frameCompleted)
-  {
-    numInstructions++;
-    lastOpCode = OpCode;
-    OpCode = MemR(Get_PC());
-    NextOpcode = MemR(Get_PC() + 1);
-
-    if (!Get_Halt())
-    {
-      #ifdef MAKEGBLOG
-    		stringstream ssOpCode;
-    		ssOpCode << numInstructions << ", ";
-    		ssOpCode << "Op: " << setfill('0') << setw(2) << uppercase << hex << (int)OpCode;
-    		if (OpCode == 0xCB)
-    			ssOpCode << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode;
-        ssOpCode << ", ";
-    		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
-      #endif
-
-      std::cout << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << std::endl;
-      std::cout << "NumInstr: " << numInstructions << std::endl;
-      ptr = dispatch[OpCode];
-      goto *ptr;
-    end: ;
-    } // end if (!Get_Halt())
-
-    #ifdef INSTLOG
-      if (OpCode != 0xCB)
-      {
-          logFile << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << std::endl;
-      } else {
-          logFile << setfill('0') << setw(2) << uppercase << hex << (int)OpCode
-          << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode << std::endl;
-      }
-    #endif
-
-    if (OpCode == 0xCB)
-        lastCycles += instructionCyclesCB[NextOpcode]*4;
-    else if (Get_ConditionalTaken())
-    {
-        lastCycles += instructionCondicionalCycles[OpCode]*4;
-        Set_ConditionalTaken(false);
-    }
-    else
-        lastCycles = instructionCycles[OpCode]*4;
-
-    if (newInterrupt)
-    {
-        lastCycles += 20;
-        newInterrupt = false;
-    }
-
-    tmpCycles = lastCycles;
-    actualCycles += lastCycles;
-
-    UpdateStateLCD(lastCycles);
-    UpdateTimer(lastCycles);
-    UpdateSerial(lastCycles);
-    Interrupts(&inst);
-
-    lastCycles -= tmpCycles;
-
-  } //end while
-
-  #ifdef INSTLOG
-    logFile.close();
-  #endif
 }
 
 void CPU::OpCodeCB(Instructions * inst)
