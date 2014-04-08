@@ -167,312 +167,285 @@ void CPU::ExecuteOneFrame()
   void *ptr;
   int tmpCycles;
 
-  void *dispatch[] = {&&NOP, &&LD_n_nn_BC, &&LD_n_A_c_BC, &&INC_nn_BC, &&INC_n_B,
-    &&DEC_n_B, &&LD_nn_n_B, &&RLC_n_A, &&LD_nn_SP, &&ADD_HL_n_BC, &&LD_A_n_c_BC,
-    &&DEC_nn_BC, &&INC_n_C, &&DEC_n_C, &&LD_nn_n_C, &&RRC_n_A, &&STOP,
-    &&LD_n_nn_DE, &&LD_n_A_c_DE, &&INC_nn_DE, &&INC_n_D, &&DEC_n_D, &&LD_nn_n_D,
-    &&RL_n_A, &&JR, &&ADD_HL_n_DE, &&LD_A_n_c_DE, &&DEC_nn_DE, &&INC_n_E,
-    &&DEC_n_E, &&LD_nn_n_E, &&RR_n_A, &&JR_CC_n_f_Z_0, &&LD_n_nn_HL,
-    &&LDI_cHL_A, &&INC_nn_HL, &&INC_n_H, &&DEC_n_H, &&LD_nn_n_H, &&DAA,
-    &&JR_CC_n_f_Z_1, &&ADD_HL_n_HL, &&LDI_A_cHL, &&DEC_nn_HL, &&INC_n_L,
-    &&DEC_n_L, &&LD_nn_n_L, &&CPL, &&JR_CC_n_f_C_0, &&LD_n_nn_SP,
-    &&LDD_cHL_A, &&INC_nn_SP, &&INC_n_c_HL, &&DEC_n_c_HL, &&LD_r1_r2_c_HL_$,
-    &&SCF, &&JR_CC_n_f_C_1, &&ADD_HL_n_SP, &&LDD_A_cHL, &&DEC_nn_SP, &&INC_n_A,
-    &&DEC_n_A, &&LD_A_n_$, &&CCF, &&LD_r1_r2_B_B, &&LD_r1_r2_B_C, &&LD_r1_r2_B_D,
-    &&LD_r1_r2_B_E, &&LD_r1_r2_B_H, &&LD_r1_r2_B_L, &&LD_r1_r2_B_c_HL, &&LD_n_A_B,
-    &&LD_r1_r2_C_B, &&LD_r1_r2_C_C, &&LD_r1_r2_C_D, &&LD_r1_r2_C_E, &&LD_r1_r2_C_H,
-    &&LD_r1_r2_C_L, &&LD_r1_r2_C_c_HL, &&LD_n_A_C, &&LD_r1_r2_D_B, &&LD_r1_r2_D_C,
-    &&LD_r1_r2_D_D, &&LD_r1_r2_D_E, &&LD_r1_r2_D_H, &&LD_r1_r2_D_L, &&LD_r1_r2_D_c_HL,
-    &&LD_n_A_D, &&LD_r1_r2_E_B, &&LD_r1_r2_E_C, &&LD_r1_r2_E_D, &&LD_r1_r2_E_E,
-    &&LD_r1_r2_E_H, &&LD_r1_r2_E_L, &&LD_r1_r2_E_c_HL, &&LD_n_A_E, &&LD_r1_r2_H_B,
-    &&LD_r1_r2_H_C, &&LD_r1_r2_H_D, &&LD_r1_r2_H_E, &&LD_r1_r2_H_H, &&LD_r1_r2_H_L,
-    &&LD_r1_r2_H_c_HL, &&LD_n_A_H, &&LD_r1_r2_L_B, &&LD_r1_r2_L_C, &&LD_r1_r2_L_D,
-    &&LD_r1_r2_L_E, &&LD_r1_r2_L_H, &&LD_r1_r2_L_L, &&LD_r1_r2_L_c_HL, &&LD_n_A_L,
-    &&LD_r1_r2_c_HL_B, &&LD_r1_r2_c_HL_C, &&LD_r1_r2_c_HL_D, &&LD_r1_r2_c_HL_E,
-    &&LD_r1_r2_c_HL_H, &&LD_r1_r2_c_HL_L, &&HALT, &&LD_n_A_c_HL, &&LD_A_n_B,
-    &&LD_A_n_C, &&LD_A_n_D, &&LD_A_n_E, &&LD_A_n_H, &&LD_A_n_L, &&LD_A_n_c_HL,
-    &&LD_n_A_A, &&ADD_A_n_B, &&ADD_A_n_C, &&ADD_A_n_D, &&ADD_A_n_E, &&ADD_A_n_H,
-    &&ADD_A_n_L, &&ADD_A_n_c_HL, &&ADD_A_n_A, &&ADC_A_n_B, &&ADC_A_n_C, &&ADC_A_n_D,
-    &&ADC_A_n_E, &&ADC_A_n_H, &&ADC_A_n_L, &&ADC_A_n_c_HL, &&ADC_A_n_A, &&SUB_n_B,
-    &&SUB_n_C, &&SUB_n_D, &&SUB_n_E, &&SUB_n_H, &&SUB_n_L, &&SUB_n_c_HL, &&SUB_n_A,
-    &&SBC_A_B, &&SBC_A_C, &&SBC_A_D, &&SBC_A_E, &&SBC_A_H, &&SBC_A_L, &&SBC_A_c_HL,
-    &&SBC_A_A, &&AND_B, &&AND_C, &&AND_D, &&AND_E, &&AND_H, &&AND_L, &&AND_c_HL,
-    &&AND_A, &&XOR_n_B, &&XOR_n_C, &&XOR_n_D, &&XOR_n_E, &&XOR_n_H, &&XOR_n_L,
-    &&XOR_n_c_HL, &&XOR_n_A, &&OR_n_B, &&OR_n_C, &&OR_n_D, &&OR_n_E, &&OR_n_H,
-    &&OR_n_L, &&OR_n_c_HL, &&OR_n_A, &&CP_n_B, &&CP_n_C, &&CP_n_D, &&CP_n_E, &&CP_n_H,
-    &&CP_n_L, &&CP_n_c_HL, &&CP_n_A, &&RET_cc_f_Z_0, &&POP_nn_BC, &&JP_cc_nn_f_Z_0,
-    &&JP_nn, &&CALL_cc_nn_f_Z_0, &&PUSH_nn_BC, &&ADD_A_n_$, &&RST_n_0x00, &&RET_cc_f_Z_1,
-    &&RET, &&JP_cc_nn_f_Z_1, &&OpCodeCB, &&CALL_cc_nn_f_Z_1, &&CALL_nn, &&ADC_A_n_$,
-    &&RST_n_0x08, &&RET_cc_f_C_0, &&POP_nn_DE, &&JP_cc_nn_f_C_0, &&NOT_IMPL, &&CALL_cc_nn_f_C_0,
-    &&PUSH_nn_DE, &&SUB_n_$, &&RST_n_0x10, &&RET_cc_f_C_1, &&RETI, &&JP_cc_nn_f_C_1,
-    &&NOT_IMPL, &&CALL_cc_nn_f_C_1, &&NOT_IMPL, &&SBC_A_$, &&RST_n_0x18, &&LDH_c$_A, &&POP_nn_HL, &&LD_cC_A,
-    &&NOT_IMPL, &&NOT_IMPL, &&PUSH_nn_HL, &&AND_$, &&RST_n_0x20, &&ADD_SP_n, &&JP_HL, &&LD_n_A_c_$$,
-    &&NOT_IMPL, &&NOT_IMPL, &&NOT_IMPL, &&XOR_n_$,
-    &&RST_n_0x28, &&LDH_A_n, &&POP_nn_AF, &&LD_A_cC, &&DI, &&NOT_IMPL, &&PUSH_nn_AF, &&OR_n_$,
-    &&RST_n_0x30, &&LDHL_SP_n, &&LD_SP_HL, &&LD_A_n_c_$$, &&EI, &&NOT_IMPL, &&NOT_IMPL,
-    &&CP_n_$, &&RST_n_0x38};
+  void *dispatch[] = {
+    &&_0x00, &&_0x01, &&_0x02, &&_0x03, &&_0x04, &&_0x05, &&_0x06, &&_0x07, &&_0x08, &&_0x09, &&_0x0A, &&_0x0B, &&_0x0C, &&_0x0D, &&_0x0E, &&_0x0F,
+    &&_0x10, &&_0x11, &&_0x12, &&_0x13, &&_0x14, &&_0x15, &&_0x16, &&_0x17, &&_0x18, &&_0x19, &&_0x1A, &&_0x1B, &&_0x1C, &&_0x1D, &&_0x1E, &&_0x1F,
+    &&_0x20, &&_0x21, &&_0x22, &&_0x23, &&_0x24, &&_0x25, &&_0x26, &&_0x27, &&_0x28, &&_0x29, &&_0x2A, &&_0x2B, &&_0x2C, &&_0x2D, &&_0x2E, &&_0x2F,
+    &&_0x30, &&_0x31, &&_0x32, &&_0x33, &&_0x34, &&_0x35, &&_0x36, &&_0x37, &&_0x38, &&_0x39, &&_0x3A, &&_0x3B, &&_0x3C, &&_0x3D, &&_0x3E, &&_0x3F,
+    &&_0x40, &&_0x41, &&_0x42, &&_0x43, &&_0x44, &&_0x45, &&_0x46, &&_0x47, &&_0x48, &&_0x49, &&_0x4A, &&_0x4B, &&_0x4C, &&_0x4D, &&_0x4E, &&_0x4F,
+    &&_0x50, &&_0x51, &&_0x52, &&_0x53, &&_0x54, &&_0x55, &&_0x56, &&_0x57, &&_0x58, &&_0x59, &&_0x5A, &&_0x5B, &&_0x5C, &&_0x5D, &&_0x5E, &&_0x5F,
+    &&_0x60, &&_0x61, &&_0x62, &&_0x63, &&_0x64, &&_0x65, &&_0x66, &&_0x67, &&_0x68, &&_0x69, &&_0x6A, &&_0x6B, &&_0x6C, &&_0x6D, &&_0x6E, &&_0x6F,
+    &&_0x70, &&_0x71, &&_0x72, &&_0x73, &&_0x74, &&_0x75, &&_0x76, &&_0x77, &&_0x78, &&_0x79, &&_0x7A, &&_0x7B, &&_0x7C, &&_0x7D, &&_0x7E, &&_0x7F,
+    &&_0x80, &&_0x81, &&_0x82, &&_0x83, &&_0x84, &&_0x85, &&_0x86, &&_0x87, &&_0x88, &&_0x89, &&_0x8A, &&_0x8B, &&_0x8C, &&_0x8D, &&_0x8E, &&_0x8F,
+    &&_0x90, &&_0x91, &&_0x92, &&_0x93, &&_0x94, &&_0x95, &&_0x96, &&_0x97, &&_0x98, &&_0x99, &&_0x9A, &&_0x9B, &&_0x9C, &&_0x9D, &&_0x9E, &&_0x9F,
+    &&_0xA0, &&_0xA1, &&_0xA2, &&_0xA3, &&_0xA4, &&_0xA5, &&_0xA6, &&_0xA7, &&_0xA8, &&_0xA9, &&_0xAA, &&_0xAB, &&_0xAC, &&_0xAD, &&_0xAE, &&_0xAF,
+    &&_0xB0, &&_0xB1, &&_0xB2, &&_0xB3, &&_0xB4, &&_0xB5, &&_0xB6, &&_0xB7, &&_0xB8, &&_0xB9, &&_0xBA, &&_0xBB, &&_0xBC, &&_0xBD, &&_0xBE, &&_0xBF,
+    &&_0xC0, &&_0xC1, &&_0xC2, &&_0xC3, &&_0xC4, &&_0xC5, &&_0xC6, &&_0xC7, &&_0xC8, &&_0xC9, &&_0xCA, &&_0xCB, &&_0xCC, &&_0xCD, &&_0xCE, &&_0xCF,
+    &&_0xD0, &&_0xD1, &&_0xD2, &&_NIMP, &&_0xD4, &&_0xD5, &&_0xD6, &&_0xD7, &&_0xD8, &&_0xD9, &&_0xDA, &&_NIMP, &&_0xDC, &&_NIMP, &&_0xDE, &&_0xDF,
+    &&_0xE0, &&_0xE1, &&_0xE2, &&_NIMP, &&_NIMP, &&_0xE5, &&_0xE6, &&_0xE7, &&_0xE8, &&_0xE9, &&_0xEA, &&_NIMP, &&_NIMP, &&_NIMP, &&_0xEE, &&_0xEF,
+    &&_0xF0, &&_0xF1, &&_0xF2, &&_0xF3, &&_NIMP, &&_0xF5, &&_0xF6, &&_0xF7, &&_0xF8, &&_0xF9, &&_0xFA, &&_0xFB, &&_NIMP, &&_NIMP, &&_0xFE, &&_0xFF};
 
-  NOP:  inst.NOP(); goto end;
-  LD_n_nn_BC:  inst.LD_n_nn(BC); goto end;
-  LD_n_A_c_BC:  inst.LD_n_A(c_BC); goto end;
-  INC_nn_BC:  inst.INC_nn(BC); goto end;
-  INC_n_B:  inst.INC_n(B); goto end;
-  DEC_n_B:  inst.DEC_n(B); goto end;
-  LD_nn_n_B:  inst.LD_nn_n(B); goto end;
-  RLC_n_A:  inst.RLC_n(A); goto end;
-  LD_nn_SP:  inst.LD_nn_SP(); goto end;
-  ADD_HL_n_BC:  inst.ADD_HL_n(BC); goto end;
-  LD_A_n_c_BC:  inst.LD_A_n(c_BC); goto end;
-  DEC_nn_BC:  inst.DEC_nn(BC); goto end;
-  INC_n_C:  inst.INC_n(C); goto end;
-  DEC_n_C:  inst.DEC_n(C); goto end;
-  LD_nn_n_C:  inst.LD_nn_n(C); goto end;
-  RRC_n_A:  inst.RRC_n(A); goto end;
+  _0x00: inst.NOP(); goto end;
+  _0x01: inst.LD_n_nn(BC); goto end;
+  _0x02: inst.LD_n_A(c_BC); goto end;
+  _0x03: inst.INC_nn(BC); goto end;
+  _0x04: inst.INC_n(B); goto end;
+  _0x05: inst.DEC_n(B); goto end;
+  _0x06: inst.LD_nn_n(B); goto end;
+  _0x07: inst.RLC_n(A); goto end;
+  _0x08: inst.LD_nn_SP(); goto end;
+  _0x09: inst.ADD_HL_n(BC); goto end;
+  _0x0A: inst.LD_A_n(c_BC); goto end;
+  _0x0B: inst.DEC_nn(BC); goto end;
+  _0x0C: inst.INC_n(C); goto end;
+  _0x0D: inst.DEC_n(C); goto end;
+  _0x0E: inst.LD_nn_n(C); goto end;
+  _0x0F: inst.RRC_n(A); goto end;
 
-  STOP: inst.STOP(); ChangeSpeed(); goto end;
-  LD_n_nn_DE:  inst.LD_n_nn(DE); goto end;
-  LD_n_A_c_DE:  inst.LD_n_A(c_DE); goto end;
-  INC_nn_DE:  inst.INC_nn(DE); goto end;
-  INC_n_D:  inst.INC_n(D); goto end;
-  DEC_n_D:  inst.DEC_n(D); goto end;
-  LD_nn_n_D:  inst.LD_nn_n(D); goto end;
-  RL_n_A:  inst.RL_n(A); goto end;
-  JR:  inst.JR(); goto end;
-  ADD_HL_n_DE:  inst.ADD_HL_n(DE); goto end;
-  LD_A_n_c_DE:  inst.LD_A_n(c_DE); goto end;
-  DEC_nn_DE:  inst.DEC_nn(DE); goto end;
-  INC_n_E:  inst.INC_n(E); goto end;
-  DEC_n_E:  inst.DEC_n(E); goto end;
-  LD_nn_n_E:  inst.LD_nn_n(E); goto end;
-  RR_n_A:  inst.RR_n(A); goto end;
+  _0x10: inst.STOP(); ChangeSpeed(); goto end;
+  _0x11: inst.LD_n_nn(DE); goto end;
+  _0x12: inst.LD_n_A(c_DE); goto end;
+  _0x13: inst.INC_nn(DE); goto end;
+  _0x14: inst.INC_n(D); goto end;
+  _0x15: inst.DEC_n(D); goto end;
+  _0x16: inst.LD_nn_n(D); goto end;
+  _0x17: inst.RL_n(A); goto end;
+  _0x18: inst.JR(); goto end;
+  _0x19: inst.ADD_HL_n(DE); goto end;
+  _0x1A: inst.LD_A_n(c_DE); goto end;
+  _0x1B: inst.DEC_nn(DE); goto end;
+  _0x1C: inst.INC_n(E); goto end;
+  _0x1D: inst.DEC_n(E); goto end;
+  _0x1E: inst.LD_nn_n(E); goto end;
+  _0x1F: inst.RR_n(A); goto end;
 
-  JR_CC_n_f_Z_0:  inst.JR_CC_n(f_Z, 0); goto end;
-  LD_n_nn_HL:  inst.LD_n_nn(HL); goto end;
-  LDI_cHL_A:  inst.LDI_cHL_A(); goto end;
-  INC_nn_HL:  inst.INC_nn(HL); goto end;
-  INC_n_H:  inst.INC_n(H); goto end;
-  DEC_n_H:  inst.DEC_n(H); goto end;
-  LD_nn_n_H:  inst.LD_nn_n(H); goto end;
-  DAA:  inst.DAA(); goto end;
-  JR_CC_n_f_Z_1:  inst.JR_CC_n(f_Z, 1); goto end;
-  ADD_HL_n_HL:  inst.ADD_HL_n(HL); goto end;
-  LDI_A_cHL:  inst.LDI_A_cHL(); goto end;
-  DEC_nn_HL:  inst.DEC_nn(HL); goto end;
-  INC_n_L:  inst.INC_n(L); goto end;
-  DEC_n_L:  inst.DEC_n(L); goto end;
-  LD_nn_n_L:  inst.LD_nn_n(L); goto end;
-  CPL:  inst.CPL(); goto end;
+  _0x20: inst.JR_CC_n(f_Z, 0); goto end;
+  _0x21: inst.LD_n_nn(HL); goto end;
+  _0x22: inst.LDI_cHL_A(); goto end;
+  _0x23: inst.INC_nn(HL); goto end;
+  _0x24: inst.INC_n(H); goto end;
+  _0x25: inst.DEC_n(H); goto end;
+  _0x26: inst.LD_nn_n(H); goto end;
+  _0x27: inst.DAA(); goto end;
+  _0x28: inst.JR_CC_n(f_Z, 1); goto end;
+  _0x29: inst.ADD_HL_n(HL); goto end;
+  _0x2A: inst.LDI_A_cHL(); goto end;
+  _0x2B: inst.DEC_nn(HL); goto end;
+  _0x2C: inst.INC_n(L); goto end;
+  _0x2D: inst.DEC_n(L); goto end;
+  _0x2E: inst.LD_nn_n(L); goto end;
+  _0x2F: inst.CPL(); goto end;
 
-  JR_CC_n_f_C_0:  inst.JR_CC_n(f_C, 0); goto end;
-  LD_n_nn_SP:  inst.LD_n_nn(SP); goto end;
-  LDD_cHL_A:  inst.LDD_cHL_A(); goto end;
-  INC_nn_SP:  inst.INC_nn(SP); goto end;
-  INC_n_c_HL:  inst.INC_n(c_HL); goto end;
-  DEC_n_c_HL:  inst.DEC_n(c_HL); goto end;
-  LD_r1_r2_c_HL_$:  inst.LD_r1_r2(c_HL, $); goto end;
-  SCF:  inst.SCF(); goto end;
-  JR_CC_n_f_C_1:  inst.JR_CC_n(f_C, 1); goto end;
-  ADD_HL_n_SP:  inst.ADD_HL_n(SP); goto end;
-  LDD_A_cHL:  inst.LDD_A_cHL(); goto end;
-  DEC_nn_SP:  inst.DEC_nn(SP); goto end;
-  INC_n_A:  inst.INC_n(A); goto end;
-  DEC_n_A:  inst.DEC_n(A); goto end;
-  LD_A_n_$:  inst.LD_A_n($); goto end;
-  CCF:  inst.CCF(); goto end;
+  _0x30: inst.JR_CC_n(f_C, 0); goto end;
+  _0x31: inst.LD_n_nn(SP); goto end;
+  _0x32: inst.LDD_cHL_A(); goto end;
+  _0x33: inst.INC_nn(SP); goto end;
+  _0x34: inst.INC_n(c_HL); goto end;
+  _0x35: inst.DEC_n(c_HL); goto end;
+  _0x36: inst.LD_r1_r2(c_HL, $); goto end;
+  _0x37: inst.SCF(); goto end;
+  _0x38: inst.JR_CC_n(f_C, 1); goto end;
+  _0x39: inst.ADD_HL_n(SP); goto end;
+  _0x3A: inst.LDD_A_cHL(); goto end;
+  _0x3B: inst.DEC_nn(SP); goto end;
+  _0x3C: inst.INC_n(A); goto end;
+  _0x3D: inst.DEC_n(A); goto end;
+  _0x3E: inst.LD_A_n($); goto end;
+  _0x3F: inst.CCF(); goto end;
 
-  LD_r1_r2_B_B:  inst.LD_r1_r2(B, B); goto end;
-  LD_r1_r2_B_C:  inst.LD_r1_r2(B, C); goto end;
-  LD_r1_r2_B_D:  inst.LD_r1_r2(B, D); goto end;
-  LD_r1_r2_B_E:  inst.LD_r1_r2(B, E); goto end;
-  LD_r1_r2_B_H:  inst.LD_r1_r2(B, H); goto end;
-  LD_r1_r2_B_L:  inst.LD_r1_r2(B, L); goto end;
-  LD_r1_r2_B_c_HL:  inst.LD_r1_r2(B, c_HL); goto end;
-  LD_n_A_B:  inst.LD_n_A(B); goto end;
-  LD_r1_r2_C_B:  inst.LD_r1_r2(C, B); goto end;
-  LD_r1_r2_C_C:  inst.LD_r1_r2(C, C); goto end;
-  LD_r1_r2_C_D:  inst.LD_r1_r2(C, D); goto end;
-  LD_r1_r2_C_E:  inst.LD_r1_r2(C, E); goto end;
-  LD_r1_r2_C_H:  inst.LD_r1_r2(C, H); goto end;
-  LD_r1_r2_C_L:  inst.LD_r1_r2(C, L); goto end;
-  LD_r1_r2_C_c_HL:  inst.LD_r1_r2(C, c_HL); goto end;
-  LD_n_A_C:  inst.LD_n_A(C); goto end;
+  _0x40: inst.LD_r1_r2(B, B); goto end;
+  _0x41: inst.LD_r1_r2(B, C); goto end;
+  _0x42: inst.LD_r1_r2(B, D); goto end;
+  _0x43: inst.LD_r1_r2(B, E); goto end;
+  _0x44: inst.LD_r1_r2(B, H); goto end;
+  _0x45: inst.LD_r1_r2(B, L); goto end;
+  _0x46: inst.LD_r1_r2(B, c_HL); goto end;
+  _0x47: inst.LD_n_A(B); goto end;
+  _0x48: inst.LD_r1_r2(C, B); goto end;
+  _0x49: inst.LD_r1_r2(C, C); goto end;
+  _0x4A: inst.LD_r1_r2(C, D); goto end;
+  _0x4B: inst.LD_r1_r2(C, E); goto end;
+  _0x4C: inst.LD_r1_r2(C, H); goto end;
+  _0x4D: inst.LD_r1_r2(C, L); goto end;
+  _0x4E: inst.LD_r1_r2(C, c_HL); goto end;
+  _0x4F: inst.LD_n_A(C); goto end;
 
-  LD_r1_r2_D_B:  inst.LD_r1_r2(D, B); goto end;
-  LD_r1_r2_D_C:  inst.LD_r1_r2(D, C); goto end;
-  LD_r1_r2_D_D:  inst.LD_r1_r2(D, D); goto end;
-  LD_r1_r2_D_E:  inst.LD_r1_r2(D, E); goto end;
-  LD_r1_r2_D_H:  inst.LD_r1_r2(D, H); goto end;
-  LD_r1_r2_D_L:  inst.LD_r1_r2(D, L); goto end;
-  LD_r1_r2_D_c_HL:  inst.LD_r1_r2(D, c_HL); goto end;
-  LD_n_A_D:  inst.LD_n_A(D); goto end;
-  LD_r1_r2_E_B:  inst.LD_r1_r2(E, B); goto end;
-  LD_r1_r2_E_C:  inst.LD_r1_r2(E, C); goto end;
-  LD_r1_r2_E_D:  inst.LD_r1_r2(E, D); goto end;
-  LD_r1_r2_E_E:  inst.LD_r1_r2(E, E); goto end;
-  LD_r1_r2_E_H:  inst.LD_r1_r2(E, H); goto end;
-  LD_r1_r2_E_L:  inst.LD_r1_r2(E, L); goto end;
-  LD_r1_r2_E_c_HL:  inst.LD_r1_r2(E, c_HL); goto end;
-  LD_n_A_E:  inst.LD_n_A(E); goto end;
+  _0x50: inst.LD_r1_r2(D, B); goto end;
+  _0x51: inst.LD_r1_r2(D, C); goto end;
+  _0x52: inst.LD_r1_r2(D, D); goto end;
+  _0x53: inst.LD_r1_r2(D, E); goto end;
+  _0x54: inst.LD_r1_r2(D, H); goto end;
+  _0x55: inst.LD_r1_r2(D, L); goto end;
+  _0x56: inst.LD_r1_r2(D, c_HL); goto end;
+  _0x57: inst.LD_n_A(D); goto end;
+  _0x58: inst.LD_r1_r2(E, B); goto end;
+  _0x59: inst.LD_r1_r2(E, C); goto end;
+  _0x5A: inst.LD_r1_r2(E, D); goto end;
+  _0x5B: inst.LD_r1_r2(E, E); goto end;
+  _0x5C: inst.LD_r1_r2(E, H); goto end;
+  _0x5D: inst.LD_r1_r2(E, L); goto end;
+  _0x5E: inst.LD_r1_r2(E, c_HL); goto end;
+  _0x5F: inst.LD_n_A(E); goto end;
 
-  LD_r1_r2_H_B:  inst.LD_r1_r2(H, B); goto end;
-  LD_r1_r2_H_C:  inst.LD_r1_r2(H, C); goto end;
-  LD_r1_r2_H_D:  inst.LD_r1_r2(H, D); goto end;
-  LD_r1_r2_H_E:  inst.LD_r1_r2(H, E); goto end;
-  LD_r1_r2_H_H:  inst.LD_r1_r2(H, H); goto end;
-  LD_r1_r2_H_L:  inst.LD_r1_r2(H, L); goto end;
-  LD_r1_r2_H_c_HL:  inst.LD_r1_r2(H, c_HL); goto end;
-  LD_n_A_H:  inst.LD_n_A(H); goto end;
-  LD_r1_r2_L_B:  inst.LD_r1_r2(L, B); goto end;
-  LD_r1_r2_L_C:  inst.LD_r1_r2(L, C); goto end;
-  LD_r1_r2_L_D:  inst.LD_r1_r2(L, D); goto end;
-  LD_r1_r2_L_E:  inst.LD_r1_r2(L, E); goto end;
-  LD_r1_r2_L_H:  inst.LD_r1_r2(L, H); goto end;
-  LD_r1_r2_L_L:  inst.LD_r1_r2(L, L); goto end;
-  LD_r1_r2_L_c_HL:  inst.LD_r1_r2(L, c_HL); goto end;
-  LD_n_A_L:  inst.LD_n_A(L); goto end;
+  _0x60: inst.LD_r1_r2(H, B); goto end;
+  _0x61: inst.LD_r1_r2(H, C); goto end;
+  _0x62: inst.LD_r1_r2(H, D); goto end;
+  _0x63: inst.LD_r1_r2(H, E); goto end;
+  _0x64: inst.LD_r1_r2(H, H); goto end;
+  _0x65: inst.LD_r1_r2(H, L); goto end;
+  _0x66: inst.LD_r1_r2(H, c_HL); goto end;
+  _0x67: inst.LD_n_A(H); goto end;
+  _0x68: inst.LD_r1_r2(L, B); goto end;
+  _0x69: inst.LD_r1_r2(L, C); goto end;
+  _0x6A: inst.LD_r1_r2(L, D); goto end;
+  _0x6B: inst.LD_r1_r2(L, E); goto end;
+  _0x6C: inst.LD_r1_r2(L, H); goto end;
+  _0x6D: inst.LD_r1_r2(L, L); goto end;
+  _0x6E: inst.LD_r1_r2(L, c_HL); goto end;
+  _0x6F: inst.LD_n_A(L); goto end;
 
-  LD_r1_r2_c_HL_B:  inst.LD_r1_r2(c_HL, B); goto end;
-  LD_r1_r2_c_HL_C:  inst.LD_r1_r2(c_HL, C); goto end;
-  LD_r1_r2_c_HL_D:  inst.LD_r1_r2(c_HL, D); goto end;
-  LD_r1_r2_c_HL_E:  inst.LD_r1_r2(c_HL, E); goto end;
-  LD_r1_r2_c_HL_H:  inst.LD_r1_r2(c_HL, H); goto end;
-  LD_r1_r2_c_HL_L:  inst.LD_r1_r2(c_HL, L); goto end;
-  HALT:  inst.HALT(); goto end;
-  LD_n_A_c_HL:  inst.LD_n_A(c_HL); goto end;
-  LD_A_n_B:  inst.LD_A_n(B); goto end;
-  LD_A_n_C:  inst.LD_A_n(C); goto end;
-  LD_A_n_D:  inst.LD_A_n(D); goto end;
-  LD_A_n_E:  inst.LD_A_n(E); goto end;
-  LD_A_n_H:  inst.LD_A_n(H); goto end;
-  LD_A_n_L:  inst.LD_A_n(L); goto end;
-  LD_A_n_c_HL:  inst.LD_A_n(c_HL); goto end;
-  LD_n_A_A:  inst.LD_n_A(A); goto end;
+  _0x70: inst.LD_r1_r2(c_HL, B); goto end;
+  _0x71: inst.LD_r1_r2(c_HL, C); goto end;
+  _0x72: inst.LD_r1_r2(c_HL, D); goto end;
+  _0x73: inst.LD_r1_r2(c_HL, E); goto end;
+  _0x74: inst.LD_r1_r2(c_HL, H); goto end;
+  _0x75: inst.LD_r1_r2(c_HL, L); goto end;
+  _0x76: inst.HALT(); goto end;
+  _0x77: inst.LD_n_A(c_HL); goto end;
+  _0x78: inst.LD_A_n(B); goto end;
+  _0x79: inst.LD_A_n(C); goto end;
+  _0x7A: inst.LD_A_n(D); goto end;
+  _0x7B: inst.LD_A_n(E); goto end;
+  _0x7C: inst.LD_A_n(H); goto end;
+  _0x7D: inst.LD_A_n(L); goto end;
+  _0x7E: inst.LD_A_n(c_HL); goto end;
+  _0x7F: inst.LD_n_A(A); goto end;
 
-  ADD_A_n_B:  inst.ADD_A_n(B); goto end;
-  ADD_A_n_C:  inst.ADD_A_n(C); goto end;
-  ADD_A_n_D:  inst.ADD_A_n(D); goto end;
-  ADD_A_n_E:  inst.ADD_A_n(E); goto end;
-  ADD_A_n_H:  inst.ADD_A_n(H); goto end;
-  ADD_A_n_L:  inst.ADD_A_n(L); goto end;
-  ADD_A_n_c_HL:  inst.ADD_A_n(c_HL); goto end;
-  ADD_A_n_A:  inst.ADD_A_n(A); goto end;
-  ADC_A_n_B:  inst.ADC_A_n(B); goto end;
-  ADC_A_n_C:  inst.ADC_A_n(C); goto end;
-  ADC_A_n_D:  inst.ADC_A_n(D); goto end;
-  ADC_A_n_E:  inst.ADC_A_n(E); goto end;
-  ADC_A_n_H:  inst.ADC_A_n(H); goto end;
-  ADC_A_n_L:  inst.ADC_A_n(L); goto end;
-  ADC_A_n_c_HL:  inst.ADC_A_n(c_HL); goto end;
-  ADC_A_n_A:  inst.ADC_A_n(A); goto end;
+  _0x80: inst.ADD_A_n(B); goto end;
+  _0x81: inst.ADD_A_n(C); goto end;
+  _0x82: inst.ADD_A_n(D); goto end;
+  _0x83: inst.ADD_A_n(E); goto end;
+  _0x84: inst.ADD_A_n(H); goto end;
+  _0x85: inst.ADD_A_n(L); goto end;
+  _0x86: inst.ADD_A_n(c_HL); goto end;
+  _0x87: inst.ADD_A_n(A); goto end;
+  _0x88: inst.ADC_A_n(B); goto end;
+  _0x89: inst.ADC_A_n(C); goto end;
+  _0x8A: inst.ADC_A_n(D); goto end;
+  _0x8B: inst.ADC_A_n(E); goto end;
+  _0x8C: inst.ADC_A_n(H); goto end;
+  _0x8D: inst.ADC_A_n(L); goto end;
+  _0x8E: inst.ADC_A_n(c_HL); goto end;
+  _0x8F: inst.ADC_A_n(A); goto end;
 
-  SUB_n_B:  inst.SUB_n(B); goto end;
-  SUB_n_C:  inst.SUB_n(C); goto end;
-  SUB_n_D:  inst.SUB_n(D); goto end;
-  SUB_n_E:  inst.SUB_n(E); goto end;
-  SUB_n_H:  inst.SUB_n(H); goto end;
-  SUB_n_L:  inst.SUB_n(L); goto end;
-  SUB_n_c_HL:  inst.SUB_n(c_HL); goto end;
-  SUB_n_A:  inst.SUB_n(A); goto end;
-  SBC_A_B:  inst.SBC_A(B); goto end;
-  SBC_A_C:  inst.SBC_A(C); goto end;
-  SBC_A_D:  inst.SBC_A(D); goto end;
-  SBC_A_E:  inst.SBC_A(E); goto end;
-  SBC_A_H:  inst.SBC_A(H); goto end;
-  SBC_A_L:  inst.SBC_A(L); goto end;
-  SBC_A_c_HL:  inst.SBC_A(c_HL); goto end;
-  SBC_A_A:  inst.SBC_A(A); goto end;
+  _0x90: inst.SUB_n(B); goto end;
+  _0x91: inst.SUB_n(C); goto end;
+  _0x92: inst.SUB_n(D); goto end;
+  _0x93: inst.SUB_n(E); goto end;
+  _0x94: inst.SUB_n(H); goto end;
+  _0x95: inst.SUB_n(L); goto end;
+  _0x96: inst.SUB_n(c_HL); goto end;
+  _0x97: inst.SUB_n(A); goto end;
+  _0x98: inst.SBC_A(B); goto end;
+  _0x99: inst.SBC_A(C); goto end;
+  _0x9A: inst.SBC_A(D); goto end;
+  _0x9B: inst.SBC_A(E); goto end;
+  _0x9C: inst.SBC_A(H); goto end;
+  _0x9D: inst.SBC_A(L); goto end;
+  _0x9E: inst.SBC_A(c_HL); goto end;
+  _0x9F: inst.SBC_A(A); goto end;
 
-  AND_B:  inst.AND(B); goto end;
-  AND_C:  inst.AND(C); goto end;
-  AND_D:  inst.AND(D); goto end;
-  AND_E:  inst.AND(E); goto end;
-  AND_H:  inst.AND(H); goto end;
-  AND_L:  inst.AND(L); goto end;
-  AND_c_HL:  inst.AND(c_HL); goto end;
-  AND_A:  inst.AND(A); goto end;
-  XOR_n_B:  inst.XOR_n(B); goto end;
-  XOR_n_C:  inst.XOR_n(C); goto end;
-  XOR_n_D:  inst.XOR_n(D); goto end;
-  XOR_n_E:  inst.XOR_n(E); goto end;
-  XOR_n_H:  inst.XOR_n(H); goto end;
-  XOR_n_L:  inst.XOR_n(L); goto end;
-  XOR_n_c_HL:  inst.XOR_n(c_HL); goto end;
-  XOR_n_A:  inst.XOR_n(A); goto end;
+  _0xA0: inst.AND(B); goto end;
+  _0xA1: inst.AND(C); goto end;
+  _0xA2: inst.AND(D); goto end;
+  _0xA3: inst.AND(E); goto end;
+  _0xA4: inst.AND(H); goto end;
+  _0xA5: inst.AND(L); goto end;
+  _0xA6: inst.AND(c_HL); goto end;
+  _0xA7: inst.AND(A); goto end;
+  _0xA8: inst.XOR_n(B); goto end;
+  _0xA9: inst.XOR_n(C); goto end;
+  _0xAA: inst.XOR_n(D); goto end;
+  _0xAB: inst.XOR_n(E); goto end;
+  _0xAC: inst.XOR_n(H); goto end;
+  _0xAD: inst.XOR_n(L); goto end;
+  _0xAE: inst.XOR_n(c_HL); goto end;
+  _0xAF: inst.XOR_n(A); goto end;
 
-  OR_n_B:  inst.OR_n(B); goto end;
-  OR_n_C:  inst.OR_n(C); goto end;
-  OR_n_D:  inst.OR_n(D); goto end;
-  OR_n_E:  inst.OR_n(E); goto end;
-  OR_n_H:  inst.OR_n(H); goto end;
-  OR_n_L:  inst.OR_n(L); goto end;
-  OR_n_c_HL:  inst.OR_n(c_HL); goto end;
-  OR_n_A:  inst.OR_n(A); goto end;
-  CP_n_B:  inst.CP_n(B); goto end;
-  CP_n_C:  inst.CP_n(C); goto end;
-  CP_n_D:  inst.CP_n(D); goto end;
-  CP_n_E:  inst.CP_n(E); goto end;
-  CP_n_H:  inst.CP_n(H); goto end;
-  CP_n_L:  inst.CP_n(L); goto end;
-  CP_n_c_HL:  inst.CP_n(c_HL); goto end;
-  CP_n_A:  inst.CP_n(A); goto end;
+  _0xB0: inst.OR_n(B); goto end;
+  _0xB1: inst.OR_n(C); goto end;
+  _0xB2: inst.OR_n(D); goto end;
+  _0xB3: inst.OR_n(E); goto end;
+  _0xB4: inst.OR_n(H); goto end;
+  _0xB5: inst.OR_n(L); goto end;
+  _0xB6: inst.OR_n(c_HL); goto end;
+  _0xB7: inst.OR_n(A); goto end;
+  _0xB8: inst.CP_n(B); goto end;
+  _0xB9: inst.CP_n(C); goto end;
+  _0xBA: inst.CP_n(D); goto end;
+  _0xBB: inst.CP_n(E); goto end;
+  _0xBC: inst.CP_n(H); goto end;
+  _0xBD: inst.CP_n(L); goto end;
+  _0xBE: inst.CP_n(c_HL); goto end;
+  _0xBF: inst.CP_n(A); goto end;
 
-  RET_cc_f_Z_0:  inst.RET_cc(f_Z, 0); goto end;
-  POP_nn_BC:  inst.POP_nn(BC); goto end;
-  JP_cc_nn_f_Z_0:  inst.JP_cc_nn(f_Z, 0); goto end;
-  JP_nn:  inst.JP_nn(); goto end;
-  CALL_cc_nn_f_Z_0:  inst.CALL_cc_nn(f_Z, 0); goto end;
-  PUSH_nn_BC:  inst.PUSH_nn(BC); goto end;
-  ADD_A_n_$:  inst.ADD_A_n($); goto end;
-  RST_n_0x00:  inst.RST_n(0x00); goto end;
-  RET_cc_f_Z_1:  inst.RET_cc(f_Z, 1); goto end;
-  RET:  inst.RET(); goto end;
-  JP_cc_nn_f_Z_1:  inst.JP_cc_nn(f_Z, 1); goto end;
-  OpCodeCB:  OpCodeCB(&inst); goto end;
-  CALL_cc_nn_f_Z_1:  inst.CALL_cc_nn(f_Z, 1); goto end;
-  CALL_nn:  inst.CALL_nn(); goto end;
-  ADC_A_n_$:  inst.ADC_A_n($); goto end;
-  RST_n_0x08:  inst.RST_n(0x08); goto end;
+  _0xC0: inst.RET_cc(f_Z, 0); goto end;
+  _0xC1: inst.POP_nn(BC); goto end;
+  _0xC2: inst.JP_cc_nn(f_Z, 0); goto end;
+  _0xC3: inst.JP_nn(); goto end;
+  _0xC4: inst.CALL_cc_nn(f_Z, 0); goto end;
+  _0xC5: inst.PUSH_nn(BC); goto end;
+  _0xC6: inst.ADD_A_n($); goto end;
+  _0xC7: inst.RST_n(0x00); goto end;
+  _0xC8: inst.RET_cc(f_Z, 1); goto end;
+  _0xC9: inst.RET(); goto end;
+  _0xCA: inst.JP_cc_nn(f_Z, 1); goto end;
+  _0xCB: OpCodeCB(&inst); goto end;
+  _0xCC: inst.CALL_cc_nn(f_Z, 1); goto end;
+  _0xCD: inst.CALL_nn(); goto end;
+  _0xCE: inst.ADC_A_n($); goto end;
+  _0xCF: inst.RST_n(0x08); goto end;
 
-  RET_cc_f_C_0:  inst.RET_cc(f_C, 0); goto end;
-  POP_nn_DE:  inst.POP_nn(DE); goto end;
-  JP_cc_nn_f_C_0:  inst.JP_cc_nn(f_C, 0); goto end;
-  CALL_cc_nn_f_C_0:  inst.CALL_cc_nn(f_C, 0); goto end;
-  PUSH_nn_DE:  inst.PUSH_nn(DE); goto end;
-  SUB_n_$:  inst.SUB_n($); goto end;
-  RST_n_0x10:  inst.RST_n(0x10); goto end;
-  RET_cc_f_C_1:  inst.RET_cc(f_C, 1); goto end;
-  RETI:  inst.RETI(); goto end;
-  JP_cc_nn_f_C_1:  inst.JP_cc_nn(f_C, 1); goto end;
-  CALL_cc_nn_f_C_1:  inst.CALL_cc_nn(f_C, 1); goto end;
-  SBC_A_$:  inst.SBC_A($); goto end;
-  RST_n_0x18:  inst.RST_n(0x18); goto end;
+  _0xD0: inst.RET_cc(f_C, 0); goto end;
+  _0xD1: inst.POP_nn(DE); goto end;
+  _0xD2: inst.JP_cc_nn(f_C, 0); goto end;
+  _0xD4: inst.CALL_cc_nn(f_C, 0); goto end;
+  _0xD5: inst.PUSH_nn(DE); goto end;
+  _0xD6: inst.SUB_n($); goto end;
+  _0xD7: inst.RST_n(0x10); goto end;
+  _0xD8: inst.RET_cc(f_C, 1); goto end;
+  _0xD9: inst.RETI(); goto end;
+  _0xDA: inst.JP_cc_nn(f_C, 1); goto end;
+  _0xDC: inst.CALL_cc_nn(f_C, 1); goto end;
+  _0xDE: inst.SBC_A($); goto end;
+  _0xDF: inst.RST_n(0x18); goto end;
 
-  LDH_c$_A:  inst.LDH_c$_A(); goto end;
-  POP_nn_HL:  inst.POP_nn(HL); goto end;
-  LD_cC_A:  inst.LD_cC_A(); goto end;
-  PUSH_nn_HL:  inst.PUSH_nn(HL); goto end;
-  AND_$:  inst.AND($); goto end;
-  RST_n_0x20:  inst.RST_n(0x20); goto end;
-  ADD_SP_n:  inst.ADD_SP_n(); goto end;
-  JP_HL:  inst.JP_HL(); goto end;
-  LD_n_A_c_$$:  inst.LD_n_A(c_$$); goto end;
-  XOR_n_$:  inst.XOR_n($); goto end;
-  RST_n_0x28:  inst.RST_n(0x28); goto end;
+  _0xE0: inst.LDH_c$_A(); goto end;
+  _0xE1: inst.POP_nn(HL); goto end;
+  _0xE2: inst.LD_cC_A(); goto end;
+  _0xE5: inst.PUSH_nn(HL); goto end;
+  _0xE6: inst.AND($); goto end;
+  _0xE7: inst.RST_n(0x20); goto end;
+  _0xE8: inst.ADD_SP_n(); goto end;
+  _0xE9: inst.JP_HL(); goto end;
+  _0xEA: inst.LD_n_A(c_$$); goto end;
+  _0xEE: inst.XOR_n($); goto end;
+  _0xEF: inst.RST_n(0x28); goto end;
 
-  LDH_A_n:  inst.LDH_A_n(); goto end;
-  POP_nn_AF:  inst.POP_nn(AF); goto end;
-  LD_A_cC:  inst.LD_A_cC(); goto end;
-  DI:  inst.DI(); goto end;
-  PUSH_nn_AF:  inst.PUSH_nn(AF); goto end;
-  OR_n_$:  inst.OR_n($); goto end;
-  RST_n_0x30:  inst.RST_n(0x30); goto end;
-  LDHL_SP_n:  inst.LDHL_SP_n(); goto end;
-  LD_SP_HL:  inst.LD_SP_HL(); goto end;
-  LD_A_n_c_$$:  inst.LD_A_n(c_$$); goto end;
-  EI:  inst.EI(); goto end;
-  CP_n_$:  inst.CP_n($); goto end;
-  RST_n_0x38:  inst.RST_n(0x38); goto end;
-  NOT_IMPL: goto end;
+  _0xF0: inst.LDH_A_n(); goto end;
+  _0xF1: inst.POP_nn(AF); goto end;
+  _0xF2: inst.LD_A_cC(); goto end;
+  _0xF3: inst.DI(); goto end;
+  _0xF5: inst.PUSH_nn(AF); goto end;
+  _0xF6: inst.OR_n($); goto end;
+  _0xF7: inst.RST_n(0x30); goto end;
+  _0xF8: inst.LDHL_SP_n(); goto end;
+  _0xF9: inst.LD_SP_HL(); goto end;
+  _0xFA: inst.LD_A_n(c_$$); goto end;
+  _0xFB: inst.EI(); goto end;
+  _0xFE: inst.CP_n($); goto end;
+  _0xFF: inst.RST_n(0x38); goto end;
+  _NIMP: throw GBException("something");
 
   #ifdef MAKEGBLOG
   	log->Enqueue("\n\nStartFrame", NULL, "");
