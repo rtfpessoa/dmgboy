@@ -445,7 +445,7 @@ void CPU::ExecuteOneFrame()
   _0xFB: inst.EI(); goto end;
   _0xFE: inst.CP_n($); goto end;
   _0xFF: inst.RST_n(0x38); goto end;
-  _NIMP: throw GBException("something");
+  _NIMP: throw GBException("something"); goto end;
 
   #ifdef MAKEGBLOG
   	log->Enqueue("\n\nStartFrame", NULL, "");
@@ -471,11 +471,13 @@ void CPU::ExecuteOneFrame()
     		log->Enqueue(ssOpCode.str(), this->GetPtrRegisters(), "");
       #endif
 
+      std::cout << setfill('0') << setw(2) << uppercase << hex << (int)OpCode << std::endl;
+      std::cout << "NumInstr: " << numInstructions << std::endl;
       ptr = dispatch[OpCode];
       goto *ptr;
+    end: ;
     } // end if (!Get_Halt())
 
-end:
     #ifdef INSTLOG
       if (OpCode != 0xCB)
       {
@@ -484,7 +486,6 @@ end:
           logFile << setfill('0') << setw(2) << uppercase << hex << (int)OpCode
           << setfill('0') << setw(2) << uppercase << hex << (int)NextOpcode << std::endl;
       }
-      logFile.flush();
     #endif
 
     if (OpCode == 0xCB)
