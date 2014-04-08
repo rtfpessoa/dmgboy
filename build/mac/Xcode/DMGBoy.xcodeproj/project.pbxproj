@@ -103,8 +103,8 @@
 		6E23C72111D7CD510043AF47 /* Def.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Def.h; path = ../../../src/Def.h; sourceTree = SOURCE_ROOT; };
 		6E23C72311D7CD510043AF47 /* GBException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GBException.cpp; path = ../../../src/GBException.cpp; sourceTree = SOURCE_ROOT; };
 		6E23C72411D7CD510043AF47 /* GBException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GBException.h; path = ../../../src/GBException.h; sourceTree = SOURCE_ROOT; };
-		6E23C72511D7CD510043AF47 /* Instructions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Instructions.cpp; path = ../../../src/Instructions.cpp; sourceTree = SOURCE_ROOT; };
-		6E23C72611D7CD510043AF47 /* Instructions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Instructions.h; path = ../../../src/Instructions.h; sourceTree = SOURCE_ROOT; };
+		6E23C72511D7CD510043AF47 /* Instructions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Instructions.cpp; path = ../../../src/Instructions.cpp; sourceTree = SOURCE_ROOT; };
+		6E23C72611D7CD510043AF47 /* Instructions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Instructions.h; path = ../../../src/Instructions.h; sourceTree = SOURCE_ROOT; };
 		6E23C72711D7CD510043AF47 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Log.cpp; path = ../../../src/Log.cpp; sourceTree = SOURCE_ROOT; };
 		6E23C72811D7CD510043AF47 /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Log.h; path = ../../../src/Log.h; sourceTree = SOURCE_ROOT; };
 		6E23C72911D7CD510043AF47 /* MBC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MBC.cpp; path = ../../../src/MBC.cpp; sourceTree = SOURCE_ROOT; };
