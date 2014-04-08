@@ -1122,8 +1122,10 @@ BYTE CPU::P1Changed(BYTE newValue)
 void CPU::OnEndFrame()
 {
 	v->RefreshScreen();
+#ifndef INSTPROFILE
 	if (s)
-		s->EndFrame();
+	 s->EndFrame();
+#endif
 	frameCompleted = true;
 }
 

@@ -1,16 +1,16 @@
 /*
  This file is part of DMGBoy.
- 
+
  DMGBoy is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  DMGBoy is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with DMGBoy.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,14 +32,14 @@ using namespace std;
 EmulationThread::EmulationThread()
 {
     mutex = new wxMutex();
-    
+
 	sound = new Sound();
     video = new Video(NULL);
 	cpu = new CPU(video, sound);
 	cartridge = NULL;
-    
+
     ApplySettings();
-    
+
     SetState(NotStartedYet);
 }
 
@@ -55,14 +55,14 @@ EmulationThread::~EmulationThread() {
 void EmulationThread::SetState(enumEmuStates state)
 {
     wxMutexLocker lock(*mutex);
-    
+
     this->emuState = state;
-    
+
     if (state == Playing)
         sound->SetEnabled(SettingsGetSoundEnabled());
     else
         sound->SetEnabled(false);
-    
+
     if (state == Stopped)
     {
 #ifdef MAKEGBLOG
@@ -79,25 +79,39 @@ enumEmuStates EmulationThread::GetState()
 
 wxThread::ExitCode EmulationThread::Entry()
 {
+    #ifdef INSTPROFILE
+      static const int TIME_SECOND = 1000000;
+      int count = 0;
+      wxLongLong timeSpent = 0;
+    #endif
+
     while (!TestDestroy())
     {
-        long desired = 15;  // Milisegundos deseados por frame
-        // Deberia ser 16 pero con ese valor en linux el sonido se entrecorta
-        
-        swFrame.Start();
-        
-		{
-			wxMutexLocker lock(*mutex);
-			if (emuState == Playing)
-			    cpu->ExecuteOneFrame();
-		} // Desbloquear el mutex
-        
-        long time = swFrame.Time();
-        
-        if (time < desired)
-            this->Sleep(desired-time);
+	    {
+        wxMutexLocker lock(*mutex);
+        if (emuState == Playing) {
+            #ifdef INSTPROFILE
+              swFrame.Start();
+            #endif
+
+            cpu->ExecuteOneFrame();
+
+            #ifdef INSTPROFILE
+              timeSpent += swFrame.TimeInMicro();
+              count++;
+            #endif
+        }
+		  } // Desbloquear el mutex
+
+      #ifdef INSTPROFILE
+        if (timeSpent > TIME_SECOND) {
+            std::cout << "FPS: " << count << std::endl;
+            timeSpent = 0;
+            count = 0;
+        }
+      #endif
     }
-    
+
     return 0;
 }
 
@@ -107,17 +121,17 @@ bool EmulationThread::ChangeFile(wxString fileName)
     // llamar a SetState
     {
         wxMutexLocker lock(*mutex);
-        
+
         BYTE * buffer = NULL;
         unsigned long size = 0;
         bool isZip = false;
-        
+
         if (!wxFileExists(fileName))
         {
             wxMessageBox(_("The file:\n")+fileName+_("\ndoesn't exist"), _("Error"));
             return false;
         }
-        
+
         wxString fileLower = fileName.Lower();
         if (fileLower.EndsWith(wxT(".zip")))
         {
@@ -131,34 +145,34 @@ bool EmulationThread::ChangeFile(wxString fileName)
             wxMessageBox(_("Only gb, gbc and zip files allowed!"), _("Error"));
             return false;
         }
-        
-        
+
+
         // Si ha llegado aquí es que es un archivo permitido
         if (cartridge)
             delete cartridge;
-        
+
         wxString battsDir = wxStandardPaths::Get().GetUserDataDir() + wxFileName::GetPathSeparator()
         + wxT("Batts");
-        
+
         if (!wxFileName::DirExists(battsDir))
             wxFileName::Mkdir(battsDir, 0777, wxPATH_MKDIR_FULL);
-        
+
         battsDir += wxFileName::GetPathSeparator();
-        
+
         if (isZip) {
             cartridge = new Cartridge(buffer, size, string(battsDir.mb_str()));
         }else {
             cartridge = new Cartridge(string(fileName.mb_str()), string(battsDir.mb_str()));
         }
-        
-        
+
+
         cpu->LoadCartridge(cartridge);
         cpu->Reset();
     }
-    
-    
+
+
 	SetState(Playing);
-    
+
     return true;
 }
 
@@ -176,7 +190,7 @@ void EmulationThread::LoadZip(const wxString zipPath, BYTE ** buffer, unsigned l
 	while ((entry = zip.GetNextEntry()))
 	{
 		fileInZip = entry->GetName();
-        
+
 		fileLower = fileInZip.Lower();
 		if (fileLower.EndsWith(wxT(".gb")) || fileLower.EndsWith(wxT(".gbc")))
 		{
@@ -192,7 +206,7 @@ void EmulationThread::LoadZip(const wxString zipPath, BYTE ** buffer, unsigned l
 			continue;
 		}
 	}
-    
+
 	// Archivo no encontrado
 	wxMessageBox(_("GameBoy rom not found in the file:\n")+zipPath, _("Error"));
 	return;
@@ -201,21 +215,21 @@ void EmulationThread::LoadZip(const wxString zipPath, BYTE ** buffer, unsigned l
 void EmulationThread::LoadState(std::string fileName, int id)
 {
     wxMutexLocker lock(*mutex);
-    
+
     cpu->LoadState(fileName, id);
 }
 
 void EmulationThread::SaveState(std::string fileName, int id)
 {
     wxMutexLocker lock(*mutex);
-    
+
     cpu->SaveState(fileName, id);
 }
 
 void EmulationThread::ApplySettings()
 {
     wxMutexLocker lock(*mutex);
-    
+
     PadSetKeys(SettingsGetInput());
     sound->ChangeSampleRate(SettingsGetSoundSampleRate());
     sound->SetEnabled(SettingsGetSoundEnabled());

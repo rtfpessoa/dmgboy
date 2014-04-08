@@ -83,16 +83,16 @@ MainFrame::MainFrame(wxString fileName)
     // Create the MainFrame
     this->Create(0, ID_MAINFRAME, wxT(APP_NAME), wxDefaultPosition,
            wxDefaultSize, wxDEFAULT_FRAME_STYLE);
-    
+
 	wxIconBundle * icons = new wxIconBundle(wxIcon(gb16_xpm));
 	icons->AddIcon(wxIcon(gb32_xpm));
 	this->SetIcons(*icons);
 
     mainSizer = new wxBoxSizer(wxVERTICAL);
-    
+
     this->CreateMenuBar();
 	this->CreateToolBar();
-	
+
 	numRecentFiles = 0;
 
 	settingsDialog = new SettingsDialog(this);
@@ -101,7 +101,7 @@ MainFrame::MainFrame(wxString fileName)
 
     // create the emulation
     emulation = new EmulationThread();
-    
+
     wxThreadError err = emulation->Create();
     if (err != wxTHREAD_NO_ERROR)
         wxMessageBox(wxT("Couldn't create the thread!"));
@@ -112,13 +112,13 @@ MainFrame::MainFrame(wxString fileName)
 
     fullScreen = false;
     ChangeRenderer();
-    
+
 	if (fileName != wxT(""))
 		ChangeFile(fileName);
-		
+
     timer = new wxTimer(this, ID_TIMER);
 	timer->Start(16);
-    
+
     SetSizerAndFit(mainSizer);
 }
 
@@ -143,13 +143,13 @@ void MainFrame::CreateMenuBar()
 	recentMenuFile->AppendSeparator();
 	recentMenuFile->Append(ID_CLEAR_RECENT, _("Clear recent roms"));
 	fileMenu->AppendSubMenu(recentMenuFile, _("Open Recent"));
-    
+
     // Se crea un wxMenu que se tratará exactamente igual que a recentMenuFile
 	// para poder tener uno en el menuBar y otro como popUp
 	recentMenuPopup = new wxMenu;
 	recentMenuPopup->AppendSeparator();
 	recentMenuPopup->Append(ID_CLEAR_RECENT, _("Clear recent roms"));
-	
+
 	wxMenu * loadMenuFile = new wxMenu;
 	wxMenu * saveMenuFile = new wxMenu;
 	wxString slotMenu;
@@ -165,7 +165,7 @@ void MainFrame::CreateMenuBar()
 	}
 	fileMenu->AppendSubMenu(loadMenuFile, _("Load State"));
 	fileMenu->AppendSubMenu(saveMenuFile, _("Save State"));
-	
+
 	fileMenu->Append(wxID_EXIT, _("E&xit"));
 
     // add the file menu to the menu bar
@@ -192,7 +192,7 @@ void MainFrame::CreateMenuBar()
 
     // add the file menu to the menu bar
     mb->Append(emulationMenu, _("&Emulation"));
-    
+
     wxMenu *languageMenu = new wxMenu;
     languageMenu->Append(ID_LANG_ENGLISH, wxT("English"));
     languageMenu->Append(ID_LANG_SPANISH,  wxString::FromUTF8("Español"));
@@ -212,12 +212,12 @@ void MainFrame::CreateMenuBar()
 void MainFrame::CreateToolBar()
 {
     toolBar = new wxToolBar(this, wxID_ANY);
-    
+
     //toolBar->AddStretchableSpace();
-    
+
 	wxBitmap bmpOpen(open_xpm);
 	toolBar->AddTool(wxID_OPEN, _("Open"), bmpOpen);
-	
+
 	wxBitmap bmpRecent(recent_xpm);
 	toolBar->AddTool(ID_OPEN_RECENT, _("Recent"), bmpRecent);
 
@@ -231,19 +231,19 @@ void MainFrame::CreateToolBar()
 
 	wxBitmap bmpStop(stop_xpm);
 	toolBar->AddTool(ID_STOP, _("Stop"), bmpStop);
-	
+
 	toolBar->EnableTool(ID_START, false);
 	toolBar->EnableTool(ID_PAUSE, false);
 	toolBar->EnableTool(ID_STOP, false);
-    
+
     toolBar->AddSeparator();
-    
+
     wxBitmap bmpChangeView(changeView_xpm);
 	toolBar->AddTool(ID_CHANGEVIEW, _("Change View"), bmpChangeView);
 
     //toolBar->AddStretchableSpace();
-    
-	
+
+
     //SetToolBar(toolBar);
     toolBar->Realize();
     mainSizer->Add(toolBar, 0, wxEXPAND);
@@ -258,12 +258,12 @@ void MainFrame::OnFileOpen(wxCommandEvent &) {
 
 	enumEmuStates copyState = emulation->GetState();
     emulation->SetState(Paused);
-	
+
 	wxFileDialog* openDialog = new wxFileDialog(this, _("Choose a gameboy rom to open"), wxEmptyString, wxEmptyString,
 												wxT("Gameboy roms (*.gb; *.gbc; *.zip)|*.gb;*.gbc;*.zip"),
 												wxFD_OPEN, wxDefaultPosition);
 
-	
+
 	// Creates a "open file" dialog
 	if (openDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 		this->ChangeFile(openDialog->GetPath());
@@ -273,7 +273,7 @@ void MainFrame::OnFileOpen(wxCommandEvent &) {
 	// Clean up after ourselves
 	openDialog->Destroy();
 }
- 
+
 void MainFrame::OnRecentItem(wxCommandEvent &event)
 {
 	int idAux = event.GetId();
@@ -285,7 +285,7 @@ void MainFrame::OnLoadState(wxCommandEvent &event)
 {
 	int idAux = event.GetId();
 	int id = idAux - ID_LOADSTATE0;
-	
+
 	wxString savesDir = wxStandardPaths::Get().GetUserDataDir() + wxFileName::GetPathSeparator()
 	+ wxT("SaveStates") + wxFileName::GetPathSeparator();
 
@@ -303,13 +303,13 @@ void MainFrame::OnSaveState(wxCommandEvent &event)
 {
 	int idAux = event.GetId();
 	int id = idAux - ID_SAVESTATE0;
-	
+
 	wxString savesDir = wxStandardPaths::Get().GetUserDataDir() + wxFileName::GetPathSeparator()
 	+ wxT("SaveStates");
-	
+
 	if (!wxFileName::DirExists(savesDir))
 		wxFileName::Mkdir(savesDir, 0777, wxPATH_MKDIR_FULL);
-	
+
 	savesDir += wxFileName::GetPathSeparator();
 	try
 	{
@@ -329,7 +329,7 @@ void MainFrame::OnClearRecent(wxCommandEvent &)
 		recentMenuPopup->Delete(ID_RECENT0+i);
 	}
 	numRecentFiles = 0;
-	
+
 	this->RecentRomsToSettings();
     settingsDialog->Reload();
     SettingsSaveToFile();
@@ -347,17 +347,17 @@ void MainFrame::CreateRecentMenu(std::string * roms)
 	{
 		if (roms[i] == "")
 			break;
-		
+
 		recentFiles[i].fullName = wxString(roms[i].c_str(), wxConvUTF8);
 		recentFiles[i].shortName = recentFiles[i].fullName.substr(recentFiles[i].fullName.rfind(wxFileName::GetPathSeparator())+1);
-		
+
 		int id = ID_RECENT0 + numRecentFiles;
 		recentMenuFile->Insert(numRecentFiles, id, recentFiles[i].shortName);
 		recentMenuPopup->Insert(numRecentFiles, id, recentFiles[i].shortName);
-		
+
 		numRecentFiles++;
 	}
-	
+
 }
 
 void MainFrame::UpdateRecentMenu(wxString fileName)
@@ -372,9 +372,9 @@ void MainFrame::UpdateRecentMenu(wxString fileName)
 			break;
 		}
 	}
-	
+
 	int startFrom;
-	
+
 	// Si ya existia de antes y es el primero
 	if (previousIndex == 0)
 	{
@@ -399,7 +399,7 @@ void MainFrame::UpdateRecentMenu(wxString fileName)
 	{
 		startFrom = MAX_RECENT_FILES-2;
 	}
-	
+
 	for (int i=startFrom; i>=0; i--)
 	{
 		recentFiles[i+1].shortName = recentFiles[i].shortName;
@@ -407,13 +407,13 @@ void MainFrame::UpdateRecentMenu(wxString fileName)
 	}
 	recentFiles[0].shortName = shortName;
 	recentFiles[0].fullName = fileName;
-	
+
 	for (int i=0; i<numRecentFiles; i++)
 	{
 		recentMenuFile->SetLabel(ID_RECENT0+i, recentFiles[i].shortName);
 		recentMenuPopup->SetLabel(ID_RECENT0+i, recentFiles[i].shortName);
 	}
-	
+
 	this->RecentRomsToSettings();
     settingsDialog->Reload();
     SettingsSaveToFile();
@@ -423,17 +423,17 @@ void MainFrame::UpdateRecentMenu(wxString fileName)
 void MainFrame::RecentRomsToSettings()
 {
 	std::string recentRomsSettings[10];
-	
+
 	for (int i=0; i<numRecentFiles; i++)
 	{
 		recentRomsSettings[i] = recentFiles[i].fullName.mb_str();
 	}
-	
+
 	for(int i=numRecentFiles; i<MAX_RECENT_FILES; i++)
 	{
 		recentRomsSettings[i] = "";
 	}
-	
+
 	SettingsSetRecentRoms(recentRomsSettings);
 }
 
@@ -445,12 +445,12 @@ void MainFrame::OnFileExit(wxCommandEvent &)
 void MainFrame::OnClose(wxCloseEvent&)
 {
     timer->Stop();
-    
+
 	if (settingsDialog)
 		settingsDialog->Destroy();
-    
+
     emulation->Delete();
-    
+
     Destroy();
 }
 
@@ -469,12 +469,12 @@ void MainFrame::OnSettings(wxCommandEvent &)
 		settingsDialog->AcceptValues();
         if (SettingsGetRenderMethod() != typeRenderer)
         {
-            ChangeRenderer();    
+            ChangeRenderer();
         }
-        
+
         if (renderer)
             renderer->ChangePalette(SettingsGetGreenScale());
-        
+
 		emulation->ApplySettings();
 	}
 
@@ -484,14 +484,14 @@ void MainFrame::OnSettings(wxCommandEvent &)
 void MainFrame::ChangeRenderer()
 {
     typeRenderer = SettingsGetRenderMethod();
-    
+
     if (renderer)
     {
         wxWindow *window = renderer->GetWinRenderer();
         mainSizer->Detach(window);
         window->Destroy();
     }
-    
+
     if (typeRenderer == 0)
     {
         renderer = new RendererSW(this);
@@ -500,9 +500,9 @@ void MainFrame::ChangeRenderer()
     {
         renderer = new RendererOGL(this);
     }
-    
+
     emulation->SetScreen(renderer);
-    
+
     mainSizer->Add(renderer->GetWinRenderer(), 1, wxEXPAND);
     mainSizer->Layout();
 }
@@ -609,29 +609,29 @@ void MainFrame::OnResize(wxSizeEvent &event)
     wxSize clientSize = this->GetClientSize();
     wxSize imageSize = clientSize;
     imageSize.y -= 24;
-    
+
     float aspectRatio = (float)GB_SCREEN_W / GB_SCREEN_H;
 
     int magneticBorder = 20;
     int mod = imageSize.x % GB_SCREEN_W;
-    
+
     if (mod < magneticBorder)
         imageSize.x -= mod;
     else if (mod > (GB_SCREEN_W-magneticBorder))
         imageSize.x += (GB_SCREEN_W-mod);
-    
+
     imageSize.y = imageSize.x / aspectRatio;
-    
+
     if (imageSize.y > wxSystemSettings::GetMetric(wxSYS_SCREEN_Y)-(24+22))
         imageSize.y = wxSystemSettings::GetMetric(wxSYS_SCREEN_Y)-(24+22);
-    
+
     if (!IsFullScreen())
         this->SetClientSize(wxSize(imageSize.x, imageSize.y+24));
-    
+
     this->Layout();
 	if (renderer)
 		renderer->OnRefreshScreen();
-#else	
+#else
 	event.Skip();
 #endif
 }
@@ -640,7 +640,7 @@ void MainFrame::OnMaximize(wxMaximizeEvent &event) {
     static int width=160, height=190;
     static bool maximized = false;
     static int posX=0, posY=0;
-    
+
     if (maximized) {
         SetSize(width, height);
         SetPosition(wxPoint(posX, posY));
@@ -650,27 +650,27 @@ void MainFrame::OnMaximize(wxMaximizeEvent &event) {
         GetPosition(&posX, &posY);
         event.Skip(true);
     }
-    
+
     maximized = !maximized;
 }
 
 void MainFrame::OnChangeLanguage(wxCommandEvent &event) {
     int id = event.GetId();
-    
+
     switch (id) {
         case ID_LANG_ENGLISH:
             SettingsSetLanguage(wxLANGUAGE_ENGLISH);
             break;
-            
+
         case ID_LANG_SPANISH:
             SettingsSetLanguage(wxLANGUAGE_SPANISH);
             break;
-            
+
         default:
             SettingsSetLanguage(wxLANGUAGE_ENGLISH);
             break;
     }
-    
+
     SettingsSaveToFile();
     wxMessageBox(_("The language will change the next time you restart the application"), _("Language"));
 }
