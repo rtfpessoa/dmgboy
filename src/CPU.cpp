@@ -1122,11 +1122,14 @@ BYTE CPU::P1Changed(BYTE newValue)
 void CPU::OnEndFrame()
 {
 	v->RefreshScreen();
-#ifndef INSTPROFILE
-	if (s)
+	if (s && !speedBoost) {
 	 s->EndFrame();
-#endif
+    }
 	frameCompleted = true;
+}
+
+void CPU::SetSpeedBoost(bool value) {
+    speedBoost = value;
 }
 
 void CPU::ChangeSpeed()

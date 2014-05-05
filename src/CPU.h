@@ -29,6 +29,7 @@ class Cartridge;
 class CPU: public Registers, public Memory
 {
 private:
+    bool speedBoost;
 	unsigned long numInstructions;
 	unsigned long actualCycles;
 	BYTE lastCycles;
@@ -68,6 +69,7 @@ public:
 #endif
 	void SaveState(std::string saveDirectory, int numSlot);
 	void LoadState(std::string loadDirectory, int numSlot);
+    void SetSpeedBoost(bool value);
 private:
 	void Init(Video *v);
     void ResetGlobalVariables();

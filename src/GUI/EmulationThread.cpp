@@ -248,5 +248,9 @@ void EmulationThread::UpdatePad()
     if (emuState == Playing)
     {
         cpu->UpdatePad();
+        
+        // handle speed mode
+        cpu->SetSpeedBoost(wxGetKeyState(WXK_SPACE));
+        
     }
 }
