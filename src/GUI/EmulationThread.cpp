@@ -79,37 +79,37 @@ enumEmuStates EmulationThread::GetState()
 
 wxThread::ExitCode EmulationThread::Entry()
 {
-    #ifdef INSTPROFILE
-      static const int TIME_SECOND = 1000000;
-      int count = 0;
-      wxLongLong timeSpent = 0;
-    #endif
+#ifdef INSTPROFILE
+    static const int TIME_SECOND = 1000000;
+    int count = 0;
+    wxLongLong timeSpent = 0;
+#endif
 
     while (!TestDestroy())
     {
 	    {
-        wxMutexLocker lock(*mutex);
-        if (emuState == Playing) {
-            #ifdef INSTPROFILE
-              swFrame.Start();
-            #endif
+            wxMutexLocker lock(*mutex);
+            if (emuState == Playing) {
+#ifdef INSTPROFILE
+                swFrame.Start();
+#endif
 
-            cpu->ExecuteOneFrame();
+                cpu->ExecuteOneFrame();
 
-            #ifdef INSTPROFILE
-              timeSpent += swFrame.TimeInMicro();
-              count++;
-            #endif
-        }
-		  } // Desbloquear el mutex
+#ifdef INSTPROFILE
+                timeSpent += swFrame.TimeInMicro();
+                count++;
+#endif
+            }
+        } // Desbloquear el mutex
 
-      #ifdef INSTPROFILE
+#ifdef INSTPROFILE
         if (timeSpent > TIME_SECOND) {
             std::cout << "FPS: " << count << std::endl;
             timeSpent = 0;
             count = 0;
         }
-      #endif
+#endif
     }
 
     return 0;
